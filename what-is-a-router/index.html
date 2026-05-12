@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>What is a Router in Backbone.js? Complete Beginner Guide</title>
+
+<meta name="description" content="Learn what a Router in Backbone.js is, how it works, real examples, best practices, and FAQ. Beginner-friendly and SEO optimized.">
+
+<meta name="robots" content="index, follow">
+<meta name="author" content="Backbone Tutorials">
+<meta name="theme-color" content="#2563eb">
+<meta name="format-detection" content="telephone=no">
+
+<link rel="canonical" href="https://backbonetutorials.com/what-is-a-router/">
+
+<link rel="icon" href="/assets/favicon.ico">
+<link rel="apple-touch-icon" href="/assets/favicon.png">
+
+<link rel="preload" as="image" href="/assets/what-is-a-router-800.webp">
+
+<!-- Open Graph -->
+<meta property="og:title" content="What is a Router in Backbone.js? Complete Beginner Guide">
+<meta property="og:description" content="Learn what a Router in Backbone.js is, how it works, real examples, best practices, and FAQ.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://backbonetutorials.com/what-is-a-router/">
+<meta property="og:image" content="https://backbonetutorials.com/assets/what-is-a-router-1200.jpg">
+<meta property="og:site_name" content="Backbone Tutorials">
+<meta property="og:locale" content="en_US">
+
+<!-- Twitter -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="What is a Router in Backbone.js? Complete Beginner Guide">
+<meta name="twitter:description" content="Learn what a Router in Backbone.js is, how it works, real examples, best practices, and FAQ.">
+<meta name="twitter:image" content="https://backbonetutorials.com/assets/what-is-a-router-1200.jpg">
+<meta name="twitter:url" content="https://backbonetutorials.com/what-is-a-router/">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+
+<style>
+html{
+  scroll-behavior:smooth;
+}
+
+body { font-family: 'Inter', sans-serif; margin:0; background:#f4f6f9; color:#1f2937; line-height:1.7; }
+.container {
+  max-width:900px;
+  margin:30px auto;
+  padding:20px;
+  background:#fff;
+  border-radius:10px;
+  box-shadow:0 2px 10px rgba(0,0,0,0.04);
+}
+h1,h2,h3 { color:#111827; }
+
+.nav {
+  background:#111827;
+  padding:15px;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  flex-wrap:wrap;
+  gap:8px;
+}
+
+.nav a {
+  color:white;
+  margin:0 10px;
+  text-decoration:none;
+  font-weight:600;
+}
+
+.nav a:hover {
+  text-decoration:underline;
+}
+
+.nav-logo img{
+  vertical-align:middle;
+  margin-right:12px;
+  border-radius:8px;
+}
+
+figure {
+  margin:30px 0;
+}
+
+img {
+  width:100%;
+  height:auto;
+  border-radius:10px;
+}
+
+pre {
+  background:#111;
+  color:#eee;
+  padding:15px;
+  border-radius:8px;
+  overflow-x:auto;
+  box-shadow:0 2px 8px rgba(0,0,0,0.15);
+}
+
+.cta {
+  background:#eef2ff;
+  padding:20px;
+  margin-top:30px;
+  text-align:center;
+  border-radius:10px;
+}
+
+a { color:#2563eb; }
+
+.back-home {
+  margin-top:25px;
+}
+
+footer {
+  background:#111827;
+  color:white;
+  text-align:center;
+  padding:30px 20px;
+  margin-top:40px;
+}
+
+footer a {
+  color:#93c5fd;
+  text-decoration:none;
+}
+
+footer a:hover {
+  text-decoration:underline;
+}
+
+.btn{
+  display:inline-block;
+  background:#2563eb;
+  color:white;
+  padding:12px 22px;
+  border-radius:8px;
+  text-decoration:none;
+  font-weight:600;
+  margin-top:15px;
+  transition:0.2s ease;
+}
+
+.btn:hover{
+  background:#1d4ed8;
+  transform:translateY(-1px);
+}
+
+.card {
+  background:#fff;
+  padding:20px;
+  border-radius:10px;
+  box-shadow:0 2px 8px rgba(0,0,0,0.05);
+  overflow:hidden;
+  max-width:100%;
+  transition:0.2s ease;
+}
+
+.card:hover{
+  transform:translateY(-2px);
+  box-shadow:0 6px 18px rgba(0,0,0,0.08);
+}
+
+.toc-list{
+  padding-left:20px;
+}
+
+.toc-list li{
+  margin-bottom:8px;
+}
+
+.author-line{
+  font-size:15px;
+  margin-top:-6px;
+  margin-bottom:10px;
+  color:#4b5563;
+}
+
+figcaption{
+  font-size:14px;
+  color:#6b7280;
+  margin-top:10px;
+}
+
+#faq h3{
+  margin-top:25px;
+}
+
+#faq p{
+  margin-bottom:18px;
+}
+
+@media(max-width:600px){
+  .container { padding:15px; }
+}
+</style>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+
+    {
+      "@type": "Organization",
+      "@id": "https://backbonetutorials.com/#organization",
+      "name": "Backbone Tutorials",
+      "url": "https://backbonetutorials.com",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://backbonetutorials.com/assets/logo.png"
+      },
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "contactType": "customer support",
+        "areaServed": "Worldwide"
+      }
+    },
+
+    {
+      "@type": "WebSite",
+      "@id": "https://backbonetutorials.com/#website",
+      "url": "https://backbonetutorials.com/",
+      "name": "Backbone Tutorials",
+      "publisher": {
+        "@id": "https://backbonetutorials.com/#organization"
+      }
+    },
+
+    {
+      "@type": "Person",
+      "@id": "https://backbonetutorials.com/author/backbone-tutorials-team/#person",
+      "name": "Backbone Tutorials Team",
+      "url": "https://backbonetutorials.com/author/backbone-tutorials-team/",
+      "worksFor": {
+        "@id": "https://backbonetutorials.com/#organization"
+      },
+      "jobTitle": "Frontend JavaScript Editorial Team",
+      "knowsAbout": [
+        "Backbone.js",
+        "JavaScript",
+        "Frontend Development",
+        "Single Page Applications"
+      ]
+    },
+
+    {
+      "@type": "WebPage",
+      "@id": "https://backbonetutorials.com/what-is-a-router/#webpage",
+      "url": "https://backbonetutorials.com/what-is-a-router/",
+      "name": "What is a Router in Backbone.js",
+      "headline": "What is a Router in Backbone.js?",
+      "description": "Learn what a Router in Backbone.js is, how it works, real examples, best practices, and FAQ.",
+      "inLanguage": "en",
+      "image": {
+        "@type": "ImageObject",
+        "url": "https://backbonetutorials.com/assets/what-is-a-router-1200.jpg",
+        "width": 1200,
+        "height": 800
+      },
+      "isPartOf": {
+        "@id": "https://backbonetutorials.com/#website"
+      },
+      "author": {
+        "@id": "https://backbonetutorials.com/author/backbone-tutorials-team/#person"
+      },
+      "publisher": {
+        "@id": "https://backbonetutorials.com/#organization"
+      },
+      "breadcrumb": {
+        "@id": "https://backbonetutorials.com/what-is-a-router/#breadcrumb"
+      },
+      "mainEntity": {
+        "@id": "https://backbonetutorials.com/what-is-a-router/#article"
+      }
+    },
+
+    {
+      "@type": "TechArticle",
+      "@id": "https://backbonetutorials.com/what-is-a-router/#article",
+      "url": "https://backbonetutorials.com/what-is-a-router/",
+      "headline": "What is a Router in Backbone.js?",
+      "description": "Learn what a Router in Backbone.js is, how it works, real examples, best practices, and FAQ.",
+      "inLanguage": "en",
+      "image": {
+        "@type": "ImageObject",
+        "url": "https://backbonetutorials.com/assets/what-is-a-router-1200.jpg",
+        "width": 1200,
+        "height": 800
+      },
+      "author": {
+        "@id": "https://backbonetutorials.com/author/backbone-tutorials-team/#person"
+      },
+      "publisher": {
+        "@id": "https://backbonetutorials.com/#organization"
+      },
+      "mainEntityOfPage": {
+        "@id": "https://backbonetutorials.com/what-is-a-router/#webpage"
+      },
+      "datePublished": "2026-05-12",
+      "dateModified": "2026-05-12",
+      "keywords": [
+        "Backbone.js",
+        "Backbone Router",
+        "JavaScript Framework",
+        "Single Page Application",
+        "Frontend Development"
+      ]
+    },
+
+    {
+      "@type": "BreadcrumbList",
+      "@id": "https://backbonetutorials.com/what-is-a-router/#breadcrumb",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://backbonetutorials.com/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Router",
+          "item": "https://backbonetutorials.com/what-is-a-router/"
+        }
+      ]
+    },
+
+    {
+      "@type": "FAQPage",
+      "@id": "https://backbonetutorials.com/what-is-a-router/#faq",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What is a Router in Backbone.js?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "A Router in Backbone.js maps URL routes to specific functions and controls navigation inside a single-page application."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Why is routing important in web applications?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Routing allows applications to update content dynamically without reloading the page, improving performance and user experience."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How does Backbone Router work with models and views?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "The router handles navigation, models manage data, and views render the interface, creating a complete application flow."
+          }
+        }
+      ]
+    }
+
+  ]
+}
+</script>
+
+</head>
+
+<body>
+
+<nav class="nav" aria-label="Main Navigation">
+
+<a href="/" class="nav-logo" title="Backbone Tutorials Homepage">
+<img 
+src="/assets/logo.png" 
+alt="Backbone Tutorials Logo"
+width="36"
+height="36"
+loading="eager"
+decoding="async">
+</a>
+
+<a href="/" title="Backbone.js Tutorials Homepage">Home</a>
+
+<a href="/backbonejs/" title="Backbone.js Complete Guide">
+Backbone Guide
+</a>
+
+<a href="/what-is-a-router/" title="What is a Router in Backbone.js">
+Router
+</a>
+
+<a href="/what-is-a-model/" title="What is a Model in Backbone.js">
+Model
+</a>
+
+<a href="/what-is-a-view/" title="What is a View in Backbone.js">
+View
+</a>
+
+</nav>
+
+<main>
+
+<article class="container">
+
+<h1>What is a Router in Backbone.js?</h1>
+
+<p class="author-line">
+Author:
+<a href="/author/backbone-tutorials-team/">
+Backbone Tutorials Team
+</a>
+</p>
+
+<p class="author-line">
+Last Updated: May 2026
+</p>
+
+<p class="author-line">
+7 min read
+</p>
+
+<p><strong>Backbone.js Router</strong> is one of the most important components in a Backbone application. It is responsible for managing navigation and connecting URLs to specific functions in your application.</p>
+
+<p>If you are building a single-page application (SPA), the router ensures that users can navigate between different sections without reloading the page. To understand how it works with other components, explore the <a href="/backbonejs/">Backbone.js tutorial hub</a> and continue learning about <a href="/what-is-a-model/">Models</a> and <a href="/what-is-a-view/">Views</a>.</p>
+
+<div class="card">
+
+<h2>Table of Contents</h2>
+
+<ul class="toc-list">
+
+<li>
+<a href="#what-you-will-learn">
+What You Will Learn
+</a>
+</li>
+
+<li>
+<a href="#why-router-is-important">
+Why Router is Important
+</a>
+</li>
+
+<li>
+<a href="#how-router-works">
+How Backbone Router Works
+</a>
+</li>
+
+<li>
+<a href="#routing-logic">
+Understanding Routing Logic
+</a>
+</li>
+
+<li>
+<a href="#real-world-example">
+Real-World Example
+</a>
+</li>
+
+<li>
+<a href="#router-with-components">
+How Router Works with Model and View
+</a>
+</li>
+
+<li>
+<a href="#best-practices">
+Best Practices
+</a>
+</li>
+
+<li>
+<a href="#common-mistakes">
+Common Mistakes
+</a>
+</li>
+
+<li>
+<a href="#advanced-router-usage">
+Advanced Router Usage
+</a>
+</li>
+
+<li>
+<a href="#in-depth-explanation">
+In-Depth Explanation
+</a>
+</li>
+
+<li>
+<a href="#faq">
+FAQ
+</a>
+</li>
+
+<li>
+<a href="#conclusion">
+Conclusion
+</a>
+</li>
+
+</ul>
+
+</div>
+
+<h2 id="what-you-will-learn">
+What You Will Learn
+</h2>
+
+<ul>
+<li>How Backbone Router works</li>
+<li>How routes control navigation</li>
+<li>How Router interacts with Models and Views</li>
+<li>Common routing patterns in Backbone.js</li>
+<li>Best practices for scalable applications</li>
+</ul>
+
+<!-- IMAGE -->
+<figure>
+
+<picture>
+
+<source 
+srcset="
+/assets/what-is-a-router-400.webp 400w,
+/assets/what-is-a-router-800.webp 800w,
+/assets/what-is-a-router-1200.webp 1200w"
+sizes="(max-width: 600px) 100vw, 800px"
+type="image/webp">
+
+<source 
+srcset="
+/assets/what-is-a-router-400.jpg 400w,
+/assets/what-is-a-router-800.jpg 800w,
+/assets/what-is-a-router-1200.jpg 1200w"
+sizes="(max-width: 600px) 100vw, 800px"
+type="image/jpeg">
+
+<img 
+src="/assets/what-is-a-router-800.webp"
+alt="What is a Router in Backbone.js explained visually"
+loading="eager"
+decoding="async"
+fetchpriority="high"
+width="800"
+height="533">
+
+</picture>
+
+<figcaption>
+Backbone Router controlling navigation flow in a single-page application
+</figcaption>
+
+</figure>
+
+<h2 id="why-router-is-important">
+Why Router is Important in Backbone.js
+</h2>
+
+<p>
+In traditional websites, every navigation action reloads the page. This approach is slow and creates a poor user experience. Backbone Router solves this by allowing navigation to happen dynamically. To understand the complete architecture, explore the <a href="/backbonejs/">Backbone.js tutorial hub</a>.
+</p>
+
+<p>This means that when a user clicks a link, the application updates the content without reloading the entire page.</p>
+
+<ul>
+<li>Improves application speed</li>
+<li>Enhances user experience</li>
+<li>Creates smooth navigation flow</li>
+<li>Supports single-page application behavior</li>
+</ul>
+
+<h2 id="how-router-works">
+How Backbone Router Works
+</h2>
+
+<p>The router works by mapping URL patterns to functions. Each route triggers a specific function when accessed.</p>
+
+<pre><code>
+var AppRouter = Backbone.Router.extend({
+  routes: {
+    "home": "homePage",
+    "profile": "profilePage"
+  }
+});
+</code></pre>
+
+<p>When a user visits a specific route, the corresponding function executes and updates the view.</p>
+
+<h2 id="routing-logic">
+Understanding Routing Logic
+</h2>
+
+<p>Routing logic is essential for controlling how users move through your application. It defines which content is shown based on the URL.</p>
+
+<p>This is especially important in applications where multiple views exist within a single page.</p>
+
+<h2 id="real-world-example">
+Real-World Example
+</h2>
+
+<p>Imagine a dashboard application with multiple sections like Home, Profile, and Settings. When a user clicks a menu item, the router updates the content instantly without refreshing the page.</p>
+
+<p>This creates a seamless experience similar to desktop applications.</p>
+
+<p>
+Many older Backbone.js applications relied heavily on routers to manage frontend navigation before modern reactive frameworks became more common in large-scale projects.
+</p>
+
+<h2 id="router-with-components">
+How Router Works with Model and View
+</h2>
+
+<p>The Router does not work alone. It interacts with other Backbone components:</p>
+
+<ul>
+<li><a href="/what-is-a-model/">Model</a> handles data</li>
+<li><a href="/what-is-a-view/">View</a> renders UI</li>
+</ul>
+
+<p>The router decides which view to display and when to update it.</p>
+
+<h2 id="best-practices">
+Best Practices for Using Router
+</h2>
+
+<ul>
+<li>Keep routes simple and readable</li>
+<li>Use meaningful route names</li>
+<li>Avoid complex nested routes</li>
+<li>Separate routing logic from business logic</li>
+</ul>
+
+<h2 id="common-mistakes">
+Common Mistakes Developers Make
+</h2>
+
+<p>Many developers overload the router with too much logic. This makes the application difficult to maintain.</p>
+
+<p>The router should only handle navigation, not data or UI logic.</p>
+
+<h2 id="advanced-router-usage">
+Advanced Router Usage
+</h2>
+
+<p>In more advanced applications, routers can handle parameters, query strings, and dynamic routes. This allows developers to build flexible navigation systems.</p>
+
+<p>For example, you can create routes that respond to user IDs or specific actions.</p>
+
+<h2 id="in-depth-explanation">
+In-Depth Explanation
+</h2>
+<p>Understanding Backbone.js deeply requires knowing how each component interacts within an application. The <a href="/what-is-a-model/">Model</a> manages data, the <a href="/what-is-a-view/">View</a> renders the interface, and the <a href="/what-is-a-router/">Router</a> controls navigation. This separation ensures that applications remain scalable and maintainable even as complexity increases.</p>
+<p>
+By understanding how Router communicates with Models and Views, developers can create applications that remain organized, flexible, and easier to maintain over time.
+</p>
+
+<h2 id="faq">
+Frequently Asked Questions
+</h2>
+
+<h3>What does a Backbone Router do?</h3>
+<p>
+A Backbone Router manages navigation and maps URLs to specific functions inside an application.
+</p>
+
+<h3>Why are routers important in single-page applications?</h3>
+<p>
+Routers allow applications to update content dynamically without refreshing the page.
+</p>
+
+<h3>Can Backbone Router work with Models and Views?</h3>
+<p>
+Yes. Routers coordinate navigation while Models manage data and Views render the interface.
+</p>
+
+<h2 id="conclusion">
+Conclusion
+</h2>
+
+<p>Backbone Router is essential for building modern web applications. It allows developers to create dynamic navigation systems that improve performance and user experience.</p>
+
+<p>By mastering routing, you gain control over how users interact with your application.</p>
+
+<p>
+For many developers learning older JavaScript frameworks, understanding routing is often the point where Backbone.js architecture starts making much more sense.
+</p>
+
+<h2>Related Tutorials</h2>
+
+<ul>
+<li><a href="/backbonejs/">Backbone.js Complete Guide</a></li>
+<li><a href="/what-is-a-model/">What is a Model in Backbone.js?</a></li>
+<li><a href="/what-is-a-view/">What is a View in Backbone.js?</a></li>
+</ul>
+
+<h2>Official Documentation</h2>
+<p>
+<a href="https://backbonejs.org/" 
+target="_blank" 
+rel="noopener noreferrer">
+Official Backbone.js Documentation
+</a>
+</p>
+
+<div class="cta">
+<h2>Continue Learning Backbone.js</h2>
+<p>Next step: understand how data works in your app.</p>
+<a href="/what-is-a-model/" class="btn">
+Go to Model Guide →
+</a>
+</div>
+
+<div class="back-home">
+<a href="/backbonejs/" title="Backbone.js Tutorial Hub">
+← Back to Backbone.js Tutorial Hub
+</a>
+</div>
+
+<div class="back-home">
+<a href="/" title="Homepage">
+Back to Homepage
+</a>
+</div>
+
+</article>
+
+</main>
+
+<footer>
+
+<p>
+Backbone Tutorials
+</p>
+
+<p>
+<a href="/">Home</a> | 
+<a href="/about/">About</a> | 
+<a href="/contact/">Contact</a> | 
+<a href="/privacy-policy/">Privacy Policy</a> | 
+<a href="/terms/">Terms</a>
+</p>
+
+<p>
+© 2026 Backbone Tutorials
+</p>
+
+</footer>
+
+</body>
+</html>
