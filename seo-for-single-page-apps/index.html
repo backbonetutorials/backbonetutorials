@@ -1,0 +1,1000 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>SEO for Single Page Apps (SPA SEO) Complete Guide</title>
+
+<meta name="description" content="Learn how SEO works for Single Page Applications (SPAs), including JavaScript rendering, crawlability, indexing, routing, and frontend optimization strategies.">
+
+<meta name="robots" content="index, follow">
+<meta name="author" content="Backbone Tutorials">
+<meta name="theme-color" content="#2563eb">
+<meta name="format-detection" content="telephone=no">
+
+<link rel="canonical" href="https://backbonetutorials.com/seo-for-single-page-apps/">
+
+<link rel="icon" href="/assets/favicon.ico">
+<link rel="apple-touch-icon" href="/assets/favicon.png">
+
+<link
+rel="preload"
+as="image"
+href="/assets/seo-for-single-page-apps-800.webp"
+imagesrcset="
+/assets/seo-for-single-page-apps-400.webp 400w,
+/assets/seo-for-single-page-apps-800.webp 800w,
+/assets/seo-for-single-page-apps-1200.webp 1200w"
+imagesizes="(max-width: 600px) 100vw, 800px">
+
+<!-- Open Graph -->
+<meta property="og:title" content="SEO for Single Page Apps (SPA SEO) Complete Guide">
+<meta property="og:description" content="Learn how SEO works in Single Page Applications including routing, rendering, indexing, crawlability, and frontend architecture optimization.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://backbonetutorials.com/seo-for-single-page-apps/">
+<meta property="og:image" content="https://backbonetutorials.com/assets/seo-for-single-page-apps-1200.jpg">
+<meta property="og:site_name" content="Backbone Tutorials">
+<meta property="og:locale" content="en_US">
+
+<!-- Twitter -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="SEO for Single Page Apps (SPA SEO) Complete Guide">
+<meta name="twitter:description" content="Learn SEO strategies for Single Page Applications including crawlability, rendering, routing, and frontend optimization.">
+<meta name="twitter:image" content="https://backbonetutorials.com/assets/seo-for-single-page-apps-1200.jpg">
+<meta name="twitter:url" content="https://backbonetutorials.com/seo-for-single-page-apps/">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+
+<style>
+
+html{
+  scroll-behavior:smooth;
+}
+
+body {
+  font-family:'Inter',sans-serif;
+  margin:0;
+  background:#f4f6f9;
+  color:#1f2937;
+  line-height:1.7;
+}
+
+.container {
+  max-width:900px;
+  margin:30px auto;
+  padding:20px;
+  background:#fff;
+  border-radius:10px;
+  box-shadow:0 2px 10px rgba(0,0,0,0.04);
+}
+
+h1,h2,h3 {
+  color:#111827;
+}
+
+.nav {
+  background:#111827;
+  padding:15px;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  flex-wrap:wrap;
+  gap:8px;
+}
+
+.nav a {
+  color:white;
+  margin:0 10px;
+  text-decoration:none;
+  font-weight:600;
+}
+
+.nav a:hover {
+  text-decoration:underline;
+}
+
+.nav-logo img{
+  vertical-align:middle;
+  margin-right:12px;
+  border-radius:8px;
+}
+
+figure {
+  margin:30px 0;
+}
+
+picture{
+  display:block;
+}
+
+img {
+  width:100%;
+  height:auto;
+  border-radius:10px;
+}
+
+pre {
+  background:#111;
+  color:#eee;
+  padding:15px;
+  border-radius:8px;
+  overflow-x:auto;
+  box-shadow:0 2px 8px rgba(0,0,0,0.15);
+}
+
+.cta {
+  background:#eef2ff;
+  padding:20px;
+  margin-top:30px;
+  text-align:center;
+  border-radius:10px;
+}
+
+a {
+  color:#2563eb;
+}
+
+.back-home {
+  margin-top:25px;
+}
+
+footer {
+  background:#111827;
+  color:white;
+  text-align:center;
+  padding:30px 20px;
+  margin-top:40px;
+}
+
+footer a {
+  color:#93c5fd;
+  text-decoration:none;
+}
+
+footer a:hover {
+  text-decoration:underline;
+}
+
+.btn{
+  display:inline-block;
+  background:#2563eb;
+  color:white;
+  padding:12px 22px;
+  border-radius:8px;
+  text-decoration:none;
+  font-weight:600;
+  margin-top:15px;
+  transition:0.2s ease;
+}
+
+.btn:hover{
+  background:#1d4ed8;
+  transform:translateY(-1px);
+}
+
+.card {
+  background:#fff;
+  padding:20px;
+  border-radius:10px;
+  box-shadow:0 2px 8px rgba(0,0,0,0.05);
+  overflow:hidden;
+  max-width:100%;
+  transition:0.2s ease;
+}
+
+.card:hover{
+  transform:translateY(-2px);
+}
+
+.toc-list{
+  padding-left:20px;
+}
+
+.toc-list li{
+  margin-bottom:8px;
+}
+
+.author-line{
+  font-size:15px;
+  margin-top:-6px;
+  margin-bottom:10px;
+  color:#4b5563;
+}
+
+figcaption{
+  font-size:14px;
+  color:#6b7280;
+  margin-top:10px;
+}
+
+#faq h3{
+  margin-top:25px;
+}
+
+#faq p{
+  margin-bottom:18px;
+}
+
+@media(max-width:600px){
+  .container {
+    padding:15px;
+  }
+}
+
+</style>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+
+    {
+      "@type": "Organization",
+      "@id": "https://backbonetutorials.com/#organization",
+      "name": "Backbone Tutorials",
+      "url": "https://backbonetutorials.com/",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://backbonetutorials.com/assets/logo.png"
+      },
+      "sameAs": [
+        "https://x.com/backbonetutor",
+        "https://github.com/backbonetutorials/backbonetutorials",
+        "https://www.youtube.com/@BACKBONETUTORIALS"
+      ],
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "contactType": "customer support",
+        "email": "backbonetutorials2026@gmail.com",
+        "availableLanguage": [
+          "English"
+        ],
+        "areaServed": "Worldwide"
+      }
+    },
+
+    {
+      "@type": "WebSite",
+      "@id": "https://backbonetutorials.com/#website",
+      "url": "https://backbonetutorials.com/",
+      "name": "Backbone Tutorials",
+      "publisher": {
+        "@id": "https://backbonetutorials.com/#organization"
+      }
+    },
+
+    {
+      "@type": "Person",
+      "@id": "https://backbonetutorials.com/author/backbone-tutorials-team/#person",
+      "name": "Backbone Tutorials Team",
+      "url": "https://backbonetutorials.com/author/backbone-tutorials-team/",
+      "worksFor": {
+        "@id": "https://backbonetutorials.com/#organization"
+      },
+      "jobTitle": "Frontend JavaScript Editorial Team",
+      "knowsAbout": [
+        "Backbone.js",
+        "JavaScript",
+        "Frontend Development",
+        "Single Page Applications"
+      ]
+    },
+
+    {
+      "@type": "WebPage",
+      "@id": "https://backbonetutorials.com/seo-for-single-page-apps/#webpage",
+      "url": "https://backbonetutorials.com/seo-for-single-page-apps/",
+      "name": "SEO for Single Page Apps",
+      "headline": "SEO for Single Page Apps",
+      "description": "Learn how SEO works for Single Page Applications, including JavaScript rendering, crawlability, indexing, routing, and frontend optimization strategies.",
+      "inLanguage": "en",
+
+      "image": {
+        "@type": "ImageObject",
+        "url": "https://backbonetutorials.com/assets/seo-for-single-page-apps-1200.jpg",
+        "width": 1200,
+        "height": 800
+      },
+
+      "isPartOf": {
+        "@id": "https://backbonetutorials.com/#website"
+      },
+
+      "author": {
+        "@id": "https://backbonetutorials.com/author/backbone-tutorials-team/#person"
+      },
+
+      "publisher": {
+        "@id": "https://backbonetutorials.com/#organization"
+      },
+
+      "breadcrumb": {
+        "@id": "https://backbonetutorials.com/seo-for-single-page-apps/#breadcrumb"
+      },
+
+      "mainEntity": {
+        "@id": "https://backbonetutorials.com/seo-for-single-page-apps/#article"
+      }
+    },
+
+    {
+      "@type": "TechArticle",
+      "@id": "https://backbonetutorials.com/seo-for-single-page-apps/#article",
+      "url": "https://backbonetutorials.com/seo-for-single-page-apps/",
+      "headline": "SEO for Single Page Apps",
+      "description": "Learn how SEO works in Single Page Applications including crawlability, rendering, routing, indexing, and frontend optimization.",
+      "inLanguage": "en",
+
+      "image": {
+        "@type": "ImageObject",
+        "url": "https://backbonetutorials.com/assets/seo-for-single-page-apps-1200.jpg",
+        "width": 1200,
+        "height": 800
+      },
+
+      "author": {
+        "@id": "https://backbonetutorials.com/author/backbone-tutorials-team/#person"
+      },
+
+      "publisher": {
+        "@id": "https://backbonetutorials.com/#organization"
+      },
+
+      "mainEntityOfPage": {
+        "@id": "https://backbonetutorials.com/seo-for-single-page-apps/#webpage"
+      },
+
+      "datePublished": "2026-05-21",
+      "dateModified": "2026-05-21",
+
+      "articleSection": [
+        "SEO",
+        "Single Page Applications",
+        "Frontend Architecture"
+      ],
+
+      "keywords": [
+        "Single Page Applications",
+        "SPA SEO",
+        "JavaScript SEO",
+        "Client Side Rendering",
+        "Crawlability",
+        "Frontend Architecture",
+        "Backbone.js"
+      ],
+
+      "about": [
+        {
+          "@type": "Thing",
+          "name": "Single Page Applications"
+        },
+        {
+          "@type": "Thing",
+          "name": "JavaScript SEO"
+        },
+        {
+          "@type": "Thing",
+          "name": "Frontend Architecture"
+        }
+      ],
+
+      "mentions": [
+        {
+          "@type": "SoftwareApplication",
+          "name": "Backbone.js"
+        },
+        {
+          "@type": "SoftwareApplication",
+          "name": "RequireJS"
+        },
+        {
+          "@type": "Thing",
+          "name": "Client Side Rendering"
+        },
+        {
+          "@type": "Thing",
+          "name": "Server Side Rendering"
+        }
+      ]
+    },
+
+    {
+      "@type": "BreadcrumbList",
+      "@id": "https://backbonetutorials.com/seo-for-single-page-apps/#breadcrumb",
+      "itemListElement": [
+
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://backbonetutorials.com/"
+        },
+
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "SEO for Single Page Apps",
+          "item": "https://backbonetutorials.com/seo-for-single-page-apps/"
+        }
+
+      ]
+    },
+
+    {
+      "@type": "FAQPage",
+      "@id": "https://backbonetutorials.com/seo-for-single-page-apps/#faq",
+      "mainEntity": [
+
+        {
+          "@type": "Question",
+          "name": "What is SEO for Single Page Applications?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "SEO for Single Page Applications involves optimizing JavaScript-rendered applications so search engines can crawl, render, and index content properly."
+          }
+        },
+
+        {
+          "@type": "Question",
+          "name": "Can Google crawl Single Page Applications?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. Google can render many JavaScript applications, but proper architecture and optimization are still important for crawlability and indexing."
+          }
+        },
+
+        {
+          "@type": "Question",
+          "name": "Why is SEO difficult for SPAs?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Single Page Applications often rely heavily on JavaScript rendering, which can create challenges for search engine crawlers if content is not rendered correctly."
+          }
+        },
+
+        {
+          "@type": "Question",
+          "name": "Does Backbone.js support SEO-friendly routing?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. Backbone.js routing can support SEO-friendly URLs when applications are structured correctly."
+          }
+        }
+
+      ]
+    }
+
+  ]
+}
+</script>
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-FYJP43XDHH"></script>
+
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+
+gtag('config', 'G-FYJP43XDHH');
+</script>
+
+</head>
+
+<body>
+
+<nav class="nav" aria-label="Main Navigation">
+
+<a href="/" class="nav-logo" title="Backbone Tutorials Homepage">
+<img
+src="/assets/logo.png"
+alt="Backbone Tutorials Logo"
+width="36"
+height="36"
+loading="lazy"
+decoding="async">
+</a>
+
+<a href="/" title="Backbone.js Tutorials Homepage">
+Home
+</a>
+
+<a href="/backbonejs/" title="Backbone.js Complete Guide">
+Backbone Guide
+</a>
+
+<a href="/what-is-a-router/" title="What is a Router in Backbone.js">
+Router
+</a>
+
+<a href="/what-is-a-model/" title="What is a Model in Backbone.js">
+Model
+</a>
+
+<a href="/what-is-a-view/" title="What is a View in Backbone.js">
+View
+</a>
+
+<a href="/what-is-a-collection/" title="What is a Collection in Backbone.js">
+Collection
+</a>
+
+</nav>
+
+<main>
+
+<article class="container">
+
+<h1>SEO for Single Page Apps Complete Guide</h1>
+
+<p class="author-line">
+Author:
+<a href="/author/backbone-tutorials-team/">
+Backbone Tutorials Team
+</a>
+</p>
+
+<p class="author-line">
+Last Updated: May 2026
+</p>
+
+<p class="author-line">
+10 min read
+</p>
+
+<p>
+Single Page Applications changed how frontend applications are built by dynamically rendering content without requiring full page reloads. Frameworks like Backbone.js helped popularize lightweight SPA architecture and client-side routing patterns.
+</p>
+
+<p>
+This guide explains how SEO works in Single Page Applications, including rendering, crawlability, indexing, routing, and JavaScript optimization strategies.
+</p>
+
+<p>
+To better understand frontend architecture and Single Page Application behavior, it is also recommended to understand how <a href="/what-is-a-model/">Models</a>, <a href="/what-is-a-view/">Views</a>, <a href="/what-is-a-router/">Routers</a>, and <a href="/what-is-a-collection/">Collections</a> work together inside Backbone.js applications.
+</p>
+
+<p>
+As Single Page Applications become larger and more dynamic, frontend architecture and rendering strategy become increasingly important for SEO performance and crawlability.
+</p>
+
+<div class="card">
+
+<h2>Table of Contents</h2>
+
+<ul class="toc-list">
+
+<li>
+<a href="#what-is-spa-seo">
+What is SPA SEO?
+</a>
+</li>
+
+<li>
+<a href="#why-seo-is-difficult">
+Why SEO is Difficult for SPAs
+</a>
+</li>
+
+<li>
+<a href="#client-side-rendering">
+Client Side Rendering
+</a>
+</li>
+
+<li>
+<a href="#routing-and-urls">
+Routing and URLs
+</a>
+</li>
+
+<li>
+<a href="#rendering-strategies">
+Rendering Strategies
+</a>
+</li>
+
+<li>
+<a href="#crawlability">
+Crawlability
+</a>
+</li>
+
+<li>
+<a href="#best-practices">
+Best Practices
+</a>
+</li>
+
+<li>
+<a href="#faq">
+FAQ
+</a>
+</li>
+
+<li>
+<a href="#conclusion">
+Conclusion
+</a>
+</li>
+
+</ul>
+
+</div>
+
+<figure>
+
+<picture>
+
+<source
+srcset="
+/assets/seo-for-single-page-apps-400.webp 400w,
+/assets/seo-for-single-page-apps-800.webp 800w,
+/assets/seo-for-single-page-apps-1200.webp 1200w"
+sizes="(max-width: 600px) 100vw, 800px"
+type="image/webp">
+
+<source
+srcset="
+/assets/seo-for-single-page-apps-400.jpg 400w,
+/assets/seo-for-single-page-apps-800.jpg 800w,
+/assets/seo-for-single-page-apps-1200.jpg 1200w"
+sizes="(max-width: 600px) 100vw, 800px"
+type="image/jpeg">
+
+<img
+src="/assets/seo-for-single-page-apps-800.webp"
+alt="Single Page Application SEO architecture showing routing rendering and indexing"
+loading="eager"
+fetchpriority="high"
+decoding="async"
+width="800"
+height="533">
+
+</picture>
+
+<figcaption>
+Single Page Applications require careful routing and rendering strategies to improve search engine crawlability and indexing.
+</figcaption>
+
+</figure>
+
+<h2 id="what-is-spa-seo">
+What is SPA SEO?
+</h2>
+
+<p>
+SEO for Single Page Applications focuses on helping search engines properly crawl, render, and index JavaScript-generated content.
+</p>
+
+<p>
+Unlike traditional websites, SPAs dynamically update content without full page reloads. This changes how crawlers interpret application structure and rendering behavior.
+</p>
+
+<h2 id="why-seo-is-difficult">
+Why SEO is Difficult for SPAs
+</h2>
+
+<p>
+Many Single Page Applications depend heavily on client-side JavaScript rendering.
+</p>
+
+<ul>
+<li>Content may load after initial HTML rendering</li>
+<li>JavaScript execution may delay indexing</li>
+<li>Dynamic routes can confuse crawlers</li>
+<li>Metadata may not update properly</li>
+<li>Large bundles can slow rendering</li>
+</ul>
+
+<p>
+Without proper optimization, search engines may struggle to process SPA content correctly.
+</p>
+
+<h2 id="client-side-rendering">
+Client Side Rendering
+</h2>
+
+<p>
+Backbone.js applications commonly use client-side rendering where JavaScript generates interface content inside the browser.
+</p>
+
+<pre><code>
+router.navigate('/products');
+
+view.render();
+</code></pre>
+
+<p>
+This rendering approach improves frontend interactivity but can create SEO challenges if crawlers cannot render JavaScript efficiently.
+</p>
+
+<h2 id="routing-and-urls">
+Routing and URLs
+</h2>
+
+<p>
+SEO-friendly routing remains important for Single Page Applications.
+</p>
+
+<pre><code>
+var AppRouter = Backbone.Router.extend({
+
+  routes: {
+    'products/:id': 'showProduct'
+  }
+
+});
+</code></pre>
+
+<p>
+Clean URLs improve:
+</p>
+
+<ul>
+<li>crawlability</li>
+<li>indexing</li>
+<li>user experience</li>
+<li>shareability</li>
+</ul>
+
+<p>
+Backbone.js routing helped introduce many frontend navigation patterns later adopted by modern frameworks.
+</p>
+
+<p>
+As Single Page Applications become larger, developers often organize routing systems, Views, Models, and application logic using modular frontend architecture patterns.
+</p>
+
+<p>
+Learn more in
+<a href="/organizing-backbone-using-modules/">
+Organizing Backbone.js Using Modules
+</a>.
+</p>
+
+<h2 id="rendering-strategies">
+Rendering Strategies
+</h2>
+
+<p>
+Modern applications often use different rendering approaches:
+</p>
+
+<ul>
+<li>Client Side Rendering (CSR)</li>
+<li>Server Side Rendering (SSR)</li>
+<li>Static Site Generation (SSG)</li>
+<li>Hybrid Rendering</li>
+</ul>
+
+<p>
+Each approach has different tradeoffs involving performance, complexity, scalability, and SEO.
+</p>
+
+<h2 id="crawlability">
+Crawlability
+</h2>
+
+<p>
+Search engines must be able to:
+</p>
+
+<ul>
+<li>discover URLs</li>
+<li>render JavaScript</li>
+<li>load metadata</li>
+<li>process internal links</li>
+<li>index rendered content</li>
+</ul>
+
+<p>
+Applications with poor internal linking or broken rendering pipelines may experience indexing problems.
+</p>
+
+<h2 id="best-practices">
+Best Practices
+</h2>
+
+<ul>
+<li>Use clean URLs</li>
+<li>Render important content early</li>
+<li>Optimize metadata dynamically</li>
+<li>Improve internal linking</li>
+<li>Reduce JavaScript bundle size</li>
+<li>Test rendering inside Google Search Console</li>
+</ul>
+
+<p>
+Maintaining crawlable frontend architecture improves long-term SEO performance for Single Page Applications.
+</p>
+
+<section id="faq">
+
+<h2>Frequently Asked Questions</h2>
+
+<h3>
+What is SEO for Single Page Applications?
+</h3>
+
+<p>
+SEO for Single Page Applications involves optimizing JavaScript-rendered applications so search engines can properly crawl and index content.
+</p>
+
+<h3>
+Can Google crawl Single Page Applications?
+</h3>
+
+<p>
+Yes. Google can render many JavaScript applications, although optimization is still important.
+</p>
+
+<h3>
+Why is SEO difficult for SPAs?
+</h3>
+
+<p>
+Heavy client-side rendering can create crawlability and indexing challenges if applications are not structured correctly.
+</p>
+
+<h3>
+Does Backbone.js support SEO-friendly routing?
+</h3>
+
+<p>
+Yes. Backbone.js can support SEO-friendly URL structures when routing is implemented correctly.
+</p>
+
+</section>
+
+<h2 id="conclusion">
+Conclusion
+</h2>
+
+<p>
+SEO for Single Page Applications remains an important frontend engineering topic because rendering strategy directly affects crawlability, indexing, and search visibility.
+</p>
+
+<p>
+Understanding how routing, rendering, metadata, and frontend architecture interact helps developers build scalable JavaScript applications that remain accessible to search engines.
+</p>
+
+<h2 id="related-tutorials">
+Related Tutorials
+</h2>
+
+<p>
+Continue exploring Backbone.js tutorials and frontend architecture guides below.
+</p>
+
+<ul>
+
+<li>
+<a href="/backbonejs/">
+Backbone.js Complete Guide
+</a>
+</li>
+
+<li>
+<a href="/what-is-a-router/">
+What is a Router in Backbone.js?
+</a>
+</li>
+
+<li>
+<a href="/what-is-a-model/">
+What is a Model in Backbone.js?
+</a>
+</li>
+
+<li>
+<a href="/what-is-a-view/">
+What is a View in Backbone.js?
+</a>
+</li>
+
+<li>
+<a href="/what-is-a-collection/">
+What is a Collection in Backbone.js?
+</a>
+</li>
+
+<li>
+<a href="/organizing-backbone-using-modules/">
+Organizing Backbone.js Using Modules
+</a>
+</li>
+
+<li>
+<a href="/why-would-you-use-backbone/">
+Why Would You Use Backbone?
+</a>
+</li>
+
+<li>
+<a href="/nodejs-restify-mongodb-mongoose/">
+Node.js Restify MongoDB Mongoose
+</a>
+</li>
+
+</ul>
+
+<h2>
+Official Documentation
+</h2>
+
+<p>
+For deeper technical references and API details, you can also visit the official Backbone.js documentation.
+</p>
+
+<p>
+<a href="https://backbonejs.org/"
+target="_blank"
+rel="noopener noreferrer">
+Official Backbone.js Documentation
+</a>
+</p>
+
+<div class="cta">
+
+<h2>
+Continue Learning Backbone.js
+</h2>
+
+<p>
+Explore more Backbone.js tutorials covering Models, Views, Routers, Collections, and frontend architecture.
+</p>
+
+<a href="/backbonejs/" class="btn">
+Explore the Backbone Guide →
+</a>
+
+</div>
+
+<div class="back-home">
+
+<a href="/backbonejs/">
+← Back to Backbone.js Tutorial Hub
+</a>
+
+</div>
+
+<div class="back-home">
+
+<a href="/">
+Back to Homepage
+</a>
+
+</div>
+
+</article>
+
+</main>
+
+<footer>
+
+<p>
+Backbone Tutorials
+</p>
+
+<p>
+<a href="/">Home</a> |
+<a href="/about/">About</a> |
+<a href="/contact/">Contact</a> |
+<a href="/privacy-policy/">Privacy Policy</a> |
+<a href="/terms/">Terms</a>
+</p>
+
+<p>
+© 2026 Backbone Tutorials
+</p>
+
+</footer>
+
+</body>
+</html>

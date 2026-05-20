@@ -3,9 +3,11 @@
 xmlns="https://www.sitemaps.org/schemas/sitemap/0.9"
 xmlns:image="https://www.google.com/schemas/sitemap-image/1.1">
 
+<!-- HOMEPAGE -->
+
 <url>
 <loc>https://backbonetutorials.com/</loc>
-<lastmod>2026-05-12</lastmod>
+<lastmod>2026-05-21</lastmod>
 <changefreq>weekly</changefreq>
 <priority>1.0</priority>
 
@@ -15,9 +17,11 @@ xmlns:image="https://www.google.com/schemas/sitemap-image/1.1">
 </image:image>
 </url>
 
+<!-- MAIN GUIDE -->
+
 <url>
 <loc>https://backbonetutorials.com/backbonejs/</loc>
-<lastmod>2026-05-12</lastmod>
+<lastmod>2026-05-21</lastmod>
 <changefreq>weekly</changefreq>
 <priority>0.9</priority>
 
@@ -27,9 +31,11 @@ xmlns:image="https://www.google.com/schemas/sitemap-image/1.1">
 </image:image>
 </url>
 
+<!-- ROUTER -->
+
 <url>
 <loc>https://backbonetutorials.com/what-is-a-router/</loc>
-<lastmod>2026-05-12</lastmod>
+<lastmod>2026-05-21</lastmod>
 <changefreq>monthly</changefreq>
 <priority>0.8</priority>
 
@@ -39,9 +45,11 @@ xmlns:image="https://www.google.com/schemas/sitemap-image/1.1">
 </image:image>
 </url>
 
+<!-- MODEL -->
+
 <url>
 <loc>https://backbonetutorials.com/what-is-a-model/</loc>
-<lastmod>2026-05-12</lastmod>
+<lastmod>2026-05-21</lastmod>
 <changefreq>monthly</changefreq>
 <priority>0.8</priority>
 
@@ -51,9 +59,11 @@ xmlns:image="https://www.google.com/schemas/sitemap-image/1.1">
 </image:image>
 </url>
 
+<!-- VIEW -->
+
 <url>
 <loc>https://backbonetutorials.com/what-is-a-view/</loc>
-<lastmod>2026-05-12</lastmod>
+<lastmod>2026-05-21</lastmod>
 <changefreq>monthly</changefreq>
 <priority>0.8</priority>
 
@@ -63,9 +73,81 @@ xmlns:image="https://www.google.com/schemas/sitemap-image/1.1">
 </image:image>
 </url>
 
+<!-- COLLECTION -->
+
+<url>
+<loc>https://backbonetutorials.com/what-is-a-collection/</loc>
+<lastmod>2026-05-21</lastmod>
+<changefreq>monthly</changefreq>
+<priority>0.8</priority>
+
+<image:image>
+<image:loc>https://backbonetutorials.com/assets/what-is-a-collection-1200.jpg</image:loc>
+<image:title>What is a Collection in Backbone.js</image:title>
+</image:image>
+</url>
+
+<!-- ORGANIZING MODULES -->
+
+<url>
+<loc>https://backbonetutorials.com/organizing-backbone-using-modules/</loc>
+<lastmod>2026-05-21</lastmod>
+<changefreq>monthly</changefreq>
+<priority>0.7</priority>
+
+<image:image>
+<image:loc>https://backbonetutorials.com/assets/organizing-backbone-using-modules-1200.jpg</image:loc>
+<image:title>Organizing Backbone.js Using Modules</image:title>
+</image:image>
+</url>
+
+<!-- SEO FOR SPA -->
+
+<url>
+<loc>https://backbonetutorials.com/seo-for-single-page-apps/</loc>
+<lastmod>2026-05-21</lastmod>
+<changefreq>monthly</changefreq>
+<priority>0.7</priority>
+
+<image:image>
+<image:loc>https://backbonetutorials.com/assets/seo-for-single-page-apps-1200.jpg</image:loc>
+<image:title>SEO for Single Page Applications</image:title>
+</image:image>
+</url>
+
+<!-- WHY USE BACKBONE -->
+
+<url>
+<loc>https://backbonetutorials.com/why-would-you-use-backbone/</loc>
+<lastmod>2026-05-21</lastmod>
+<changefreq>monthly</changefreq>
+<priority>0.7</priority>
+
+<image:image>
+<image:loc>https://backbonetutorials.com/assets/why-would-you-use-backbone-1200.jpg</image:loc>
+<image:title>Why Would You Use Backbone.js</image:title>
+</image:image>
+</url>
+
+<!-- NODE RESTIFY MONGODB -->
+
+<url>
+<loc>https://backbonetutorials.com/nodejs-restify-mongodb-mongoose/</loc>
+<lastmod>2026-05-21</lastmod>
+<changefreq>monthly</changefreq>
+<priority>0.7</priority>
+
+<image:image>
+<image:loc>https://backbonetutorials.com/assets/nodejs-restify-mongodb-mongoose-1200.jpg</image:loc>
+<image:title>Node.js Restify MongoDB and Mongoose</image:title>
+</image:image>
+</url>
+
+<!-- AUTHOR -->
+
 <url>
 <loc>https://backbonetutorials.com/author/backbone-tutorials-team/</loc>
-<lastmod>2026-05-12</lastmod>
+<lastmod>2026-05-21</lastmod>
 <changefreq>monthly</changefreq>
 <priority>0.6</priority>
 
@@ -75,30 +157,32 @@ xmlns:image="https://www.google.com/schemas/sitemap-image/1.1">
 </image:image>
 </url>
 
+<!-- STATIC PAGES -->
+
 <url>
 <loc>https://backbonetutorials.com/about/</loc>
-<lastmod>2026-05-12</lastmod>
+<lastmod>2026-05-21</lastmod>
 <changefreq>yearly</changefreq>
 <priority>0.3</priority>
 </url>
 
 <url>
 <loc>https://backbonetutorials.com/contact/</loc>
-<lastmod>2026-05-12</lastmod>
+<lastmod>2026-05-21</lastmod>
 <changefreq>yearly</changefreq>
 <priority>0.3</priority>
 </url>
 
 <url>
 <loc>https://backbonetutorials.com/privacy-policy/</loc>
-<lastmod>2026-05-12</lastmod>
+<lastmod>2026-05-21</lastmod>
 <changefreq>yearly</changefreq>
 <priority>0.2</priority>
 </url>
 
 <url>
 <loc>https://backbonetutorials.com/terms/</loc>
-<lastmod>2026-05-12</lastmod>
+<lastmod>2026-05-21</lastmod>
 <changefreq>yearly</changefreq>
 <priority>0.2</priority>
 </url>
