@@ -1,3 +1,8 @@
+# robots.txt — backbonetutorials.com
+# Full crawl access. CSS, JS, and images are intentionally left crawlable so
+# Googlebot can render JavaScript pages and index them correctly (core to a
+# JavaScript-SEO site). There are no admin, search, cart, or parameter URLs to block.
+
 User-agent: *
 Allow: /
 

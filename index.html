@@ -1,3 +1,4 @@
+<!-- DEPLOY TO: /  (homepage · index.html) · WebPage · REVISED: +7-social footer bar, +7 sameAs, +cluster directory section. Existing content/SEO preserved. -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,7 +6,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Backbone.js Tutorials & JavaScript Guides for Beginners</title>
+<title>Backbone.js Tutorials &amp; JavaScript Guides for Beginners</title>
 
 <meta name="description" content="Learn Backbone.js step by step with complete guides on Router, Model, View, and Collection. Beginner-friendly JavaScript tutorials with real examples.">
 
@@ -19,822 +20,344 @@
 <link rel="icon" href="/assets/favicon.ico">
 <link rel="apple-touch-icon" href="/assets/favicon.png">
 
-<link
-rel="preload"
-as="image"
-href="/assets/index-800.webp"
-imagesrcset="
-/assets/index-400.webp 400w,
-/assets/index-800.webp 800w,
-/assets/index-1200.webp 1200w"
-imagesizes="(max-width: 600px) 100vw, 800px">
-
-<!-- Open Graph -->
-<meta property="og:title" content="Backbone.js Tutorials & JavaScript Guides">
+<meta property="og:title" content="Backbone.js Tutorials &amp; JavaScript Guides">
 <meta property="og:description" content="Learn Backbone.js with Router, Model, View, and Collection explained step by step.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://backbonetutorials.com/">
 <meta property="og:image" content="https://backbonetutorials.com/assets/index-1200.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:type" content="image/jpeg">
+<meta property="og:image:alt" content="Backbone.js architecture diagram showing Router, Model, View, and Collection">
 <meta property="og:site_name" content="Backbone Tutorials">
 <meta property="og:locale" content="en_US">
 
-<!-- Twitter -->
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Backbone.js Tutorials & JavaScript Guides">
+<meta name="twitter:title" content="Backbone.js Tutorials &amp; JavaScript Guides">
 <meta name="twitter:description" content="Learn Backbone.js with Router, Model, View, and Collection explained step by step.">
 <meta name="twitter:image" content="https://backbonetutorials.com/assets/index-1200.jpg">
 <meta name="twitter:url" content="https://backbonetutorials.com/">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap">
-
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 
 <style>
-html{
-  scroll-behavior:smooth;
-}
-body {
-  font-family:'Inter',sans-serif;
-  margin:0;
-  background:#f4f6f9;
-  color:#1f2937;
-  line-height:1.7;
-}
-.nav {
-  background:#111827;
-  padding:15px;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  flex-wrap:wrap;
-  gap:8px;
-}
-
-.nav a {
-  color:white;
-  margin:0 10px;
-  text-decoration:none;
-  font-weight:600;
-}
-
-.nav a:hover {
-  text-decoration:underline;
-}
-
-.nav-logo img{
-  vertical-align:middle;
-  margin-right:12px;
-  border-radius:8px;
-}
-
-.hero {
-  text-align:center;
-  padding:70px 20px;
-  background:#fff;
-}
-
-.hero p{
-  max-width:760px;
-  margin:0 auto;
-}
-
-.hero figure{
-  max-width:800px;
-  margin:30px auto 0;
-}
-
-figcaption{
-  font-size:14px;
-  color:#6b7280;
-  margin-top:10px;
-}
-
-.hero img{
-  width:100%;
-  height:auto;
-  border-radius:10px;
-  display:block;
-}
-
-.grid{
-  max-width:1400px;
-  margin:40px auto;
-  display:grid;
-  grid-template-columns:repeat(5,1fr);
-  gap:20px;
-  align-items:stretch;
-}
-
-.card {
-  background:#fff;
-  padding:20px;
-  border-radius:10px;
-  box-shadow:0 2px 8px rgba(0,0,0,0.05);
-  overflow:hidden;
-  max-width:100%;
-  transition:0.2s ease;
-
-  display:flex;
-  flex-direction:column;
-  justify-content:space-between;
-}
-
-.card:hover{
-  transform:translateY(-2px);
-  box-shadow:0 6px 18px rgba(0,0,0,0.08);
-}
-
-.card p{
-  flex-grow:1;
-}
-
-.card-action{
-  margin-top:auto;
-}
-
-.section { 
-  max-width:900px; 
-  margin:50px auto; 
-  text-align:left; 
-  padding:0 20px;
-}
-
-footer {
-  background:#111827;
-  color:white;
-  text-align:center;
-  padding:30px 20px;
-  margin-top:40px;
-}
-
-footer a {
-  color:#93c5fd;
-  text-decoration:none;
-}
-
-footer a:hover {
-  text-decoration:underline;
-}
-
-.btn{
-  display:block;
-  width:100%;
-  box-sizing:border-box;
-  text-align:center;
-  background:#2563eb;
-  color:white;
-  padding:12px 22px;
-  border-radius:8px;
-  text-decoration:none;
-  font-weight:600;
-  margin-top:15px;
-  transition:0.2s ease;
-}
-
-.hero .btn{
-  display:inline-block;
-  width:auto;
-  margin-top:30px;
-}
-
-.cta-btn{
-  display:inline-block;
-  width:auto;
-}
-
-.btn:hover{
-  background:#1d4ed8;
-  transform:translateY(-1px);
-}
-
-.toc-list{
-  padding-left:20px;
-}
-
-.toc-list li{
-  margin-bottom:8px;
-}
-
-@media(max-width:1100px){
-
-  .grid{
-    grid-template-columns:repeat(2,1fr);
-  }
-
-}
-
-@media(max-width:700px){
-
-  .grid{
-    grid-template-columns:1fr;
-  }
-
-}
-
+html{scroll-behavior:smooth}
+body{font-family:'Inter',sans-serif;margin:0;background:#f4f6f9;color:#1f2937;line-height:1.7}
+.container{max-width:900px;margin:30px auto;padding:20px;background:#fff;border-radius:10px;box-shadow:0 2px 10px rgba(0,0,0,0.04)}
+h1,h2,h3{color:#111827}
+h1{line-height:1.25}
+.nav{background:#111827;padding:15px;display:flex;justify-content:center;align-items:center;flex-wrap:wrap;gap:8px}
+.nav a{color:white;margin:0 10px;text-decoration:none;font-weight:600}
+.nav a:hover{text-decoration:underline}
+.nav-logo img{vertical-align:middle;margin-right:12px;border-radius:8px}
+.hero{text-align:center;padding:10px 0 0}
+.hero p.lede{font-size:18px;color:#374151;max-width:680px;margin:14px auto 22px}
+figure{margin:26px 0}
+figure img{max-width:100%;height:auto;border-radius:12px;display:block;margin:0 auto;box-shadow:0 4px 20px rgba(0,0,0,0.10)}
+figcaption{font-size:14px;color:#6b7280;margin-top:10px;text-align:center}
+pre{background:#111;color:#eee;padding:15px;border-radius:8px;overflow-x:auto}
+code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+p code,li code{background:#eef2ff;padding:1px 5px;border-radius:4px;font-size:.95em}
+a{color:#2563eb}
+.cta{background:#eef2ff;padding:22px;margin-top:30px;text-align:center;border-radius:10px}
+.back-home{margin-top:25px}
+footer{background:#111827;color:white;text-align:center;padding:30px 20px;margin-top:40px}
+footer a{color:#93c5fd;text-decoration:none}
+footer a:hover{text-decoration:underline}
+.btn{display:inline-block;background:#2563eb;color:white;padding:12px 24px;border-radius:8px;text-decoration:none;font-weight:600;margin-top:6px;transition:0.2s ease}
+.btn:hover{background:#1d4ed8;transform:translateY(-1px)}
+/* guide cards */
+.card-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:16px;margin:24px 0}
+.card{background:#fff;border:1.5px solid #f1f3f7;border-radius:10px;padding:20px;transition:border-color .18s,box-shadow .18s}
+.card:hover{border-color:#2563eb;box-shadow:0 4px 18px rgba(37,99,235,0.08)}
+.card h3{margin:0 0 8px;font-size:17px}
+.card p{margin:0 0 12px;font-size:14px;color:#6b7280}
+.card a{font-weight:600;text-decoration:none}
+/* cluster directory */
+.cluster-section{margin:34px 0 10px}
+.cluster-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px;margin:18px 0}
+.cluster-card{background:#fff;border:1.5px solid #f1f3f7;border-radius:12px;padding:20px;text-decoration:none;color:inherit;transition:border-color .18s,box-shadow .18s;display:flex;flex-direction:column;gap:7px;border-top:3px solid var(--ac,#2563eb)}
+.cluster-card:hover{border-color:var(--ac,#2563eb);box-shadow:0 6px 20px rgba(0,0,0,0.07)}
+.cluster-card .label{font-size:11px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--ac,#2563eb)}
+.cluster-card .name{font-size:17px;font-weight:700;color:#111827}
+.cluster-card .desc{font-size:13.5px;color:#6b7280;line-height:1.55}
+.toc{background:#f9fafb;border:1px solid #eef2f7;border-radius:10px;padding:18px 24px}
+.toc ul{columns:2;margin:8px 0 0;padding-left:18px}
+.toc li{margin-bottom:6px}
+.bt-social{display:flex;gap:13px;flex-wrap:wrap;align-items:center;justify-content:center;margin:0 0 14px;padding:0;list-style:none}
+.bt-social a{position:relative;isolation:isolate;width:46px;height:46px;border-radius:14px;display:inline-flex;align-items:center;justify-content:center;text-decoration:none;-webkit-tap-highlight-color:transparent;background-color:var(--c,#333);background-image:linear-gradient(150deg,rgba(255,255,255,.30),rgba(255,255,255,0) 42%,rgba(0,0,0,.22));box-shadow:0 1px 1px rgba(0,0,0,.22),0 7px 14px -3px rgba(0,0,0,.34),inset 0 1px 0 rgba(255,255,255,.50),inset 0 -2px 5px rgba(0,0,0,.30);transition:transform .18s cubic-bezier(.2,.7,.2,1),box-shadow .18s ease}
+.bt-social a::before{content:"";position:absolute;left:3px;right:3px;top:2px;height:44%;border-radius:12px 12px 50% 50%/12px 12px 24px 24px;background:linear-gradient(180deg,rgba(255,255,255,.42),rgba(255,255,255,0));pointer-events:none;z-index:0}
+.bt-social a:hover{transform:translateY(-3px) scale(1.05);box-shadow:0 2px 2px rgba(0,0,0,.20),0 16px 26px -6px rgba(0,0,0,.40),inset 0 1px 0 rgba(255,255,255,.55),inset 0 -2px 6px rgba(0,0,0,.32)}
+.bt-social a:active{transform:translateY(-1px) scale(1.01)}
+.bt-social a:focus-visible{outline:3px solid #93c5fd;outline-offset:3px}
+.bt-social svg{position:relative;z-index:1;width:22px;height:22px;display:block;filter:drop-shadow(0 1px 1px rgba(0,0,0,.28))}
+@media (prefers-reduced-motion:reduce){.bt-social a{transition:none}.bt-social a:hover{transform:none}}
+@media(max-width:600px){.container{padding:15px}.card-grid,.cluster-grid{grid-template-columns:1fr}.toc ul{columns:1}}
 </style>
 
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@graph": [
-
     {
       "@type": "Organization",
       "@id": "https://backbonetutorials.com/#organization",
       "name": "Backbone Tutorials",
       "url": "https://backbonetutorials.com/",
-      "logo": {
-        "@type": "ImageObject",
-        "url": "https://backbonetutorials.com/assets/logo.png"
-      },
+      "logo": { "@type": "ImageObject", "url": "https://backbonetutorials.com/assets/logo.png" },
       "sameAs": [
-        "https://x.com/backbonetutor",
         "https://github.com/backbonetutorials/backbonetutorials",
-        "https://www.youtube.com/@BACKBONETUTORIALS"
+        "https://x.com/backbonetutor",
+        "https://www.youtube.com/@BACKBONETUTORIALS",
+        "https://bsky.app/profile/backbonetutorials.bsky.social",
+        "https://www.instagram.com/backbonetutorials/",
+        "https://www.tiktok.com/@backbonetutorials",
+        "https://www.facebook.com/BackboneTutorials"
       ],
       "contactPoint": {
         "@type": "ContactPoint",
         "contactType": "customer support",
-        "email": "backbonetutorials2026@gmail.com",
-        "availableLanguage": [
-          "English"
-        ],
+        "url": "https://x.com/backbonetutor",
+        "availableLanguage": ["English"],
         "areaServed": "Worldwide"
       }
     },
-
     {
       "@type": "WebSite",
       "@id": "https://backbonetutorials.com/#website",
       "url": "https://backbonetutorials.com/",
       "name": "Backbone Tutorials",
-      "publisher": {
-        "@id": "https://backbonetutorials.com/#organization"
+      "publisher": { "@id": "https://backbonetutorials.com/#organization" },
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": "https://backbonetutorials.com/?s={search_term_string}",
+        "query-input": "required name=search_term_string"
       }
     },
-
-    {
-      "@type": "Person",
-      "@id": "https://backbonetutorials.com/author/backbone-tutorials-team/#person",
-      "name": "Backbone Tutorials Team",
-      "url": "https://backbonetutorials.com/author/backbone-tutorials-team/",
-      "worksFor": {
-        "@id": "https://backbonetutorials.com/#organization"
-      },
-      "jobTitle": "Frontend JavaScript Editorial Team",
-      "knowsAbout": [
-        "Backbone.js",
-        "JavaScript",
-        "Frontend Development",
-        "Single Page Applications"
-      ]
-    },
-
     {
       "@type": "WebPage",
       "@id": "https://backbonetutorials.com/#webpage",
       "url": "https://backbonetutorials.com/",
-      "name": "Backbone.js Tutorials",
-      "headline": "Learn Backbone.js – Complete JavaScript Framework Guide for Beginners",
+      "name": "Backbone.js Tutorials & JavaScript Guides for Beginners",
       "description": "Learn Backbone.js step by step with complete guides on Router, Model, View, and Collection. Beginner-friendly JavaScript tutorials with real examples.",
       "inLanguage": "en",
-
-      "image": {
-        "@type": "ImageObject",
-        "url": "https://backbonetutorials.com/assets/index-1200.jpg",
-        "width": 1200,
-        "height": 800
-      },
-
+      "dateModified": "2026-06-12T04:30:00+07:00",
+      "isPartOf": { "@id": "https://backbonetutorials.com/#website" },
+      "about": { "@id": "https://backbonetutorials.com/#organization" },
       "primaryImageOfPage": {
         "@type": "ImageObject",
         "url": "https://backbonetutorials.com/assets/index-1200.jpg",
         "width": 1200,
-        "height": 800
+        "height": 630
       },
-
-      "isPartOf": {
-        "@id": "https://backbonetutorials.com/#website"
-      },
-
-      "author": {
-        "@id": "https://backbonetutorials.com/author/backbone-tutorials-team/#person"
-      },
-
-      "publisher": {
-        "@id": "https://backbonetutorials.com/#organization"
-      },
-
-      "breadcrumb": {
-        "@id": "https://backbonetutorials.com/#breadcrumb"
-      },
-
-      "mainEntity": {
-        "@id": "https://backbonetutorials.com/#article"
-      }
+      "mainEntity": { "@id": "https://backbonetutorials.com/#faq" }
     },
-
-    {
-      "@type": "TechArticle",
-      "@id": "https://backbonetutorials.com/#article",
-      "url": "https://backbonetutorials.com/",
-      "headline": "Learn Backbone.js – Complete JavaScript Framework Guide for Beginners",
-      "description": "Learn Backbone.js step by step with complete guides on Router, Model, View, and Collection. Beginner-friendly JavaScript tutorials with real examples.",
-      "inLanguage": "en",
-
-      "image": {
-        "@type": "ImageObject",
-        "url": "https://backbonetutorials.com/assets/index-1200.jpg",
-        "width": 1200,
-        "height": 800
-      },
-
-      "author": {
-        "@id": "https://backbonetutorials.com/author/backbone-tutorials-team/#person"
-      },
-
-      "publisher": {
-        "@id": "https://backbonetutorials.com/#organization"
-      },
-
-      "mainEntityOfPage": {
-        "@id": "https://backbonetutorials.com/#webpage"
-      },
-
-      "datePublished": "2026-05-12T09:00:00+07:00",
-      "dateModified": "2026-05-22T22:15:00+07:00",
-
-      "articleSection": [
-        "Backbone.js",
-        "Frontend Development",
-        "JavaScript Frameworks"
-      ],
-
-      "keywords": [
-        "Backbone.js",
-        "Backbone Router",
-        "Backbone Model",
-        "Backbone View",
-        "Backbone Collection",
-        "JavaScript Framework",
-        "Frontend Development"
-      ],
-
-      "about": [
-        {
-          "@type": "SoftwareSourceCode",
-          "name": "Backbone.js"
-        },
-        {
-          "@type": "Thing",
-          "name": "Frontend Architecture"
-        },
-        {
-          "@type": "Thing",
-          "name": "Single Page Applications"
-        }
-      ]
-    },
-
-    {
-      "@type": "BreadcrumbList",
-      "@id": "https://backbonetutorials.com/#breadcrumb",
-      "itemListElement": [
-        {
-          "@type": "ListItem",
-          "position": 1,
-          "name": "Home",
-          "item": "https://backbonetutorials.com/"
-        }
-      ]
-    },
-
     {
       "@type": "FAQPage",
       "@id": "https://backbonetutorials.com/#faq",
       "mainEntity": [
-
         {
           "@type": "Question",
           "name": "What is Backbone.js used for?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Backbone.js is used to structure JavaScript applications using models, views, routers, and collections."
-          }
+          "acceptedAnswer": { "@type": "Answer", "text": "Backbone.js is used to structure JavaScript applications using models, collections, views, and routers." }
         },
-
         {
           "@type": "Question",
           "name": "Is Backbone.js still relevant?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Yes, Backbone.js is still valuable for learning architecture and maintaining lightweight applications."
-          }
+          "acceptedAnswer": { "@type": "Answer", "text": "Yes. Backbone.js is still valuable for learning architecture and maintaining lightweight applications." }
         },
-
         {
           "@type": "Question",
           "name": "What should I learn first in Backbone.js?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Start with Router, then Model, View, and Collection to understand the complete application flow."
-          }
+          "acceptedAnswer": { "@type": "Answer", "text": "Start with Router, then continue with Model, View, and Collection to understand the complete application flow." }
         },
-
         {
           "@type": "Question",
           "name": "What is a Collection in Backbone.js?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "A Collection in Backbone.js is used to manage groups of Models and organize related application data."
-          }
+          "acceptedAnswer": { "@type": "Answer", "text": "A Collection in Backbone.js is used to manage groups of Models and organize structured application data efficiently." }
         },
-
         {
           "@type": "Question",
           "name": "What does a Collection do in Backbone.js?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "A Backbone.js Collection manages groups of Models and helps organize application data more efficiently."
-          }
+          "acceptedAnswer": { "@type": "Answer", "text": "Collections help developers store, organize, filter, and synchronize grouped frontend data inside Backbone.js applications." }
         }
-
       ]
     }
-
   ]
 }
 </script>
 
-
 <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-FYJP43XDHH"></script>
 <script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-FYJP43XDHH');
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-FYJP43XDHH');
 </script>
 
 </head>
-
 <body>
 
 <nav class="nav" aria-label="Main Navigation">
-
-<a href="/" class="nav-logo" title="Backbone Tutorials Homepage">
-<img 
-src="/assets/logo.png" 
-alt="Backbone Tutorials Logo"
-width="36"
-height="36"
-loading="lazy"
-decoding="async">
-</a>
-
+<a href="/" class="nav-logo" title="Backbone Tutorials Homepage"><img src="/assets/logo.png" alt="Backbone Tutorials Logo" width="36" height="36" decoding="async"></a>
 <a href="/" title="Backbone.js Tutorials Homepage">Home</a>
-
-<a href="/backbonejs/" title="Backbone.js Complete Guide">
-Backbone Guide
-</a>
-
-<a href="/what-is-a-router/" title="What is a Router in Backbone.js">
-Router
-</a>
-
-<a href="/what-is-a-model/" title="What is a Model in Backbone.js">
-Model
-</a>
-
-<a href="/what-is-a-view/" title="What is a View in Backbone.js">
-View
-</a>
-
-<a href="/what-is-a-collection/" title="What is a Collection in Backbone.js">
-Collection
-</a>
-
+<a href="/backbonejs/" title="Backbone.js Complete Guide">Backbone Guide</a>
+<a href="/what-is-a-router/" title="What is a Router in Backbone.js">Router</a>
+<a href="/what-is-a-model/" title="What is a Model in Backbone.js">Model</a>
+<a href="/what-is-a-view/" title="What is a View in Backbone.js">View</a>
+<a href="/what-is-a-collection/" title="What is a Collection in Backbone.js">Collection</a>
 </nav>
 
 <main>
-<section class="hero">
+<div class="container">
 
+<div class="hero">
 <h1>Learn Backbone.js – Complete JavaScript Framework Guide for Beginners</h1>
-
-<p>
-Complete beginner-friendly guides covering Router, Model, View, and Collection to help you build scalable web applications. Learn Backbone.js architecture step by step with real-world examples and structured tutorials.
-</p>
-
-<a href="/backbonejs/" class="btn cta-btn">
-Explore the Guide
-</a>
+<p class="lede">Complete beginner-friendly guides covering Router, Model, View, and Collection to help you build scalable web applications. Learn Backbone.js architecture step by step with real-world examples and structured tutorials.</p>
+<a href="/backbonejs/" class="btn">Explore the Guide</a>
+</div>
 
 <figure>
-
 <picture>
-
-<source 
-srcset="
-/assets/index-400.webp 400w,
-/assets/index-800.webp 800w,
-/assets/index-1200.webp 1200w"
-sizes="(max-width: 600px) 100vw, 800px"
-type="image/webp">
-
-<source 
-srcset="
-/assets/index-400.jpg 400w,
-/assets/index-800.jpg 800w,
-/assets/index-1200.jpg 1200w"
-sizes="(max-width: 600px) 100vw, 800px"
-type="image/jpeg">
-
-<img
-src="/assets/index-800.webp"
-alt="Backbone.js architecture diagram showing Router, Model, View, and Collection structure"
-loading="eager"
-fetchpriority="high"
-decoding="async"
-width="800"
-height="533">
-
+<source type="image/webp" srcset="/assets/index-400.webp 400w, /assets/index-800.webp 800w, /assets/index-1200.webp 1200w" sizes="(max-width:600px) 100vw, 860px">
+<img src="/assets/index-800.jpg" srcset="/assets/index-400.jpg 400w, /assets/index-800.jpg 800w, /assets/index-1200.jpg 1200w" sizes="(max-width:600px) 100vw, 860px" alt="Backbone.js architecture diagram showing Router, Model, View, and Collection structure" width="860" height="484" fetchpriority="high">
 </picture>
-
 <figcaption>Backbone.js architecture overview including Router, Model, View, and Collection</figcaption>
-
 </figure>
 
+<div class="card-grid">
+<div class="card">
+<h3>Backbone.js Basics</h3>
+<p>Understand the full architecture including Router, Model, View, and Collection.</p>
+<a href="/backbonejs/">Explore →</a>
+</div>
+<div class="card">
+<h3>Router Guide</h3>
+<p>Learn how navigation works in Backbone.js applications.</p>
+<a href="/what-is-a-router/">Read →</a>
+</div>
+<div class="card">
+<h3>Model Guide</h3>
+<p>Understand how data is structured and managed.</p>
+<a href="/what-is-a-model/">Read →</a>
+</div>
+<div class="card">
+<h3>View Guide</h3>
+<p>Learn how UI rendering works and how data is displayed to users.</p>
+<a href="/what-is-a-view/">Read →</a>
+</div>
+<div class="card">
+<h3>Collection Guide</h3>
+<p>Learn how Backbone.js Collections organize grouped application data.</p>
+<a href="/what-is-a-collection/">Read →</a>
+</div>
+</div>
+
+<section class="cluster-section" aria-labelledby="learning-paths">
+<h2 id="learning-paths">Explore Learning Paths</h2>
+<p>Beyond the core Backbone.js guides, these topic clusters take you from framework fundamentals into modern frontend systems, rendering, search visibility, and realtime engineering. Each cluster is a structured curriculum you can follow end to end.</p>
+<div class="cluster-grid">
+<a href="/backbonejs/" class="cluster-card" style="--ac:#2563eb">
+<span class="label">Pillar Guide</span>
+<span class="name">Backbone.js Complete Guide</span>
+<span class="desc">The hub for Router, Model, View, and Collection, with the eight historical tutorials in one structured path.</span>
+</a>
+<a href="/foundations/" class="cluster-card" style="--ac:#3b82f6">
+<span class="label">Foundations</span>
+<span class="name">Backbone.js Foundations</span>
+<span class="desc">Events, templates, sync, view lifecycle, data flow, and application structure, the building blocks of every Backbone app.</span>
+</a>
+<a href="/architecture/" class="cluster-card" style="--ac:#6366f1">
+<span class="label">Frontend Architecture</span>
+<span class="name">Frontend Architecture</span>
+<span class="desc">SPA architecture, routing, state management, component communication, and browser state systems explained from the ground up.</span>
+</a>
+<a href="/rendering/" class="cluster-card" style="--ac:#a855f7">
+<span class="label">Rendering</span>
+<span class="name">Rendering Systems</span>
+<span class="desc">The browser rendering pipeline, client-side vs server rendering, hydration, progressive rendering, and paint optimization.</span>
+</a>
+<a href="/javascript-seo/" class="cluster-card" style="--ac:#22c55e">
+<span class="label">JavaScript SEO</span>
+<span class="name">JavaScript SEO</span>
+<span class="desc">How Googlebot crawls and renders JavaScript, indexing single page apps, framework SEO, and technical SEO audits.</span>
+</a>
+<a href="/interactive-web/" class="cluster-card" style="--ac:#f59e0b">
+<span class="label">Interactive Web</span>
+<span class="name">Interactive Web</span>
+<span class="desc">Realtime engineering: WebSocket, WebRTC, pub-sub, operational transform, CRDTs, multiplayer sync, and rendering loops.</span>
+</a>
+<a href="/modern-frameworks/" class="cluster-card" style="--ac:#06b6d4">
+<span class="label">Modern Frameworks</span>
+<span class="name">Modern Frameworks</span>
+<span class="desc">How frontend evolved from Backbone to React, Vue, and signals, with migration guides, reactivity, and framework comparisons.</span>
+</a>
+</div>
 </section>
 
-<section class="grid">
-
-<div class="card">
-
-<h2>Backbone.js Basics</h2>
-
-<p>
-Understand the full architecture including Router, Model, View, and Collection.
-</p>
-
-<div class="card-action">
-<a href="/backbonejs/" 
-class="btn"
-aria-label="Explore Backbone.js Basics Guide">
-Explore
-</a>
-</div>
-
-</div>
-
-<div class="card">
-
-<h2>Router Guide</h2>
-
-<p>
-Learn how navigation works in Backbone.js applications.
-</p>
-
-<div class="card-action">
-<a href="/what-is-a-router/" 
-class="btn"
-aria-label="Read Backbone Router Guide">
-Read
-</a>
-</div>
-
-</div>
-
-<div class="card">
-
-<h2>Model Guide</h2>
-
-<p>
-Understand how data is structured and managed.
-</p>
-
-<div class="card-action">
-<a href="/what-is-a-model/" 
-class="btn"
-aria-label="Read Backbone Model Guide">
-Read
-</a>
-</div>
-
-</div>
-
-<div class="card">
-
-<h2>View Guide</h2>
-
-<p>
-Learn how UI rendering works and how data is displayed to users.
-</p>
-
-<div class="card-action">
-<a href="/what-is-a-view/" 
-class="btn"
-aria-label="Read Backbone View Guide">
-Read
-</a>
-</div>
-
-</div>
-
-<div class="card">
-
-<h2>Collection Guide</h2>
-
-<p>
-Learn how Backbone.js Collections organize grouped application data.
-</p>
-
-<div class="card-action">
-<a href="/what-is-a-collection/" 
-class="btn"
-aria-label="Read Backbone Collection Guide">
-Read
-</a>
-</div>
-
-</div>
-
-</section>
-
-<section class="section">
-<h2 id="what-is-backbone">
-What is Backbone.js?
-</h2>
-
-<p>
-Backbone.js is a lightweight JavaScript framework that provides structure to web applications by organizing code into models, views, collections, and routers.
-</p>
-
-<p>
-Explore more guides: 
-<a href="/what-is-a-router/">Router tutorial</a>, 
-<a href="/what-is-a-model/">Model tutorial</a>, 
-<a href="/what-is-a-view/">View tutorial</a>, 
-and 
-<a href="/what-is-a-collection/">Collection tutorial</a>.
-</p>
-
+<h2 id="what-is-backbone">What is Backbone.js?</h2>
+<p>Backbone.js is a lightweight JavaScript framework that provides structure to web applications by organizing code into models, views, collections, and routers.</p>
+<p>Explore more guides: <a href="/what-is-a-router/">Router tutorial</a>, <a href="/what-is-a-model/">Model tutorial</a>, <a href="/what-is-a-view/">View tutorial</a>, and <a href="/what-is-a-collection/">Collection tutorial</a>.</p>
 <p>This separation allows developers to write cleaner, more maintainable code. Unlike heavy frameworks, Backbone.js gives flexibility while still providing a solid architecture foundation.</p>
-<p>
-More than just a framework, Backbone.js helps developers understand how modern web applications are structured. By mastering its architecture, you gain insights that apply across many popular JavaScript frameworks.
-</p>
+<p>More than just a framework, Backbone.js helps developers understand how modern web applications are structured. By mastering its architecture, you gain insights that apply across many popular JavaScript frameworks.</p>
+<p>Some tutorials on this website are based on older Backbone.js development patterns that are still useful for understanding lightweight frontend architecture and legacy JavaScript applications.</p>
 
-<p>
-Some tutorials on this website are based on older Backbone.js development patterns that are still useful for understanding lightweight frontend architecture and legacy JavaScript applications.
-</p>
-
-<div class="card">
-
-<h2>Table of Contents</h2>
-
-<ul class="toc-list">
-
-<li><a href="#what-is-backbone">What is Backbone.js?</a></li>
-
-<li><a href="#architecture">Architecture</a></li>
-
-<li><a href="#relevance">Why Backbone.js is Still Relevant</a></li>
-
-<li><a href="#benefits">Benefits</a></li>
-
-<li><a href="#learning-path">Learning Path</a></li>
-
-<li><a href="#real-world-applications">Applications</a></li>
-
-<li><a href="#best-practices">Best Practices</a></li>
-
-<li><a href="#common-mistakes">Common Mistakes</a></li>
-
-<li><a href="#deep-understanding">Deep Understanding</a></li>
-
-<li><a href="#why-learn-today">Why Learn Today</a></li>
-
-<li><a href="#faq">FAQ</a></li>
-
-<li><a href="#conclusion">Conclusion</a></li>
-
-</ul>
-
-</div>
-
-<h2 id="architecture">
-How Backbone.js Architecture Works
-</h2>
-
-<p>The core idea behind Backbone.js is separation of concerns:</p>
-
+<section class="toc" aria-labelledby="toc-heading">
+<h2 id="toc-heading" style="margin-top:0">Table of Contents</h2>
 <ul>
-
-<li>
-<strong>Router</strong> handles navigation 
-(<a href="/what-is-a-router/">learn router</a>)
-</li>
-
-<li>
-<strong>Model</strong> manages application data 
-(<a href="/what-is-a-model/">learn model</a>)
-</li>
-
-<li>
-<strong>View</strong> renders the user interface 
-(<a href="/what-is-a-view/">learn view</a>)
-</li>
-
-<li>
-<strong>Collection</strong> organizes groups of Models and manages structured frontend data 
-(<a href="/what-is-a-collection/">learn collection</a>)
-</li>
-
+<li><a href="#what-is-backbone">What is Backbone.js?</a></li>
+<li><a href="#architecture">Architecture</a></li>
+<li><a href="#relevance">Why Backbone.js is Still Relevant</a></li>
+<li><a href="#benefits">Benefits</a></li>
+<li><a href="#learning-path">Learning Path</a></li>
+<li><a href="#real-world-applications">Applications</a></li>
+<li><a href="#best-practices">Best Practices</a></li>
+<li><a href="#common-mistakes">Common Mistakes</a></li>
+<li><a href="#deep-understanding">Deep Understanding</a></li>
+<li><a href="#why-learn-today">Why Learn Today</a></li>
+<li><a href="#faq">FAQ</a></li>
+<li><a href="#conclusion">Conclusion</a></li>
 </ul>
+</section>
 
-<p>Together, these components create a structured frontend architecture that helps developers build scalable applications without unnecessary complexity.</p>
+<h2 id="architecture">How Backbone.js Architecture Works</h2>
+<p>The core idea behind Backbone.js is separation of concerns:</p>
+<ul>
+<li><strong>Router</strong> handles navigation (<a href="/what-is-a-router/">learn router</a>)</li>
+<li><strong>Model</strong> manages application data (<a href="/what-is-a-model/">learn model</a>)</li>
+<li><strong>View</strong> renders the user interface (<a href="/what-is-a-view/">learn view</a>)</li>
+<li><strong>Collection</strong> organizes groups of Models and manages structured frontend data (<a href="/what-is-a-collection/">learn collection</a>)</li>
+</ul>
+<p>Together, these components create a structured frontend architecture that helps developers build scalable applications without unnecessary complexity. For a deeper systems view, continue to the <a href="/architecture/">frontend architecture</a> cluster.</p>
 
-<h2 id="relevance">
-Why Backbone.js is Still Relevant
-</h2>
-
+<h2 id="relevance">Why Backbone.js is Still Relevant</h2>
 <p>Even in the era of modern frameworks, Backbone.js remains relevant because it teaches core concepts of application structure. Understanding Backbone helps developers grasp deeper concepts used in frameworks like React or Vue.</p>
-
 <p>It is also widely used in legacy systems that still require maintenance and scalability.</p>
 
-<h2 id="benefits">
-Benefits of Learning Backbone.js
-</h2>
+<h2 id="benefits">Benefits of Learning Backbone.js</h2>
+<p>Learning Backbone.js helps developers understand core JavaScript architecture principles such as data flow, separation of concerns, and event-driven programming. These concepts are essential for mastering modern frameworks.</p>
+<p>Collections are especially useful for understanding how grouped frontend data is managed inside scalable JavaScript applications.</p>
 
-<p>
-Learning Backbone.js helps developers understand core JavaScript architecture principles such as data flow, separation of concerns, and event-driven programming. These concepts are essential for mastering modern frameworks.
-</p>
-
-<p>
-Collections are especially useful for understanding how grouped frontend data is managed inside scalable JavaScript applications.
-</p>
-
-<h2 id="learning-path">
-Learning Backbone.js Step by Step
-</h2>
-<p>
-You can also explore the complete <a href="/backbonejs/">Backbone.js tutorial hub</a> for a structured learning path.
-</p>
-
+<h2 id="learning-path">Learning Backbone.js Step by Step</h2>
+<p>You can also explore the complete <a href="/backbonejs/">Backbone.js tutorial hub</a> for a structured learning path.</p>
 <p>If you are a beginner, follow this path:</p>
-
 <ul>
-
-<li>
-<a href="/what-is-a-router/">
-Start with Router
-</a>
-</li>
-
-<li>
-<a href="/what-is-a-model/">
-Continue with Model
-</a>
-</li>
-
-<li>
-<a href="/what-is-a-view/">
-Continue with View
-</a>
-</li>
-
-<li>
-<a href="/what-is-a-collection/">
-Finish with Collection
-</a>
-</li>
-
+<li><a href="/what-is-a-router/">Start with Router</a></li>
+<li><a href="/what-is-a-model/">Continue with Model</a></li>
+<li><a href="/what-is-a-view/">Continue with View</a></li>
+<li><a href="/what-is-a-collection/">Finish with Collection</a></li>
 </ul>
-
-<p>
-If you want to dive deeper, explore the 
-<a href="/what-is-a-router/">Router guide</a>, 
-<a href="/what-is-a-model/">Model guide</a>, 
-<a href="/what-is-a-view/">View guide</a>, 
-and 
-<a href="/what-is-a-collection/">Collection guide</a>.
-</p>
-
+<p>If you want to dive deeper, explore the <a href="/what-is-a-router/">Router guide</a>, <a href="/what-is-a-model/">Model guide</a>, <a href="/what-is-a-view/">View guide</a>, and <a href="/what-is-a-collection/">Collection guide</a>. Once the fundamentals click, the <a href="/foundations/">Backbone foundations</a> cluster goes deeper into events, templates, and sync.</p>
 <p>This step-by-step learning ensures you understand how each component interacts.</p>
 
-<h2 id="real-world-applications">
-Real-World Applications
-</h2>
-
+<h2 id="real-world-applications">Real-World Applications</h2>
 <p>Backbone.js is used in dashboards, admin systems, and lightweight applications where performance and control are important. Its flexibility allows developers to integrate it into existing systems easily.</p>
-
 <p>Collections are commonly used in dashboards, data tables, and frontend applications that manage large groups of records.</p>
 
-<h2 id="best-practices">
-Best Practices for Backbone.js
-</h2>
-
+<h2 id="best-practices">Best Practices for Backbone.js</h2>
 <ul>
 <li>Keep logic separated</li>
 <li>Use events correctly</li>
@@ -842,124 +365,67 @@ Best Practices for Backbone.js
 <li>Keep components simple</li>
 </ul>
 
-<h2 id="common-mistakes">
-Common Mistakes Beginners Make
-</h2>
-
+<h2 id="common-mistakes">Common Mistakes Beginners Make</h2>
 <p>Many beginners try to combine logic into one component, which leads to messy code. Always maintain clear separation between Router, Model, View, and Collection responsibilities.</p>
 
-<h2 id="deep-understanding">
-Deep Understanding of Backbone.js
-</h2>
-
+<h2 id="deep-understanding">Deep Understanding of Backbone.js</h2>
 <p>To truly master Backbone.js, you need to understand how data flows between components. The Model stores individual data, the Collection organizes grouped data, the View displays the interface, and the Router controls navigation. This flow ensures your application remains predictable and scalable.</p>
-
 <p>By mastering these concepts, you will gain a strong foundation in JavaScript architecture.</p>
 
-<h2 id="why-learn-today">
-Why Learn Backbone.js Today
-</h2>
-<p>
-Backbone.js remains an important framework for understanding how modern JavaScript applications are structured.
-</p>
-
-<p>
-Many modern frontend concepts became popular through lightweight frameworks like Backbone.js. Backbone still provides a clear and simple way to learn core concepts such as data flow, separation of concerns, and event-driven architecture.
-</p>
-
+<h2 id="why-learn-today">Why Learn Backbone.js Today</h2>
+<p>Backbone.js remains an important framework for understanding how modern JavaScript applications are structured.</p>
+<p>Many modern frontend concepts became popular through lightweight frameworks like Backbone.js. Backbone still provides a clear and simple way to learn core concepts such as data flow, separation of concerns, and event-driven architecture.</p>
 <p>By learning Backbone.js, developers gain a deeper understanding of how applications work internally. This knowledge makes it easier to adapt to other frameworks and build scalable applications.</p>
 
-<h2 id="faq">
-Frequently Asked Questions
-</h2>
-
+<h2 id="faq">Frequently Asked Questions</h2>
 <h3>What is Backbone.js used for?</h3>
-<p>
-Backbone.js is used to structure JavaScript applications using models, collections, views, and routers.
-</p>
-
+<p>Backbone.js is used to structure JavaScript applications using models, collections, views, and routers.</p>
 <h3>Is Backbone.js still relevant?</h3>
-<p>
-Yes. Backbone.js is still valuable for learning architecture and maintaining lightweight applications.
-</p>
-
+<p>Yes. Backbone.js is still valuable for learning architecture and maintaining lightweight applications.</p>
 <h3>What should I learn first in Backbone.js?</h3>
-<p>
-Start with Router, then continue with Model, View, and Collection to understand the complete application flow.
-</p>
-
+<p>Start with Router, then continue with Model, View, and Collection to understand the complete application flow.</p>
 <h3>What is a Collection in Backbone.js?</h3>
-
-<p>
-A Collection in Backbone.js is used to manage groups of Models and organize structured application data efficiently.
-</p>
-
+<p>A Collection in Backbone.js is used to manage groups of Models and organize structured application data efficiently.</p>
 <h3>What does a Collection do in Backbone.js?</h3>
+<p>Collections help developers store, organize, filter, and synchronize grouped frontend data inside Backbone.js applications.</p>
 
-<p>
-Collections help developers store, organize, filter, and synchronize grouped frontend data inside Backbone.js applications.
-</p>
+<h2 id="conclusion">Conclusion</h2>
+<p>Backbone.js remains one of the best frameworks for learning frontend architecture fundamentals. It teaches important concepts such as separation of concerns, routing, data management, collections, and event-driven application design.</p>
+<p>By understanding how Router, Model, View, and Collection work together, developers can build cleaner and more scalable JavaScript applications while strengthening their overall frontend development skills.</p>
+<p>Start learning today and build your Backbone.js foundation step by step.</p>
 
-<h2 id="conclusion">
-Conclusion
-</h2>
+<h2 id="official-docs">Official Documentation</h2>
+<p>For deeper technical references and API details, you can also visit the official Backbone.js documentation.</p>
+<p><a href="https://backbonejs.org/" target="_blank" rel="noopener noreferrer">Official Backbone.js Documentation</a></p>
 
-<p>
-Backbone.js remains one of the best frameworks for learning frontend architecture fundamentals. It teaches important concepts such as separation of concerns, routing, data management, collections, and event-driven application design.
-</p>
-
-<p>
-By understanding how Router, Model, View, and Collection work together, developers can build cleaner and more scalable JavaScript applications while strengthening their overall frontend development skills.
-</p>
-
-<p>
-Start learning today and build your Backbone.js foundation step by step.
-</p>
-
-<h2>Official Documentation</h2>
-
-<p>
-For deeper technical references and API details, you can also visit the official Backbone.js documentation.
-</p>
-
-<p>
-<a href="https://backbonejs.org/" 
-target="_blank" 
-rel="noopener noreferrer">
-Official Backbone.js Documentation
-</a>
-</p>
-</section>
-
-<section class="section">
-<h2>Start Learning Today</h2>
+<div class="cta">
+<h2 style="margin-top:0">Start Learning Today</h2>
 <p>Start learning today and master Backbone.js step by step. Build real-world applications, understand modern JavaScript architecture, and improve your development skills with practical examples.</p>
-<a href="/backbonejs/" class="btn cta-btn">
-Go to Backbone Guide →
-</a>
-</section>
+<a href="/backbonejs/" class="btn">Go to Backbone Guide →</a>
+</div>
 
+</div>
 </main>
 
-
 <footer>
-
+<p>Backbone Tutorials</p>
+<nav class="bt-social" aria-label="Backbone Tutorials on social media">
+  <a style="--c:#181717" href="https://github.com/backbonetutorials/backbonetutorials" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on GitHub"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#fff" d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0 1 12 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222 0 1.606-.014 2.898-.014 3.293 0 .322.216.694.825.576C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg></a>
+  <a style="--c:#000000" href="https://x.com/backbonetutor" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on X (formerly Twitter)"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#fff" d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+  <a style="--c:#FF0000" href="https://www.youtube.com/@BACKBONETUTORIALS" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on YouTube"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#fff" d="M8.5 6.5 L8.5 17.5 L17.5 12 Z"/></svg></a>
+  <a style="--c:#0285FF" href="https://bsky.app/profile/backbonetutorials.bsky.social" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on Bluesky"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#fff" d="M12 10.8c-1.087-2.114-4.046-6.053-6.798-7.995C2.566.944 1.561 1.266.902 1.565.139 1.908 0 3.08 0 3.768c0 .69.378 5.65.624 6.479.815 2.736 3.713 3.66 6.383 3.364.136-.02.275-.039.415-.056-.138.022-.276.04-.415.056-3.912.58-7.387 2.005-2.83 7.078 5.013 5.19 6.87-1.113 7.823-4.308.953 3.195 2.05 9.271 7.733 4.308 4.267-4.308 1.172-6.498-2.74-7.078a8.741 8.741 0 0 1-.415-.056c.14.017.279.036.415.056 2.67.296 5.568-.628 6.383-3.364C23.622 9.418 24 4.458 24 3.768c0-.688-.139-1.86-.902-2.203-.659-.299-1.664-.621-4.3 1.24C16.046 4.747 13.087 8.686 12 10.8Z"/></svg></a>
+  <a style="--c:#d62976;background-image:linear-gradient(150deg,rgba(255,255,255,.30),rgba(255,255,255,0) 42%,rgba(0,0,0,.22)),linear-gradient(45deg,#feda75,#fa7e1e,#d62976,#962fbf,#4f5bd5)" href="https://www.instagram.com/backbonetutorials/" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on Instagram"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="4" y="4" width="16" height="16" rx="5" fill="none" stroke="#fff" stroke-width="2"/><circle cx="12" cy="12" r="3.6" fill="none" stroke="#fff" stroke-width="2"/><circle cx="17.2" cy="6.8" r="1.25" fill="#fff"/></svg></a>
+  <a style="--c:#000000" href="https://www.tiktok.com/@backbonetutorials" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on TikTok"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#fff" d="M16.5 5.82a4.79 4.79 0 0 1-1.16-3.07h-2.9v11.43a2.45 2.45 0 1 1-2.45-2.45c.17 0 .33.02.49.05V8.83a5.36 5.36 0 0 0-.49-.02 5.35 5.35 0 1 0 5.35 5.35V8.6a7.66 7.66 0 0 0 4.46 1.42V7.13a4.79 4.79 0 0 1-2.8-1.31Z"/></svg></a>
+  <a style="--c:#1877F2" href="https://www.facebook.com/BackboneTutorials" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on Facebook"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#fff" d="M13.5 21v-8h2.6l.4-3h-3V8.1c0-.87.27-1.46 1.5-1.46H17V3.96c-.28-.04-1.2-.12-2.28-.12-2.26 0-3.8 1.38-3.8 3.9V10H8.3v3h2.62v8h2.58Z"/></svg></a>
+</nav>
 <p>
-Backbone Tutorials
-</p>
-
-<p>
-<a href="/">Home</a> | 
-<a href="/about/">About</a> | 
-<a href="/contact/">Contact</a> | 
-<a href="/privacy-policy/">Privacy Policy</a> | 
+<a href="/">Home</a> |
+<a href="/about/">About</a> |
+<a href="/contact/">Contact</a> |
+<a href="/privacy-policy/">Privacy Policy</a> |
 <a href="/terms/">Terms</a>
 </p>
-
-<p>
-© 2026 Backbone Tutorials
-</p>
-
+<p>© 2026 Backbone Tutorials</p>
 </footer>
 
 </body>

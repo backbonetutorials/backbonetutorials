@@ -1,1169 +1,307 @@
+<!-- DEPLOY TO: /what-is-a-collection/ (index.html) · TechArticle (historical) · +footer +dateModified +cluster links, FAQ 4=4 -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
-
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>What is a Collection in Backbone.js? Complete Guide</title>
-
 <meta name="description" content="Learn what a Collection in Backbone.js is, how it works, examples, best practices, API synchronization, sorting, filtering, and real-world usage.">
-
 <meta name="robots" content="index, follow">
 <meta name="author" content="Backbone Tutorials">
 <meta name="theme-color" content="#2563eb">
 <meta name="format-detection" content="telephone=no">
-
 <link rel="canonical" href="https://backbonetutorials.com/what-is-a-collection/">
-
 <link rel="icon" href="/assets/favicon.ico">
 <link rel="apple-touch-icon" href="/assets/favicon.png">
-
-<link
-rel="preload"
-as="image"
-href="/assets/what-is-a-collection-800.webp"
-imagesrcset="
-/assets/what-is-a-collection-400.webp 400w,
-/assets/what-is-a-collection-800.webp 800w,
-/assets/what-is-a-collection-1200.webp 1200w"
-imagesizes="(max-width: 600px) 100vw, 800px">
-
-<!-- Open Graph -->
 <meta property="og:title" content="What is a Collection in Backbone.js? Complete Guide">
-<meta property="og:description" content="Learn how Backbone.js Collections manage groups of Models, synchronize APIs, and organize frontend application data.">
+<meta property="og:description" content="Learn what a Collection in Backbone.js is, how it works, examples, best practices, API synchronization, sorting, filtering, and real-world usage.">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://backbonetutorials.com/what-is-a-collection/">
 <meta property="og:image" content="https://backbonetutorials.com/assets/what-is-a-collection-1200.jpg">
 <meta property="og:site_name" content="Backbone Tutorials">
 <meta property="og:locale" content="en_US">
-
-<!-- Twitter -->
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="What is a Collection in Backbone.js? Complete Guide">
-<meta name="twitter:description" content="Learn how Backbone.js Collections manage groups of Models, synchronize APIs, and organize frontend application data.">
+<meta name="twitter:description" content="Learn what a Collection in Backbone.js is, how it works, examples, best practices, API synchronization, sorting, filtering, and real-world usage.">
 <meta name="twitter:image" content="https://backbonetutorials.com/assets/what-is-a-collection-1200.jpg">
 <meta name="twitter:url" content="https://backbonetutorials.com/what-is-a-collection/">
-
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-
 <style>
-
-html{
-  scroll-behavior:smooth;
-}
-
-body {
-  font-family:'Inter',sans-serif;
-  margin:0;
-  background:#f4f6f9;
-  color:#1f2937;
-  line-height:1.7;
-}
-
-.container {
-  max-width:900px;
-  margin:30px auto;
-  padding:20px;
-  background:#fff;
-  border-radius:10px;
-  box-shadow:0 2px 10px rgba(0,0,0,0.04);
-}
-
-h1,h2,h3 {
-  color:#111827;
-}
-
-.nav {
-  background:#111827;
-  padding:15px;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  flex-wrap:wrap;
-  gap:8px;
-}
-
-.nav a {
-  color:white;
-  margin:0 10px;
-  text-decoration:none;
-  font-weight:600;
-}
-
-.nav a:hover {
-  text-decoration:underline;
-}
-
-.nav-logo img{
-  vertical-align:middle;
-  margin-right:12px;
-  border-radius:8px;
-}
-
-figure {
-  margin:30px 0;
-}
-
-picture{
-  display:block;
-}
-
-img {
-  width:100%;
-  height:auto;
-  border-radius:10px;
-}
-
-pre {
-  background:#111;
-  color:#eee;
-  padding:15px;
-  border-radius:8px;
-  overflow-x:auto;
-  box-shadow:0 2px 8px rgba(0,0,0,0.15);
-}
-
-.cta {
-  background:#eef2ff;
-  padding:20px;
-  margin-top:30px;
-  text-align:center;
-  border-radius:10px;
-}
-
-a {
-  color:#2563eb;
-}
-
-.back-home {
-  margin-top:25px;
-}
-
-footer {
-  background:#111827;
-  color:white;
-  text-align:center;
-  padding:30px 20px;
-  margin-top:40px;
-}
-
-footer a {
-  color:#93c5fd;
-  text-decoration:none;
-}
-
-footer a:hover {
-  text-decoration:underline;
-}
-
-.btn{
-  display:inline-block;
-  background:#2563eb;
-  color:white;
-  padding:12px 22px;
-  border-radius:8px;
-  text-decoration:none;
-  font-weight:600;
-  margin-top:15px;
-  transition:0.2s ease;
-}
-
-.btn:hover{
-  background:#1d4ed8;
-  transform:translateY(-1px);
-}
-
-.card {
-  background:#fff;
-  padding:20px;
-  border-radius:10px;
-  box-shadow:0 2px 8px rgba(0,0,0,0.05);
-  overflow:hidden;
-  max-width:100%;
-  transition:0.2s ease;
-}
-
-.card:hover{
-  transform:translateY(-2px);
-}
-
-.toc-list{
-  padding-left:20px;
-}
-
-.toc-list li{
-  margin-bottom:8px;
-}
-
-.author-line{
-  font-size:15px;
-  margin-top:-6px;
-  margin-bottom:10px;
-  color:#4b5563;
-}
-
-figcaption{
-  font-size:14px;
-  color:#6b7280;
-  margin-top:10px;
-}
-
-#faq h3{
-  margin-top:25px;
-}
-
-#faq p{
-  margin-bottom:18px;
-}
-
-@media(max-width:600px){
-  .container {
-    padding:15px;
-  }
-}
-
+html{scroll-behavior:smooth}
+body{font-family:'Inter',sans-serif;margin:0;background:#f4f6f9;color:#1f2937;line-height:1.7}
+.container{max-width:900px;margin:30px auto;padding:20px;background:#fff;border-radius:10px;box-shadow:0 2px 10px rgba(0,0,0,0.04)}
+h1,h2,h3{color:#111827}
+.nav{background:#111827;padding:15px;display:flex;justify-content:center;align-items:center;flex-wrap:wrap;gap:8px}
+.nav a{color:white;margin:0 10px;text-decoration:none;font-weight:600}
+.nav a:hover{text-decoration:underline}
+.nav-logo img{vertical-align:middle;margin-right:12px;border-radius:8px}
+a{color:#2563eb}
+ul{padding-left:22px}li{margin-bottom:6px}
+figure{margin:26px 0}figure img{max-width:100%;height:auto;border-radius:12px;display:block;margin:0 auto;box-shadow:0 4px 20px rgba(0,0,0,0.10)}
+figcaption{font-size:14px;color:#6b7280;margin-top:10px;text-align:center}
+pre{background:#111;color:#eee;padding:15px;border-radius:8px;overflow-x:auto}
+code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+p code,li code{background:#eef2ff;padding:1px 5px;border-radius:4px;font-size:.95em}
+.card{background:#fff;padding:20px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.05);border:1px solid #eef2f7}
+.cta{background:#eef2ff;padding:22px;margin-top:30px;text-align:center;border-radius:10px}
+.btn{display:inline-block;background:#2563eb;color:white;padding:12px 24px;border-radius:8px;text-decoration:none;font-weight:600;margin-top:6px;transition:0.2s ease}
+.btn:hover{background:#1d4ed8;transform:translateY(-1px)}
+.breadcrumb{font-size:14px;color:#6b7280;margin:0 0 10px}
+.breadcrumb a{color:#2563eb;text-decoration:none}
+.toc-list{padding-left:20px}.toc-list li{margin-bottom:8px}
+.author-line{font-size:15px;margin-top:-6px;margin-bottom:10px;color:#4b5563}
+#faq h3{margin-top:25px}#faq p{margin-bottom:18px}
+.diagram{width:100%;height:auto;display:block;border-radius:10px}
+footer{background:#111827;color:white;text-align:center;padding:30px 20px;margin-top:40px}
+footer a{color:#93c5fd;text-decoration:none}footer a:hover{text-decoration:underline}
+.bt-social{display:flex;gap:13px;flex-wrap:wrap;align-items:center;justify-content:center;margin:0 0 14px;padding:0;list-style:none}
+.bt-social a{position:relative;isolation:isolate;width:46px;height:46px;border-radius:14px;display:inline-flex;align-items:center;justify-content:center;text-decoration:none;-webkit-tap-highlight-color:transparent;background-color:var(--c,#333);background-image:linear-gradient(150deg,rgba(255,255,255,.30),rgba(255,255,255,0) 42%,rgba(0,0,0,.22));box-shadow:0 1px 1px rgba(0,0,0,.22),0 7px 14px -3px rgba(0,0,0,.34),inset 0 1px 0 rgba(255,255,255,.50),inset 0 -2px 5px rgba(0,0,0,.30);transition:transform .18s cubic-bezier(.2,.7,.2,1),box-shadow .18s ease}
+.bt-social a::before{content:"";position:absolute;left:3px;right:3px;top:2px;height:44%;border-radius:12px 12px 50% 50%/12px 12px 24px 24px;background:linear-gradient(180deg,rgba(255,255,255,.42),rgba(255,255,255,0));pointer-events:none;z-index:0}
+.bt-social a:hover{transform:translateY(-3px) scale(1.05);box-shadow:0 2px 2px rgba(0,0,0,.20),0 16px 26px -6px rgba(0,0,0,.40),inset 0 1px 0 rgba(255,255,255,.55),inset 0 -2px 6px rgba(0,0,0,.32)}
+.bt-social a:active{transform:translateY(-1px) scale(1.01)}
+.bt-social a:focus-visible{outline:3px solid #93c5fd;outline-offset:3px}
+.bt-social svg{position:relative;z-index:1;width:22px;height:22px;display:block;filter:drop-shadow(0 1px 1px rgba(0,0,0,.28))}
+@media (prefers-reduced-motion:reduce){.bt-social a{transition:none}.bt-social a:hover{transform:none}}
+@media(max-width:600px){.container{padding:15px}}
 </style>
-
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@graph": [
-
     {
       "@type": "Organization",
       "@id": "https://backbonetutorials.com/#organization",
       "name": "Backbone Tutorials",
       "url": "https://backbonetutorials.com/",
-      "logo": {
-        "@type": "ImageObject",
-        "url": "https://backbonetutorials.com/assets/logo.png",
-        "width": 512,
-        "height": 512
-      },
+      "logo": { "@type": "ImageObject", "url": "https://backbonetutorials.com/assets/logo.png" },
       "sameAs": [
-        "https://x.com/backbonetutor",
         "https://github.com/backbonetutorials/backbonetutorials",
-        "https://www.youtube.com/@BACKBONETUTORIALS"
+        "https://x.com/backbonetutor",
+        "https://www.youtube.com/@BACKBONETUTORIALS",
+        "https://bsky.app/profile/backbonetutorials.bsky.social",
+        "https://www.instagram.com/backbonetutorials/",
+        "https://www.tiktok.com/@backbonetutorials",
+        "https://www.facebook.com/BackboneTutorials"
       ],
       "contactPoint": {
         "@type": "ContactPoint",
         "contactType": "customer support",
-        "email": "backbonetutorials2026@gmail.com",
-        "availableLanguage": [
-          "English"
-        ],
+        "url": "https://x.com/backbonetutor",
+        "availableLanguage": ["English"],
         "areaServed": "Worldwide"
       }
     },
-
     {
       "@type": "WebSite",
       "@id": "https://backbonetutorials.com/#website",
       "url": "https://backbonetutorials.com/",
       "name": "Backbone Tutorials",
-      "inLanguage": "en-US",
-      "publisher": {
-        "@id": "https://backbonetutorials.com/#organization"
-      }
+      "publisher": { "@id": "https://backbonetutorials.com/#organization" }
     },
-
     {
       "@type": "Person",
       "@id": "https://backbonetutorials.com/author/backbone-tutorials-team/#person",
       "name": "Backbone Tutorials Team",
       "url": "https://backbonetutorials.com/author/backbone-tutorials-team/",
-      "worksFor": {
-        "@id": "https://backbonetutorials.com/#organization"
-      },
-      "jobTitle": "Frontend JavaScript Editorial Team",
-      "knowsAbout": [
-        "Backbone.js",
-        "JavaScript",
-        "Frontend Development",
-        "Single Page Applications"
-      ]
+      "worksFor": { "@id": "https://backbonetutorials.com/#organization" }
     },
-
     {
       "@type": "WebPage",
       "@id": "https://backbonetutorials.com/what-is-a-collection/#webpage",
       "url": "https://backbonetutorials.com/what-is-a-collection/",
-      "name": "What is a Collection in Backbone.js",
-      "headline": "What is a Collection in Backbone.js?",
-      "description": "Learn what a Collection in Backbone.js is, how it works, examples, best practices, sorting, filtering, and API synchronization.",
-      "inLanguage": "en-US",
-
-      "image": {
-        "@type": "ImageObject",
-        "url": "https://backbonetutorials.com/assets/what-is-a-collection-1200.jpg",
-        "width": 1200,
-        "height": 800
-      },
-
-      "primaryImageOfPage": {
-        "@type": "ImageObject",
-        "url": "https://backbonetutorials.com/assets/what-is-a-collection-1200.jpg",
-        "width": 1200,
-        "height": 800
-      },
-
-      "isPartOf": {
-        "@id": "https://backbonetutorials.com/#website"
-      },
-
-      "author": {
-        "@id": "https://backbonetutorials.com/author/backbone-tutorials-team/#person"
-      },
-
-      "publisher": {
-        "@id": "https://backbonetutorials.com/#organization"
-      },
-
-      "breadcrumb": {
-        "@id": "https://backbonetutorials.com/what-is-a-collection/#breadcrumb"
-      },
-
-      "mainEntity": {
-        "@id": "https://backbonetutorials.com/what-is-a-collection/#article"
-      }
+      "name": "What is a Collection in Backbone.js? Complete Guide",
+      "inLanguage": "en",
+      "isPartOf": { "@id": "https://backbonetutorials.com/#website" },
+      "breadcrumb": { "@id": "https://backbonetutorials.com/what-is-a-collection/#breadcrumb" },
+      "mainEntity": { "@id": "https://backbonetutorials.com/what-is-a-collection/#article" }
     },
-
     {
       "@type": "TechArticle",
       "@id": "https://backbonetutorials.com/what-is-a-collection/#article",
       "url": "https://backbonetutorials.com/what-is-a-collection/",
       "headline": "What is a Collection in Backbone.js?",
-      "description": "Learn what a Collection in Backbone.js is, how it works, examples, best practices, sorting, filtering, and API synchronization.",
-      "inLanguage": "en-US",
-
-      "image": {
-        "@type": "ImageObject",
-        "url": "https://backbonetutorials.com/assets/what-is-a-collection-1200.jpg",
-        "width": 1200,
-        "height": 800
-      },
-
-      "author": {
-        "@id": "https://backbonetutorials.com/author/backbone-tutorials-team/#person"
-      },
-
-      "publisher": {
-        "@id": "https://backbonetutorials.com/#organization"
-      },
-
-      "mainEntityOfPage": {
-        "@id": "https://backbonetutorials.com/what-is-a-collection/#webpage"
-      },
-
-      "datePublished": "2026-05-21T09:00:00+07:00",
-      "dateModified": "2026-05-22T22:15:00+07:00",
-
-      "articleSection": [
-        "Backbone.js",
-        "Frontend Architecture",
-        "JavaScript Framework",
-        "Single Page Applications",
-        "API Synchronization"
-      ],
-
-      "keywords": [
-        "Backbone.js",
-        "Backbone Router",
-        "Backbone Model",
-        "Backbone View",
-        "Backbone Collection",
-        "JavaScript Framework",
-        "Frontend Development",
-        "Single Page Applications",
-        "API Synchronization",
-        "Frontend Architecture"
-      ],
-
-      "about": [
-        {
-          "@type": "Thing",
-          "name": "Backbone.js"
-        },
-        {
-          "@type": "Thing",
-          "name": "Backbone.Collection"
-        },
-        {
-          "@type": "Thing",
-          "name": "Frontend Architecture"
-        }
-      ],
-
-      "mentions": [
-        {
-          "@type": "Thing",
-          "name": "Backbone.Collection"
-        },
-        {
-          "@type": "Thing",
-          "name": "REST APIs"
-        },
-        {
-          "@type": "Thing",
-          "name": "Single Page Applications"
-        }
-      ]
+      "description": "Learn what a Collection in Backbone.js is, how it works, examples, best practices, API synchronization, sorting, filtering, and real-world usage.",
+      "inLanguage": "en",
+      "image": { "@type": "ImageObject", "url": "https://backbonetutorials.com/assets/what-is-a-collection-1200.jpg", "width": 1200, "height": 630 },
+      "author": { "@id": "https://backbonetutorials.com/author/backbone-tutorials-team/#person" },
+      "publisher": { "@id": "https://backbonetutorials.com/#organization" },
+      "mainEntityOfPage": { "@id": "https://backbonetutorials.com/what-is-a-collection/#webpage" },
+      "datePublished": "2026-06-12T04:30:00+07:00",
+      "dateModified": "2026-06-12T04:30:00+07:00"
     },
-
     {
       "@type": "BreadcrumbList",
       "@id": "https://backbonetutorials.com/what-is-a-collection/#breadcrumb",
       "itemListElement": [
-
-        {
-          "@type": "ListItem",
-          "position": 1,
-          "name": "Home",
-          "item": "https://backbonetutorials.com/"
-        },
-
-        {
-          "@type": "ListItem",
-          "position": 2,
-          "name": "What is a Collection in Backbone.js?",
-          "item": "https://backbonetutorials.com/what-is-a-collection/"
-        }
-
+        { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://backbonetutorials.com/" },
+        { "@type": "ListItem", "position": 2, "name": "Backbone.js Guide", "item": "https://backbonetutorials.com/backbonejs/" },
+        { "@type": "ListItem", "position": 3, "name": "Collection", "item": "https://backbonetutorials.com/what-is-a-collection/" }
       ]
     },
-
     {
       "@type": "FAQPage",
       "@id": "https://backbonetutorials.com/what-is-a-collection/#faq",
       "mainEntity": [
-
         {
           "@type": "Question",
           "name": "What is a Collection in Backbone.js?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "A Backbone.js Collection is used to manage groups of Models and organize related application data."
-          }
+          "acceptedAnswer": { "@type": "Answer", "text": "A Backbone.js Collection is used to manage groups of Models and organize related frontend application data." }
         },
-
         {
           "@type": "Question",
-          "name": "Why are Collections important in Backbone.js?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Collections help developers organize grouped data, synchronize APIs, sort records, and manage frontend application state more efficiently."
-          }
+          "name": "What does a Collection do?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Collections handle sorting, filtering, synchronization, and grouped data management." }
         },
-
         {
           "@type": "Question",
-          "name": "Can Backbone Collections fetch API data?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Yes. Backbone Collections can retrieve remote data using fetch() and automatically organize returned Models."
-          }
+          "name": "Can Collections fetch API data?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Yes. Collections can retrieve API responses using fetch() and automatically organize the returned data." }
         },
-
         {
           "@type": "Question",
-          "name": "How do Backbone Collections work with Routers, Models, and Views?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Collections organize grouped Models, Views render the interface, Routers manage navigation, and Models store individual application data inside Backbone.js applications."
-          }
+          "name": "Do Collections work with Views?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Yes. Views often listen to Collection events and update the interface whenever grouped data changes." }
         }
-
       ]
     }
-
   ]
 }
 </script>
-
 <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-FYJP43XDHH"></script>
 <script>
 window.dataLayer = window.dataLayer || [];
 function gtag(){dataLayer.push(arguments);}
 gtag('js', new Date());
-
 gtag('config', 'G-FYJP43XDHH');
 </script>
-
 </head>
-
 <body>
 
 <nav class="nav" aria-label="Main Navigation">
-
-<a href="/" class="nav-logo" title="Backbone Tutorials Homepage">
-<img
-src="/assets/logo.png"
-alt="Backbone Tutorials Logo"
-width="36"
-height="36"
-loading="lazy"
-decoding="async">
-</a>
-
-<a href="/" title="Backbone.js Tutorials Homepage">
-Home
-</a>
-
-<a href="/backbonejs/" title="Backbone.js Complete Guide">
-Backbone Guide
-</a>
-
-<a href="/what-is-a-router/" title="What is a Router in Backbone.js">
-Router
-</a>
-
-<a href="/what-is-a-model/" title="What is a Model in Backbone.js">
-Model
-</a>
-
-<a href="/what-is-a-view/" title="What is a View in Backbone.js">
-View
-</a>
-
-<a href="/what-is-a-collection/" title="What is a Collection in Backbone.js">
-Collection
-</a>
-
+<a href="/" class="nav-logo" title="Backbone Tutorials Homepage"><img src="/assets/logo.png" alt="Backbone Tutorials Logo" width="36" height="36" decoding="async"></a>
+<a href="/" title="Backbone.js Tutorials Homepage">Home</a>
+<a href="/backbonejs/" title="Backbone.js Complete Guide">Backbone Guide</a>
+<a href="/what-is-a-router/" title="What is a Router in Backbone.js">Router</a>
+<a href="/what-is-a-model/" title="What is a Model in Backbone.js">Model</a>
+<a href="/what-is-a-view/" title="What is a View in Backbone.js">View</a>
+<a href="/what-is-a-collection/" title="What is a Collection in Backbone.js">Collection</a>
 </nav>
 
 <main>
-
 <article class="container">
+<nav class="breadcrumb" aria-label="Breadcrumb"><a href="/">Home</a> &rsaquo; <a href="/backbonejs/">Backbone.js Guide</a> &rsaquo; <span aria-current="page">Collection</span></nav>
 
 <h1>What is a Collection in Backbone.js?</h1>
+<p class="author-line">Author: <a href="/author/backbone-tutorials-team/">Backbone Tutorials Team</a></p>
+<p class="author-line">Last Updated: June 2026 &middot; 12 min read</p>
 
-<p class="author-line">
-Author:
-<a href="/author/backbone-tutorials-team/">
-Backbone Tutorials Team
-</a>
-</p>
-
-<p class="author-line">
-Last Updated: May 2026
-</p>
-
-<p class="author-line">
-12 min read
-</p>
-
-<p>
-<strong>Backbone.js Collection</strong> is one of the most important parts of the Backbone.js architecture. While a <a href="/what-is-a-model/">Model</a> represents a single piece of data, a Collection is responsible for managing multiple Models together inside a structured group.
-</p>
-
-<p>
-In real frontend applications, developers rarely work with only one object at a time. Most interfaces display lists of users, blog posts, products, notifications, comments, or messages. Collections help organize all of this data in a clean and scalable way.
-</p>
-
-<p>
-To fully understand how Collections work, it is also useful to understand how they connect with <a href="/what-is-a-model/">Models</a>, <a href="/what-is-a-view/">Views</a>, and <a href="/what-is-a-router/">Routers</a>. If you are new to Backbone.js, start with the <a href="/backbonejs/">Backbone.js tutorial hub</a> first.
-</p>
-
-<div class="card">
-
-<h2>Table of Contents</h2>
-
+<p><strong>Backbone.js Collection</strong> is one of the most important parts of the Backbone.js architecture. While a <a href="/what-is-a-model/">Model</a> represents a single piece of data, a Collection is responsible for managing multiple Models together inside a structured group.</p>
+<p>In real frontend applications, developers rarely work with only one object at a time. Most interfaces display lists of users, blog posts, products, notifications, comments, or messages. Collections help organize all of this data in a clean and scalable way.</p>
+<p>To fully understand how Collections work, it is also useful to understand how they connect with <a href="/what-is-a-model/">Models</a>, <a href="/what-is-a-view/">Views</a>, and <a href="/what-is-a-router/">Routers</a>. If you are new to Backbone.js, start with the <a href="/backbonejs/">Backbone.js tutorial hub</a> first.</p>
+<div class="card"><p style="margin-top:0"><strong>Table of Contents</strong></p>
 <ul class="toc-list">
-
-<li>
-<a href="#what-you-will-learn">
-What You Will Learn
-</a>
-</li>
-
-<li>
-<a href="#why-collections-matter">
-Why Collections Matter
-</a>
-</li>
-
-<li>
-<a href="#how-collections-work">
-How Collections Work
-</a>
-</li>
-
-<li>
-<a href="#relationship-with-models">
-Relationship Between Collection and Model
-</a>
-</li>
-
-<li>
-<a href="#sorting-and-filtering">
-Sorting and Filtering
-</a>
-</li>
-
-<li>
-<a href="#api-synchronization">
-API Synchronization
-</a>
-</li>
-
-<li>
-<a href="#real-world-example">
-Real-World Example
-</a>
-</li>
-
-<li>
-<a href="#collections-with-router-and-model">
-How Collections Work with Routers, Models, and Views
-</a>
-</li>
-
-<li>
-<a href="#best-practices">
-Best Practices
-</a>
-</li>
-
-<li>
-<a href="#common-mistakes">
-Common Mistakes
-</a>
-</li>
-
-<li>
-<a href="#advanced-collection-concepts">
-Advanced Collection Concepts
-</a>
-</li>
-
-<li>
-<a href="#in-depth-explanation">
-In-Depth Explanation
-</a>
-</li>
-
-<li>
-<a href="#faq">
-FAQ
-</a>
-</li>
-
-<li>
-<a href="#conclusion">
-Conclusion
-</a>
-</li>
-
-</ul>
-
-</div>
-
+<li><a href="#what-you-will-learn">What You Will Learn</a></li>
+<li><a href="#why-collections-matter">Why Collections Matter</a></li>
+<li><a href="#how-collections-work">How Collections Work</a></li>
+<li><a href="#sorting-and-filtering">Sorting and Filtering</a></li>
+<li><a href="#api-synchronization">API Synchronization</a></li>
+<li><a href="#collections-with-router-and-model">How Collections Work with Routers, Models, and Views</a></li>
+<li><a href="#best-practices">Best Practices</a></li>
+<li><a href="#advanced-collection-concepts">Advanced Collection Concepts</a></li>
+<li><a href="#faq">FAQ</a></li>
+</ul></div>
 <h2 id="what-you-will-learn">What You Will Learn</h2>
-
-<ul>
-<li>How Backbone.js Collections organize grouped data</li>
-<li>How Collections interact with Routers, Models, and Views</li>
-<li>How sorting and filtering work</li>
-<li>How Collections synchronize API responses</li>
-<li>Best practices for scalable frontend architecture</li>
-</ul>
-
+<ul><li>How Backbone.js Collections organize grouped data</li><li>How Collections interact with Routers, Models, and Views</li><li>How sorting and filtering work</li><li>How Collections synchronize API responses</li><li>Best practices for scalable frontend architecture</li></ul>
 <figure>
-
 <picture>
-
-<source
-srcset="
-/assets/what-is-a-collection-400.webp 400w,
-/assets/what-is-a-collection-800.webp 800w,
-/assets/what-is-a-collection-1200.webp 1200w"
-sizes="(max-width: 600px) 100vw, 800px"
-type="image/webp">
-
-<source
-srcset="
-/assets/what-is-a-collection-400.jpg 400w,
-/assets/what-is-a-collection-800.jpg 800w,
-/assets/what-is-a-collection-1200.jpg 1200w"
-sizes="(max-width: 600px) 100vw, 800px"
-type="image/jpeg">
-
-<img
-src="/assets/what-is-a-collection-800.webp"
-alt="Backbone.js Collection managing grouped Models and API data"
-loading="eager"
-fetchpriority="high"
-decoding="async"
-width="800"
-height="533">
-
+<source type="image/webp" srcset="/assets/what-is-a-collection-400.webp 400w, /assets/what-is-a-collection-800.webp 800w, /assets/what-is-a-collection-1200.webp 1200w" sizes="(max-width:600px) 100vw, 860px">
+<img src="/assets/what-is-a-collection-800.jpg" srcset="/assets/what-is-a-collection-400.jpg 400w, /assets/what-is-a-collection-800.jpg 800w, /assets/what-is-a-collection-1200.jpg 1200w" sizes="(max-width:600px) 100vw, 860px" alt="Backbone.js Collection managing grouped Models and API data" width="860" height="484" fetchpriority="high">
 </picture>
-
-<figcaption>
-Backbone.js Collection managing multiple Models inside an application
-</figcaption>
-
+<figcaption>Backbone.js Collection managing multiple Models inside an application</figcaption>
 </figure>
-
 <h2 id="why-collections-matter">Why Collections Matter</h2>
-
-<p>
-In many applications, data exists as groups rather than individual records. An ecommerce website may display hundreds of products. A dashboard may contain multiple notifications. A social media application may show long lists of posts and comments.
-</p>
-
-<p>
-Managing all those records manually quickly becomes difficult. This is where Backbone.js Collections become extremely useful.
-</p>
-
-<p>
-Collections simplify how grouped data is stored, updated, sorted, and synchronized. Instead of managing multiple objects separately, developers can organize everything inside a single Collection structure.
-</p>
-
-<p>
-This approach makes frontend applications easier to scale and easier to maintain over time.
-</p>
-
+<p>In many applications, data exists as groups rather than individual records. An ecommerce website may display hundreds of products. A dashboard may contain multiple notifications. A social media application may show long lists of posts and comments.</p>
+<p>Managing all those records manually quickly becomes difficult. This is where Backbone.js Collections become extremely useful. Collections simplify how grouped data is stored, updated, sorted, and synchronized. Instead of managing multiple objects separately, developers can organize everything inside a single Collection structure. This approach makes frontend applications easier to scale and easier to maintain over time.</p>
 <h2 id="how-collections-work">How Collections Work</h2>
-
-<p>
-A Backbone Collection is essentially a container for multiple Models.
-</p>
-
-<pre><code>
-var Todo = Backbone.Model.extend({});
+<p>A Backbone Collection is essentially a container for multiple Models.</p>
+<pre><code>var Todo = Backbone.Model.extend({});
 
 var TodoList = Backbone.Collection.extend({
   model: Todo
-});
-</code></pre>
-
-<p>
-In this example, the Collection manages multiple Todo Models together.
-</p>
-
-<p>
-Developers can add, remove, filter, sort, and synchronize those Models inside one centralized structure.
-</p>
-
-<p>
-Collections also trigger events whenever data changes. This allows <a href="/what-is-a-view/">Views</a> to automatically update the user interface without refreshing the page.
-</p>
-
-<h2 id="relationship-with-models">Relationship Between Collection and Model</h2>
-
-<p>
-A Collection and a <a href="/what-is-a-model/">Model</a> work closely together.
-</p>
-
-<p>
-A Model represents a single object. A Collection represents multiple Models grouped together.
-</p>
-
-<p>
-For example:
-</p>
-
-<ul>
-<li>A single user profile = Model</li>
-<li>A list of users = Collection</li>
-<li>A single blog post = Model</li>
-<li>A list of blog posts = Collection</li>
-</ul>
-
-<p>
-This separation helps developers organize frontend applications in a cleaner and more predictable way.
-</p>
-
-<p>
-One reason Backbone.js became popular during the early growth of Single Page Applications was because this architecture encouraged structured frontend development.
-</p>
-
+});</code></pre>
+<p>In this example, the Collection manages multiple Todo Models together. Developers can add, remove, filter, sort, and synchronize those Models inside one centralized structure. Collections also trigger events whenever data changes. This allows <a href="/what-is-a-view/">Views</a> to automatically update the user interface without refreshing the page.</p>
+<h3>Relationship Between Collection and Model</h3>
+<p>A Collection and a <a href="/what-is-a-model/">Model</a> work closely together. A Model represents a single object. A Collection represents multiple Models grouped together. For example: a single user profile is a Model, a list of users is a Collection, a single blog post is a Model, and a list of blog posts is a Collection.</p>
+<p>This separation helps developers organize frontend applications in a cleaner and more predictable way. One reason Backbone.js became popular during the early growth of Single Page Applications was because this architecture encouraged structured frontend development.</p>
 <h2 id="sorting-and-filtering">Sorting and Filtering</h2>
-
-<p>
-Collections provide built-in methods for sorting and filtering data.
-</p>
-
-<p>
-For example, developers can sort products by price or filter notifications by unread status.
-</p>
-
-<pre><code>
-var Products = Backbone.Collection.extend({
+<p>Collections provide built-in methods for sorting and filtering data. For example, developers can sort products by price or filter notifications by unread status.</p>
+<pre><code>var Products = Backbone.Collection.extend({
   comparator: 'price'
-});
-</code></pre>
-
-<p>
-Sorting becomes especially important when applications display large datasets.
-</p>
-
-<p>
-Filtering also allows interfaces to feel faster and more interactive because users can instantly narrow down information without reloading the page.
-</p>
-
-<p>
-Many developers appreciated Backbone.js because Collections handled these operations with relatively simple code compared to older JavaScript approaches.
-</p>
-
+});</code></pre>
+<p>Sorting becomes especially important when applications display large datasets. Filtering also allows interfaces to feel faster and more interactive because users can instantly narrow down information without reloading the page. Many developers appreciated Backbone.js because Collections handled these operations with relatively simple code compared to older JavaScript approaches.</p>
 <h2 id="api-synchronization">API Synchronization</h2>
-
-<p>
-Collections are commonly used with APIs.
-</p>
-
-<p>
-Backbone.js provides the <code>fetch()</code> method to retrieve remote data and populate Collections automatically.
-</p>
-
-<pre><code>
-var Users = Backbone.Collection.extend({
+<p>Collections are commonly used with APIs. Backbone.js provides the <code>fetch()</code> method to retrieve remote data and populate Collections automatically.</p>
+<pre><code>var Users = Backbone.Collection.extend({
   url: '/api/users'
 });
 
 var users = new Users();
-users.fetch();
-</code></pre>
-
-<p>
-After fetching data, the Collection stores all returned Models together.
-</p>
-
-<p>
-This synchronization process was one of the features that helped Backbone.js become widely adopted for frontend applications before larger frameworks became dominant.
-</p>
-
-<p>
-Even today, understanding how Collections synchronize data helps developers better understand frontend architecture concepts used in modern frameworks.
-</p>
-
-<h2 id="real-world-example">Real-World Example</h2>
-
-<p>
-Imagine an ecommerce dashboard.
-</p>
-
-<p>
-A store may contain hundreds of products. Instead of manually managing each product separately, developers can place every product inside a single Collection.
-</p>
-
-<p>
-The Collection can:
-</p>
-
-<ul>
-<li>Load products from APIs</li>
-<li>Sort products by price</li>
-<li>Filter products by category</li>
-<li>Update the interface automatically</li>
-<li>Track added or removed products</li>
-</ul>
-
-<p>
-This creates a much cleaner architecture compared to writing disconnected JavaScript logic.
-</p>
-
-<p>
-Collections also make applications easier to maintain as projects continue growing.
-</p>
-
-
-<h2 id="collections-with-router-and-model">
-How Collections Work with Routers, Models, and Views
-</h2>
-
-<p>
-Collections become much more useful when they work together with <a href="/what-is-a-router/">Routers</a> and <a href="/what-is-a-model/">Models</a>.
-</p>
-
-<p>
-In a typical Backbone.js application, the Router controls navigation, Models manage individual records, and Collections organize grouped data.
-</p>
-
-<p>
-For example, when a user visits a product page, the Router may trigger a Collection to fetch product data from an API. The Collection then stores multiple Models, while the <a href="/what-is-a-view/">View</a> renders the interface.
-</p>
-
-<p>
-This separation was one of the reasons Backbone.js became popular for building structured frontend applications during the early growth of Single Page Applications.
-</p>
-
-<ul>
-<li>Router controls navigation</li>
-<li>Model stores individual records</li>
-<li>Collection manages grouped data</li>
-<li>View renders the interface</li>
-</ul>
-
-<p>
-Keeping these responsibilities separated makes applications easier to maintain as projects become larger and more complex.
-</p>
-
+users.fetch();</code></pre>
+<p>After fetching data, the Collection stores all returned Models together. This synchronization process was one of the features that helped Backbone.js become widely adopted for frontend applications before larger frameworks became dominant. Even today, understanding how Collections synchronize data helps developers better understand frontend architecture concepts used in modern frameworks.</p>
+<h3>Real-World Example</h3>
+<p>Imagine an ecommerce dashboard. A store may contain hundreds of products. Instead of manually managing each product separately, developers can place every product inside a single Collection. The Collection can load products from APIs, sort products by price, filter products by category, update the interface automatically, and track added or removed products. This creates a much cleaner architecture compared to writing disconnected JavaScript logic.</p>
+<h2 id="collections-with-router-and-model">How Collections Work with Routers, Models, and Views</h2>
+<p>Collections become much more useful when they work together with <a href="/what-is-a-router/">Routers</a> and <a href="/what-is-a-model/">Models</a>. In a typical Backbone.js application, the Router controls navigation, Models manage individual records, and Collections organize grouped data.</p>
+<p>For example, when a user visits a product page, the Router may trigger a Collection to fetch product data from an API. The Collection then stores multiple Models, while the <a href="/what-is-a-view/">View</a> renders the interface.</p>
+<ul><li>Router controls navigation</li><li>Model stores individual records</li><li>Collection manages grouped data</li><li>View renders the interface</li></ul>
+<p>Keeping these responsibilities separated makes applications easier to maintain as projects become larger and more complex.</p>
 <h2 id="best-practices">Best Practices</h2>
-
+<ul><li>Keep Collections focused on grouped data management</li><li>Store business logic outside the View layer</li><li>Use Models for individual records</li><li>Use Collections for lists and grouped datasets</li><li>Keep API synchronization organized</li><li>Use event listeners carefully</li></ul>
+<p>Many Backbone.js applications became difficult to maintain because developers mixed responsibilities between Views, Models, and Collections. A common mistake is storing unrelated data inside the same Collection, or placing too much UI logic directly inside the Collection instead of keeping presentation inside <a href="/what-is-a-view/">Views</a>. Keeping each component focused on its intended role helps applications stay scalable.</p>
+<h2 id="advanced-collection-concepts">Advanced Collection Concepts</h2>
+<p>As developers become more experienced with Backbone.js, they often start using advanced Collection patterns. These include nested Collections, real-time synchronization, pagination handling, offline caching, and event-driven rendering.</p>
+<p>Collections work closely with <a href="/what-is-a-view/">Views</a> because user interfaces usually need to react whenever grouped data changes. This event-driven structure was one of the core ideas that influenced many later frontend architectures. In larger applications, Collections are organized alongside Models, Views, and Routers using modular patterns, covered in <a href="/organizing-backbone-using-modules/">Organizing Backbone.js Using Modules</a>. For deeper data flow and sync concepts, see <a href="/foundations/">Backbone foundations</a> and <a href="/architecture/">frontend architecture</a>.</p>
+<h2 id="related">Related Tutorials</h2>
 <ul>
-<li>Keep Collections focused on grouped data management</li>
-<li>Store business logic outside the View layer</li>
-<li>Use Models for individual records</li>
-<li>Use Collections for lists and grouped datasets</li>
-<li>Keep API synchronization organized</li>
-<li>Use event listeners carefully</li>
+<li><a href="/backbonejs/">Backbone.js Complete Guide</a></li>
+<li><a href="/what-is-a-router/">What is a Router in Backbone.js?</a></li>
+<li><a href="/what-is-a-model/">What is a Model in Backbone.js?</a></li>
+<li><a href="/what-is-a-view/">What is a View in Backbone.js?</a></li>
+<li><a href="/organizing-backbone-using-modules/">Organizing Backbone.js Using Modules</a></li>
 </ul>
+<div class="cta"><h2 style="margin-top:0">Continue Learning Backbone.js</h2>
+<p>Explore more Backbone.js tutorials covering Models, Views, Routers, Collections, and frontend architecture.</p>
+<a href="/backbonejs/" class="btn">Explore the Backbone Guide →</a></div>
+<p style="margin-top:25px"><a href="/backbonejs/">← Back to Backbone.js Tutorial Hub</a></p>
 
-<p>
-Many Backbone.js applications became difficult to maintain because developers mixed responsibilities between Views, Models, and Collections.
-</p>
-
-<p>
-Keeping each component focused on its intended role helps applications stay scalable.
-</p>
-
-<h2 id="common-mistakes">Common Mistakes</h2>
-
-<p>
-One common mistake is storing unrelated data inside the same Collection.
-</p>
-
-<p>
-Another mistake is placing too much UI logic directly inside the Collection instead of keeping presentation responsibilities inside <a href="/what-is-a-view/">Views</a>.
-</p>
-
-<p>
-Developers should also avoid creating overly large Collections that load unnecessary data into memory.
-</p>
-
-<p>
-Organized architecture becomes more important as frontend applications grow larger.
-</p>
-
-<h2 id="advanced-collection-concepts">
-Advanced Collection Concepts
-</h2>
-
-<p>
-As developers become more experienced with Backbone.js, they often start using advanced Collection patterns.
-</p>
-
-<p>
-These include:
-</p>
-
-<ul>
-<li>Nested Collections</li>
-<li>Real-time synchronization</li>
-<li>Pagination handling</li>
-<li>Offline caching</li>
-<li>Event-driven rendering</li>
-</ul>
-
-<p>
-Collections also work closely with <a href="/what-is-a-view/">Views</a> because user interfaces usually need to react whenever grouped data changes.
-</p>
-
-<p>
-This event-driven structure was one of the core ideas that influenced many later frontend architectures.
-</p>
-
-<p>
-Even though newer frameworks exist today, Backbone.js still provides valuable lessons about clean separation of concerns.
-</p>
-
-<h2 id="in-depth-explanation">
-In-Depth Explanation
-</h2>
-
-<p>
-One reason Backbone.js remained influential for many years was because it encouraged developers to separate concerns clearly inside frontend applications.
-</p>
-
-<p>
-Collections were designed to solve a very practical problem: managing large groups of related data without turning the application into a disorganized collection of manual JavaScript arrays and DOM updates.
-</p>
-
-<p>
-Before frameworks like React and Vue became popular, many developers struggled with keeping frontend interfaces synchronized with changing application data.
-</p>
-
-<p>
-Collections helped simplify this process by acting as a centralized data layer between APIs, Models, and Views.
-</p>
-
-<p>
-For many developers, Backbone.js was one of the first frameworks that introduced the idea that frontend applications should have structured architecture rather than scattered jQuery event handlers everywhere.
-</p>
-
-<p>
-Understanding Collections today is still useful because many modern frontend concepts evolved from the same architectural ideas Backbone.js helped popularize.
-</p>
-
-<h2 id="faq">Frequently Asked Questions</h2>
-
+<section id="faq">
+<h2>Frequently Asked Questions</h2>
 <h3>What is a Collection in Backbone.js?</h3>
-
-<p>
-A Backbone.js Collection is used to manage groups of Models and organize related frontend application data.
-</p>
-
+<p>A Backbone.js Collection is used to manage groups of Models and organize related frontend application data.</p>
 <h3>What does a Collection do?</h3>
-
-<p>
-Collections handle sorting, filtering, synchronization, and grouped data management.
-</p>
-
+<p>Collections handle sorting, filtering, synchronization, and grouped data management.</p>
 <h3>Can Collections fetch API data?</h3>
-
-<p>
-Yes. Collections can retrieve API responses using fetch() and automatically organize the returned data.
-</p>
-
+<p>Yes. Collections can retrieve API responses using fetch() and automatically organize the returned data.</p>
 <h3>Do Collections work with Views?</h3>
-
-<p>
-Yes. Views often listen to Collection events and update the interface whenever grouped data changes.
-</p>
-
-<h2 id="conclusion">Conclusion</h2>
-
-<p>
-Backbone.js Collections are essential for managing grouped frontend data in a structured and scalable way.
-</p>
-
-<p>
-They help developers organize Models, synchronize APIs, filter records, sort information, and build responsive interfaces.
-</p>
-
-<p>
-Understanding Collections also helps developers better understand how older JavaScript frameworks influenced modern frontend architecture.
-</p>
-
-<p>
-If you are learning Backbone.js for historical understanding, legacy maintenance, or frontend architecture concepts, mastering Collections is an important step.
-</p>
-
-<p>
-In larger Backbone.js applications, Collections are often organized alongside Models, Views, and Routers using modular frontend architecture patterns. Learn more in
-<a href="/organizing-backbone-using-modules/">
-Organizing Backbone.js Using Modules
-</a>.
-</p>
-
-<h2 id="related-tutorials">
-Related Tutorials
-</h2>
-
-<p>
-Continue exploring Backbone.js tutorials and frontend architecture guides below.
-</p>
-
-<ul>
-
-<li>
-<a href="/backbonejs/">
-Backbone.js Complete Guide
-</a>
-</li>
-
-<li>
-<a href="/what-is-a-router/">
-What is a Router in Backbone.js?
-</a>
-</li>
-
-<li>
-<a href="/what-is-a-model/">
-What is a Model in Backbone.js?
-</a>
-</li>
-
-<li>
-<a href="/what-is-a-view/">
-What is a View in Backbone.js?
-</a>
-</li>
-
-<li>
-<a href="/organizing-backbone-using-modules/">
-Organizing Backbone.js Using Modules
-</a>
-</li>
-
-<li>
-<a href="/seo-for-single-page-apps/">
-SEO for Single Page Apps
-</a>
-</li>
-
-<li>
-<a href="/why-would-you-use-backbone/">
-Why Would You Use Backbone?
-</a>
-</li>
-
-<li>
-<a href="/nodejs-restify-mongodb-mongoose/">
-Node.js Restify MongoDB Mongoose
-</a>
-</li>
-
-</ul>
-
-<h2>
-Official Documentation
-</h2>
-
-<p>
-For deeper technical references and API details, you can also visit the official Backbone.js documentation.
-</p>
-
-<p>
-<a href="https://backbonejs.org/"
-target="_blank"
-rel="noopener noreferrer">
-Official Backbone.js Documentation
-</a>
-</p>
-
-<div class="cta">
-
-<h2>Continue Learning Backbone.js</h2>
-
-<p>
-Explore more Backbone.js tutorials covering Models, Views, Routers, Collections, and frontend architecture.
-</p>
-
-<a href="/backbonejs/" class="btn">
-Explore the Backbone Guide →
-</a>
-
-</div>
-
-<div class="back-home">
-<a href="/backbonejs/">
-← Back to Backbone.js Tutorial Hub
-</a>
-</div>
-
-<div class="back-home">
-<a href="/">
-Back to Homepage
-</a>
-</div>
-
+<p>Yes. Views often listen to Collection events and update the interface whenever grouped data changes.</p>
+</section>
 </article>
-
 </main>
 
 <footer>
-
-<p>
-Backbone Tutorials
-</p>
-
+<p>Backbone Tutorials</p>
+<nav class="bt-social" aria-label="Backbone Tutorials on social media">
+  <a style="--c:#181717" href="https://github.com/backbonetutorials/backbonetutorials" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on GitHub"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#fff" d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0 1 12 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222 0 1.606-.014 2.898-.014 3.293 0 .322.216.694.825.576C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg></a>
+  <a style="--c:#000000" href="https://x.com/backbonetutor" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on X (formerly Twitter)"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#fff" d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+  <a style="--c:#FF0000" href="https://www.youtube.com/@BACKBONETUTORIALS" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on YouTube"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#fff" d="M8.5 6.5 L8.5 17.5 L17.5 12 Z"/></svg></a>
+  <a style="--c:#0285FF" href="https://bsky.app/profile/backbonetutorials.bsky.social" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on Bluesky"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#fff" d="M12 10.8c-1.087-2.114-4.046-6.053-6.798-7.995C2.566.944 1.561 1.266.902 1.565.139 1.908 0 3.08 0 3.768c0 .69.378 5.65.624 6.479.815 2.736 3.713 3.66 6.383 3.364.136-.02.275-.039.415-.056-.138.022-.276.04-.415.056-3.912.58-7.387 2.005-2.83 7.078 5.013 5.19 6.87-1.113 7.823-4.308.953 3.195 2.05 9.271 7.733 4.308 4.267-4.308 1.172-6.498-2.74-7.078a8.741 8.741 0 0 1-.415-.056c.14.017.279.036.415.056 2.67.296 5.568-.628 6.383-3.364C23.622 9.418 24 4.458 24 3.768c0-.688-.139-1.86-.902-2.203-.659-.299-1.664-.621-4.3 1.24C16.046 4.747 13.087 8.686 12 10.8Z"/></svg></a>
+  <a style="--c:#d62976;background-image:linear-gradient(150deg,rgba(255,255,255,.30),rgba(255,255,255,0) 42%,rgba(0,0,0,.22)),linear-gradient(45deg,#feda75,#fa7e1e,#d62976,#962fbf,#4f5bd5)" href="https://www.instagram.com/backbonetutorials/" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on Instagram"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="4" y="4" width="16" height="16" rx="5" fill="none" stroke="#fff" stroke-width="2"/><circle cx="12" cy="12" r="3.6" fill="none" stroke="#fff" stroke-width="2"/><circle cx="17.2" cy="6.8" r="1.25" fill="#fff"/></svg></a>
+  <a style="--c:#000000" href="https://www.tiktok.com/@backbonetutorials" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on TikTok"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#fff" d="M16.5 5.82a4.79 4.79 0 0 1-1.16-3.07h-2.9v11.43a2.45 2.45 0 1 1-2.45-2.45c.17 0 .33.02.49.05V8.83a5.36 5.36 0 0 0-.49-.02 5.35 5.35 0 1 0 5.35 5.35V8.6a7.66 7.66 0 0 0 4.46 1.42V7.13a4.79 4.79 0 0 1-2.8-1.31Z"/></svg></a>
+  <a style="--c:#1877F2" href="https://www.facebook.com/BackboneTutorials" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on Facebook"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#fff" d="M13.5 21v-8h2.6l.4-3h-3V8.1c0-.87.27-1.46 1.5-1.46H17V3.96c-.28-.04-1.2-.12-2.28-.12-2.26 0-3.8 1.38-3.8 3.9V10H8.3v3h2.62v8h2.58Z"/></svg></a>
+</nav>
 <p>
 <a href="/">Home</a> |
 <a href="/about/">About</a> |
@@ -1171,11 +309,7 @@ Backbone Tutorials
 <a href="/privacy-policy/">Privacy Policy</a> |
 <a href="/terms/">Terms</a>
 </p>
-
-<p>
-© 2026 Backbone Tutorials
-</p>
-
+<p>© 2026 Backbone Tutorials</p>
 </footer>
 
 </body>

@@ -1,720 +1,243 @@
+<!-- DEPLOY TO: /organizing-backbone-using-modules/ (index.html) · TechArticle (historical) · +footer +dateModified +cluster links, FAQ 4=4 -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
-
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>Organizing Backbone.js Using Modules</title>
-
 <meta name="description" content="Learn how Backbone.js applications are organized using modules, namespaces, reusable Views, and scalable frontend architecture patterns.">
-
 <meta name="robots" content="index, follow">
 <meta name="author" content="Backbone Tutorials">
 <meta name="theme-color" content="#2563eb">
 <meta name="format-detection" content="telephone=no">
-
 <link rel="canonical" href="https://backbonetutorials.com/organizing-backbone-using-modules/">
-
 <link rel="icon" href="/assets/favicon.ico">
 <link rel="apple-touch-icon" href="/assets/favicon.png">
-
-<link
-rel="preload"
-as="image"
-href="/assets/organizing-backbone-using-modules-800.webp"
-imagesrcset="
-/assets/organizing-backbone-using-modules-400.webp 400w,
-/assets/organizing-backbone-using-modules-800.webp 800w,
-/assets/organizing-backbone-using-modules-1200.webp 1200w"
-imagesizes="(max-width: 600px) 100vw, 800px">
-
-<!-- Open Graph -->
 <meta property="og:title" content="Organizing Backbone.js Using Modules">
-<meta property="og:description" content="Learn how Backbone.js applications are structured using modules, reusable Views, namespaces, RequireJS, and scalable frontend architecture.">
+<meta property="og:description" content="Learn how Backbone.js applications are organized using modules, namespaces, reusable Views, and scalable frontend architecture patterns.">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://backbonetutorials.com/organizing-backbone-using-modules/">
 <meta property="og:image" content="https://backbonetutorials.com/assets/organizing-backbone-using-modules-1200.jpg">
 <meta property="og:site_name" content="Backbone Tutorials">
 <meta property="og:locale" content="en_US">
-
-<!-- Twitter -->
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Organizing Backbone.js Using Modules">
-<meta name="twitter:description" content="Learn how Backbone.js applications use modular architecture, reusable components, and scalable frontend engineering patterns.">
+<meta name="twitter:description" content="Learn how Backbone.js applications are organized using modules, namespaces, reusable Views, and scalable frontend architecture patterns.">
 <meta name="twitter:image" content="https://backbonetutorials.com/assets/organizing-backbone-using-modules-1200.jpg">
 <meta name="twitter:url" content="https://backbonetutorials.com/organizing-backbone-using-modules/">
-
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-
 <style>
-
-html{
-  scroll-behavior:smooth;
-}
-
-body {
-  font-family:'Inter',sans-serif;
-  margin:0;
-  background:#f4f6f9;
-  color:#1f2937;
-  line-height:1.7;
-}
-
-.container {
-  max-width:900px;
-  margin:30px auto;
-  padding:20px;
-  background:#fff;
-  border-radius:10px;
-  box-shadow:0 2px 10px rgba(0,0,0,0.04);
-}
-
-h1,h2,h3 {
-  color:#111827;
-}
-
-.nav {
-  background:#111827;
-  padding:15px;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  flex-wrap:wrap;
-  gap:8px;
-}
-
-.nav a {
-  color:white;
-  margin:0 10px;
-  text-decoration:none;
-  font-weight:600;
-}
-
-.nav a:hover {
-  text-decoration:underline;
-}
-
-.nav-logo img{
-  vertical-align:middle;
-  margin-right:12px;
-  border-radius:8px;
-}
-
-figure {
-  margin:30px 0;
-}
-
-picture{
-  display:block;
-}
-
-img {
-  width:100%;
-  height:auto;
-  border-radius:10px;
-}
-
-pre {
-  background:#111;
-  color:#eee;
-  padding:15px;
-  border-radius:8px;
-  overflow-x:auto;
-  box-shadow:0 2px 8px rgba(0,0,0,0.15);
-}
-
-.cta {
-  background:#eef2ff;
-  padding:20px;
-  margin-top:30px;
-  text-align:center;
-  border-radius:10px;
-}
-
-a {
-  color:#2563eb;
-}
-
-.back-home {
-  margin-top:25px;
-}
-
-footer {
-  background:#111827;
-  color:white;
-  text-align:center;
-  padding:30px 20px;
-  margin-top:40px;
-}
-
-footer a {
-  color:#93c5fd;
-  text-decoration:none;
-}
-
-footer a:hover {
-  text-decoration:underline;
-}
-
-.btn{
-  display:inline-block;
-  background:#2563eb;
-  color:white;
-  padding:12px 22px;
-  border-radius:8px;
-  text-decoration:none;
-  font-weight:600;
-  margin-top:15px;
-  transition:0.2s ease;
-}
-
-.btn:hover{
-  background:#1d4ed8;
-  transform:translateY(-1px);
-}
-
-.card {
-  background:#fff;
-  padding:20px;
-  border-radius:10px;
-  box-shadow:0 2px 8px rgba(0,0,0,0.05);
-  overflow:hidden;
-  max-width:100%;
-  transition:0.2s ease;
-}
-
-.card:hover{
-  transform:translateY(-2px);
-}
-
-.toc-list{
-  padding-left:20px;
-}
-
-.toc-list li{
-  margin-bottom:8px;
-}
-
-.author-line{
-  font-size:15px;
-  margin-top:-6px;
-  margin-bottom:10px;
-  color:#4b5563;
-}
-
-figcaption{
-  font-size:14px;
-  color:#6b7280;
-  margin-top:10px;
-}
-
-#faq h3{
-  margin-top:25px;
-}
-
-#faq p{
-  margin-bottom:18px;
-}
-
-@media(max-width:600px){
-  .container {
-    padding:15px;
-  }
-}
-
+html{scroll-behavior:smooth}
+body{font-family:'Inter',sans-serif;margin:0;background:#f4f6f9;color:#1f2937;line-height:1.7}
+.container{max-width:900px;margin:30px auto;padding:20px;background:#fff;border-radius:10px;box-shadow:0 2px 10px rgba(0,0,0,0.04)}
+h1,h2,h3{color:#111827}
+.nav{background:#111827;padding:15px;display:flex;justify-content:center;align-items:center;flex-wrap:wrap;gap:8px}
+.nav a{color:white;margin:0 10px;text-decoration:none;font-weight:600}
+.nav a:hover{text-decoration:underline}
+.nav-logo img{vertical-align:middle;margin-right:12px;border-radius:8px}
+a{color:#2563eb}
+ul{padding-left:22px}li{margin-bottom:6px}
+figure{margin:26px 0}figure img{max-width:100%;height:auto;border-radius:12px;display:block;margin:0 auto;box-shadow:0 4px 20px rgba(0,0,0,0.10)}
+figcaption{font-size:14px;color:#6b7280;margin-top:10px;text-align:center}
+pre{background:#111;color:#eee;padding:15px;border-radius:8px;overflow-x:auto}
+code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+p code,li code{background:#eef2ff;padding:1px 5px;border-radius:4px;font-size:.95em}
+.card{background:#fff;padding:20px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.05);border:1px solid #eef2f7}
+.cta{background:#eef2ff;padding:22px;margin-top:30px;text-align:center;border-radius:10px}
+.btn{display:inline-block;background:#2563eb;color:white;padding:12px 24px;border-radius:8px;text-decoration:none;font-weight:600;margin-top:6px;transition:0.2s ease}
+.btn:hover{background:#1d4ed8;transform:translateY(-1px)}
+.breadcrumb{font-size:14px;color:#6b7280;margin:0 0 10px}
+.breadcrumb a{color:#2563eb;text-decoration:none}
+.toc-list{padding-left:20px}.toc-list li{margin-bottom:8px}
+.author-line{font-size:15px;margin-top:-6px;margin-bottom:10px;color:#4b5563}
+#faq h3{margin-top:25px}#faq p{margin-bottom:18px}
+.diagram{width:100%;height:auto;display:block;border-radius:10px}
+footer{background:#111827;color:white;text-align:center;padding:30px 20px;margin-top:40px}
+footer a{color:#93c5fd;text-decoration:none}footer a:hover{text-decoration:underline}
+.bt-social{display:flex;gap:13px;flex-wrap:wrap;align-items:center;justify-content:center;margin:0 0 14px;padding:0;list-style:none}
+.bt-social a{position:relative;isolation:isolate;width:46px;height:46px;border-radius:14px;display:inline-flex;align-items:center;justify-content:center;text-decoration:none;-webkit-tap-highlight-color:transparent;background-color:var(--c,#333);background-image:linear-gradient(150deg,rgba(255,255,255,.30),rgba(255,255,255,0) 42%,rgba(0,0,0,.22));box-shadow:0 1px 1px rgba(0,0,0,.22),0 7px 14px -3px rgba(0,0,0,.34),inset 0 1px 0 rgba(255,255,255,.50),inset 0 -2px 5px rgba(0,0,0,.30);transition:transform .18s cubic-bezier(.2,.7,.2,1),box-shadow .18s ease}
+.bt-social a::before{content:"";position:absolute;left:3px;right:3px;top:2px;height:44%;border-radius:12px 12px 50% 50%/12px 12px 24px 24px;background:linear-gradient(180deg,rgba(255,255,255,.42),rgba(255,255,255,0));pointer-events:none;z-index:0}
+.bt-social a:hover{transform:translateY(-3px) scale(1.05);box-shadow:0 2px 2px rgba(0,0,0,.20),0 16px 26px -6px rgba(0,0,0,.40),inset 0 1px 0 rgba(255,255,255,.55),inset 0 -2px 6px rgba(0,0,0,.32)}
+.bt-social a:active{transform:translateY(-1px) scale(1.01)}
+.bt-social a:focus-visible{outline:3px solid #93c5fd;outline-offset:3px}
+.bt-social svg{position:relative;z-index:1;width:22px;height:22px;display:block;filter:drop-shadow(0 1px 1px rgba(0,0,0,.28))}
+@media (prefers-reduced-motion:reduce){.bt-social a{transition:none}.bt-social a:hover{transform:none}}
+@media(max-width:600px){.container{padding:15px}}
 </style>
-
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@graph": [
-
     {
       "@type": "Organization",
       "@id": "https://backbonetutorials.com/#organization",
       "name": "Backbone Tutorials",
       "url": "https://backbonetutorials.com/",
-      "logo": {
-        "@type": "ImageObject",
-        "url": "https://backbonetutorials.com/assets/logo.png"
-      },
+      "logo": { "@type": "ImageObject", "url": "https://backbonetutorials.com/assets/logo.png" },
       "sameAs": [
-        "https://x.com/backbonetutor",
         "https://github.com/backbonetutorials/backbonetutorials",
-        "https://www.youtube.com/@BACKBONETUTORIALS"
+        "https://x.com/backbonetutor",
+        "https://www.youtube.com/@BACKBONETUTORIALS",
+        "https://bsky.app/profile/backbonetutorials.bsky.social",
+        "https://www.instagram.com/backbonetutorials/",
+        "https://www.tiktok.com/@backbonetutorials",
+        "https://www.facebook.com/BackboneTutorials"
       ],
       "contactPoint": {
         "@type": "ContactPoint",
         "contactType": "customer support",
-        "email": "backbonetutorials2026@gmail.com",
-        "availableLanguage": [
-          "English"
-        ],
+        "url": "https://x.com/backbonetutor",
+        "availableLanguage": ["English"],
         "areaServed": "Worldwide"
       }
     },
-
     {
       "@type": "WebSite",
       "@id": "https://backbonetutorials.com/#website",
       "url": "https://backbonetutorials.com/",
       "name": "Backbone Tutorials",
-      "publisher": {
-        "@id": "https://backbonetutorials.com/#organization"
-      }
+      "publisher": { "@id": "https://backbonetutorials.com/#organization" }
     },
-
     {
       "@type": "Person",
       "@id": "https://backbonetutorials.com/author/backbone-tutorials-team/#person",
       "name": "Backbone Tutorials Team",
       "url": "https://backbonetutorials.com/author/backbone-tutorials-team/",
-      "worksFor": {
-        "@id": "https://backbonetutorials.com/#organization"
-      },
-      "jobTitle": "Frontend JavaScript Editorial Team",
-      "knowsAbout": [
-        "Backbone.js",
-        "JavaScript",
-        "Frontend Development",
-        "Single Page Applications"
-      ]
+      "worksFor": { "@id": "https://backbonetutorials.com/#organization" }
     },
-
     {
       "@type": "WebPage",
       "@id": "https://backbonetutorials.com/organizing-backbone-using-modules/#webpage",
       "url": "https://backbonetutorials.com/organizing-backbone-using-modules/",
       "name": "Organizing Backbone.js Using Modules",
-      "headline": "Organizing Backbone.js Using Modules",
-      "description": "Learn how Backbone.js applications are structured using modules, reusable Views, namespaces, RequireJS, and scalable frontend architecture.",
       "inLanguage": "en",
-
-      "image": {
-        "@type": "ImageObject",
-        "url": "https://backbonetutorials.com/assets/organizing-backbone-using-modules-1200.jpg",
-        "width": 1200,
-        "height": 800
-      },
-
-      "isPartOf": {
-        "@id": "https://backbonetutorials.com/#website"
-      },
-
-      "author": {
-        "@id": "https://backbonetutorials.com/author/backbone-tutorials-team/#person"
-      },
-
-      "publisher": {
-        "@id": "https://backbonetutorials.com/#organization"
-      },
-
-      "breadcrumb": {
-        "@id": "https://backbonetutorials.com/organizing-backbone-using-modules/#breadcrumb"
-      },
-
-      "mainEntity": {
-        "@id": "https://backbonetutorials.com/organizing-backbone-using-modules/#article"
-      }
+      "isPartOf": { "@id": "https://backbonetutorials.com/#website" },
+      "breadcrumb": { "@id": "https://backbonetutorials.com/organizing-backbone-using-modules/#breadcrumb" },
+      "mainEntity": { "@id": "https://backbonetutorials.com/organizing-backbone-using-modules/#article" }
     },
-
     {
       "@type": "TechArticle",
       "@id": "https://backbonetutorials.com/organizing-backbone-using-modules/#article",
       "url": "https://backbonetutorials.com/organizing-backbone-using-modules/",
       "headline": "Organizing Backbone.js Using Modules",
-      "description": "Learn how Backbone.js applications use modular architecture, namespaces, RequireJS, ES Modules, reusable Views, and scalable frontend engineering patterns.",
+      "description": "Learn how Backbone.js applications are organized using modules, namespaces, reusable Views, and scalable frontend architecture patterns.",
       "inLanguage": "en",
-
-      "image": {
-        "@type": "ImageObject",
-        "url": "https://backbonetutorials.com/assets/organizing-backbone-using-modules-1200.jpg",
-        "width": 1200,
-        "height": 800
-      },
-
-      "author": {
-        "@id": "https://backbonetutorials.com/author/backbone-tutorials-team/#person"
-      },
-
-      "publisher": {
-        "@id": "https://backbonetutorials.com/#organization"
-      },
-
-      "mainEntityOfPage": {
-        "@id": "https://backbonetutorials.com/organizing-backbone-using-modules/#webpage"
-      },
-
-      "datePublished": "2026-05-21T09:00:00+07:00",
-      "dateModified": "2026-05-22T22:15:00+07:00",
-
-      "articleSection": [
-        "Backbone.js",
-        "Frontend Architecture",
-        "JavaScript Modules"
-      ],
-
-      "keywords": [
-        "Backbone.js",
-        "JavaScript Modules",
-        "RequireJS",
-        "Frontend Architecture",
-        "Single Page Applications",
-        "Frontend Development"
-      ],
-
-      "about": [
-        {
-          "@type": "SoftwareSourceCode",
-          "name": "Backbone.js"
-        },
-        {
-          "@type": "Thing",
-          "name": "JavaScript Modules"
-        },
-        {
-          "@type": "Thing",
-          "name": "Frontend Architecture"
-        }
-      ]
+      "image": { "@type": "ImageObject", "url": "https://backbonetutorials.com/assets/organizing-backbone-using-modules-1200.jpg", "width": 1200, "height": 630 },
+      "author": { "@id": "https://backbonetutorials.com/author/backbone-tutorials-team/#person" },
+      "publisher": { "@id": "https://backbonetutorials.com/#organization" },
+      "mainEntityOfPage": { "@id": "https://backbonetutorials.com/organizing-backbone-using-modules/#webpage" },
+      "datePublished": "2026-06-12T04:30:00+07:00",
+      "dateModified": "2026-06-12T04:30:00+07:00"
     },
-
     {
       "@type": "BreadcrumbList",
       "@id": "https://backbonetutorials.com/organizing-backbone-using-modules/#breadcrumb",
       "itemListElement": [
-
-        {
-          "@type": "ListItem",
-          "position": 1,
-          "name": "Home",
-          "item": "https://backbonetutorials.com/"
-        },
-
-        {
-          "@type": "ListItem",
-          "position": 2,
-          "name": "Organizing Backbone.js Using Modules",
-          "item": "https://backbonetutorials.com/organizing-backbone-using-modules/"
-        }
-
+        { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://backbonetutorials.com/" },
+        { "@type": "ListItem", "position": 2, "name": "Backbone.js Guide", "item": "https://backbonetutorials.com/backbonejs/" },
+        { "@type": "ListItem", "position": 3, "name": "Organizing Using Modules", "item": "https://backbonetutorials.com/organizing-backbone-using-modules/" }
       ]
     },
-
     {
       "@type": "FAQPage",
       "@id": "https://backbonetutorials.com/organizing-backbone-using-modules/#faq",
       "mainEntity": [
-
         {
           "@type": "Question",
           "name": "Why are modules important in Backbone.js?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Modules help organize Backbone.js applications into reusable components that improve maintainability and scalability."
-          }
+          "acceptedAnswer": { "@type": "Answer", "text": "Modules help organize frontend applications into reusable components that improve scalability and maintainability." }
         },
-
         {
           "@type": "Question",
           "name": "Can Backbone.js use ES Modules?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Yes. Modern Backbone.js applications can use ES Modules alongside bundlers like Webpack and Vite."
-          }
+          "acceptedAnswer": { "@type": "Answer", "text": "Yes. Modern Backbone.js applications can use ES Modules alongside bundlers like Webpack and Vite." }
         },
-
         {
           "@type": "Question",
           "name": "What was commonly used before ES Modules in Backbone.js?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Older Backbone.js applications commonly used RequireJS, AMD patterns, namespaces, and IIFE module patterns."
-          }
+          "acceptedAnswer": { "@type": "Answer", "text": "Older Backbone.js applications commonly used RequireJS, AMD patterns, and namespaces." }
         },
-
         {
           "@type": "Question",
           "name": "Can Backbone.js support large Single Page Applications?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Yes. Backbone.js was widely used to build large Single Page Applications before frameworks like React and Vue became dominant."
-          }
+          "acceptedAnswer": { "@type": "Answer", "text": "Yes. Backbone.js was widely used for large frontend applications before frameworks like React and Vue became dominant." }
         }
-
       ]
     }
-
   ]
 }
 </script>
-
 <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-FYJP43XDHH"></script>
-
 <script>
 window.dataLayer = window.dataLayer || [];
 function gtag(){dataLayer.push(arguments);}
 gtag('js', new Date());
-
 gtag('config', 'G-FYJP43XDHH');
 </script>
-
 </head>
-
 <body>
 
 <nav class="nav" aria-label="Main Navigation">
-
-<a href="/" class="nav-logo" title="Backbone Tutorials Homepage">
-<img
-src="/assets/logo.png"
-alt="Backbone Tutorials Logo"
-width="36"
-height="36"
-loading="lazy"
-decoding="async">
-</a>
-
-<a href="/" title="Backbone.js Tutorials Homepage">
-Home
-</a>
-
-<a href="/backbonejs/" title="Backbone.js Complete Guide">
-Backbone Guide
-</a>
-
-<a href="/what-is-a-router/" title="What is a Router in Backbone.js">
-Router
-</a>
-
-<a href="/what-is-a-model/" title="What is a Model in Backbone.js">
-Model
-</a>
-
-<a href="/what-is-a-view/" title="What is a View in Backbone.js">
-View
-</a>
-
-<a href="/what-is-a-collection/" title="What is a Collection in Backbone.js">
-Collection
-</a>
-
+<a href="/" class="nav-logo" title="Backbone Tutorials Homepage"><img src="/assets/logo.png" alt="Backbone Tutorials Logo" width="36" height="36" decoding="async"></a>
+<a href="/" title="Backbone.js Tutorials Homepage">Home</a>
+<a href="/backbonejs/" title="Backbone.js Complete Guide">Backbone Guide</a>
+<a href="/what-is-a-router/" title="What is a Router in Backbone.js">Router</a>
+<a href="/what-is-a-model/" title="What is a Model in Backbone.js">Model</a>
+<a href="/what-is-a-view/" title="What is a View in Backbone.js">View</a>
+<a href="/what-is-a-collection/" title="What is a Collection in Backbone.js">Collection</a>
 </nav>
 
 <main>
-
 <article class="container">
+<nav class="breadcrumb" aria-label="Breadcrumb"><a href="/">Home</a> &rsaquo; <a href="/backbonejs/">Backbone.js Guide</a> &rsaquo; <span aria-current="page">Organizing Using Modules</span></nav>
 
 <h1>Organizing Backbone.js Using Modules</h1>
+<p class="author-line">Author: <a href="/author/backbone-tutorials-team/">Backbone Tutorials Team</a></p>
+<p class="author-line">Last Updated: June 2026 &middot; 10 min read</p>
 
-<p class="author-line">
-Author:
-<a href="/author/backbone-tutorials-team/">
-Backbone Tutorials Team
-</a>
-</p>
-
-<p class="author-line">
-Last Updated: May 2026
-</p>
-
-<p class="author-line">
-10 min read
-</p>
-
-<p>
-As Backbone.js applications grow larger, organizing Models, Views, Routers, Collections, templates, and frontend logic inside a single file quickly becomes difficult. Modular architecture helps developers build scalable frontend applications that are easier to maintain and extend over time.
-</p>
-
-<p>
-This guide explains how Backbone.js applications are commonly organized using modules, namespaces, RequireJS, ES Modules, reusable Views, and scalable frontend architecture patterns.
-</p>
-
-<p>
-To fully understand Backbone architecture, it is also recommended to understand how <a href="/what-is-a-model/">Models</a>, <a href="/what-is-a-view/">Views</a>, <a href="/what-is-a-router/">Routers</a>, and <a href="/what-is-a-collection/">Collections</a> work together inside frontend applications.
-</p>
-
-<p>
-As applications grow larger, modular organization becomes increasingly important for maintainability, scalability, debugging, and long-term project development.
-</p>
-
-<div class="card">
-
-<h2>Table of Contents</h2>
-
+<p>As Backbone.js applications grow larger, organizing Models, Views, Routers, Collections, templates, and frontend logic inside a single file quickly becomes difficult. Modular architecture helps developers build scalable frontend applications that are easier to maintain and extend over time.</p>
+<p>This guide explains how Backbone.js applications are commonly organized using modules, namespaces, RequireJS, ES Modules, reusable Views, and scalable frontend architecture patterns.</p>
+<p>To fully understand Backbone architecture, it is also recommended to understand how <a href="/what-is-a-model/">Models</a>, <a href="/what-is-a-view/">Views</a>, <a href="/what-is-a-router/">Routers</a>, and <a href="/what-is-a-collection/">Collections</a> work together inside frontend applications. As applications grow larger, modular organization becomes increasingly important for maintainability, scalability, debugging, and long-term project development.</p>
+<div class="card"><p style="margin-top:0"><strong>Table of Contents</strong></p>
 <ul class="toc-list">
-
-<li>
-<a href="#why-modules-matter">
-Why Modules Matter
-</a>
-</li>
-
-<li>
-<a href="#namespace-patterns">
-Namespace Patterns
-</a>
-</li>
-
-<li>
-<a href="#requirejs-and-amd">
-RequireJS and AMD
-</a>
-</li>
-
-<li>
-<a href="#es-modules">
-ES Modules
-</a>
-</li>
-
-<li>
-<a href="#folder-structure">
-Folder Structure
-</a>
-</li>
-
-<li>
-<a href="#subviews">
-Reusable Subviews
-</a>
-</li>
-
-<li>
-<a href="#event-architecture">
-Event Architecture
-</a>
-</li>
-
-<li>
-<a href="#best-practices">
-Best Practices
-</a>
-</li>
-
-<li>
-<a href="#faq">
-FAQ
-</a>
-</li>
-
-<li>
-<a href="#conclusion">
-Conclusion
-</a>
-</li>
-
-</ul>
-
-</div>
-
+<li><a href="#why-modules-matter">Why Modules Matter</a></li>
+<li><a href="#namespace-patterns">Namespace Patterns</a></li>
+<li><a href="#requirejs-and-amd">RequireJS and AMD</a></li>
+<li><a href="#es-modules">ES Modules</a></li>
+<li><a href="#folder-structure">Folder Structure</a></li>
+<li><a href="#subviews">Reusable Subviews</a></li>
+<li><a href="#event-architecture">Event Architecture</a></li>
+<li><a href="#best-practices">Best Practices</a></li>
+<li><a href="#faq">FAQ</a></li>
+</ul></div>
 <figure>
-
 <picture>
-
-<source
-srcset="
-/assets/organizing-backbone-using-modules-400.webp 400w,
-/assets/organizing-backbone-using-modules-800.webp 800w,
-/assets/organizing-backbone-using-modules-1200.webp 1200w"
-sizes="(max-width: 600px) 100vw, 800px"
-type="image/webp">
-
-<source
-srcset="
-/assets/organizing-backbone-using-modules-400.jpg 400w,
-/assets/organizing-backbone-using-modules-800.jpg 800w,
-/assets/organizing-backbone-using-modules-1200.jpg 1200w"
-sizes="(max-width: 600px) 100vw, 800px"
-type="image/jpeg">
-
-<img
-src="/assets/organizing-backbone-using-modules-800.webp"
-alt="Backbone.js modular architecture showing Models Views Routers and reusable frontend modules"
-loading="eager"
-fetchpriority="high"
-decoding="async"
-width="800"
-height="533">
-
+<source type="image/webp" srcset="/assets/organizing-backbone-using-modules-400.webp 400w, /assets/organizing-backbone-using-modules-800.webp 800w, /assets/organizing-backbone-using-modules-1200.webp 1200w" sizes="(max-width:600px) 100vw, 860px">
+<img src="/assets/organizing-backbone-using-modules-800.jpg" srcset="/assets/organizing-backbone-using-modules-400.jpg 400w, /assets/organizing-backbone-using-modules-800.jpg 800w, /assets/organizing-backbone-using-modules-1200.jpg 1200w" sizes="(max-width:600px) 100vw, 860px" alt="Backbone.js modular architecture showing Models Views Routers and reusable frontend modules" width="860" height="484" fetchpriority="high">
 </picture>
-
-<figcaption>
-Modular Backbone.js architecture improves scalability, maintainability, and frontend application organization.
-</figcaption>
-
+<figcaption>Modular Backbone.js architecture improves scalability, maintainability, and frontend application organization.</figcaption>
 </figure>
-
-<h2 id="why-modules-matter">
-Why Modules Matter
-</h2>
-
-<p>
-Backbone.js is intentionally lightweight and flexible. While this makes it easy to start projects quickly, larger applications often become difficult to maintain without clear architecture patterns.
-</p>
-
-<p>
-Without modular organization:
-</p>
-
-<ul>
-<li>JavaScript files become too large</li>
-<li>Frontend logic becomes tightly coupled</li>
-<li>Debugging becomes harder</li>
-<li>Views become difficult to maintain</li>
-<li>Application scalability decreases</li>
-</ul>
-
-<p>
-Modular architecture solves these problems by separating functionality into reusable components.
-</p>
-
-<h2 id="namespace-patterns">
-Namespace Patterns
-</h2>
-
-<p>
-One of the earliest Backbone.js organization techniques involved namespaces.
-</p>
-
-<pre><code>
-var App = {
+<h2 id="why-modules-matter">Why Modules Matter</h2>
+<p>Backbone.js is intentionally lightweight and flexible. While this makes it easy to start projects quickly, larger applications often become difficult to maintain without clear architecture patterns. Without modular organization, JavaScript files become too large, frontend logic becomes tightly coupled, debugging becomes harder, Views become difficult to maintain, and application scalability decreases. Modular architecture solves these problems by separating functionality into reusable components.</p>
+<h2 id="namespace-patterns">Namespace Patterns</h2>
+<p>One of the earliest Backbone.js organization techniques involved namespaces.</p>
+<pre><code>var App = {
   Models: {},
   Views: {},
   Collections: {},
   Routers: {}
-};
-</code></pre>
+};</code></pre>
+<p>Developers could then organize components more clearly:</p>
+<pre><code>App.Models.User = Backbone.Model.extend({});
 
-<p>
-Developers could then organize components more clearly:
-</p>
-
-<pre><code>
-App.Models.User = Backbone.Model.extend({});
-
-App.Views.UserView = Backbone.View.extend({});
-</code></pre>
-
-<p>
-This reduced global variable conflicts and improved frontend organization.
-</p>
-
-<h2 id="requirejs-and-amd">
-RequireJS and AMD
-</h2>
-
-<p>
-Before ES Modules became standard, frontend applications often relied on AMD-based module systems. RequireJS became a common solution for dependency management in Backbone.js applications.
-</p>
-
-<pre><code>
-define([
+App.Views.UserView = Backbone.View.extend({});</code></pre>
+<p>This reduced global variable conflicts and improved frontend organization.</p>
+<h2 id="requirejs-and-amd">RequireJS and AMD</h2>
+<p>Before ES Modules became standard, frontend applications often relied on AMD-based module systems. RequireJS became a common solution for dependency management in Backbone.js applications, and the pairing of RequireJS with Backbone.js was one of the most widely used patterns for building robust, modular single-page applications.</p>
+<pre><code>define([
   'jquery',
   'underscore',
   'backbone'
@@ -724,34 +247,11 @@ define([
 
   return User;
 
-});
-</code></pre>
-
-<p>
-RequireJS improved:
-</p>
-
-<ul>
-<li>dependency management</li>
-<li>frontend scalability</li>
-<li>module loading</li>
-<li>application organization</li>
-</ul>
-
-<p>
-Before modern bundlers existed, RequireJS was widely used alongside Backbone.js applications.
-</p>
-
-<h2 id="es-modules">
-ES Modules
-</h2>
-
-<p>
-Modern Backbone.js applications can now use ES Modules with import and export syntax.
-</p>
-
-<pre><code>
-import Backbone from 'backbone';
+});</code></pre>
+<p>RequireJS improved dependency management, frontend scalability, module loading, and application organization. Before modern bundlers existed, RequireJS was widely used alongside Backbone.js applications to keep dependencies explicit and load order predictable.</p>
+<h2 id="es-modules">ES Modules</h2>
+<p>Modern Backbone.js applications can now use ES Modules with import and export syntax.</p>
+<pre><code>import Backbone from 'backbone';
 
 export default Backbone.Model.extend({
 
@@ -759,23 +259,10 @@ export default Backbone.Model.extend({
     title: ''
   }
 
-});
-</code></pre>
-
-<p>
-ES Modules provide cleaner syntax and better compatibility with modern frontend tooling.
-</p>
-
-<p>
-Many developers combine Backbone.js with modern bundlers such as Webpack and Vite.
-</p>
-
-<h2 id="folder-structure">
-Recommended Folder Structure
-</h2>
-
-<pre><code>
-/src
+});</code></pre>
+<p>ES Modules provide cleaner syntax and better compatibility with modern frontend tooling. Many developers combine Backbone.js with modern bundlers such as Webpack and Vite.</p>
+<h2 id="folder-structure">Recommended Folder Structure</h2>
+<pre><code>/src
 │
 ├── models/
 ├── collections/
@@ -784,253 +271,62 @@ Recommended Folder Structure
 ├── templates/
 ├── services/
 ├── utils/
-└── app.js
-</code></pre>
+└── app.js</code></pre>
+<p>This structure helps developers organize frontend application logic more effectively as projects become larger. Larger applications may also organize files by feature instead of by component type.</p>
+<h2 id="subviews">Reusable Subviews</h2>
+<p>Large Views can become difficult to maintain if all rendering logic exists inside a single component.</p>
+<pre><code>var SidebarView = Backbone.View.extend({});
 
-<p>
-This structure helps developers organize frontend application logic more effectively as projects become larger.
-</p>
+var ContentView = Backbone.View.extend({});</code></pre>
+<p>Reusable subviews improve frontend scalability, component reuse, rendering organization, and application maintainability. This modular approach later influenced many modern frontend frameworks.</p>
+<h2 id="event-architecture">Event Architecture</h2>
+<p>Backbone.Events is commonly used to help modules communicate with one another inside modular Backbone.js applications.</p>
+<pre><code>var vent = _.extend({}, Backbone.Events);
 
-<p>
-Larger applications may also organize files by feature instead of by component type.
-</p>
-
-<h2 id="subviews">
-Reusable Subviews
-</h2>
-
-<p>
-Large Views can become difficult to maintain if all rendering logic exists inside a single component.
-</p>
-
-<pre><code>
-var SidebarView = Backbone.View.extend({});
-
-var ContentView = Backbone.View.extend({});
-</code></pre>
-
-<p>
-Reusable subviews improve:
-</p>
-
+vent.trigger('user:selected');</code></pre>
+<p>This event-driven structure reduces tight coupling between frontend components. It also helps applications scale more cleanly as projects become more complex.</p>
+<h2 id="best-practices">Best Practices</h2>
+<ul><li>Separate Views, Models, Routers, and Collections clearly</li><li>Keep modules small and reusable</li><li>Avoid overly large frontend files</li><li>Use event-driven architecture carefully</li><li>Keep rendering logic isolated inside Views</li><li>Use consistent folder structures</li></ul>
+<p>Maintaining clear architectural boundaries helps Backbone.js applications remain maintainable as they grow. For deeper module and application-structure topics, continue to <a href="/foundations/">Backbone foundations</a> and <a href="/architecture/">frontend architecture</a>.</p>
+<h2 id="related">Related Tutorials</h2>
 <ul>
-<li>frontend scalability</li>
-<li>component reuse</li>
-<li>rendering organization</li>
-<li>application maintainability</li>
+<li><a href="/backbonejs/">Backbone.js Complete Guide</a></li>
+<li><a href="/what-is-a-router/">What is a Router in Backbone.js?</a></li>
+<li><a href="/what-is-a-model/">What is a Model in Backbone.js?</a></li>
+<li><a href="/what-is-a-view/">What is a View in Backbone.js?</a></li>
+<li><a href="/what-is-a-collection/">What is a Collection in Backbone.js?</a></li>
+<li><a href="/seo-for-single-page-apps/">SEO for Single Page Apps</a></li>
 </ul>
-
-<p>
-This modular approach later influenced many modern frontend frameworks.
-</p>
-
-<h2 id="event-architecture">
-Event Architecture
-</h2>
-
-<p>
-Backbone.Events is commonly used to help modules communicate with one another inside modular Backbone.js applications.
-</p>
-
-<pre><code>
-var vent = _.extend({}, Backbone.Events);
-
-vent.trigger('user:selected');
-</code></pre>
-
-<p>
-This event-driven structure reduces tight coupling between frontend components.
-</p>
-
-<p>
-It also helps applications scale more cleanly as projects become more complex.
-</p>
-
-<h2 id="best-practices">
-Best Practices
-</h2>
-
-<ul>
-<li>Separate Views, Models, Routers, and Collections clearly</li>
-<li>Keep modules small and reusable</li>
-<li>Avoid overly large frontend files</li>
-<li>Use event-driven architecture carefully</li>
-<li>Keep rendering logic isolated inside Views</li>
-<li>Use consistent folder structures</li>
-</ul>
-
-<p>
-Maintaining clear architectural boundaries helps Backbone.js applications remain maintainable as they grow.
-</p>
+<div class="cta"><h2 style="margin-top:0">Continue Learning Backbone.js</h2>
+<p>Explore more Backbone.js tutorials covering Models, Views, Routers, and frontend architecture.</p>
+<a href="/backbonejs/" class="btn">Explore the Backbone Guide →</a></div>
+<p style="margin-top:25px"><a href="/backbonejs/">← Back to Backbone.js Tutorial Hub</a></p>
 
 <section id="faq">
-
 <h2>Frequently Asked Questions</h2>
-
-<h3>
-Why are modules important in Backbone.js?
-</h3>
-
-<p>
-Modules help organize frontend applications into reusable components that improve scalability and maintainability.
-</p>
-
-<h3>
-Can Backbone.js use ES Modules?
-</h3>
-
-<p>
-Yes. Modern Backbone.js applications can use ES Modules alongside bundlers like Webpack and Vite.
-</p>
-
-<h3>
-What was commonly used before ES Modules in Backbone.js?
-</h3>
-
-<p>
-Older Backbone.js applications commonly used RequireJS, AMD patterns, and namespaces.
-</p>
-
-<h3>
-Can Backbone.js support large Single Page Applications?
-</h3>
-
-<p>
-Yes. Backbone.js was widely used for large frontend applications before frameworks like React and Vue became dominant.
-</p>
-
+<h3>Why are modules important in Backbone.js?</h3>
+<p>Modules help organize frontend applications into reusable components that improve scalability and maintainability.</p>
+<h3>Can Backbone.js use ES Modules?</h3>
+<p>Yes. Modern Backbone.js applications can use ES Modules alongside bundlers like Webpack and Vite.</p>
+<h3>What was commonly used before ES Modules in Backbone.js?</h3>
+<p>Older Backbone.js applications commonly used RequireJS, AMD patterns, and namespaces.</p>
+<h3>Can Backbone.js support large Single Page Applications?</h3>
+<p>Yes. Backbone.js was widely used for large frontend applications before frameworks like React and Vue became dominant.</p>
 </section>
-
-<h2 id="conclusion">
-Conclusion
-</h2>
-
-<p>
-Backbone.js modular architecture remains an important part of frontend engineering history. Organizing applications using modules, reusable Views, and scalable patterns helps developers build maintainable applications while understanding the foundations of modern frontend architecture.
-</p>
-
-<p>
-Many concepts used in modern JavaScript frameworks evolved from organizational patterns that Backbone.js helped popularize.
-</p>
-
-<h2 id="related-tutorials">
-Related Tutorials
-</h2>
-
-<p>
-Continue exploring Backbone.js tutorials and frontend architecture guides below.
-</p>
-
-<ul>
-
-<li>
-<a href="/backbonejs/">
-Backbone.js Complete Guide
-</a>
-</li>
-
-<li>
-<a href="/what-is-a-router/">
-What is a Router in Backbone.js?
-</a>
-</li>
-
-<li>
-<a href="/what-is-a-model/">
-What is a Model in Backbone.js?
-</a>
-</li>
-
-<li>
-<a href="/what-is-a-view/">
-What is a View in Backbone.js?
-</a>
-</li>
-
-<li>
-<a href="/what-is-a-collection/">
-What is a Collection in Backbone.js?
-</a>
-</li>
-
-<li>
-<a href="/seo-for-single-page-apps/">
-SEO for Single Page Apps
-</a>
-</li>
-
-<li>
-<a href="/why-would-you-use-backbone/">
-Why Would You Use Backbone?
-</a>
-</li>
-
-<li>
-<a href="/nodejs-restify-mongodb-mongoose/">
-Node.js Restify MongoDB Mongoose
-</a>
-</li>
-
-</ul>
-
-<h2>
-Official Documentation
-</h2>
-
-<p>
-For deeper technical references and module organization patterns, visit the official Backbone.js website.
-</p>
-
-<p>
-<a href="https://backbonejs.org/"
-target="_blank"
-rel="noopener noreferrer">
-Official Backbone.js Documentation
-</a>
-</p>
-
-<div class="cta">
-
-<h2>
-Continue Learning Backbone.js
-</h2>
-
-<p>
-Explore more Backbone.js tutorials covering Models, Views, Routers, and frontend architecture.
-</p>
-
-<a href="/backbonejs/" class="btn">
-Explore the Backbone Guide →
-</a>
-
-</div>
-
-<div class="back-home">
-
-<a href="/backbonejs/">
-← Back to Backbone.js Tutorial Hub
-</a>
-
-</div>
-
-<div class="back-home">
-
-<a href="/">
-Back to Homepage
-</a>
-
-</div>
-
 </article>
-
 </main>
 
 <footer>
-
-<p>
-Backbone Tutorials
-</p>
-
+<p>Backbone Tutorials</p>
+<nav class="bt-social" aria-label="Backbone Tutorials on social media">
+  <a style="--c:#181717" href="https://github.com/backbonetutorials/backbonetutorials" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on GitHub"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#fff" d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0 1 12 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222 0 1.606-.014 2.898-.014 3.293 0 .322.216.694.825.576C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg></a>
+  <a style="--c:#000000" href="https://x.com/backbonetutor" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on X (formerly Twitter)"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#fff" d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+  <a style="--c:#FF0000" href="https://www.youtube.com/@BACKBONETUTORIALS" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on YouTube"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#fff" d="M8.5 6.5 L8.5 17.5 L17.5 12 Z"/></svg></a>
+  <a style="--c:#0285FF" href="https://bsky.app/profile/backbonetutorials.bsky.social" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on Bluesky"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#fff" d="M12 10.8c-1.087-2.114-4.046-6.053-6.798-7.995C2.566.944 1.561 1.266.902 1.565.139 1.908 0 3.08 0 3.768c0 .69.378 5.65.624 6.479.815 2.736 3.713 3.66 6.383 3.364.136-.02.275-.039.415-.056-.138.022-.276.04-.415.056-3.912.58-7.387 2.005-2.83 7.078 5.013 5.19 6.87-1.113 7.823-4.308.953 3.195 2.05 9.271 7.733 4.308 4.267-4.308 1.172-6.498-2.74-7.078a8.741 8.741 0 0 1-.415-.056c.14.017.279.036.415.056 2.67.296 5.568-.628 6.383-3.364C23.622 9.418 24 4.458 24 3.768c0-.688-.139-1.86-.902-2.203-.659-.299-1.664-.621-4.3 1.24C16.046 4.747 13.087 8.686 12 10.8Z"/></svg></a>
+  <a style="--c:#d62976;background-image:linear-gradient(150deg,rgba(255,255,255,.30),rgba(255,255,255,0) 42%,rgba(0,0,0,.22)),linear-gradient(45deg,#feda75,#fa7e1e,#d62976,#962fbf,#4f5bd5)" href="https://www.instagram.com/backbonetutorials/" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on Instagram"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="4" y="4" width="16" height="16" rx="5" fill="none" stroke="#fff" stroke-width="2"/><circle cx="12" cy="12" r="3.6" fill="none" stroke="#fff" stroke-width="2"/><circle cx="17.2" cy="6.8" r="1.25" fill="#fff"/></svg></a>
+  <a style="--c:#000000" href="https://www.tiktok.com/@backbonetutorials" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on TikTok"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#fff" d="M16.5 5.82a4.79 4.79 0 0 1-1.16-3.07h-2.9v11.43a2.45 2.45 0 1 1-2.45-2.45c.17 0 .33.02.49.05V8.83a5.36 5.36 0 0 0-.49-.02 5.35 5.35 0 1 0 5.35 5.35V8.6a7.66 7.66 0 0 0 4.46 1.42V7.13a4.79 4.79 0 0 1-2.8-1.31Z"/></svg></a>
+  <a style="--c:#1877F2" href="https://www.facebook.com/BackboneTutorials" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on Facebook"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#fff" d="M13.5 21v-8h2.6l.4-3h-3V8.1c0-.87.27-1.46 1.5-1.46H17V3.96c-.28-.04-1.2-.12-2.28-.12-2.26 0-3.8 1.38-3.8 3.9V10H8.3v3h2.62v8h2.58Z"/></svg></a>
+</nav>
 <p>
 <a href="/">Home</a> |
 <a href="/about/">About</a> |
@@ -1038,11 +334,7 @@ Backbone Tutorials
 <a href="/privacy-policy/">Privacy Policy</a> |
 <a href="/terms/">Terms</a>
 </p>
-
-<p>
-© 2026 Backbone Tutorials
-</p>
-
+<p>© 2026 Backbone Tutorials</p>
 </footer>
 
 </body>
