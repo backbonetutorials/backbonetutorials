@@ -1,0 +1,461 @@
+<!-- DEPLOY TO: /rendering/javascript-rendering/  (index.html) · TechArticle · per MASTERMIND_SEO.md -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>JavaScript Rendering — how JS builds the DOM</title>
+
+<meta name="description" content="How JavaScript builds and updates the DOM: parsing and execution, blocking vs deferred loading, virtual DOM, reconciliation, and rendering patterns.">
+
+<meta name="robots" content="index, follow">
+<meta name="author" content="Backbone Tutorials">
+<meta name="theme-color" content="#2563eb">
+<meta name="format-detection" content="telephone=no">
+
+<link rel="canonical" href="https://backbonetutorials.com/rendering/javascript-rendering/">
+
+<link rel="icon" href="/assets/favicon.ico">
+<link rel="apple-touch-icon" href="/assets/favicon.png">
+
+<meta property="og:title" content="JavaScript Rendering — how JS builds the DOM">
+<meta property="og:description" content="How JavaScript builds and updates the DOM: blocking and deferred loading, direct DOM manipulation, virtual DOM, reconciliation, and rendering patterns.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://backbonetutorials.com/rendering/javascript-rendering/">
+<meta property="og:image" content="https://backbonetutorials.com/assets/rendering/javascript-rendering-1200.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:type" content="image/jpeg">
+<meta property="og:image:alt" content="JavaScript Rendering — Backbone Tutorials">
+<meta property="og:site_name" content="Backbone Tutorials">
+<meta property="og:locale" content="en_US">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="JavaScript Rendering — how JS builds the DOM">
+<meta name="twitter:description" content="How JavaScript builds and updates the DOM: blocking, deferred loading, direct DOM manipulation, virtual DOM, and rendering patterns.">
+<meta name="twitter:image" content="https://backbonetutorials.com/assets/rendering/javascript-rendering-1200.jpg">
+<meta name="twitter:image:alt" content="JavaScript Rendering — Backbone Tutorials">
+<meta name="twitter:url" content="https://backbonetutorials.com/rendering/javascript-rendering/">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+
+<style>
+html{scroll-behavior:smooth}
+body{font-family:'Inter',sans-serif;margin:0;background:#f4f6f9;color:#1f2937;line-height:1.7}
+.container{max-width:900px;margin:30px auto;padding:20px;background:#fff;border-radius:10px;box-shadow:0 2px 10px rgba(0,0,0,0.04)}
+h1,h2,h3{color:#111827}
+.nav{background:#111827;padding:15px;display:flex;justify-content:center;align-items:center;flex-wrap:wrap;gap:8px}
+.nav a{color:white;margin:0 10px;text-decoration:none;font-weight:600}
+.nav a:hover{text-decoration:underline}
+.nav-logo img{vertical-align:middle;margin-right:12px;border-radius:8px}
+figure{margin:30px 0}
+pre{background:#111;color:#eee;padding:15px;border-radius:8px;overflow-x:auto;box-shadow:0 2px 8px rgba(0,0,0,0.15)}
+code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+p code,li code{background:#eef2ff;padding:1px 5px;border-radius:4px;font-size:.95em}
+.cta{background:#eef2ff;padding:20px;margin-top:30px;text-align:center;border-radius:10px}
+a{color:#2563eb}
+.back-home{margin-top:25px}
+footer{background:#111827;color:white;text-align:center;padding:30px 20px;margin-top:40px}
+footer a{color:#93c5fd;text-decoration:none}
+footer a:hover{text-decoration:underline}
+.btn{display:inline-block;background:#2563eb;color:white;padding:12px 22px;border-radius:8px;text-decoration:none;font-weight:600;margin-top:15px;transition:0.2s ease}
+.btn:hover{background:#1d4ed8;transform:translateY(-1px)}
+.card{background:#fff;padding:20px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.05);overflow:hidden;max-width:100%;border:1px solid #eef2f7}
+.toc-list{padding-left:20px}
+.toc-list li{margin-bottom:8px}
+.author-line{font-size:15px;margin-top:-6px;margin-bottom:10px;color:#4b5563}
+figcaption{font-size:14px;color:#6b7280;margin-top:10px}
+#faq h3{margin-top:25px}
+#faq p{margin-bottom:18px}
+.breadcrumb{font-size:14px;color:#6b7280;margin:0 0 10px}
+.breadcrumb a{color:#2563eb;text-decoration:none}
+.breadcrumb a:hover{text-decoration:underline}
+.diagram{width:100%;height:auto;display:block;border-radius:10px}
+.bt-social{display:flex;gap:13px;flex-wrap:wrap;align-items:center;justify-content:center;margin:0 0 14px;padding:0;list-style:none}
+.bt-social a{position:relative;isolation:isolate;width:46px;height:46px;border-radius:14px;display:inline-flex;align-items:center;justify-content:center;text-decoration:none;-webkit-tap-highlight-color:transparent;background-color:var(--c,#333);background-image:linear-gradient(150deg,rgba(255,255,255,.30),rgba(255,255,255,0) 42%,rgba(0,0,0,.22));box-shadow:0 1px 1px rgba(0,0,0,.22),0 7px 14px -3px rgba(0,0,0,.34),inset 0 1px 0 rgba(255,255,255,.50),inset 0 -2px 5px rgba(0,0,0,.30);transition:transform .18s cubic-bezier(.2,.7,.2,1),box-shadow .18s ease}
+.bt-social a::before{content:"";position:absolute;left:3px;right:3px;top:2px;height:44%;border-radius:12px 12px 50% 50%/12px 12px 24px 24px;background:linear-gradient(180deg,rgba(255,255,255,.42),rgba(255,255,255,0));pointer-events:none;z-index:0}
+.bt-social a:hover{transform:translateY(-3px) scale(1.05);box-shadow:0 2px 2px rgba(0,0,0,.20),0 16px 26px -6px rgba(0,0,0,.40),inset 0 1px 0 rgba(255,255,255,.55),inset 0 -2px 6px rgba(0,0,0,.32)}
+.bt-social a:active{transform:translateY(-1px) scale(1.01)}
+.bt-social a:focus-visible{outline:3px solid #93c5fd;outline-offset:3px}
+.bt-social svg{position:relative;z-index:1;width:22px;height:22px;display:block;filter:drop-shadow(0 1px 1px rgba(0,0,0,.28))}
+@media (prefers-reduced-motion:reduce){.bt-social a{transition:none}.bt-social a:hover{transform:none}}
+@media(max-width:600px){.container{padding:15px}}
+</style>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": "https://backbonetutorials.com/#organization",
+      "name": "Backbone Tutorials",
+      "url": "https://backbonetutorials.com/",
+      "logo": { "@type": "ImageObject", "url": "https://backbonetutorials.com/assets/logo.png" },
+      "sameAs": [
+        "https://github.com/backbonetutorials/backbonetutorials",
+        "https://x.com/backbonetutor",
+        "https://www.youtube.com/@BACKBONETUTORIALS",
+        "https://bsky.app/profile/backbonetutorials.bsky.social",
+        "https://www.instagram.com/backbonetutorials/",
+        "https://www.tiktok.com/@backbonetutorials",
+        "https://www.facebook.com/BackboneTutorials"
+      ],
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "contactType": "customer support",
+        "email": "backbonetutorials2026@gmail.com",
+        "availableLanguage": ["English"],
+        "areaServed": "Worldwide"
+      }
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://backbonetutorials.com/#website",
+      "url": "https://backbonetutorials.com/",
+      "name": "Backbone Tutorials",
+      "publisher": { "@id": "https://backbonetutorials.com/#organization" }
+    },
+    {
+      "@type": "Person",
+      "@id": "https://backbonetutorials.com/author/backbone-tutorials-team/#person",
+      "name": "Backbone Tutorials Team",
+      "url": "https://backbonetutorials.com/author/backbone-tutorials-team/",
+      "worksFor": { "@id": "https://backbonetutorials.com/#organization" },
+      "jobTitle": "Frontend JavaScript Editorial Team",
+      "knowsAbout": ["JavaScript rendering", "DOM", "Virtual DOM", "Web performance", "Backbone.js"]
+    },
+    {
+      "@type": "WebPage",
+      "@id": "https://backbonetutorials.com/rendering/javascript-rendering/#webpage",
+      "url": "https://backbonetutorials.com/rendering/javascript-rendering/",
+      "name": "JavaScript Rendering — how JS builds the DOM",
+      "headline": "JavaScript Rendering",
+      "description": "How JavaScript builds and updates the DOM: parsing and execution, blocking vs deferred loading, virtual DOM, reconciliation, and rendering patterns.",
+      "inLanguage": "en",
+      "isPartOf": { "@id": "https://backbonetutorials.com/#website" },
+      "author": { "@id": "https://backbonetutorials.com/author/backbone-tutorials-team/#person" },
+      "publisher": { "@id": "https://backbonetutorials.com/#organization" },
+      "breadcrumb": { "@id": "https://backbonetutorials.com/rendering/javascript-rendering/#breadcrumb" },
+      "mainEntity": { "@id": "https://backbonetutorials.com/rendering/javascript-rendering/#article" }
+    },
+    {
+      "@type": "TechArticle",
+      "@id": "https://backbonetutorials.com/rendering/javascript-rendering/#article",
+      "url": "https://backbonetutorials.com/rendering/javascript-rendering/",
+      "headline": "JavaScript Rendering",
+      "description": "An engineering guide to how JavaScript builds and updates the DOM: script loading strategies, direct DOM manipulation, the virtual DOM model, reconciliation and diffing, and the rendering patterns in use today.",
+      "inLanguage": "en",
+      "image": {
+        "@type": "ImageObject",
+        "url": "https://backbonetutorials.com/assets/rendering/javascript-rendering-1200.jpg",
+        "width": 1200,
+        "height": 630
+      },
+      "author": { "@id": "https://backbonetutorials.com/author/backbone-tutorials-team/#person" },
+      "publisher": { "@id": "https://backbonetutorials.com/#organization" },
+      "mainEntityOfPage": { "@id": "https://backbonetutorials.com/rendering/javascript-rendering/#webpage" },
+      "datePublished": "2026-06-12T04:30:00+07:00",
+      "dateModified": "2026-06-12T04:30:00+07:00",
+      "articleSection": ["Rendering", "JavaScript", "Engineering"],
+      "keywords": ["javascript rendering", "DOM manipulation", "virtual DOM", "reconciliation", "script loading", "deferred scripts"],
+      "about": [
+        { "@type": "Thing", "name": "JavaScript" },
+        { "@type": "Thing", "name": "Document Object Model" },
+        { "@type": "Thing", "name": "Rendering" }
+      ],
+      "mentions": [
+        { "@type": "Thing", "name": "Virtual DOM" },
+        { "@type": "Thing", "name": "Reconciliation" },
+        { "@type": "Thing", "name": "defer attribute" }
+      ]
+    },
+    {
+      "@type": "BreadcrumbList",
+      "@id": "https://backbonetutorials.com/rendering/javascript-rendering/#breadcrumb",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://backbonetutorials.com/" },
+        { "@type": "ListItem", "position": 2, "name": "Rendering", "item": "https://backbonetutorials.com/rendering/" },
+        { "@type": "ListItem", "position": 3, "name": "JavaScript Rendering", "item": "https://backbonetutorials.com/rendering/javascript-rendering/" }
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "@id": "https://backbonetutorials.com/rendering/javascript-rendering/#faq",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Why does JavaScript block HTML parsing?",
+          "acceptedAnswer": { "@type": "Answer", "text": "A classic script tag without defer or async pauses the HTML parser until the script downloads and executes, because the script might call document.write or otherwise change the document structure. Using defer or async lets parsing continue while the script loads." }
+        },
+        {
+          "@type": "Question",
+          "name": "What is the virtual DOM?",
+          "acceptedAnswer": { "@type": "Answer", "text": "A virtual DOM is an in-memory representation of the real DOM. When state changes, the framework computes a new virtual tree, diffs it against the previous one, and applies only the changed nodes to the real DOM, reducing expensive full-page updates." }
+        },
+        {
+          "@type": "Question",
+          "name": "What is reconciliation?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Reconciliation is the process of comparing a new virtual DOM tree to the previous one to find the minimal set of real DOM changes needed. Frameworks use keys to match list items across renders and avoid destroying and recreating unchanged nodes." }
+        },
+        {
+          "@type": "Question",
+          "name": "How does Backbone.js handle DOM updates?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Backbone views listen to model and collection events and call render methods directly, updating specific parts of the DOM without a virtual DOM layer. This is the direct manipulation pattern: efficient when updates are targeted, but requires the developer to manage granularity explicitly." }
+        }
+      ]
+    }
+  ]
+}
+</script>
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-FYJP43XDHH"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-FYJP43XDHH');
+</script>
+
+</head>
+
+<body>
+
+<nav class="nav" aria-label="Main Navigation">
+<a href="/" class="nav-logo" title="Backbone Tutorials Homepage"><img src="/assets/logo.png" alt="Backbone Tutorials Logo" width="36" height="36" loading="lazy" decoding="async"></a>
+<a href="/" title="Backbone.js Tutorials Homepage">Home</a>
+<a href="/backbonejs/" title="Backbone.js Complete Guide">Backbone Guide</a>
+<a href="/what-is-a-router/" title="What is a Router in Backbone.js">Router</a>
+<a href="/what-is-a-model/" title="What is a Model in Backbone.js">Model</a>
+<a href="/what-is-a-view/" title="What is a View in Backbone.js">View</a>
+<a href="/what-is-a-collection/" title="What is a Collection in Backbone.js">Collection</a>
+</nav>
+
+<main>
+
+<article class="container">
+
+<nav class="breadcrumb" aria-label="Breadcrumb">
+<a href="/">Home</a> › <a href="/rendering/">Rendering</a> › <span aria-current="page">JavaScript Rendering</span>
+</nav>
+
+<h1>JavaScript Rendering</h1>
+
+<p class="author-line">Written by <a href="/author/backbone-tutorials-team/">Backbone Tutorials Team</a></p>
+<p class="author-line">Last updated: June 2026 · 10 min read</p>
+
+<p>
+Every frontend framework is, at its core, a system for deciding when and how to update the DOM. That sounds narrow, but it turns out to be nearly everything: the architecture, the performance profile, and the way a page appears to crawlers and search engines all follow from how JavaScript builds and modifies the document. This guide traces that path, from how a script gets into the browser to how modern rendering patterns keep updates efficient.
+</p>
+
+<p>
+This sits between the mechanics of the <a href="/rendering/browser-rendering-pipeline/">browser rendering pipeline</a> and the strategy decisions in <a href="/rendering/client-side-rendering-vs-ssr/">CSR versus SSR</a>. It also underpins the crawlability concerns in <a href="/javascript-seo/javascript-rendering-and-indexing/">JavaScript rendering and indexing</a>.
+</p>
+
+<figure>
+<svg class="diagram" viewBox="0 0 720 150" role="img" aria-labelledby="jrTitle jrDesc" xmlns="http://www.w3.org/2000/svg">
+  <title id="jrTitle">JavaScript rendering approaches</title>
+  <desc id="jrDesc">Three paths from state to DOM: direct manipulation, template re-render, and virtual DOM reconciliation.</desc>
+  <rect x="0" y="0" width="720" height="150" rx="12" fill="#0f172a"></rect>
+  <g font-family="Inter, sans-serif" text-anchor="middle">
+    <rect x="270" y="14" width="180" height="34" rx="9" fill="#1e293b" stroke="#2563eb" stroke-width="2"></rect>
+    <text x="360" y="36" fill="#fff" font-size="12" font-weight="700">State change</text>
+    <rect x="40"  y="90" width="160" height="34" rx="9" fill="#1e293b" stroke="#3b82f6"></rect>
+    <text x="120" y="108" fill="#fff" font-size="11">Direct DOM write</text>
+    <rect x="270" y="90" width="180" height="34" rx="9" fill="#1e293b" stroke="#a855f7"></rect>
+    <text x="360" y="108" fill="#fff" font-size="11">Template re-render</text>
+    <rect x="520" y="90" width="160" height="34" rx="9" fill="#1e293b" stroke="#22c55e"></rect>
+    <text x="600" y="103" fill="#fff" font-size="11">vDOM diff</text>
+    <text x="600" y="117" fill="#86efac" font-size="10">+ reconcile</text>
+    <g stroke="#64748b" stroke-width="1.5" fill="none">
+      <path d="M310 48 L160 88" marker-end="url(#ajr)"></path>
+      <path d="M360 48 L360 88" marker-end="url(#ajr)"></path>
+      <path d="M410 48 L560 88" marker-end="url(#ajr)"></path>
+    </g>
+  </g>
+  <defs><marker id="ajr" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0 0 L7 3 L0 6 Z" fill="#64748b"></path></marker></defs>
+</svg>
+<figcaption>Three ways JavaScript responds to a state change: direct DOM writes, full template re-render, or virtual DOM diffing and reconciliation.</figcaption>
+</figure>
+
+<div class="card">
+<p style="margin-top:0"><strong>What you'll learn</strong></p>
+<ul class="toc-list">
+<li><a href="#loading">Script loading and parse blocking</a></li>
+<li><a href="#direct">Direct DOM manipulation</a></li>
+<li><a href="#templates">Template-based rendering</a></li>
+<li><a href="#vdom">The virtual DOM model</a></li>
+<li><a href="#reconciliation">Reconciliation and keys</a></li>
+<li><a href="#patterns">Rendering patterns today</a></li>
+</ul>
+</div>
+
+<h2 id="loading">Script loading and parse blocking</h2>
+
+<p>
+Before JavaScript can build anything, it has to get into the browser without stalling the page. How you load a script determines when it runs and how much it delays first paint.
+</p>
+
+<h3>defer, async, and the parser</h3>
+
+<pre><code>&lt;!-- Blocks the HTML parser until downloaded + executed --&gt;
+&lt;script src="app.js"&gt;&lt;/script&gt;
+
+&lt;!-- Downloads in parallel; executes after HTML parsed --&gt;
+&lt;script src="app.js" defer&gt;&lt;/script&gt;
+
+&lt;!-- Downloads in parallel; executes as soon as ready --&gt;
+&lt;script src="app.js" async&gt;&lt;/script&gt;</code></pre>
+
+<p>
+A plain <code>&lt;script&gt;</code> tag halts HTML parsing: the browser stops building the DOM, fetches the file, executes it, then resumes. <code>defer</code> lets parsing continue and runs the script after the document is parsed, in order; <code>async</code> also lets parsing continue but runs the script as soon as it downloads, in any order. For application bundles, <code>defer</code> is almost always the right choice: it keeps the parser moving, preserves execution order, and avoids the risk of a script running before the elements it needs exist.
+</p>
+
+<h2 id="direct">Direct DOM manipulation</h2>
+
+<p>
+The oldest and most transparent rendering approach is also still the most explicit: write directly to the DOM when something changes.
+</p>
+
+<h3>Targeted updates without a framework</h3>
+
+<pre><code>// Backbone view responding to a model change
+var UserView = Backbone.View.extend({
+  initialize: function () {
+    this.listenTo(this.model, 'change:name', this.updateName);
+  },
+  updateName: function () {
+    this.$('.user-name').text(this.model.get('name'));
+  }
+});</code></pre>
+
+<p>
+Backbone.js uses this pattern directly: a view listens to model events and updates the specific DOM nodes that changed. When the scope of an update is small and well-defined, as it usually is in a well-structured Backbone app, this is extremely efficient. The cost is that the developer has to manage granularity explicitly; a naive approach that re-renders the entire view on any change produces unnecessary DOM work.
+</p>
+
+<h2 id="templates">Template-based rendering</h2>
+
+<p>
+Rather than writing individual DOM operations, template rendering produces a complete HTML string from current state, then sets it into a container. Simple to reason about, but potentially expensive if the container is large.
+</p>
+
+<h3>Full re-render vs partial update</h3>
+
+<pre><code>render: function () {
+  // Re-renders the whole view from the template
+  this.$el.html(this.template(this.model.toJSON()));
+  return this;
+}</code></pre>
+
+<p>
+A full template re-render is easy to implement and guarantees the DOM matches the current state. Its downside is that it throws away and recreates every child element, losing focus, scroll position, and any local state those elements held. This is fine for small sections, but for a large list or a complex form it is visually disruptive and computationally wasteful.
+</p>
+
+<h2 id="vdom">The virtual DOM model</h2>
+
+<p>
+The virtual DOM is the mechanism most modern frameworks use to reconcile the simplicity of full re-renders with the efficiency of targeted updates.
+</p>
+
+<h3>An in-memory mirror of the real DOM</h3>
+
+<p>
+A virtual DOM is a lightweight JavaScript object tree that describes the desired DOM. When state changes, the framework renders a new virtual tree, compares it to the previous one, and applies only the differences to the real DOM. From the developer's perspective, every render is a clean pass over current state. From the browser's perspective, only the changed nodes are touched. The comparison step, the diff, has a cost, so the virtual DOM is not universally faster than direct manipulation; it is faster when the set of actual DOM changes is small relative to the complexity of the view, which is most of the time in a data-driven UI.
+</p>
+
+<h2 id="reconciliation">Reconciliation and keys</h2>
+
+<p>
+Diffing two arbitrary trees is expensive, so frameworks use heuristics to keep the comparison fast, and keys are the most important one.
+</p>
+
+<h3>Helping the diff algorithm with keys</h3>
+
+<pre><code>// Without keys, reordering a list destroys and recreates nodes
+items.map(item => `&lt;li&gt;${item.name}&lt;/li&gt;`).join('')
+
+// With keys, the framework can move nodes instead of recreating them
+// (React-style for illustration)
+items.map(item => &lt;li key={item.id}&gt;{item.name}&lt;/li&gt;)</code></pre>
+
+<p>
+When a list re-renders, the framework needs to match new nodes to old ones. Without a key, it assumes position, so inserting at the front destroys and recreates every item. With a stable key like a database ID, the framework can move, update, or remove only the nodes that actually changed. The rule is to use stable, unique keys from your data, never array indices on a list that can be reordered, because index-as-key breaks the matching and causes the same unnecessary work as no key at all.
+</p>
+
+<h2 id="patterns">Rendering patterns today</h2>
+
+<p>
+Direct manipulation, template rendering, and virtual DOM are not mutually exclusive; they represent a spectrum, and modern apps combine them deliberately.
+</p>
+
+<h3>Choosing the right tool for the update</h3>
+
+<p>
+Backbone uses direct manipulation by design: it is transparent, requires no abstraction layer, and forces the developer to be explicit about what changes. React and Vue use virtual DOM as their default. Svelte compiles away the virtual DOM and emits targeted DOM operations at build time, similar to hand-written Backbone updates but generated from a declarative syntax. The choice is not about which is fastest in a benchmark; it is about which matches the update granularity and team discipline of your application. A Backbone app with disciplined, targeted view renders can outperform a React app that re-renders large subtrees carelessly. The rendering pattern is a tool; the discipline is the skill. The next guide examines where rendering happens, in the browser, on the server, or ahead of time, and what each choice means for users and crawlers.
+</p>
+
+<section id="faq">
+<h2>Frequently Asked Questions</h2>
+
+<h3>Why does JavaScript block HTML parsing?</h3>
+<p>A classic script tag without <code>defer</code> or <code>async</code> pauses the HTML parser until the script downloads and executes, because the script might call <code>document.write</code> or otherwise change the document structure. Using <code>defer</code> or <code>async</code> lets parsing continue while the script loads.</p>
+
+<h3>What is the virtual DOM?</h3>
+<p>A virtual DOM is an in-memory representation of the real DOM. When state changes, the framework computes a new virtual tree, diffs it against the previous one, and applies only the changed nodes to the real DOM, reducing expensive full-page updates.</p>
+
+<h3>What is reconciliation?</h3>
+<p>Reconciliation is the process of comparing a new virtual DOM tree to the previous one to find the minimal set of real DOM changes needed. Frameworks use keys to match list items across renders and avoid destroying and recreating unchanged nodes.</p>
+
+<h3>How does Backbone.js handle DOM updates?</h3>
+<p>Backbone views listen to model and collection events and call render methods directly, updating specific parts of the DOM without a virtual DOM layer. This is the direct manipulation pattern: efficient when updates are targeted, but requires the developer to manage granularity explicitly.</p>
+</section>
+
+<p><strong>Read next:</strong> the <a href="/rendering/">Rendering</a> hub, or continue to <a href="/rendering/rendering-lifecycle/">the rendering lifecycle</a> to see how these updates flow through the browser's frame pipeline.</p>
+
+<div class="cta">
+<p><strong>See direct DOM rendering in practice.</strong></p>
+<p>The Backbone guide shows targeted view rendering applied to real models and collections.</p>
+<a href="/backbonejs/" class="btn">Explore the Backbone Guide →</a>
+</div>
+
+<div class="back-home">
+<a href="/rendering/">← Back to Rendering</a>
+</div>
+
+</article>
+
+</main>
+
+<footer>
+
+<p>Backbone Tutorials</p>
+
+<nav class="bt-social" aria-label="Backbone Tutorials on social media">
+  <a style="--c:#181717" href="https://github.com/backbonetutorials/backbonetutorials" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on GitHub"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#fff" d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0 1 12 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222 0 1.606-.014 2.898-.014 3.293 0 .322.216.694.825.576C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg></a>
+  <a style="--c:#000000" href="https://x.com/backbonetutor" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on X (formerly Twitter)"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#fff" d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+  <a style="--c:#FF0000" href="https://www.youtube.com/@BACKBONETUTORIALS" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on YouTube"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#fff" d="M8.5 6.5 L8.5 17.5 L17.5 12 Z"/></svg></a>
+  <a style="--c:#0285FF" href="https://bsky.app/profile/backbonetutorials.bsky.social" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on Bluesky"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#fff" d="M12 10.8c-1.087-2.114-4.046-6.053-6.798-7.995C2.566.944 1.561 1.266.902 1.565.139 1.908 0 3.08 0 3.768c0 .69.378 5.65.624 6.479.815 2.736 3.713 3.66 6.383 3.364.136-.02.275-.039.415-.056-.138.022-.276.04-.415.056-3.912.58-7.387 2.005-2.83 7.078 5.013 5.19 6.87-1.113 7.823-4.308.953 3.195 2.05 9.271 7.733 4.308 4.267-4.308 1.172-6.498-2.74-7.078a8.741 8.741 0 0 1-.415-.056c.14.017.279.036.415.056 2.67.296 5.568-.628 6.383-3.364C23.622 9.418 24 4.458 24 3.768c0-.688-.139-1.86-.902-2.203-.659-.299-1.664-.621-4.3 1.24C16.046 4.747 13.087 8.686 12 10.8Z"/></svg></a>
+  <a style="--c:#d62976;background-image:linear-gradient(150deg,rgba(255,255,255,.30),rgba(255,255,255,0) 42%,rgba(0,0,0,.22)),linear-gradient(45deg,#feda75,#fa7e1e,#d62976,#962fbf,#4f5bd5)" href="https://www.instagram.com/backbonetutorials/" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on Instagram"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="4" y="4" width="16" height="16" rx="5" fill="none" stroke="#fff" stroke-width="2"/><circle cx="12" cy="12" r="3.6" fill="none" stroke="#fff" stroke-width="2"/><circle cx="17.2" cy="6.8" r="1.25" fill="#fff"/></svg></a>
+  <a style="--c:#000000" href="https://www.tiktok.com/@backbonetutorials" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on TikTok"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#fff" d="M16.5 5.82a4.79 4.79 0 0 1-1.16-3.07h-2.9v11.43a2.45 2.45 0 1 1-2.45-2.45c.17 0 .33.02.49.05V8.83a5.36 5.36 0 0 0-.49-.02 5.35 5.35 0 1 0 5.35 5.35V8.6a7.66 7.66 0 0 0 4.46 1.42V7.13a4.79 4.79 0 0 1-2.8-1.31Z"/></svg></a>
+  <a style="--c:#1877F2" href="https://www.facebook.com/BackboneTutorials" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on Facebook"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#fff" d="M13.5 21v-8h2.6l.4-3h-3V8.1c0-.87.27-1.46 1.5-1.46H17V3.96c-.28-.04-1.2-.12-2.28-.12-2.26 0-3.8 1.38-3.8 3.9V10H8.3v3h2.62v8h2.58Z"/></svg></a>
+</nav>
+
+<p>
+<a href="/">Home</a> |
+<a href="/about/">About</a> |
+<a href="/contact/">Contact</a> |
+<a href="/privacy-policy/">Privacy Policy</a> |
+<a href="/terms/">Terms</a>
+</p>
+
+<p>© 2026 Backbone Tutorials</p>
+
+</footer>
+
+</body>
+</html>

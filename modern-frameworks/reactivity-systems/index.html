@@ -1,0 +1,366 @@
+<!-- DEPLOY TO: /modern-frameworks/reactivity-systems/  (index.html) · TechArticle · per MASTERMIND_SEO.md -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Reactivity Systems — How Modern Frameworks Update</title>
+
+<meta name="description" content="How reactivity systems work: dependency tracking, the manual wiring Backbone left open, virtual DOM versus fine-grained reactivity, and signals.">
+
+<meta name="robots" content="index, follow">
+<meta name="author" content="Backbone Tutorials">
+<meta name="theme-color" content="#2563eb">
+<meta name="format-detection" content="telephone=no">
+
+<link rel="canonical" href="https://backbonetutorials.com/modern-frameworks/reactivity-systems/">
+
+<link rel="icon" href="/assets/favicon.ico">
+<link rel="apple-touch-icon" href="/assets/favicon.png">
+
+<meta property="og:title" content="Reactivity Systems — How Modern Frameworks Update">
+<meta property="og:description" content="How reactivity systems work: dependency tracking, the manual wiring Backbone left open, virtual DOM versus fine-grained reactivity, and signals.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://backbonetutorials.com/modern-frameworks/reactivity-systems/">
+<meta property="og:image" content="https://backbonetutorials.com/assets/modern-frameworks/reactivity-systems-1200.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:type" content="image/jpeg">
+<meta property="og:image:alt" content="Reactivity Systems — Backbone Tutorials">
+<meta property="og:site_name" content="Backbone Tutorials">
+<meta property="og:locale" content="en_US">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Reactivity Systems — How Modern Frameworks Update">
+<meta name="twitter:description" content="How reactivity systems work: dependency tracking, the manual wiring Backbone left open, virtual DOM versus fine-grained reactivity, and signals.">
+<meta name="twitter:image" content="https://backbonetutorials.com/assets/modern-frameworks/reactivity-systems-1200.jpg">
+<meta name="twitter:image:alt" content="Reactivity Systems — Backbone Tutorials">
+<meta name="twitter:url" content="https://backbonetutorials.com/modern-frameworks/reactivity-systems/">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+
+<style>
+html{scroll-behavior:smooth}
+body{font-family:'Inter',sans-serif;margin:0;background:#f4f6f9;color:#1f2937;line-height:1.7}
+.container{max-width:900px;margin:30px auto;padding:20px;background:#fff;border-radius:10px;box-shadow:0 2px 10px rgba(0,0,0,0.04)}
+h1,h2,h3{color:#111827}
+.nav{background:#111827;padding:15px;display:flex;justify-content:center;align-items:center;flex-wrap:wrap;gap:8px}
+.nav a{color:white;margin:0 10px;text-decoration:none;font-weight:600}
+.nav a:hover{text-decoration:underline}
+.nav-logo img{vertical-align:middle;margin-right:12px;border-radius:8px}
+figure{margin:30px 0}
+pre{background:#111;color:#eee;padding:15px;border-radius:8px;overflow-x:auto;box-shadow:0 2px 8px rgba(0,0,0,0.15)}
+code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+p code,li code{background:#eef2ff;padding:1px 5px;border-radius:4px;font-size:.95em}
+.cta{background:#eef2ff;padding:20px;margin-top:30px;text-align:center;border-radius:10px}
+a{color:#2563eb}
+.back-home{margin-top:25px}
+footer{background:#111827;color:white;text-align:center;padding:30px 20px;margin-top:40px}
+footer a{color:#93c5fd;text-decoration:none}
+footer a:hover{text-decoration:underline}
+.btn{display:inline-block;background:#2563eb;color:white;padding:12px 22px;border-radius:8px;text-decoration:none;font-weight:600;margin-top:15px;transition:0.2s ease}
+.btn:hover{background:#1d4ed8;transform:translateY(-1px)}
+.card{background:#fff;padding:20px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.05);overflow:hidden;max-width:100%;border:1px solid #eef2f7;border-left:4px solid #06b6d4}
+.toc-list{padding-left:20px}
+.toc-list li{margin-bottom:8px}
+.author-line{font-size:15px;margin-top:-6px;margin-bottom:10px;color:#4b5563}
+figcaption{font-size:14px;color:#6b7280;margin-top:10px}
+#faq h3{margin-top:25px}
+#faq p{margin-bottom:18px}
+.breadcrumb{font-size:14px;color:#6b7280;margin:0 0 10px}
+.breadcrumb a{color:#2563eb;text-decoration:none}
+.breadcrumb a:hover{text-decoration:underline}
+.diagram{width:100%;height:auto;display:block;border-radius:10px}
+table.cmp{border-collapse:collapse;width:100%;margin:20px 0;font-size:14.5px}
+table.cmp th,table.cmp td{border:1px solid #e5e7eb;padding:9px 12px;text-align:left;vertical-align:top}
+table.cmp th{background:#f9fafb;font-weight:700}
+.bt-social{display:flex;gap:13px;flex-wrap:wrap;align-items:center;justify-content:center;margin:0 0 14px;padding:0;list-style:none}
+.bt-social a{position:relative;isolation:isolate;width:46px;height:46px;border-radius:14px;display:inline-flex;align-items:center;justify-content:center;text-decoration:none;-webkit-tap-highlight-color:transparent;background-color:var(--c,#333);background-image:linear-gradient(150deg,rgba(255,255,255,.30),rgba(255,255,255,0) 42%,rgba(0,0,0,.22));box-shadow:0 1px 1px rgba(0,0,0,.22),0 7px 14px -3px rgba(0,0,0,.34),inset 0 1px 0 rgba(255,255,255,.50),inset 0 -2px 5px rgba(0,0,0,.30);transition:transform .18s cubic-bezier(.2,.7,.2,1),box-shadow .18s ease}
+.bt-social a::before{content:"";position:absolute;left:3px;right:3px;top:2px;height:44%;border-radius:12px 12px 50% 50%/12px 12px 24px 24px;background:linear-gradient(180deg,rgba(255,255,255,.42),rgba(255,255,255,0));pointer-events:none;z-index:0}
+.bt-social a:hover{transform:translateY(-3px) scale(1.05);box-shadow:0 2px 2px rgba(0,0,0,.20),0 16px 26px -6px rgba(0,0,0,.40),inset 0 1px 0 rgba(255,255,255,.55),inset 0 -2px 6px rgba(0,0,0,.32)}
+.bt-social a:active{transform:translateY(-1px) scale(1.01)}
+.bt-social a:focus-visible{outline:3px solid #93c5fd;outline-offset:3px}
+.bt-social svg{position:relative;z-index:1;width:22px;height:22px;display:block;filter:drop-shadow(0 1px 1px rgba(0,0,0,.28))}
+@media (prefers-reduced-motion:reduce){.bt-social a{transition:none}.bt-social a:hover{transform:none}}
+@media(max-width:600px){.container{padding:15px}}
+</style>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": "https://backbonetutorials.com/#organization",
+      "name": "Backbone Tutorials",
+      "url": "https://backbonetutorials.com/",
+      "logo": { "@type": "ImageObject", "url": "https://backbonetutorials.com/assets/logo.png" },
+      "sameAs": [
+        "https://github.com/backbonetutorials/backbonetutorials",
+        "https://x.com/backbonetutor",
+        "https://www.youtube.com/@BACKBONETUTORIALS",
+        "https://bsky.app/profile/backbonetutorials.bsky.social",
+        "https://www.instagram.com/backbonetutorials/",
+        "https://www.tiktok.com/@backbonetutorials",
+        "https://www.facebook.com/BackboneTutorials"
+      ],
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "contactType": "customer support",
+        "url": "https://x.com/backbonetutor",
+        "availableLanguage": ["English"],
+        "areaServed": "Worldwide"
+      }
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://backbonetutorials.com/#website",
+      "url": "https://backbonetutorials.com/",
+      "name": "Backbone Tutorials",
+      "publisher": { "@id": "https://backbonetutorials.com/#organization" }
+    },
+    {
+      "@type": "Person",
+      "@id": "https://backbonetutorials.com/author/backbone-tutorials-team/#person",
+      "name": "Backbone Tutorials Team",
+      "url": "https://backbonetutorials.com/author/backbone-tutorials-team/",
+      "worksFor": { "@id": "https://backbonetutorials.com/#organization" },
+      "jobTitle": "Frontend JavaScript Editorial Team",
+      "knowsAbout": ["Reactivity", "Signals", "Virtual DOM", "Vue", "React", "Backbone.js"]
+    },
+    {
+      "@type": "WebPage",
+      "@id": "https://backbonetutorials.com/modern-frameworks/reactivity-systems/#webpage",
+      "url": "https://backbonetutorials.com/modern-frameworks/reactivity-systems/",
+      "name": "Reactivity Systems \u2014 How Modern Frameworks Update",
+      "headline": "Reactivity Systems",
+      "description": "How reactivity systems work: dependency tracking, the manual wiring Backbone left open, virtual DOM versus fine-grained reactivity, and signals.",
+      "inLanguage": "en",
+      "isPartOf": { "@id": "https://backbonetutorials.com/#website" },
+      "author": { "@id": "https://backbonetutorials.com/author/backbone-tutorials-team/#person" },
+      "publisher": { "@id": "https://backbonetutorials.com/#organization" },
+      "breadcrumb": { "@id": "https://backbonetutorials.com/modern-frameworks/reactivity-systems/#breadcrumb" },
+      "mainEntity": { "@id": "https://backbonetutorials.com/modern-frameworks/reactivity-systems/#article" }
+    },
+    {
+      "@type": "TechArticle",
+      "@id": "https://backbonetutorials.com/modern-frameworks/reactivity-systems/#article",
+      "url": "https://backbonetutorials.com/modern-frameworks/reactivity-systems/",
+      "headline": "Reactivity Systems",
+      "description": "How reactivity systems work: dependency tracking, the manual wiring Backbone left open, virtual DOM versus fine-grained reactivity, and signals.",
+      "inLanguage": "en",
+      "image": { "@type": "ImageObject", "url": "https://backbonetutorials.com/assets/modern-frameworks/reactivity-systems-1200.jpg", "width": 1200, "height": 630 },
+      "author": { "@id": "https://backbonetutorials.com/author/backbone-tutorials-team/#person" },
+      "publisher": { "@id": "https://backbonetutorials.com/#organization" },
+      "mainEntityOfPage": { "@id": "https://backbonetutorials.com/modern-frameworks/reactivity-systems/#webpage" },
+      "datePublished": "2026-06-12T04:30:00+07:00",
+      "dateModified": "2026-06-12T04:30:00+07:00",
+      "articleSection": ["Modern Frameworks", "Frontend Architecture"],
+      "keywords": ["reactivity systems", "dependency tracking", "signals", "fine-grained reactivity"],
+      "about": [
+        { "@type": "Thing", "name": "Reactivity" },
+        { "@type": "Thing", "name": "Signals" },
+        { "@type": "Thing", "name": "Frontend frameworks" }
+      ]
+    },
+    {
+      "@type": "BreadcrumbList",
+      "@id": "https://backbonetutorials.com/modern-frameworks/reactivity-systems/#breadcrumb",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://backbonetutorials.com/" },
+        { "@type": "ListItem", "position": 2, "name": "Modern Frameworks", "item": "https://backbonetutorials.com/modern-frameworks/" },
+        { "@type": "ListItem", "position": 3, "name": "Reactivity Systems", "item": "https://backbonetutorials.com/modern-frameworks/reactivity-systems/" }
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "@id": "https://backbonetutorials.com/modern-frameworks/reactivity-systems/#faq",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What is a reactivity system?",
+          "acceptedAnswer": { "@type": "Answer", "text": "A reactivity system automatically updates everything that depends on a piece of state when that state changes, without explicit instructions. The developer changes a value and the framework propagates the change." }
+        },
+        {
+          "@type": "Question",
+          "name": "How does dependency tracking work?",
+          "acceptedAnswer": { "@type": "Answer", "text": "When a computation reads a reactive value, the system records that it depends on that value. When the value is written, the system re-runs only the computations that depend on it, with no full-interface comparison needed." }
+        },
+        {
+          "@type": "Question",
+          "name": "What is the difference between a virtual DOM and signals?",
+          "acceptedAnswer": { "@type": "Answer", "text": "A virtual DOM recomputes a component and compares the result against the previous version to find changes. Signals track dependencies precisely and update only the affected nodes, doing less work per update." }
+        },
+        {
+          "@type": "Question",
+          "name": "Why is reactivity better than Backbone's events?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Backbone events require the developer to manually connect Models to Views and decide what to re-render. Reactivity removes that wiring and the common bug of forgetting to update something after a state change." }
+        }
+      ]
+    }
+  ]
+}
+</script>
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-FYJP43XDHH"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-FYJP43XDHH');
+</script>
+
+</head>
+<body>
+
+<nav class="nav" aria-label="Main Navigation">
+<a href="/" class="nav-logo" title="Backbone Tutorials Homepage"><img src="/assets/logo.png" alt="Backbone Tutorials Logo" width="36" height="36" loading="lazy" decoding="async"></a>
+<a href="/" title="Backbone.js Tutorials Homepage">Home</a>
+<a href="/backbonejs/" title="Backbone.js Complete Guide">Backbone Guide</a>
+<a href="/what-is-a-router/" title="What is a Router">Router</a>
+<a href="/what-is-a-model/" title="What is a Model">Model</a>
+<a href="/what-is-a-view/" title="What is a View">View</a>
+<a href="/what-is-a-collection/" title="What is a Collection">Collection</a>
+</nav>
+
+<main>
+<article class="container">
+
+<nav class="breadcrumb" aria-label="Breadcrumb">
+<a href="/">Home</a> › <a href="/modern-frameworks/">Modern Frameworks</a> › <span aria-current="page">Reactivity Systems</span>
+</nav>
+
+<h1>Reactivity Systems</h1>
+
+<p class="author-line">Written by <a href="/author/backbone-tutorials-team/">Backbone Tutorials Team</a></p>
+<p class="author-line">Last updated: June 2026 · 10 min read</p>
+
+<p>Reactivity is the feature that made manual <code>render</code> calls obsolete. In a reactive framework, you change a value and the parts of the interface that depend on it update by themselves, with no event you subscribed to and no diffing you triggered. It can feel like magic the first time, but underneath it is a precise, mechanical system of tracking which computations read which values. Understanding that system demystifies modern frameworks and makes their behaviour predictable instead of mysterious.</p>
+<p>This guide explains what reactivity is, the problem it solves that Backbone left open, and how dependency tracking, virtual DOMs, and signals each implement it.</p>
+
+<figure>
+<svg class="diagram" viewBox="0 0 720 165" role="img" aria-labelledby="t d" xmlns="http://www.w3.org/2000/svg">
+<title id="t">How a reactivity system tracks dependencies</title>
+<desc id="d">State is read by computations which register as dependents; when state changes, only the dependent computations re-run.</desc>
+<rect x="0" y="0" width="720" height="165" rx="12" fill="#0f172a"></rect>
+<g font-family="Inter,sans-serif" text-anchor="middle">
+<rect x="40" y="64" width="140" height="40" rx="9" fill="#1e293b" stroke="#06b6d4" stroke-width="2"></rect>
+<text x="110" y="82" fill="#67e8f9" font-size="12" font-weight="700">state: count</text>
+<text x="110" y="97" fill="#64748b" font-size="9">reactive value</text>
+<rect x="300" y="20" width="150" height="36" rx="9" fill="#1e293b" stroke="#22c55e"></rect>
+<text x="375" y="42" fill="#86efac" font-size="11">label = count*2</text>
+<rect x="300" y="64" width="150" height="36" rx="9" fill="#1e293b" stroke="#22c55e"></rect>
+<text x="375" y="86" fill="#86efac" font-size="11">render badge</text>
+<rect x="300" y="108" width="150" height="36" rx="9" fill="#1e293b" stroke="#22c55e"></rect>
+<text x="375" y="130" fill="#86efac" font-size="11">render total</text>
+<g stroke="#475569" stroke-width="1.5" fill="none">
+<path d="M180 78 C 240 60, 250 40, 298 38" marker-end="url(#a)"></path>
+<path d="M180 84 L298 82" marker-end="url(#a)"></path>
+<path d="M180 90 C 240 108, 250 124, 298 126" marker-end="url(#a)"></path>
+</g>
+<text x="240" y="155" fill="#94a3b8" font-size="10" font-weight="700">read registers a dependency · write re-runs only dependents</text>
+</g>
+<defs><marker id="a" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0 0 L6 3 L0 6 Z" fill="#475569"></path></marker></defs>
+</svg>
+</figure>
+
+<div class="card">
+<p style="margin-top:0"><strong>What you'll learn</strong></p>
+<ul class="toc-list">
+<li><a href="#what">What reactivity means in a UI framework</a></li>
+<li><a href="#problem">The problem Backbone left to the developer</a></li>
+<li><a href="#tracking">How dependency tracking works</a></li>
+<li><a href="#vdom">Virtual DOM versus fine-grained reactivity</a></li>
+<li><a href="#signals">Signals and the modern approach</a></li>
+<li><a href="#matters">Why reactivity matters for maintainability</a></li>
+</ul>
+</div>
+
+<h2 id="what">What reactivity means in a UI framework</h2>
+<p>Reactivity is a system where changing a piece of state automatically updates everything that depends on it, without explicit instructions to do so.</p>
+<h3>State as the single thing you change</h3>
+<p>In a reactive framework, the developer's job is to change state, and the framework's job is to make the interface reflect it. You never write code that says "now update this element"; you write code that changes a value, and the framework propagates that change to every computation and every piece of the interface that read it. The interface becomes a derived view of state rather than something you maintain by hand.</p>
+
+<h2 id="problem">The problem Backbone left to the developer</h2>
+<p>Backbone had events but not reactivity, and the gap between the two is exactly the work that reactive frameworks automate.</p>
+<h3>Events without automatic propagation</h3>
+<p>A Backbone Model emits a <code>change</code> event, but nothing happens unless a View is explicitly listening and explicitly re-renders. The developer must connect each Model to each interested View and decide what to update. This is reactivity done manually, and in a large application the web of listeners becomes hard to keep correct. The mechanics of that manual wiring are shown in the <a href="/backbonejs/">Backbone.js guide</a>, and removing it is the core appeal of moving to a reactive framework.</p>
+
+<h2 id="tracking">How dependency tracking works</h2>
+<p>The heart of a reactivity system is automatic dependency tracking, and the mechanism is simpler than it appears.</p>
+<h3>Reading registers, writing notifies</h3>
+<p>When a computation reads a reactive value, the system records that the computation depends on that value. Later, when the value is written, the system looks up exactly which computations depend on it and re-runs only those. No diffing of the whole interface is required because the dependency graph already knows precisely what is affected. This read-registers-write-notifies cycle, built at runtime, is what makes the update both automatic and minimal.</p>
+<pre><code>const count = signal(0);
+effect(() => render(count())); // reading count() registers this effect
+count.set(5);                  // writing re-runs only that effect</code></pre>
+
+<h2 id="vdom">Virtual DOM versus fine-grained reactivity</h2>
+<p>Two broad strategies implement reactive updates, and they make different tradeoffs between simplicity and precision.</p>
+<h3>Recompute and compare, or track and target</h3>
+<p>A virtual DOM, used by React, re-runs a component to produce a fresh description of its interface, then compares it against the previous one to find what changed. Fine-grained reactivity, used by Vue and Solid, skips the comparison entirely: it knows from the dependency graph exactly which nodes to update. The virtual DOM is conceptually simpler and recomputes more; fine-grained reactivity does less work per update but tracks more state. Both eliminate the manual updates Backbone required, as compared across the <a href="/modern-frameworks/frontend-framework-comparisons/">framework comparisons</a>.</p>
+
+<h2 id="signals">Signals and the modern approach</h2>
+<p>Signals are the current expression of fine-grained reactivity, and they have spread across many frameworks because they are both fast and easy to reason about.</p>
+<h3>Reactivity as a first-class primitive</h3>
+<p>A signal is a value that knows who depends on it. Reading it inside a computation subscribes that computation; writing it notifies the subscribers. Because the dependency relationships are explicit and fine-grained, updates touch only what changed, with no component-level recomputation. Signals have been adopted well beyond their origin, appearing in frameworks that previously used other strategies, a convergence that fits the broader <a href="/modern-frameworks/framework-evolution/">framework evolution</a> toward doing less work at update time.</p>
+
+<h2 id="matters">Why reactivity matters for maintainability</h2>
+<p>The deepest benefit of reactivity is not performance but the bugs it makes impossible to write.</p>
+<h3>Eliminating a whole class of errors</h3>
+<p>The most common bug in manual-update code is forgetting to update something after a state change, leaving the interface showing stale data. Reactivity removes that bug entirely, because the framework, not the developer, decides what to update. The result is code with fewer moving parts and less that can fall out of sync, which is why reactivity became central to nearly every framework in the <a href="/modern-frameworks/">modern frameworks</a> ecosystem. It trades a little hidden machinery for a large gain in correctness.</p>
+
+<section id="faq">
+<h2>Frequently Asked Questions</h2>
+<h3>What is a reactivity system?</h3>
+<p>A reactivity system automatically updates everything that depends on a piece of state when that state changes, without explicit instructions. The developer changes a value and the framework propagates the change.</p>
+<h3>How does dependency tracking work?</h3>
+<p>When a computation reads a reactive value, the system records that it depends on that value. When the value is written, the system re-runs only the computations that depend on it, with no full-interface comparison needed.</p>
+<h3>What is the difference between a virtual DOM and signals?</h3>
+<p>A virtual DOM recomputes a component and compares the result against the previous version to find changes. Signals track dependencies precisely and update only the affected nodes, doing less work per update.</p>
+<h3>Why is reactivity better than Backbone's events?</h3>
+<p>Backbone events require the developer to manually connect Models to Views and decide what to re-render. Reactivity removes that wiring and the common bug of forgetting to update something after a state change.</p>
+</section>
+
+<p><strong>Read next:</strong> <a href="/modern-frameworks/state-management-evolution/">the evolution of state management</a>, or the <a href="/modern-frameworks/">Modern Frameworks</a> hub.</p>
+
+<div class="cta">
+<p><strong>See reactivity done by hand.</strong></p>
+<p>The Backbone.js guide shows the manual event wiring that reactive frameworks automate.</p>
+<a href="/backbonejs/" class="btn">Explore the Backbone Guide →</a>
+</div>
+
+<div class="back-home">
+<a href="/modern-frameworks/">← Back to Modern Frameworks</a>
+</div>
+
+</article>
+</main>
+
+<footer>
+<p>Backbone Tutorials</p>
+<nav class="bt-social" aria-label="Backbone Tutorials on social media">
+  <a style="--c:#181717" href="https://github.com/backbonetutorials/backbonetutorials" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on GitHub"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#fff" d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0 1 12 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222 0 1.606-.014 2.898-.014 3.293 0 .322.216.694.825.576C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg></a>
+  <a style="--c:#000000" href="https://x.com/backbonetutor" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on X (formerly Twitter)"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#fff" d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+  <a style="--c:#FF0000" href="https://www.youtube.com/@BACKBONETUTORIALS" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on YouTube"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#fff" d="M8.5 6.5 L8.5 17.5 L17.5 12 Z"/></svg></a>
+  <a style="--c:#0285FF" href="https://bsky.app/profile/backbonetutorials.bsky.social" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on Bluesky"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#fff" d="M12 10.8c-1.087-2.114-4.046-6.053-6.798-7.995C2.566.944 1.561 1.266.902 1.565.139 1.908 0 3.08 0 3.768c0 .69.378 5.65.624 6.479.815 2.736 3.713 3.66 6.383 3.364.136-.02.275-.039.415-.056-.138.022-.276.04-.415.056-3.912.58-7.387 2.005-2.83 7.078 5.013 5.19 6.87-1.113 7.823-4.308.953 3.195 2.05 9.271 7.733 4.308 4.267-4.308 1.172-6.498-2.74-7.078a8.741 8.741 0 0 1-.415-.056c.14.017.279.036.415.056 2.67.296 5.568-.628 6.383-3.364C23.622 9.418 24 4.458 24 3.768c0-.688-.139-1.86-.902-2.203-.659-.299-1.664-.621-4.3 1.24C16.046 4.747 13.087 8.686 12 10.8Z"/></svg></a>
+  <a style="--c:#d62976;background-image:linear-gradient(150deg,rgba(255,255,255,.30),rgba(255,255,255,0) 42%,rgba(0,0,0,.22)),linear-gradient(45deg,#feda75,#fa7e1e,#d62976,#962fbf,#4f5bd5)" href="https://www.instagram.com/backbonetutorials/" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on Instagram"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="4" y="4" width="16" height="16" rx="5" fill="none" stroke="#fff" stroke-width="2"/><circle cx="12" cy="12" r="3.6" fill="none" stroke="#fff" stroke-width="2"/><circle cx="17.2" cy="6.8" r="1.25" fill="#fff"/></svg></a>
+  <a style="--c:#000000" href="https://www.tiktok.com/@backbonetutorials" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on TikTok"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#fff" d="M16.5 5.82a4.79 4.79 0 0 1-1.16-3.07h-2.9v11.43a2.45 2.45 0 1 1-2.45-2.45c.17 0 .33.02.49.05V8.83a5.36 5.36 0 0 0-.49-.02 5.35 5.35 0 1 0 5.35 5.35V8.6a7.66 7.66 0 0 0 4.46 1.42V7.13a4.79 4.79 0 0 1-2.8-1.31Z"/></svg></a>
+  <a style="--c:#1877F2" href="https://www.facebook.com/BackboneTutorials" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on Facebook"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#fff" d="M13.5 21v-8h2.6l.4-3h-3V8.1c0-.87.27-1.46 1.5-1.46H17V3.96c-.28-.04-1.2-.12-2.28-.12-2.26 0-3.8 1.38-3.8 3.9V10H8.3v3h2.62v8h2.58Z"/></svg></a>
+</nav>
+<p>
+<a href="/">Home</a> |
+<a href="/about/">About</a> |
+<a href="/contact/">Contact</a> |
+<a href="/privacy-policy/">Privacy Policy</a> |
+<a href="/terms/">Terms</a>
+</p>
+<p>© 2026 Backbone Tutorials</p>
+</footer>
+
+</body>
+</html>

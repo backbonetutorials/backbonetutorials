@@ -1,0 +1,478 @@
+<!-- DEPLOY TO: /rendering/dom-rendering-performance/  (index.html) · TechArticle · per MASTERMIND_SEO.md -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>DOM Rendering Performance — fast, efficient updates</title>
+
+<meta name="description" content="DOM rendering performance: DOM size costs, efficient node updates, DocumentFragment batching, virtualization for large lists, and measuring DOM work.">
+
+<meta name="robots" content="index, follow">
+<meta name="author" content="Backbone Tutorials">
+<meta name="theme-color" content="#2563eb">
+<meta name="format-detection" content="telephone=no">
+
+<link rel="canonical" href="https://backbonetutorials.com/rendering/dom-rendering-performance/">
+
+<link rel="icon" href="/assets/favicon.ico">
+<link rel="apple-touch-icon" href="/assets/favicon.png">
+
+<meta property="og:title" content="DOM Rendering Performance — fast, efficient updates">
+<meta property="og:description" content="How DOM size and update patterns affect rendering speed, batching with DocumentFragment, list virtualization, style and class manipulation, and measuring DOM cost.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://backbonetutorials.com/rendering/dom-rendering-performance/">
+<meta property="og:image" content="https://backbonetutorials.com/assets/rendering/dom-rendering-performance-1200.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:type" content="image/jpeg">
+<meta property="og:image:alt" content="DOM Rendering Performance — Backbone Tutorials">
+<meta property="og:site_name" content="Backbone Tutorials">
+<meta property="og:locale" content="en_US">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="DOM Rendering Performance — fast, efficient updates">
+<meta name="twitter:description" content="DOM size costs, efficient node updates, DocumentFragment batching, list virtualization, and measuring DOM rendering work in DevTools.">
+<meta name="twitter:image" content="https://backbonetutorials.com/assets/rendering/dom-rendering-performance-1200.jpg">
+<meta name="twitter:image:alt" content="DOM Rendering Performance — Backbone Tutorials">
+<meta name="twitter:url" content="https://backbonetutorials.com/rendering/dom-rendering-performance/">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+
+<style>
+html{scroll-behavior:smooth}
+body{font-family:'Inter',sans-serif;margin:0;background:#f4f6f9;color:#1f2937;line-height:1.7}
+.container{max-width:900px;margin:30px auto;padding:20px;background:#fff;border-radius:10px;box-shadow:0 2px 10px rgba(0,0,0,0.04)}
+h1,h2,h3{color:#111827}
+.nav{background:#111827;padding:15px;display:flex;justify-content:center;align-items:center;flex-wrap:wrap;gap:8px}
+.nav a{color:white;margin:0 10px;text-decoration:none;font-weight:600}
+.nav a:hover{text-decoration:underline}
+.nav-logo img{vertical-align:middle;margin-right:12px;border-radius:8px}
+figure{margin:30px 0}
+pre{background:#111;color:#eee;padding:15px;border-radius:8px;overflow-x:auto;box-shadow:0 2px 8px rgba(0,0,0,0.15)}
+code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+p code,li code{background:#eef2ff;padding:1px 5px;border-radius:4px;font-size:.95em}
+.cta{background:#eef2ff;padding:20px;margin-top:30px;text-align:center;border-radius:10px}
+a{color:#2563eb}
+.back-home{margin-top:25px}
+footer{background:#111827;color:white;text-align:center;padding:30px 20px;margin-top:40px}
+footer a{color:#93c5fd;text-decoration:none}
+footer a:hover{text-decoration:underline}
+.btn{display:inline-block;background:#2563eb;color:white;padding:12px 22px;border-radius:8px;text-decoration:none;font-weight:600;margin-top:15px;transition:0.2s ease}
+.btn:hover{background:#1d4ed8;transform:translateY(-1px)}
+.card{background:#fff;padding:20px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.05);overflow:hidden;max-width:100%;border:1px solid #eef2f7}
+.toc-list{padding-left:20px}
+.toc-list li{margin-bottom:8px}
+.author-line{font-size:15px;margin-top:-6px;margin-bottom:10px;color:#4b5563}
+figcaption{font-size:14px;color:#6b7280;margin-top:10px}
+#faq h3{margin-top:25px}
+#faq p{margin-bottom:18px}
+.breadcrumb{font-size:14px;color:#6b7280;margin:0 0 10px}
+.breadcrumb a{color:#2563eb;text-decoration:none}
+.breadcrumb a:hover{text-decoration:underline}
+.diagram{width:100%;height:auto;display:block;border-radius:10px}
+.bt-social{display:flex;gap:13px;flex-wrap:wrap;align-items:center;justify-content:center;margin:0 0 14px;padding:0;list-style:none}
+.bt-social a{position:relative;isolation:isolate;width:46px;height:46px;border-radius:14px;display:inline-flex;align-items:center;justify-content:center;text-decoration:none;-webkit-tap-highlight-color:transparent;background-color:var(--c,#333);background-image:linear-gradient(150deg,rgba(255,255,255,.30),rgba(255,255,255,0) 42%,rgba(0,0,0,.22));box-shadow:0 1px 1px rgba(0,0,0,.22),0 7px 14px -3px rgba(0,0,0,.34),inset 0 1px 0 rgba(255,255,255,.50),inset 0 -2px 5px rgba(0,0,0,.30);transition:transform .18s cubic-bezier(.2,.7,.2,1),box-shadow .18s ease}
+.bt-social a::before{content:"";position:absolute;left:3px;right:3px;top:2px;height:44%;border-radius:12px 12px 50% 50%/12px 12px 24px 24px;background:linear-gradient(180deg,rgba(255,255,255,.42),rgba(255,255,255,0));pointer-events:none;z-index:0}
+.bt-social a:hover{transform:translateY(-3px) scale(1.05);box-shadow:0 2px 2px rgba(0,0,0,.20),0 16px 26px -6px rgba(0,0,0,.40),inset 0 1px 0 rgba(255,255,255,.55),inset 0 -2px 6px rgba(0,0,0,.32)}
+.bt-social a:active{transform:translateY(-1px) scale(1.01)}
+.bt-social a:focus-visible{outline:3px solid #93c5fd;outline-offset:3px}
+.bt-social svg{position:relative;z-index:1;width:22px;height:22px;display:block;filter:drop-shadow(0 1px 1px rgba(0,0,0,.28))}
+@media (prefers-reduced-motion:reduce){.bt-social a{transition:none}.bt-social a:hover{transform:none}}
+@media(max-width:600px){.container{padding:15px}}
+</style>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": "https://backbonetutorials.com/#organization",
+      "name": "Backbone Tutorials",
+      "url": "https://backbonetutorials.com/",
+      "logo": { "@type": "ImageObject", "url": "https://backbonetutorials.com/assets/logo.png" },
+      "sameAs": [
+        "https://github.com/backbonetutorials/backbonetutorials",
+        "https://x.com/backbonetutor",
+        "https://www.youtube.com/@BACKBONETUTORIALS",
+        "https://bsky.app/profile/backbonetutorials.bsky.social",
+        "https://www.instagram.com/backbonetutorials/",
+        "https://www.tiktok.com/@backbonetutorials",
+        "https://www.facebook.com/BackboneTutorials"
+      ],
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "contactType": "customer support",
+        "email": "backbonetutorials2026@gmail.com",
+        "availableLanguage": ["English"],
+        "areaServed": "Worldwide"
+      }
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://backbonetutorials.com/#website",
+      "url": "https://backbonetutorials.com/",
+      "name": "Backbone Tutorials",
+      "publisher": { "@id": "https://backbonetutorials.com/#organization" }
+    },
+    {
+      "@type": "Person",
+      "@id": "https://backbonetutorials.com/author/backbone-tutorials-team/#person",
+      "name": "Backbone Tutorials Team",
+      "url": "https://backbonetutorials.com/author/backbone-tutorials-team/",
+      "worksFor": { "@id": "https://backbonetutorials.com/#organization" },
+      "jobTitle": "Frontend JavaScript Editorial Team",
+      "knowsAbout": ["DOM performance", "Layout thrashing", "Virtualization", "Web performance", "Backbone.js"]
+    },
+    {
+      "@type": "WebPage",
+      "@id": "https://backbonetutorials.com/rendering/dom-rendering-performance/#webpage",
+      "url": "https://backbonetutorials.com/rendering/dom-rendering-performance/",
+      "name": "DOM Rendering Performance — fast, efficient updates",
+      "headline": "DOM Rendering Performance",
+      "description": "DOM rendering performance: DOM size costs, efficient node updates, DocumentFragment batching, virtualization for large lists, and measuring DOM work.",
+      "inLanguage": "en",
+      "isPartOf": { "@id": "https://backbonetutorials.com/#website" },
+      "author": { "@id": "https://backbonetutorials.com/author/backbone-tutorials-team/#person" },
+      "publisher": { "@id": "https://backbonetutorials.com/#organization" },
+      "breadcrumb": { "@id": "https://backbonetutorials.com/rendering/dom-rendering-performance/#breadcrumb" },
+      "mainEntity": { "@id": "https://backbonetutorials.com/rendering/dom-rendering-performance/#article" }
+    },
+    {
+      "@type": "TechArticle",
+      "@id": "https://backbonetutorials.com/rendering/dom-rendering-performance/#article",
+      "url": "https://backbonetutorials.com/rendering/dom-rendering-performance/",
+      "headline": "DOM Rendering Performance",
+      "description": "An engineering guide to DOM rendering performance: why DOM size matters, batching updates with DocumentFragment, reading and writing DOM in the right order, style and class manipulation patterns, list virtualization, and measuring DOM cost in DevTools.",
+      "inLanguage": "en",
+      "image": {
+        "@type": "ImageObject",
+        "url": "https://backbonetutorials.com/assets/rendering/dom-rendering-performance-1200.jpg",
+        "width": 1200,
+        "height": 630
+      },
+      "author": { "@id": "https://backbonetutorials.com/author/backbone-tutorials-team/#person" },
+      "publisher": { "@id": "https://backbonetutorials.com/#organization" },
+      "mainEntityOfPage": { "@id": "https://backbonetutorials.com/rendering/dom-rendering-performance/#webpage" },
+      "datePublished": "2026-06-12T04:30:00+07:00",
+      "dateModified": "2026-06-12T04:30:00+07:00",
+      "articleSection": ["Rendering", "Performance", "DOM"],
+      "keywords": ["DOM performance", "DocumentFragment", "list virtualization", "layout thrashing", "className", "DOM size"],
+      "about": [
+        { "@type": "Thing", "name": "Document Object Model" },
+        { "@type": "Thing", "name": "Web performance" },
+        { "@type": "Thing", "name": "JavaScript" }
+      ],
+      "mentions": [
+        { "@type": "Thing", "name": "DocumentFragment" },
+        { "@type": "Thing", "name": "classList" },
+        { "@type": "Thing", "name": "Virtual scrolling" }
+      ]
+    },
+    {
+      "@type": "BreadcrumbList",
+      "@id": "https://backbonetutorials.com/rendering/dom-rendering-performance/#breadcrumb",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://backbonetutorials.com/" },
+        { "@type": "ListItem", "position": 2, "name": "Rendering", "item": "https://backbonetutorials.com/rendering/" },
+        { "@type": "ListItem", "position": 3, "name": "DOM Rendering Performance", "item": "https://backbonetutorials.com/rendering/dom-rendering-performance/" }
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "@id": "https://backbonetutorials.com/rendering/dom-rendering-performance/#faq",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Why does a large DOM hurt performance?",
+          "acceptedAnswer": { "@type": "Answer", "text": "A large DOM increases the cost of every layout, style recalculation, and paint pass because the browser must process more nodes. It also uses more memory and slows JavaScript that queries or modifies nodes. Google recommends keeping the total DOM node count below 1500." }
+        },
+        {
+          "@type": "Question",
+          "name": "What is DocumentFragment and why use it?",
+          "acceptedAnswer": { "@type": "Answer", "text": "DocumentFragment is an off-screen container for building groups of DOM nodes before inserting them. Because it lives outside the live DOM, adding nodes to it does not trigger reflow. A single appendChild of the completed fragment causes one reflow instead of one per node." }
+        },
+        {
+          "@type": "Question",
+          "name": "What is list virtualization?",
+          "acceptedAnswer": { "@type": "Answer", "text": "List virtualization, also called windowing, renders only the rows visible in the viewport plus a small buffer, regardless of how many total items exist. As the user scrolls, rows are recycled rather than created and destroyed. A list of 10 000 items renders as fast as a list of 20 rows." }
+        },
+        {
+          "@type": "Question",
+          "name": "Is className or classList faster for toggling styles?",
+          "acceptedAnswer": { "@type": "Answer", "text": "classList methods like add, remove, and toggle are generally preferred because they modify individual classes without replacing the full className string, reducing the risk of accidental overwrites. For toggling a single class repeatedly, both are fast enough that the difference is negligible; the ergonomics and safety of classList make it the better default." }
+        }
+      ]
+    }
+  ]
+}
+</script>
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-FYJP43XDHH"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-FYJP43XDHH');
+</script>
+
+</head>
+<body>
+
+<nav class="nav" aria-label="Main Navigation">
+<a href="/" class="nav-logo" title="Backbone Tutorials Homepage"><img src="/assets/logo.png" alt="Backbone Tutorials Logo" width="36" height="36" loading="lazy" decoding="async"></a>
+<a href="/" title="Backbone.js Tutorials Homepage">Home</a>
+<a href="/backbonejs/" title="Backbone.js Complete Guide">Backbone Guide</a>
+<a href="/what-is-a-router/" title="What is a Router">Router</a>
+<a href="/what-is-a-model/" title="What is a Model">Model</a>
+<a href="/what-is-a-view/" title="What is a View">View</a>
+<a href="/what-is-a-collection/" title="What is a Collection">Collection</a>
+</nav>
+
+<main>
+<article class="container">
+
+<nav class="breadcrumb" aria-label="Breadcrumb">
+<a href="/">Home</a> › <a href="/rendering/">Rendering</a> › <span aria-current="page">DOM Rendering Performance</span>
+</nav>
+
+<h1>DOM Rendering Performance</h1>
+
+<p class="author-line">Written by <a href="/author/backbone-tutorials-team/">Backbone Tutorials Team</a></p>
+<p class="author-line">Last updated: June 2026 · 10 min read</p>
+
+<p>
+The DOM is both the model of the page and the source of most rendering cost. Every node the browser holds in memory participates in style recalculation, layout, and paint. Write to it carelessly and you trigger those stages repeatedly within a single frame; read from it at the wrong moment and you force layout to run before the browser was ready. Knowing how the DOM interacts with the rendering pipeline, and how to structure operations to minimise the work it triggers, is the most direct path to a fast, smooth page.
+</p>
+
+<p>
+This guide builds directly on the <a href="/rendering/rendering-lifecycle/">rendering lifecycle</a> and connects to the <a href="/architecture/scalable-ui/">scalable UI</a> patterns for large lists.
+</p>
+
+<figure>
+<svg class="diagram" viewBox="0 0 720 140" role="img" aria-labelledby="domTitle domDesc" xmlns="http://www.w3.org/2000/svg">
+  <title id="domTitle">DOM update cost by approach</title>
+  <desc id="domDesc">Individual node appends cause one reflow each; DocumentFragment batches them into one; virtualization renders only visible rows regardless of list size.</desc>
+  <rect x="0" y="0" width="720" height="140" rx="12" fill="#0f172a"></rect>
+  <g font-family="Inter, sans-serif" text-anchor="middle">
+    <rect x="20"  y="20" width="200" height="50" rx="9" fill="#1e293b" stroke="#ef4444"></rect>
+    <text x="120" y="42" fill="#fca5a5" font-size="11" font-weight="700">N appends</text>
+    <text x="120" y="58" fill="#94a3b8" font-size="10">N reflows</text>
+    <rect x="260" y="20" width="200" height="50" rx="9" fill="#1e293b" stroke="#f59e0b"></rect>
+    <text x="360" y="42" fill="#fcd34d" font-size="11" font-weight="700">DocumentFragment</text>
+    <text x="360" y="58" fill="#94a3b8" font-size="10">1 reflow</text>
+    <rect x="500" y="20" width="200" height="50" rx="9" fill="#1e293b" stroke="#22c55e"></rect>
+    <text x="600" y="42" fill="#86efac" font-size="11" font-weight="700">Virtualization</text>
+    <text x="600" y="58" fill="#94a3b8" font-size="10">~20 rows regardless of N</text>
+    <rect x="20"  y="88" width="200" height="28" rx="6" fill="#1e293b" stroke="#334155"></rect>
+    <text x="120" y="106" fill="#64748b" font-size="10">Scales with list size</text>
+    <rect x="260" y="88" width="200" height="28" rx="6" fill="#1e293b" stroke="#334155"></rect>
+    <text x="360" y="106" fill="#64748b" font-size="10">Scales with list size</text>
+    <rect x="500" y="88" width="200" height="28" rx="6" fill="#1e293b" stroke="#22c55e"></rect>
+    <text x="600" y="106" fill="#86efac" font-size="10">Constant cost</text>
+  </g>
+</svg>
+<figcaption>Individual appends cause one reflow per node. DocumentFragment batches them into one. Virtualization keeps cost constant regardless of list length.</figcaption>
+</figure>
+
+<div class="card">
+<p style="margin-top:0"><strong>What you'll learn</strong></p>
+<ul class="toc-list">
+<li><a href="#size">Why DOM size matters</a></li>
+<li><a href="#batching">Batching with DocumentFragment</a></li>
+<li><a href="#readwrite">Read/write ordering</a></li>
+<li><a href="#styles">Style and class manipulation</a></li>
+<li><a href="#virtualization">List virtualization</a></li>
+<li><a href="#measure">Measuring DOM cost</a></li>
+</ul>
+</div>
+
+<h2 id="size">Why DOM size matters</h2>
+
+<p>
+The DOM is not free storage. Every node the browser keeps alive participates in rendering work whether or not it is visible.
+</p>
+
+<h3>Nodes as cost units</h3>
+
+<p>
+Style recalculation, layout, and paint all scale with the number of nodes they must consider. A DOM with 5 000 nodes runs style recalculation noticeably slower than one with 500, because the browser has to match CSS selectors against every element. Memory consumption rises too, and JavaScript that queries nodes with <code>querySelectorAll</code> or traverses the tree pays proportional to depth. Google's Lighthouse flags total DOM node counts above 1 500 as a warning, above 800 as a recommendation to reduce. The practical guideline is to only keep nodes in the DOM that are currently needed; everything else should either be generated on demand or virtualized.
+</p>
+
+<h2 id="batching">Batching with DocumentFragment</h2>
+
+<p>
+When you need to insert multiple nodes, how you do it determines whether layout runs once or once per node.
+</p>
+
+<h3>Off-screen assembly before insertion</h3>
+
+<pre><code>// Bad: one reflow per append
+items.forEach(function (item) {
+  var li = document.createElement('li');
+  li.textContent = item.name;
+  list.appendChild(li);           // triggers reflow each time
+});
+
+// Good: one reflow total
+var frag = document.createDocumentFragment();
+items.forEach(function (item) {
+  var li = document.createElement('li');
+  li.textContent = item.name;
+  frag.appendChild(li);           // no reflow, off-screen
+});
+list.appendChild(frag);           // one reflow on insertion</code></pre>
+
+<p>
+A <code>DocumentFragment</code> is an off-screen container that lives outside the live DOM. Appending nodes to it costs nothing in layout terms because nothing visible changed. A single <code>appendChild</code> of the completed fragment inserts all nodes in one operation and causes one reflow. For a list of a hundred items, this is the difference between a hundred layout passes and one. Backbone collection views that render items one at a time into the live container make exactly this mistake; building the fragment first and appending once fixes it.
+</p>
+
+<h2 id="readwrite">Read/write ordering</h2>
+
+<p>
+The sequence of DOM reads and writes within a single frame determines whether the browser can batch layout or is forced to run it repeatedly, a pattern explored in the <a href="/rendering/rendering-lifecycle/">rendering lifecycle</a> guide.
+</p>
+
+<h3>Batch reads, then batch writes</h3>
+
+<pre><code>// Forced layout on every iteration (bad)
+rows.forEach(function (row) {
+  var h = row.offsetHeight;       // read: forces layout
+  row.style.height = h * 2 + 'px'; // write: invalidates layout
+});
+
+// One layout pass (good)
+var heights = rows.map(function (row) {
+  return row.offsetHeight;        // all reads first
+});
+rows.forEach(function (row, i) {
+  row.style.height = heights[i] * 2 + 'px'; // all writes after
+});</code></pre>
+
+<p>
+Reading a geometry property like <code>offsetHeight</code> after writing styles forces the browser to flush pending layout immediately to return an accurate value. Interleaving reads and writes in a loop causes one forced layout per iteration. Separating them into a read phase followed by a write phase lets the browser batch the layout to the end of the frame.
+</p>
+
+<h2 id="styles">Style and class manipulation</h2>
+
+<p>
+How you apply visual changes affects both correctness and the number of style recalculations triggered.
+</p>
+
+<h3>classList and CSS custom properties</h3>
+
+<pre><code>// Prefer classList over direct style for toggleable states
+el.classList.add('is-active');
+el.classList.remove('is-loading');
+el.classList.toggle('is-open');
+
+// For dynamic values, CSS custom properties avoid inline style churn
+el.style.setProperty('--progress', progress + '%');</code></pre>
+
+<p>
+Setting individual <code>style</code> properties inline can trigger style recalculation for each assignment if the browser flushes between them. Toggling a class with <code>classList</code> makes one change that the browser processes in the next style pass. For values that change frequently, like an animation progress percentage, setting a CSS custom property and letting the stylesheet consume it keeps the JavaScript side simple and the CSS side expressive. Avoid reading computed styles in a loop; cache the value instead.
+</p>
+
+<h2 id="virtualization">List virtualization</h2>
+
+<p>
+No batching strategy helps when the list itself has thousands of rows. For those cases the answer is to stop rendering the invisible ones entirely.
+</p>
+
+<h3>Windowing: render only the viewport</h3>
+
+<pre><code>// Simplified virtual list: only render visible rows
+var ROW_HEIGHT = 40;
+var VISIBLE    = Math.ceil(container.clientHeight / ROW_HEIGHT) + 2;
+
+function renderWindow(scrollTop) {
+  var start = Math.floor(scrollTop / ROW_HEIGHT);
+  container.style.paddingTop = start * ROW_HEIGHT + 'px';
+  container.style.paddingBottom =
+    (items.length - start - VISIBLE) * ROW_HEIGHT + 'px';
+  var frag = document.createDocumentFragment();
+  items.slice(start, start + VISIBLE).forEach(function (item) {
+    var row = document.createElement('div');
+    row.textContent = item.name;
+    frag.appendChild(row);
+  });
+  container.innerHTML = '';
+  container.appendChild(frag);
+}</code></pre>
+
+<p>
+Virtualization renders only the rows that fit in the viewport plus a small buffer. The scrollable height is preserved with padding, so the scrollbar looks correct. Rows outside the window simply do not exist in the DOM, so style, layout, and paint costs stay constant regardless of list length. A list of ten thousand items renders as fast as a list of twenty. Libraries like TanStack Virtual handle the edge cases, but the principle is the same as the code above.
+</p>
+
+<h2 id="measure">Measuring DOM cost</h2>
+
+<p>
+DOM performance problems are invisible until you measure them. The browser provides the tools to see exactly where the cost is.
+</p>
+
+<h3>DevTools Performance and Memory panels</h3>
+
+<p>
+The Chrome DevTools Performance panel shows style recalculation, layout, and paint as coloured blocks in the flame chart. Long purple blocks indicate expensive style or layout work; if they repeat within a frame, layout thrashing is likely. The Memory panel's heap snapshot shows DOM node counts and detached trees, nodes that are no longer in the document but are still referenced by JavaScript and therefore not garbage collected. Detached trees are a frequent source of memory leaks in long-running Backbone apps where views are removed from the DOM but their event listeners keep a reference alive. Calling <code>stopListening</code> and <code>remove</code> on a Backbone view releases both.
+</p>
+
+<section id="faq">
+<h2>Frequently Asked Questions</h2>
+
+<h3>Why does a large DOM hurt performance?</h3>
+<p>A large DOM increases the cost of every layout, style recalculation, and paint pass because the browser must process more nodes. It also uses more memory and slows JavaScript that queries or modifies nodes. Google recommends keeping the total DOM node count below 1500.</p>
+
+<h3>What is DocumentFragment and why use it?</h3>
+<p><code>DocumentFragment</code> is an off-screen container for building groups of DOM nodes before inserting them. Because it lives outside the live DOM, adding nodes to it does not trigger reflow. A single <code>appendChild</code> of the completed fragment causes one reflow instead of one per node.</p>
+
+<h3>What is list virtualization?</h3>
+<p>List virtualization, also called windowing, renders only the rows visible in the viewport plus a small buffer, regardless of how many total items exist. As the user scrolls, rows are recycled rather than created and destroyed. A list of 10 000 items renders as fast as a list of 20 rows.</p>
+
+<h3>Is className or classList faster for toggling styles?</h3>
+<p><code>classList</code> methods like <code>add</code>, <code>remove</code>, and <code>toggle</code> are generally preferred because they modify individual classes without replacing the full <code>className</code> string, reducing the risk of accidental overwrites. For toggling a single class repeatedly, both are fast enough that the difference is negligible; the ergonomics and safety of <code>classList</code> make it the better default.</p>
+</section>
+
+<p><strong>Read next:</strong> the <a href="/rendering/">Rendering</a> hub, or revisit the <a href="/rendering/rendering-lifecycle/">rendering lifecycle</a> for the frame-level mechanics these patterns sit inside.</p>
+
+<div class="cta">
+<p><strong>See DOM performance patterns in a real Backbone app.</strong></p>
+<p>The Backbone guide shows views and collections built with efficient DOM update discipline.</p>
+<a href="/backbonejs/" class="btn">Explore the Backbone Guide →</a>
+</div>
+
+<div class="back-home">
+<a href="/rendering/">← Back to Rendering</a>
+</div>
+
+</article>
+</main>
+
+<footer>
+<p>Backbone Tutorials</p>
+<nav class="bt-social" aria-label="Backbone Tutorials on social media">
+  <a style="--c:#181717" href="https://github.com/backbonetutorials/backbonetutorials" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on GitHub"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#fff" d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0 1 12 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222 0 1.606-.014 2.898-.014 3.293 0 .322.216.694.825.576C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg></a>
+  <a style="--c:#000000" href="https://x.com/backbonetutor" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on X (formerly Twitter)"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#fff" d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+  <a style="--c:#FF0000" href="https://www.youtube.com/@BACKBONETUTORIALS" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on YouTube"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#fff" d="M8.5 6.5 L8.5 17.5 L17.5 12 Z"/></svg></a>
+  <a style="--c:#0285FF" href="https://bsky.app/profile/backbonetutorials.bsky.social" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on Bluesky"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#fff" d="M12 10.8c-1.087-2.114-4.046-6.053-6.798-7.995C2.566.944 1.561 1.266.902 1.565.139 1.908 0 3.08 0 3.768c0 .69.378 5.65.624 6.479.815 2.736 3.713 3.66 6.383 3.364.136-.02.275-.039.415-.056-.138.022-.276.04-.415.056-3.912.58-7.387 2.005-2.83 7.078 5.013 5.19 6.87-1.113 7.823-4.308.953 3.195 2.05 9.271 7.733 4.308 4.267-4.308 1.172-6.498-2.74-7.078a8.741 8.741 0 0 1-.415-.056c.14.017.279.036.415.056 2.67.296 5.568-.628 6.383-3.364C23.622 9.418 24 4.458 24 3.768c0-.688-.139-1.86-.902-2.203-.659-.299-1.664-.621-4.3 1.24C16.046 4.747 13.087 8.686 12 10.8Z"/></svg></a>
+  <a style="--c:#d62976;background-image:linear-gradient(150deg,rgba(255,255,255,.30),rgba(255,255,255,0) 42%,rgba(0,0,0,.22)),linear-gradient(45deg,#feda75,#fa7e1e,#d62976,#962fbf,#4f5bd5)" href="https://www.instagram.com/backbonetutorials/" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on Instagram"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="4" y="4" width="16" height="16" rx="5" fill="none" stroke="#fff" stroke-width="2"/><circle cx="12" cy="12" r="3.6" fill="none" stroke="#fff" stroke-width="2"/><circle cx="17.2" cy="6.8" r="1.25" fill="#fff"/></svg></a>
+  <a style="--c:#000000" href="https://www.tiktok.com/@backbonetutorials" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on TikTok"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#fff" d="M16.5 5.82a4.79 4.79 0 0 1-1.16-3.07h-2.9v11.43a2.45 2.45 0 1 1-2.45-2.45c.17 0 .33.02.49.05V8.83a5.36 5.36 0 0 0-.49-.02 5.35 5.35 0 1 0 5.35 5.35V8.6a7.66 7.66 0 0 0 4.46 1.42V7.13a4.79 4.79 0 0 1-2.8-1.31Z"/></svg></a>
+  <a style="--c:#1877F2" href="https://www.facebook.com/BackboneTutorials" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on Facebook"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#fff" d="M13.5 21v-8h2.6l.4-3h-3V8.1c0-.87.27-1.46 1.5-1.46H17V3.96c-.28-.04-1.2-.12-2.28-.12-2.26 0-3.8 1.38-3.8 3.9V10H8.3v3h2.62v8h2.58Z"/></svg></a>
+</nav>
+<p>
+<a href="/">Home</a> |
+<a href="/about/">About</a> |
+<a href="/contact/">Contact</a> |
+<a href="/privacy-policy/">Privacy Policy</a> |
+<a href="/terms/">Terms</a>
+</p>
+<p>© 2026 Backbone Tutorials</p>
+</footer>
+
+</body>
+</html>

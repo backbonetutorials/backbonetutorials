@@ -1,0 +1,515 @@
+<!-- DEPLOY TO: /interactive-web/presence-and-awareness-systems/  (index.html) · TechArticle · per MASTERMIND_SEO.md -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Presence and Awareness Systems — who is here</title>
+
+<meta name="description" content="Presence and awareness: online indicators, typing signals, live cursors, heartbeat expiry, and a shared awareness layer over WebSocket.">
+
+<meta name="robots" content="index, follow">
+<meta name="author" content="Backbone Tutorials">
+<meta name="theme-color" content="#2563eb">
+<meta name="format-detection" content="telephone=no">
+
+<link rel="canonical" href="https://backbonetutorials.com/interactive-web/presence-and-awareness-systems/">
+
+<link rel="icon" href="/assets/favicon.ico">
+<link rel="apple-touch-icon" href="/assets/favicon.png">
+
+<meta property="og:title" content="Presence and Awareness Systems — who is here and what are they doing">
+<meta property="og:description" content="How to build presence and awareness: online indicators, typing signals, live cursors, heartbeat-based expiry, and a shared awareness layer over WebSocket.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://backbonetutorials.com/interactive-web/presence-and-awareness-systems/">
+<meta property="og:image" content="https://backbonetutorials.com/assets/interactive-web/presence-and-awareness-systems-1200.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:type" content="image/jpeg">
+<meta property="og:image:alt" content="Presence and Awareness Systems — Backbone Tutorials">
+<meta property="og:site_name" content="Backbone Tutorials">
+<meta property="og:locale" content="en_US">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Presence and Awareness Systems — who is here and what are they doing">
+<meta name="twitter:description" content="Presence and awareness: online indicators, typing signals, live cursors, heartbeat expiry, and a shared awareness layer over WebSocket.">
+<meta name="twitter:image" content="https://backbonetutorials.com/assets/interactive-web/presence-and-awareness-systems-1200.jpg">
+<meta name="twitter:image:alt" content="Presence and Awareness Systems — Backbone Tutorials">
+<meta name="twitter:url" content="https://backbonetutorials.com/interactive-web/presence-and-awareness-systems/">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+
+<style>
+html{scroll-behavior:smooth}
+body{font-family:'Inter',sans-serif;margin:0;background:#f4f6f9;color:#1f2937;line-height:1.7}
+.container{max-width:900px;margin:30px auto;padding:20px;background:#fff;border-radius:10px;box-shadow:0 2px 10px rgba(0,0,0,0.04)}
+h1,h2,h3{color:#111827}
+.nav{background:#111827;padding:15px;display:flex;justify-content:center;align-items:center;flex-wrap:wrap;gap:8px}
+.nav a{color:white;margin:0 10px;text-decoration:none;font-weight:600}
+.nav a:hover{text-decoration:underline}
+.nav-logo img{vertical-align:middle;margin-right:12px;border-radius:8px}
+figure{margin:30px 0}
+pre{background:#111;color:#eee;padding:15px;border-radius:8px;overflow-x:auto;box-shadow:0 2px 8px rgba(0,0,0,0.15)}
+code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+p code,li code{background:#eef2ff;padding:1px 5px;border-radius:4px;font-size:.95em}
+.cta{background:#eef2ff;padding:20px;margin-top:30px;text-align:center;border-radius:10px}
+a{color:#2563eb}
+.back-home{margin-top:25px}
+footer{background:#111827;color:white;text-align:center;padding:30px 20px;margin-top:40px}
+footer a{color:#93c5fd;text-decoration:none}
+footer a:hover{text-decoration:underline}
+.btn{display:inline-block;background:#2563eb;color:white;padding:12px 22px;border-radius:8px;text-decoration:none;font-weight:600;margin-top:15px;transition:0.2s ease}
+.btn:hover{background:#1d4ed8;transform:translateY(-1px)}
+.card{background:#fff;padding:20px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.05);overflow:hidden;max-width:100%;border:1px solid #eef2f7}
+.toc-list{padding-left:20px}
+.toc-list li{margin-bottom:8px}
+.author-line{font-size:15px;margin-top:-6px;margin-bottom:10px;color:#4b5563}
+figcaption{font-size:14px;color:#6b7280;margin-top:10px}
+#faq h3{margin-top:25px}
+#faq p{margin-bottom:18px}
+.breadcrumb{font-size:14px;color:#6b7280;margin:0 0 10px}
+.breadcrumb a{color:#2563eb;text-decoration:none}
+.breadcrumb a:hover{text-decoration:underline}
+.diagram{width:100%;height:auto;display:block;border-radius:10px}
+.bt-social{display:flex;gap:13px;flex-wrap:wrap;align-items:center;justify-content:center;margin:0 0 14px;padding:0;list-style:none}
+.bt-social a{position:relative;isolation:isolate;width:46px;height:46px;border-radius:14px;display:inline-flex;align-items:center;justify-content:center;text-decoration:none;-webkit-tap-highlight-color:transparent;background-color:var(--c,#333);background-image:linear-gradient(150deg,rgba(255,255,255,.30),rgba(255,255,255,0) 42%,rgba(0,0,0,.22));box-shadow:0 1px 1px rgba(0,0,0,.22),0 7px 14px -3px rgba(0,0,0,.34),inset 0 1px 0 rgba(255,255,255,.50),inset 0 -2px 5px rgba(0,0,0,.30);transition:transform .18s cubic-bezier(.2,.7,.2,1),box-shadow .18s ease}
+.bt-social a::before{content:"";position:absolute;left:3px;right:3px;top:2px;height:44%;border-radius:12px 12px 50% 50%/12px 12px 24px 24px;background:linear-gradient(180deg,rgba(255,255,255,.42),rgba(255,255,255,0));pointer-events:none;z-index:0}
+.bt-social a:hover{transform:translateY(-3px) scale(1.05);box-shadow:0 2px 2px rgba(0,0,0,.20),0 16px 26px -6px rgba(0,0,0,.40),inset 0 1px 0 rgba(255,255,255,.55),inset 0 -2px 6px rgba(0,0,0,.32)}
+.bt-social a:active{transform:translateY(-1px) scale(1.01)}
+.bt-social a:focus-visible{outline:3px solid #93c5fd;outline-offset:3px}
+.bt-social svg{position:relative;z-index:1;width:22px;height:22px;display:block;filter:drop-shadow(0 1px 1px rgba(0,0,0,.28))}
+@media (prefers-reduced-motion:reduce){.bt-social a{transition:none}.bt-social a:hover{transform:none}}
+@media(max-width:600px){.container{padding:15px}}
+</style>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": "https://backbonetutorials.com/#organization",
+      "name": "Backbone Tutorials",
+      "url": "https://backbonetutorials.com/",
+      "logo": { "@type": "ImageObject", "url": "https://backbonetutorials.com/assets/logo.png" },
+      "sameAs": [
+        "https://github.com/backbonetutorials/backbonetutorials",
+        "https://x.com/backbonetutor",
+        "https://www.youtube.com/@BACKBONETUTORIALS",
+        "https://bsky.app/profile/backbonetutorials.bsky.social",
+        "https://www.instagram.com/backbonetutorials/",
+        "https://www.tiktok.com/@backbonetutorials",
+        "https://www.facebook.com/BackboneTutorials"
+      ],
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "contactType": "customer support",
+        "email": "backbonetutorials2026@gmail.com",
+        "availableLanguage": ["English"],
+        "areaServed": "Worldwide"
+      }
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://backbonetutorials.com/#website",
+      "url": "https://backbonetutorials.com/",
+      "name": "Backbone Tutorials",
+      "publisher": { "@id": "https://backbonetutorials.com/#organization" }
+    },
+    {
+      "@type": "Person",
+      "@id": "https://backbonetutorials.com/author/backbone-tutorials-team/#person",
+      "name": "Backbone Tutorials Team",
+      "url": "https://backbonetutorials.com/author/backbone-tutorials-team/",
+      "worksFor": { "@id": "https://backbonetutorials.com/#organization" },
+      "jobTitle": "Frontend JavaScript Editorial Team",
+      "knowsAbout": ["Presence systems", "Realtime engineering", "Collaborative apps", "Backbone.js"]
+    },
+    {
+      "@type": "WebPage",
+      "@id": "https://backbonetutorials.com/interactive-web/presence-and-awareness-systems/#webpage",
+      "url": "https://backbonetutorials.com/interactive-web/presence-and-awareness-systems/",
+      "name": "Presence and Awareness Systems — who is here and what are they doing",
+      "headline": "Presence and Awareness Systems",
+      "description": "Presence and awareness systems: online indicators, typing signals, live cursors, heartbeat-based expiry, and building a shared awareness layer over WebSocket.",
+      "inLanguage": "en",
+      "isPartOf": { "@id": "https://backbonetutorials.com/#website" },
+      "author": { "@id": "https://backbonetutorials.com/author/backbone-tutorials-team/#person" },
+      "publisher": { "@id": "https://backbonetutorials.com/#organization" },
+      "breadcrumb": { "@id": "https://backbonetutorials.com/interactive-web/presence-and-awareness-systems/#breadcrumb" },
+      "mainEntity": { "@id": "https://backbonetutorials.com/interactive-web/presence-and-awareness-systems/#article" }
+    },
+    {
+      "@type": "TechArticle",
+      "@id": "https://backbonetutorials.com/interactive-web/presence-and-awareness-systems/#article",
+      "url": "https://backbonetutorials.com/interactive-web/presence-and-awareness-systems/",
+      "headline": "Presence and Awareness Systems",
+      "description": "An engineering guide to presence and awareness: online and idle indicators, typing-in-progress signals with debounced stop detection, live cursor broadcasting, heartbeat-based user expiry, awareness maps, and building a shared awareness layer over a WebSocket transport.",
+      "inLanguage": "en",
+      "image": {
+        "@type": "ImageObject",
+        "url": "https://backbonetutorials.com/assets/interactive-web/presence-and-awareness-systems-1200.jpg",
+        "width": 1200,
+        "height": 630
+      },
+      "author": { "@id": "https://backbonetutorials.com/author/backbone-tutorials-team/#person" },
+      "publisher": { "@id": "https://backbonetutorials.com/#organization" },
+      "mainEntityOfPage": { "@id": "https://backbonetutorials.com/interactive-web/presence-and-awareness-systems/#webpage" },
+      "datePublished": "2026-06-12T04:30:00+07:00",
+      "dateModified": "2026-06-12T04:30:00+07:00",
+      "articleSection": ["Realtime Engineering", "Presence", "Collaborative Apps"],
+      "keywords": ["presence", "awareness", "typing indicator", "live cursor", "online status", "heartbeat expiry"],
+      "about": [
+        { "@type": "Thing", "name": "Presence system" },
+        { "@type": "Thing", "name": "Realtime collaboration" },
+        { "@type": "Thing", "name": "Frontend engineering" }
+      ],
+      "mentions": [
+        { "@type": "Thing", "name": "Typing indicator" },
+        { "@type": "Thing", "name": "Cursor sharing" },
+        { "@type": "Thing", "name": "Awareness map" }
+      ]
+    },
+    {
+      "@type": "BreadcrumbList",
+      "@id": "https://backbonetutorials.com/interactive-web/presence-and-awareness-systems/#breadcrumb",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Home",            "item": "https://backbonetutorials.com/" },
+        { "@type": "ListItem", "position": 2, "name": "Interactive Web", "item": "https://backbonetutorials.com/interactive-web/" },
+        { "@type": "ListItem", "position": 3, "name": "Presence and Awareness Systems", "item": "https://backbonetutorials.com/interactive-web/presence-and-awareness-systems/" }
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "@id": "https://backbonetutorials.com/interactive-web/presence-and-awareness-systems/#faq",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What is a presence system?",
+          "acceptedAnswer": { "@type": "Answer", "text": "A presence system tracks which users are currently connected and active and broadcasts that information to other participants. It powers features like online indicators, typing signals, and live cursors in collaborative tools." }
+        },
+        {
+          "@type": "Question",
+          "name": "How do you detect when a user goes offline?",
+          "acceptedAnswer": { "@type": "Answer", "text": "The server tracks a last-seen timestamp for each connection, updated on heartbeat pings. A background process expires users whose last-seen is older than a threshold, typically two to three times the heartbeat interval, and broadcasts the departure to the room." }
+        },
+        {
+          "@type": "Question",
+          "name": "Why debounce typing indicators?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Sending a typing event on every keystroke would flood the server with messages. Debouncing sends a typing-start once when the user begins and a typing-stop after a short pause with no input, typically two to three seconds. This keeps the signal accurate while reducing traffic by orders of magnitude." }
+        },
+        {
+          "@type": "Question",
+          "name": "What is an awareness map?",
+          "acceptedAnswer": { "@type": "Answer", "text": "An awareness map is a client-side data structure that holds the last-known state of every participant in the session: their name, color, cursor position, and any other ephemeral metadata. It is keyed by user or connection ID and updated as awareness events arrive." }
+        }
+      ]
+    }
+  ]
+}
+</script>
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-FYJP43XDHH"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-FYJP43XDHH');
+</script>
+
+</head>
+<body>
+
+<nav class="nav" aria-label="Main Navigation">
+<a href="/" class="nav-logo" title="Backbone Tutorials Homepage"><img src="/assets/logo.png" alt="Backbone Tutorials Logo" width="36" height="36" loading="lazy" decoding="async"></a>
+<a href="/" title="Backbone.js Tutorials Homepage">Home</a>
+<a href="/backbonejs/" title="Backbone.js Complete Guide">Backbone Guide</a>
+<a href="/what-is-a-router/" title="What is a Router">Router</a>
+<a href="/what-is-a-model/" title="What is a Model">Model</a>
+<a href="/what-is-a-view/" title="What is a View">View</a>
+<a href="/what-is-a-collection/" title="What is a Collection">Collection</a>
+</nav>
+
+<main>
+<article class="container">
+
+<nav class="breadcrumb" aria-label="Breadcrumb">
+<a href="/">Home</a> › <a href="/interactive-web/">Interactive Web</a> › <span aria-current="page">Presence and Awareness Systems</span>
+</nav>
+
+<h1>Presence and Awareness Systems</h1>
+
+<p class="author-line">Written by <a href="/author/backbone-tutorials-team/">Backbone Tutorials Team</a></p>
+<p class="author-line">Last updated: June 2026 · 10 min read</p>
+
+<p>
+Open a Google Doc with a colleague and you see their avatar in the toolbar, their cursor moving across paragraphs, and a bubble that says they are typing. None of that is document content; it is ephemeral metadata about what a person is doing right now. That layer of awareness, knowing who is present and what they are focused on, is what makes a collaborative tool feel alive rather than like two people editing the same file in turns. Building it is a distinct engineering concern from syncing the document itself.
+</p>
+
+<p>
+This guide follows <a href="/interactive-web/realtime-data-synchronization/">realtime data synchronization</a> and covers the ephemeral awareness layer that collaborative apps add on top of durable state sync.
+</p>
+
+<figure>
+<svg class="diagram" viewBox="0 0 720 150" role="img" aria-labelledby="presTitle presDesc" xmlns="http://www.w3.org/2000/svg">
+  <title id="presTitle">Presence awareness map</title>
+  <desc id="presDesc">Three users in a room; each has a color, cursor position, and status tracked in a shared awareness map on every client.</desc>
+  <rect x="0" y="0" width="720" height="150" rx="12" fill="#0f172a"></rect>
+  <g font-family="Inter, sans-serif" text-anchor="middle">
+    <rect x="20"  y="20" width="200" height="110" rx="10" fill="#1e293b" stroke="#3b82f6"></rect>
+    <text x="120" y="42" fill="#93c5fd" font-size="11" font-weight="700">Alice</text>
+    <text x="120" y="58" fill="#94a3b8" font-size="9">color: #3b82f6</text>
+    <text x="120" y="73" fill="#94a3b8" font-size="9">cursor: {x:420, y:210}</text>
+    <text x="120" y="88" fill="#94a3b8" font-size="9">status: typing</text>
+    <text x="120" y="103" fill="#94a3b8" font-size="9">lastSeen: 1s ago</text>
+    <rect x="260" y="20" width="200" height="110" rx="10" fill="#1e293b" stroke="#22c55e"></rect>
+    <text x="360" y="42" fill="#86efac" font-size="11" font-weight="700">Bob</text>
+    <text x="360" y="58" fill="#94a3b8" font-size="9">color: #22c55e</text>
+    <text x="360" y="73" fill="#94a3b8" font-size="9">cursor: {x:180, y:340}</text>
+    <text x="360" y="88" fill="#94a3b8" font-size="9">status: idle</text>
+    <text x="360" y="103" fill="#94a3b8" font-size="9">lastSeen: 8s ago</text>
+    <rect x="500" y="20" width="200" height="110" rx="10" fill="#1e293b" stroke="#a855f7"></rect>
+    <text x="600" y="42" fill="#d8b4fe" font-size="11" font-weight="700">Carol</text>
+    <text x="600" y="58" fill="#94a3b8" font-size="9">color: #a855f7</text>
+    <text x="600" y="73" fill="#94a3b8" font-size="9">cursor: null</text>
+    <text x="600" y="88" fill="#94a3b8" font-size="9">status: viewing</text>
+    <text x="600" y="103" fill="#94a3b8" font-size="9">lastSeen: 3s ago</text>
+  </g>
+</svg>
+<figcaption>An awareness map holds each participant's color, cursor position, status, and last-seen timestamp  -  updated in real time on every client.</figcaption>
+</figure>
+
+<div class="card">
+<p style="margin-top:0"><strong>What you'll learn</strong></p>
+<ul class="toc-list">
+<li><a href="#model">The awareness data model</a></li>
+<li><a href="#online">Online and idle detection</a></li>
+<li><a href="#typing">Typing indicators</a></li>
+<li><a href="#cursors">Live cursor broadcasting</a></li>
+<li><a href="#expiry">Heartbeat-based expiry</a></li>
+<li><a href="#layer">Building the awareness layer</a></li>
+</ul>
+</div>
+
+<h2 id="model">The awareness data model</h2>
+
+<p>
+Presence is ephemeral: it has no canonical history and does not need to survive a server restart. That shapes how it is modelled and stored.
+</p>
+
+<h3>An awareness map keyed by connection</h3>
+
+<pre><code>// Awareness map: { connectionId -> AwarenessState }
+var awareness = new Map();
+
+function updateAwareness(connectionId, patch) {
+  var current = awareness.get(connectionId) || {};
+  awareness.set(connectionId, Object.assign({}, current, patch, {
+    lastSeen: Date.now()
+  }));
+  broadcastAwareness(connectionId);
+}
+
+// Typical awareness state shape
+var exampleState = {
+  userId:    'user-42',
+  name:      'Alice',
+  color:     '#3b82f6',
+  status:    'typing',         // 'typing' | 'idle' | 'viewing'
+  cursor:    { x: 420, y: 210 },
+  lastSeen:  Date.now()
+};</code></pre>
+
+<p>
+Keying by connection rather than user ID is intentional: the same user might have two tabs open, and each tab is an independent presence. The awareness map lives in memory on the server, not in a database, because it is fine to lose on restart. Clients rebuild it from the join broadcasts that fire when everyone reconnects after a server restart.
+</p>
+
+<h2 id="online">Online and idle detection</h2>
+
+<p>
+Knowing someone is connected is easy; knowing they are actually paying attention is harder but more useful.
+</p>
+
+<h3>Page visibility and activity events</h3>
+
+<pre><code>// Track whether the tab is visible and the user is active
+document.addEventListener('visibilitychange', function () {
+  sendAwareness({
+    status: document.hidden ? 'away' : 'viewing'
+  });
+});
+
+var idleTimer;
+function resetIdle() {
+  clearTimeout(idleTimer);
+  sendAwareness({ status: 'active' });
+  idleTimer = setTimeout(function () {
+    sendAwareness({ status: 'idle' });
+  }, 60000);
+}
+document.addEventListener('mousemove', resetIdle);
+document.addEventListener('keydown',   resetIdle);</code></pre>
+
+<p>
+The Page Visibility API fires when the user switches tabs or minimises the window, giving an instant away signal without polling. Mouse and keyboard events reset an idle timer; when the timer fires with no activity the status becomes idle. These two signals together give a good three-state model: active, idle, and away, which is what most presence indicators need. Throttle the activity events, the reset function above already does by clearing and resetting rather than sending on every movement.
+</p>
+
+<h2 id="typing">Typing indicators</h2>
+
+<p>
+A typing indicator is the simplest form of awareness, and the most commonly over-engineered one. The mistake is emitting an event on every keystroke.
+</p>
+
+<h3>Debounced start and stop</h3>
+
+<pre><code>var typingTimer = null;
+var isTyping = false;
+
+function onInput() {
+  if (!isTyping) {
+    isTyping = true;
+    sendAwareness({ status: 'typing' });
+  }
+  clearTimeout(typingTimer);
+  typingTimer = setTimeout(function () {
+    isTyping = false;
+    sendAwareness({ status: 'viewing' });
+  }, 2500);
+}
+
+document.querySelector('#editor').addEventListener('input', onInput);</code></pre>
+
+<p>
+The pattern is: send <em>typing</em> once when the user starts and send <em>stopped typing</em> once after a pause, typically two to three seconds of no input. This reduces hundreds of messages per minute to two per typing burst. The timer threshold matters: too short and stop fires before the user finishes a sentence; too long and others see the indicator hanging after the person has moved on. Two to three seconds is the standard range.
+</p>
+
+<h2 id="cursors">Live cursor broadcasting</h2>
+
+<p>
+Live cursors are the most visually immediate form of awareness and the easiest to over-send. Throttling is not optional.
+</p>
+
+<h3>Throttled pointer events with coordinate normalisation</h3>
+
+<pre><code>var lastCursor = null;
+var CURSOR_INTERVAL = 50; // ms, ~20 fps
+
+var sendCursor = throttle(function (x, y) {
+  // Normalise to 0-1 so coordinates survive window resize
+  var nx = x / window.innerWidth;
+  var ny = y / window.innerHeight;
+  sendAwareness({ cursor: { x: nx, y: ny } });
+}, CURSOR_INTERVAL);
+
+document.addEventListener('pointermove', function (e) {
+  sendCursor(e.clientX, e.clientY);
+});
+
+function throttle(fn, ms) {
+  var last = 0;
+  return function () {
+    var now = Date.now();
+    if (now - last >= ms) { last = now; fn.apply(this, arguments); }
+  };
+}</code></pre>
+
+<p>
+Sending a cursor event on every pointer move fires dozens of times per second per user. Throttling to fifty milliseconds, about twenty frames per second, gives smooth-looking cursors while cutting traffic by a factor of ten or more. Normalising coordinates to the zero-to-one range before sending makes them viewport-independent, so a cursor positioned at the left edge of Alice's wide monitor maps to the same relative position in Bob's narrow window. Receivers multiply back by their own viewport dimensions.
+</p>
+
+<h2 id="expiry">Heartbeat-based expiry</h2>
+
+<p>
+Connections close without a clean close frame more often than you expect: laptops sleep, mobile devices switch networks, browser tabs crash. The server must clean up presence records for these ghost connections.
+</p>
+
+<h3>Server-side expiry loop</h3>
+
+<pre><code>// Server: expire connections that have not pinged recently
+var EXPIRY_MS = 45000; // 3x the 15s heartbeat interval
+
+setInterval(function () {
+  var now = Date.now();
+  awareness.forEach(function (state, connId) {
+    if (now - state.lastSeen > EXPIRY_MS) {
+      awareness.delete(connId);
+      broadcast({ type: 'leave', connectionId: connId });
+    }
+  });
+}, 15000);</code></pre>
+
+<p>
+Each heartbeat from the client updates <code>lastSeen</code>. A periodic expiry loop removes any connection whose last ping is older than three heartbeat intervals, then broadcasts a leave event so all other clients remove that user from their awareness map. Three intervals gives a reasonable grace period for a slow network without leaving ghost cursors for too long. The same loop that handles the <a href="/interactive-web/websocket-fundamentals/">WebSocket heartbeat</a> can feed this timestamp.
+</p>
+
+<h2 id="layer">Building the awareness layer</h2>
+
+<p>
+These individual signals compose into a coherent awareness layer that sits alongside the document sync system without coupling to it.
+</p>
+
+<h3>A self-contained awareness channel</h3>
+
+<p>
+The awareness layer works best as an independent message namespace on the same WebSocket connection. Messages tagged <code>type: "awareness"</code> carry ephemeral state updates and never enter the durable event log that the sync system manages. On join, the server sends a full snapshot of the current awareness map so the newcomer sees all participants immediately. After that, incremental patches flow on each change. On the client, a Backbone collection keyed by connection ID models the participant list naturally: each participant is a model with attributes for name, color, cursor, and status, and views respond to model changes to update avatars and cursor overlays without any extra glue code. The collection triggers a <code>remove</code> event when the server broadcasts a leave message, and the cursor overlay for that user disappears.
+</p>
+
+<section id="faq">
+<h2>Frequently Asked Questions</h2>
+
+<h3>What is a presence system?</h3>
+<p>A presence system tracks which users are currently connected and active and broadcasts that information to other participants. It powers features like online indicators, typing signals, and live cursors in collaborative tools.</p>
+
+<h3>How do you detect when a user goes offline?</h3>
+<p>The server tracks a last-seen timestamp for each connection, updated on heartbeat pings. A background process expires users whose last-seen is older than a threshold, typically two to three times the heartbeat interval, and broadcasts the departure to the room.</p>
+
+<h3>Why debounce typing indicators?</h3>
+<p>Sending a typing event on every keystroke would flood the server with messages. Debouncing sends a typing-start once when the user begins and a typing-stop after a short pause with no input, typically two to three seconds. This keeps the signal accurate while reducing traffic by orders of magnitude.</p>
+
+<h3>What is an awareness map?</h3>
+<p>An awareness map is a client-side data structure that holds the last-known state of every participant in the session: their name, color, cursor position, and any other ephemeral metadata. It is keyed by user or connection ID and updated as awareness events arrive.</p>
+</section>
+
+<p><strong>Read next:</strong> the <a href="/interactive-web/">Interactive Web</a> hub, or continue to <a href="/interactive-web/realtime-data-synchronization/">realtime data synchronization</a> for the durable state layer this awareness system complements.</p>
+
+<div class="cta">
+<p><strong>Want a participant collection that updates from live presence events?</strong></p>
+<p>The Backbone guide shows exactly how collections model live data from a realtime source.</p>
+<a href="/backbonejs/" class="btn">Explore the Backbone Guide →</a>
+</div>
+
+<div class="back-home">
+<a href="/interactive-web/">← Back to Interactive Web</a>
+</div>
+
+</article>
+</main>
+
+<footer>
+<p>Backbone Tutorials</p>
+<nav class="bt-social" aria-label="Backbone Tutorials on social media">
+  <a style="--c:#181717" href="https://github.com/backbonetutorials/backbonetutorials" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on GitHub"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#fff" d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0 1 12 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222 0 1.606-.014 2.898-.014 3.293 0 .322.216.694.825.576C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg></a>
+  <a style="--c:#000000" href="https://x.com/backbonetutor" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on X (formerly Twitter)"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#fff" d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+  <a style="--c:#FF0000" href="https://www.youtube.com/@BACKBONETUTORIALS" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on YouTube"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#fff" d="M8.5 6.5 L8.5 17.5 L17.5 12 Z"/></svg></a>
+  <a style="--c:#0285FF" href="https://bsky.app/profile/backbonetutorials.bsky.social" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on Bluesky"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#fff" d="M12 10.8c-1.087-2.114-4.046-6.053-6.798-7.995C2.566.944 1.561 1.266.902 1.565.139 1.908 0 3.08 0 3.768c0 .69.378 5.65.624 6.479.815 2.736 3.713 3.66 6.383 3.364.136-.02.275-.039.415-.056-.138.022-.276.04-.415.056-3.912.58-7.387 2.005-2.83 7.078 5.013 5.19 6.87-1.113 7.823-4.308.953 3.195 2.05 9.271 7.733 4.308 4.267-4.308 1.172-6.498-2.74-7.078a8.741 8.741 0 0 1-.415-.056c.14.017.279.036.415.056 2.67.296 5.568-.628 6.383-3.364C23.622 9.418 24 4.458 24 3.768c0-.688-.139-1.86-.902-2.203-.659-.299-1.664-.621-4.3 1.24C16.046 4.747 13.087 8.686 12 10.8Z"/></svg></a>
+  <a style="--c:#d62976;background-image:linear-gradient(150deg,rgba(255,255,255,.30),rgba(255,255,255,0) 42%,rgba(0,0,0,.22)),linear-gradient(45deg,#feda75,#fa7e1e,#d62976,#962fbf,#4f5bd5)" href="https://www.instagram.com/backbonetutorials/" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on Instagram"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="4" y="4" width="16" height="16" rx="5" fill="none" stroke="#fff" stroke-width="2"/><circle cx="12" cy="12" r="3.6" fill="none" stroke="#fff" stroke-width="2"/><circle cx="17.2" cy="6.8" r="1.25" fill="#fff"/></svg></a>
+  <a style="--c:#000000" href="https://www.tiktok.com/@backbonetutorials" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on TikTok"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#fff" d="M16.5 5.82a4.79 4.79 0 0 1-1.16-3.07h-2.9v11.43a2.45 2.45 0 1 1-2.45-2.45c.17 0 .33.02.49.05V8.83a5.36 5.36 0 0 0-.49-.02 5.35 5.35 0 1 0 5.35 5.35V8.6a7.66 7.66 0 0 0 4.46 1.42V7.13a4.79 4.79 0 0 1-2.8-1.31Z"/></svg></a>
+  <a style="--c:#1877F2" href="https://www.facebook.com/BackboneTutorials" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on Facebook"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#fff" d="M13.5 21v-8h2.6l.4-3h-3V8.1c0-.87.27-1.46 1.5-1.46H17V3.96c-.28-.04-1.2-.12-2.28-.12-2.26 0-3.8 1.38-3.8 3.9V10H8.3v3h2.62v8h2.58Z"/></svg></a>
+</nav>
+<p>
+<a href="/">Home</a> |
+<a href="/about/">About</a> |
+<a href="/contact/">Contact</a> |
+<a href="/privacy-policy/">Privacy Policy</a> |
+<a href="/terms/">Terms</a>
+</p>
+<p>© 2026 Backbone Tutorials</p>
+</footer>
+
+</body>
+</html>

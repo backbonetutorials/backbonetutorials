@@ -1,0 +1,446 @@
+<!-- DEPLOY TO: /javascript-seo/how-google-crawls-javascript/  (index.html) · TechArticle · per MASTERMIND_SEO.md
+     EDITOR (§11.1): add a real GSC URL-Inspection screenshot (rendered HTML) + the date tested before publish; add URL to sitemap.xml. -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>How Google Crawls JavaScript — crawl, render, index</title>
+
+<meta name="description" content="How Googlebot crawls JavaScript: the crawl, render, and index pipeline, the renderer's limits, the render queue, and verifying with Search Console.">
+
+<meta name="robots" content="index, follow">
+<meta name="author" content="Backbone Tutorials">
+<meta name="theme-color" content="#2563eb">
+<meta name="format-detection" content="telephone=no">
+
+<link rel="canonical" href="https://backbonetutorials.com/javascript-seo/how-google-crawls-javascript/">
+
+<link rel="icon" href="/assets/favicon.ico">
+<link rel="apple-touch-icon" href="/assets/favicon.png">
+
+<!-- Open Graph -->
+<meta property="og:title" content="How Google Crawls JavaScript — crawl, render, index">
+<meta property="og:description" content="A code-first guide to how Googlebot crawls and renders JavaScript: the pipeline, the renderer's limits, the render queue, crawlable links, and Search Console.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://backbonetutorials.com/javascript-seo/how-google-crawls-javascript/">
+<meta property="og:image" content="https://backbonetutorials.com/assets/javascript-seo/how-google-crawls-javascript-1200.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:type" content="image/jpeg">
+<meta property="og:image:alt" content="How Google Crawls JavaScript — Backbone Tutorials">
+<meta property="og:site_name" content="Backbone Tutorials">
+<meta property="og:locale" content="en_US">
+
+<!-- Twitter -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="How Google Crawls JavaScript — crawl, render, index">
+<meta name="twitter:description" content="How Googlebot crawls and renders JavaScript: the pipeline, the renderer's limits, the render queue, crawlable links, and verifying in Search Console.">
+<meta name="twitter:image" content="https://backbonetutorials.com/assets/javascript-seo/how-google-crawls-javascript-1200.jpg">
+<meta name="twitter:image:alt" content="How Google Crawls JavaScript — Backbone Tutorials">
+<meta name="twitter:url" content="https://backbonetutorials.com/javascript-seo/how-google-crawls-javascript/">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+
+<style>
+
+html{scroll-behavior:smooth}
+body{font-family:'Inter',sans-serif;margin:0;background:#f4f6f9;color:#1f2937;line-height:1.7}
+.container{max-width:900px;margin:30px auto;padding:20px;background:#fff;border-radius:10px;box-shadow:0 2px 10px rgba(0,0,0,0.04)}
+h1,h2,h3{color:#111827}
+.nav{background:#111827;padding:15px;display:flex;justify-content:center;align-items:center;flex-wrap:wrap;gap:8px}
+.nav a{color:white;margin:0 10px;text-decoration:none;font-weight:600}
+.nav a:hover{text-decoration:underline}
+.nav-logo img{vertical-align:middle;margin-right:12px;border-radius:8px}
+figure{margin:30px 0}
+img{width:100%;height:auto;border-radius:10px}
+pre{background:#111;color:#eee;padding:15px;border-radius:8px;overflow-x:auto;box-shadow:0 2px 8px rgba(0,0,0,0.15)}
+code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+p code,li code{background:#eef2ff;padding:1px 5px;border-radius:4px;font-size:.95em}
+.cta{background:#eef2ff;padding:20px;margin-top:30px;text-align:center;border-radius:10px}
+a{color:#2563eb}
+.back-home{margin-top:25px}
+footer{background:#111827;color:white;text-align:center;padding:30px 20px;margin-top:40px}
+footer a{color:#93c5fd;text-decoration:none}
+footer a:hover{text-decoration:underline}
+.btn{display:inline-block;background:#2563eb;color:white;padding:12px 22px;border-radius:8px;text-decoration:none;font-weight:600;margin-top:15px;transition:0.2s ease}
+.btn:hover{background:#1d4ed8;transform:translateY(-1px)}
+.card{background:#fff;padding:20px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.05);overflow:hidden;max-width:100%;border:1px solid #eef2f7}
+.toc-list{padding-left:20px}
+.toc-list li{margin-bottom:8px}
+.author-line{font-size:15px;margin-top:-6px;margin-bottom:10px;color:#4b5563}
+figcaption{font-size:14px;color:#6b7280;margin-top:10px}
+#faq h3{margin-top:25px}
+#faq p{margin-bottom:18px}
+.breadcrumb{font-size:14px;color:#6b7280;margin:0 0 10px}
+.breadcrumb a{color:#2563eb;text-decoration:none}
+.breadcrumb a:hover{text-decoration:underline}
+.diagram{width:100%;height:auto;display:block;border-radius:10px}
+.bt-social{display:flex;gap:13px;flex-wrap:wrap;align-items:center;justify-content:center;margin:0 0 14px;padding:0;list-style:none}
+.bt-social a{position:relative;isolation:isolate;width:46px;height:46px;border-radius:14px;display:inline-flex;align-items:center;justify-content:center;text-decoration:none;-webkit-tap-highlight-color:transparent;background-color:var(--c,#333);background-image:linear-gradient(150deg,rgba(255,255,255,.30),rgba(255,255,255,0) 42%,rgba(0,0,0,.22));box-shadow:0 1px 1px rgba(0,0,0,.22),0 7px 14px -3px rgba(0,0,0,.34),inset 0 1px 0 rgba(255,255,255,.50),inset 0 -2px 5px rgba(0,0,0,.30);transition:transform .18s cubic-bezier(.2,.7,.2,1),box-shadow .18s ease}
+.bt-social a::before{content:"";position:absolute;left:3px;right:3px;top:2px;height:44%;border-radius:12px 12px 50% 50%/12px 12px 24px 24px;background:linear-gradient(180deg,rgba(255,255,255,.42),rgba(255,255,255,0));pointer-events:none;z-index:0}
+.bt-social a:hover{transform:translateY(-3px) scale(1.05);box-shadow:0 2px 2px rgba(0,0,0,.20),0 16px 26px -6px rgba(0,0,0,.40),inset 0 1px 0 rgba(255,255,255,.55),inset 0 -2px 6px rgba(0,0,0,.32)}
+.bt-social a:active{transform:translateY(-1px) scale(1.01)}
+.bt-social a:focus-visible{outline:3px solid #93c5fd;outline-offset:3px}
+.bt-social svg{position:relative;z-index:1;width:22px;height:22px;display:block;filter:drop-shadow(0 1px 1px rgba(0,0,0,.28))}
+@media (prefers-reduced-motion:reduce){.bt-social a{transition:none}.bt-social a:hover{transform:none}}
+@media(max-width:600px){.container{padding:15px}}
+
+</style>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": "https://backbonetutorials.com/#organization",
+      "name": "Backbone Tutorials",
+      "url": "https://backbonetutorials.com/",
+      "logo": { "@type": "ImageObject", "url": "https://backbonetutorials.com/assets/logo.png" },
+      "sameAs": [
+        "https://github.com/backbonetutorials/backbonetutorials",
+        "https://x.com/backbonetutor",
+        "https://www.youtube.com/@BACKBONETUTORIALS",
+        "https://bsky.app/profile/backbonetutorials.bsky.social",
+        "https://www.instagram.com/backbonetutorials/",
+        "https://www.tiktok.com/@backbonetutorials",
+        "https://www.facebook.com/BackboneTutorials"
+      ],
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "contactType": "customer support",
+        "email": "backbonetutorials2026@gmail.com",
+        "availableLanguage": ["English"],
+        "areaServed": "Worldwide"
+      }
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://backbonetutorials.com/#website",
+      "url": "https://backbonetutorials.com/",
+      "name": "Backbone Tutorials",
+      "publisher": { "@id": "https://backbonetutorials.com/#organization" }
+    },
+    {
+      "@type": "Person",
+      "@id": "https://backbonetutorials.com/author/backbone-tutorials-team/#person",
+      "name": "Backbone Tutorials Team",
+      "url": "https://backbonetutorials.com/author/backbone-tutorials-team/",
+      "worksFor": { "@id": "https://backbonetutorials.com/#organization" },
+      "jobTitle": "Frontend JavaScript Editorial Team",
+      "knowsAbout": ["JavaScript SEO", "Googlebot rendering", "SPA architecture", "Backbone.js"]
+    },
+    {
+      "@type": "WebPage",
+      "@id": "https://backbonetutorials.com/javascript-seo/how-google-crawls-javascript/#webpage",
+      "url": "https://backbonetutorials.com/javascript-seo/how-google-crawls-javascript/",
+      "name": "How Google Crawls JavaScript — crawl, render, index",
+      "headline": "How Google Crawls JavaScript",
+      "description": "How Googlebot crawls JavaScript: the crawl, render, and index pipeline, the renderer's limits, the render queue, and verifying with Search Console.",
+      "inLanguage": "en",
+      "isPartOf": { "@id": "https://backbonetutorials.com/#website" },
+      "author": { "@id": "https://backbonetutorials.com/author/backbone-tutorials-team/#person" },
+      "publisher": { "@id": "https://backbonetutorials.com/#organization" },
+      "breadcrumb": { "@id": "https://backbonetutorials.com/javascript-seo/how-google-crawls-javascript/#breadcrumb" },
+      "mainEntity": { "@id": "https://backbonetutorials.com/javascript-seo/how-google-crawls-javascript/#article" }
+    },
+    {
+      "@type": "TechArticle",
+      "@id": "https://backbonetutorials.com/javascript-seo/how-google-crawls-javascript/#article",
+      "url": "https://backbonetutorials.com/javascript-seo/how-google-crawls-javascript/",
+      "headline": "How Google Crawls JavaScript",
+      "description": "A guide to how Googlebot crawls and renders JavaScript: the crawl-render-index pipeline, the renderer's limits, the render queue, crawlable links and resources, and verifying with Search Console.",
+      "inLanguage": "en",
+      "image": {
+        "@type": "ImageObject",
+        "url": "https://backbonetutorials.com/assets/javascript-seo/how-google-crawls-javascript-1200.jpg",
+        "width": 1200,
+        "height": 630
+      },
+      "author": { "@id": "https://backbonetutorials.com/author/backbone-tutorials-team/#person" },
+      "publisher": { "@id": "https://backbonetutorials.com/#organization" },
+      "mainEntityOfPage": { "@id": "https://backbonetutorials.com/javascript-seo/how-google-crawls-javascript/#webpage" },
+      "datePublished": "2026-06-12T04:30:00+07:00",
+      "dateModified": "2026-06-12T04:30:00+07:00",
+      "articleSection": ["JavaScript SEO", "Crawling", "Rendering"],
+      "keywords": ["how Google crawls JavaScript", "Googlebot rendering", "crawl render index", "render queue", "crawlable links", "URL inspection"],
+      "about": [
+        { "@type": "Thing", "name": "Googlebot" },
+        { "@type": "Thing", "name": "Web crawler" },
+        { "@type": "Thing", "name": "JavaScript" }
+      ],
+      "mentions": [
+        { "@type": "Thing", "name": "Google Search Console" },
+        { "@type": "Thing", "name": "Web Rendering Service" },
+        { "@type": "Thing", "name": "robots.txt" }
+      ]
+    },
+    {
+      "@type": "BreadcrumbList",
+      "@id": "https://backbonetutorials.com/javascript-seo/how-google-crawls-javascript/#breadcrumb",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://backbonetutorials.com/" },
+        { "@type": "ListItem", "position": 2, "name": "JavaScript SEO", "item": "https://backbonetutorials.com/javascript-seo/" },
+        { "@type": "ListItem", "position": 3, "name": "How Google Crawls JavaScript", "item": "https://backbonetutorials.com/javascript-seo/how-google-crawls-javascript/" }
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "@id": "https://backbonetutorials.com/javascript-seo/how-google-crawls-javascript/#faq",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Does Googlebot execute JavaScript?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Yes. Googlebot renders pages with an evergreen, Chromium-based engine that runs JavaScript, so client-rendered content can be seen. It comes with limits and the render can be deferred, so it is not the same as instant indexing." }
+        },
+        {
+          "@type": "Question",
+          "name": "Why is my JavaScript content not getting indexed?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Common causes are blocked scripts or CSS in robots.txt, content that only appears after a click or scroll, a render that was deferred or timed out, or navigation that uses JavaScript instead of real links. Confirm the cause with URL Inspection." }
+        },
+        {
+          "@type": "Question",
+          "name": "Does Google use two waves of indexing?",
+          "acceptedAnswer": { "@type": "Answer", "text": "The old two-waves description is a simplification. Rendering is now closer to continuous, but it can still trail crawling, so treat important content as needing to be present without relying on a later render, using server-side rendering or prerendering." }
+        },
+        {
+          "@type": "Question",
+          "name": "How do I check what Googlebot sees?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Use URL Inspection in Google Search Console and view the rendered HTML, or run Test Live URL. Compare that rendered output with the content you expect; anything missing there is likely missing from the index too." }
+        }
+      ]
+    }
+  ]
+}
+</script>
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-FYJP43XDHH"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-FYJP43XDHH');
+</script>
+
+</head>
+
+<body>
+
+<nav class="nav" aria-label="Main Navigation">
+<a href="/" class="nav-logo" title="Backbone Tutorials Homepage"><img src="/assets/logo.png" alt="Backbone Tutorials Logo" width="36" height="36" loading="lazy" decoding="async"></a>
+<a href="/" title="Backbone.js Tutorials Homepage">Home</a>
+<a href="/backbonejs/" title="Backbone.js Complete Guide">Backbone Guide</a>
+<a href="/what-is-a-router/" title="What is a Router in Backbone.js">Router</a>
+<a href="/what-is-a-model/" title="What is a Model in Backbone.js">Model</a>
+<a href="/what-is-a-view/" title="What is a View in Backbone.js">View</a>
+<a href="/what-is-a-collection/" title="What is a Collection in Backbone.js">Collection</a>
+</nav>
+
+<main>
+
+<article class="container">
+
+<nav class="breadcrumb" aria-label="Breadcrumb">
+<a href="/">Home</a> › <a href="/javascript-seo/">JavaScript SEO</a> › <span aria-current="page">How Google Crawls JavaScript</span>
+</nav>
+
+<h1>How Google Crawls JavaScript</h1>
+
+<p class="author-line">Written by <a href="/author/backbone-tutorials-team/">Backbone Tutorials Team</a></p>
+<p class="author-line">Last updated: June 2026 · 9 min read</p>
+
+<p>
+A page that looks complete in your browser can reach Google as a near-empty shell. The reason is timing: your content arrives after JavaScript runs, but a crawler first sees only the HTML the server sent. Whether your words ever get indexed depends on a second step, rendering, that you do not control and cannot take for granted.
+</p>
+
+<p>
+This guide walks the path a JavaScript page takes through Google, from the first fetch to the index, and shows where it breaks. It is the first stage of the wider <a href="/javascript-seo/">JavaScript SEO</a> cluster and pairs with the <a href="/seo-for-single-page-apps/">SEO for single page apps</a> overview.
+</p>
+
+<figure>
+<svg class="diagram" viewBox="0 0 720 200" role="img" aria-labelledby="pTitle pDesc" xmlns="http://www.w3.org/2000/svg">
+  <title id="pTitle">From fetch to index</title>
+  <desc id="pDesc">Googlebot crawls the HTML, queues the page for rendering, runs the JavaScript, then indexes the rendered result.</desc>
+  <rect x="0" y="0" width="720" height="200" rx="12" fill="#0f172a"></rect>
+  <g font-family="Inter, sans-serif" text-anchor="middle">
+    <rect x="24"  y="75" width="150" height="50" rx="10" fill="#1e293b" stroke="#2563eb" stroke-width="2"></rect><text x="99" y="98" fill="#fff" font-size="13" font-weight="700">Crawl HTML</text><text x="99" y="114" fill="#93c5fd" font-size="10">fetch the page</text>
+    <rect x="208" y="75" width="150" height="50" rx="10" fill="#1e293b" stroke="#a855f7"></rect><text x="283" y="98" fill="#fff" font-size="13" font-weight="700">Render queue</text><text x="283" y="114" fill="#c4b5fd" font-size="10">may wait</text>
+    <rect x="392" y="75" width="150" height="50" rx="10" fill="#1e293b" stroke="#3b82f6"></rect><text x="467" y="98" fill="#fff" font-size="13" font-weight="700">Render JS</text><text x="467" y="114" fill="#93c5fd" font-size="10">headless Chromium</text>
+    <rect x="576" y="75" width="120" height="50" rx="10" fill="#1e293b" stroke="#2563eb" stroke-width="2"></rect><text x="636" y="104" fill="#fff" font-size="13" font-weight="700">Index</text>
+    <g stroke="#64748b" stroke-width="2" fill="none">
+      <path d="M176 100 L206 100" marker-end="url(#ag)"></path>
+      <path d="M360 100 L390 100" marker-end="url(#ag)"></path>
+      <path d="M544 100 L574 100" marker-end="url(#ag)"></path>
+    </g>
+  </g>
+  <defs><marker id="ag" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0 0 L7 3 L0 6 Z" fill="#64748b"></path></marker></defs>
+</svg>
+<figcaption>The render step sits between crawling and indexing, and the render queue means it can happen later, not instantly.</figcaption>
+</figure>
+
+<div class="card">
+<p style="margin-top:0"><strong>What you'll learn</strong></p>
+<ul class="toc-list">
+<li><a href="#pipeline">The crawl, render, index pipeline</a></li>
+<li><a href="#limits">What Googlebot can and cannot do</a></li>
+<li><a href="#queue">The render queue and deferred rendering</a></li>
+<li><a href="#resources">Never block JavaScript and CSS</a></li>
+<li><a href="#links">Use real links and server-visible content</a></li>
+<li><a href="#verify">Verify what Google actually renders</a></li>
+</ul>
+</div>
+
+<h2 id="pipeline">The crawl, render, index pipeline</h2>
+
+<p>
+For a static page, crawling and indexing are nearly the same moment. For a JavaScript page, a third step wedges in between. Googlebot fetches the HTML, sets the page aside to be rendered, runs the scripts in a browser engine, and only then indexes whatever the render produced.
+</p>
+
+<h3>Why rendering is its own stage</h3>
+
+<p>
+Rendering is expensive, far more so than fetching text, so Google does not do it inline with the crawl. That single fact explains most JavaScript SEO trouble: anything that depends on the render is at the mercy of a later, separate, resource-limited step rather than guaranteed the instant your page is crawled.
+</p>
+
+<h2 id="limits">What Googlebot can and cannot do</h2>
+
+<p>
+The renderer is a real, modern, Chromium-based browser, so it executes your JavaScript and builds the same DOM a visitor would see. What it does not do is behave like an engaged human poking at the page.
+</p>
+
+<h3>No clicks, no scroll, no stored state</h3>
+
+<p>
+Googlebot does not click buttons, fill forms, scroll to trigger lazy content, accept cookie prompts, or carry login state between pages. It also discards local storage and similar state between loads. So content that appears only after one of those actions is, to Google, content that does not appear at all. Anything important must be reachable without interaction.
+</p>
+
+<h2 id="queue">The render queue and deferred rendering</h2>
+
+<p>
+Because rendering is batched, a crawled page waits in a queue before its scripts run. That delay is usually short, but it is real, and on a large or slow site it compounds.
+</p>
+
+<h3>Content behind JavaScript can be indexed late</h3>
+
+<p>
+While a page sits in the render queue, the only thing Google has is the raw HTML from the crawl. If that HTML is an empty shell, the page can be indexed thin, or with nothing, until the render catches up. For pages where freshness or completeness matters, that lag is a reason to put the important content into the initial HTML through server-side rendering or prerendering.
+</p>
+
+<h2 id="resources">Never block JavaScript and CSS</h2>
+
+<p>
+To render a page, Googlebot has to download the same scripts and styles the browser does. Block those files and you hand the renderer a broken page.
+</p>
+
+<h3>Let crawlers fetch your resources</h3>
+
+<pre><code># Bad: blocks the JavaScript Googlebot needs to render
+Disallow: /assets/js/
+
+# Good: let crawlers fetch the JavaScript and CSS
+Allow: /assets/</code></pre>
+
+<p>
+A surprising number of indexing problems trace back to a well-meaning <code>Disallow</code> that starves the renderer. Keep your bundles and stylesheets crawlable, and confirm it; the same URL Inspection tool below flags resources that Google could not load.
+</p>
+
+<h2 id="links">Use real links and server-visible content</h2>
+
+<p>
+Google discovers pages by following links, and it only follows the kind it can see. A real anchor with an <code>href</code> is a link; an element that navigates through a click handler is not.
+</p>
+
+<h3>Real anchors beat JavaScript navigation</h3>
+
+<pre><code>&lt;!-- Crawlable: Googlebot follows this --&gt;
+&lt;a href="/products/42"&gt;Product 42&lt;/a&gt;
+
+&lt;!-- Not crawlable: there is no URL to follow --&gt;
+&lt;div onclick="go('/products/42')"&gt;Product 42&lt;/div&gt;</code></pre>
+
+<p>
+Route your single page app with real paths and real anchors, the approach from the <a href="/foundations/backbone-routing-basics/">routing guide</a> using <code>pushState</code>, so every view has a URL a crawler can reach. Then make sure the server returns meaningful content for those URLs rather than an empty container.
+</p>
+
+<h2 id="verify">Verify what Google actually renders</h2>
+
+<p>
+You never have to guess what Googlebot sees, because Google will show you. The rendered HTML it produces is available for any URL on a property you own.
+</p>
+
+<h3>Checking the rendered HTML in Search Console</h3>
+
+<p>
+Open URL Inspection in Google Search Console, run Test Live URL, and view the rendered HTML and the screenshot. Compare that against the content you expect to rank for. If a heading, a product, or a block of text is missing from the rendered output, it is almost certainly missing from the index, and now you know exactly which step to fix.
+</p>
+
+<p>
+That is how Google crawls JavaScript: fetch, queue, render, index, with every stage a place a page can fall short. Keep resources crawlable, content reachable without interaction, links real, and verify the render, and a JavaScript site competes on even ground. Next in the cluster, rendering and indexing looks at exactly what survives that render and when.
+</p>
+
+<section id="faq">
+<h2>Frequently Asked Questions</h2>
+
+<h3>Does Googlebot execute JavaScript?</h3>
+<p>Yes. Googlebot renders pages with an evergreen, Chromium-based engine that runs JavaScript, so client-rendered content can be seen. It comes with limits and the render can be deferred, so it is not the same as instant indexing.</p>
+
+<h3>Why is my JavaScript content not getting indexed?</h3>
+<p>Common causes are blocked scripts or CSS in <code>robots.txt</code>, content that only appears after a click or scroll, a render that was deferred or timed out, or navigation that uses JavaScript instead of real links. Confirm the cause with URL Inspection.</p>
+
+<h3>Does Google use two waves of indexing?</h3>
+<p>The old two-waves description is a simplification. Rendering is now closer to continuous, but it can still trail crawling, so treat important content as needing to be present without relying on a later render, using server-side rendering or prerendering.</p>
+
+<h3>How do I check what Googlebot sees?</h3>
+<p>Use URL Inspection in Google Search Console and view the rendered HTML, or run Test Live URL. Compare that rendered output with the content you expect; anything missing there is likely missing from the index too.</p>
+</section>
+
+<p><strong>Read next:</strong> <a href="/javascript-seo/javascript-rendering-and-indexing/">JavaScript Rendering and Indexing</a>, the next guide, or the <a href="/seo-for-single-page-apps/">SEO for single page apps</a> overview.</p>
+
+<div class="cta">
+<p><strong>Building the app you want indexed?</strong></p>
+<p>Crawlable routes start in the frontend. See how a single page app is structured in the complete Backbone guide.</p>
+<a href="/backbonejs/" class="btn">Explore the Backbone Guide →</a>
+</div>
+
+<div class="back-home">
+<a href="/javascript-seo/">← Back to JavaScript SEO</a>
+</div>
+
+</article>
+
+</main>
+
+<footer>
+
+<p>Backbone Tutorials</p>
+
+<nav class="bt-social" aria-label="Backbone Tutorials on social media">
+  <a style="--c:#181717" href="https://github.com/backbonetutorials/backbonetutorials" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on GitHub"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#fff" d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0 1 12 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222 0 1.606-.014 2.898-.014 3.293 0 .322.216.694.825.576C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg></a>
+  <a style="--c:#000000" href="https://x.com/backbonetutor" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on X (formerly Twitter)"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#fff" d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+  <a style="--c:#FF0000" href="https://www.youtube.com/@BACKBONETUTORIALS" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on YouTube"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#fff" d="M8.5 6.5 L8.5 17.5 L17.5 12 Z"/></svg></a>
+  <a style="--c:#0285FF" href="https://bsky.app/profile/backbonetutorials.bsky.social" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on Bluesky"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#fff" d="M12 10.8c-1.087-2.114-4.046-6.053-6.798-7.995C2.566.944 1.561 1.266.902 1.565.139 1.908 0 3.08 0 3.768c0 .69.378 5.65.624 6.479.815 2.736 3.713 3.66 6.383 3.364.136-.02.275-.039.415-.056-.138.022-.276.04-.415.056-3.912.58-7.387 2.005-2.83 7.078 5.013 5.19 6.87-1.113 7.823-4.308.953 3.195 2.05 9.271 7.733 4.308 4.267-4.308 1.172-6.498-2.74-7.078a8.741 8.741 0 0 1-.415-.056c.14.017.279.036.415.056 2.67.296 5.568-.628 6.383-3.364C23.622 9.418 24 4.458 24 3.768c0-.688-.139-1.86-.902-2.203-.659-.299-1.664-.621-4.3 1.24C16.046 4.747 13.087 8.686 12 10.8Z"/></svg></a>
+  <a style="--c:#d62976;background-image:linear-gradient(150deg,rgba(255,255,255,.30),rgba(255,255,255,0) 42%,rgba(0,0,0,.22)),linear-gradient(45deg,#feda75,#fa7e1e,#d62976,#962fbf,#4f5bd5)" href="https://www.instagram.com/backbonetutorials/" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on Instagram"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="4" y="4" width="16" height="16" rx="5" fill="none" stroke="#fff" stroke-width="2"/><circle cx="12" cy="12" r="3.6" fill="none" stroke="#fff" stroke-width="2"/><circle cx="17.2" cy="6.8" r="1.25" fill="#fff"/></svg></a>
+  <a style="--c:#000000" href="https://www.tiktok.com/@backbonetutorials" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on TikTok"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#fff" d="M16.5 5.82a4.79 4.79 0 0 1-1.16-3.07h-2.9v11.43a2.45 2.45 0 1 1-2.45-2.45c.17 0 .33.02.49.05V8.83a5.36 5.36 0 0 0-.49-.02 5.35 5.35 0 1 0 5.35 5.35V8.6a7.66 7.66 0 0 0 4.46 1.42V7.13a4.79 4.79 0 0 1-2.8-1.31Z"/></svg></a>
+  <a style="--c:#1877F2" href="https://www.facebook.com/BackboneTutorials" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on Facebook"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#fff" d="M13.5 21v-8h2.6l.4-3h-3V8.1c0-.87.27-1.46 1.5-1.46H17V3.96c-.28-.04-1.2-.12-2.28-.12-2.26 0-3.8 1.38-3.8 3.9V10H8.3v3h2.62v8h2.58Z"/></svg></a>
+</nav>
+
+<p>
+<a href="/">Home</a> |
+<a href="/about/">About</a> |
+<a href="/contact/">Contact</a> |
+<a href="/privacy-policy/">Privacy Policy</a> |
+<a href="/terms/">Terms</a>
+</p>
+
+<p>© 2026 Backbone Tutorials</p>
+
+</footer>
+
+</body>
+</html>

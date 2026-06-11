@@ -1,0 +1,390 @@
+<!-- ===========================================================================
+     DEPLOY TO: /foundations/   (i.e. /foundations/index.html)
+     Cluster hub for the "Backbone.js Foundations" recovery cluster.
+     Mirrors the live site shell (Inter, .nav, .container, .card, .cta, footer).
+     Built per MASTERMIND_SEO.md §4/§5/§6/§8/§9/§12.5. Page type = CollectionPage.
+     EDITOR (§11.1): before publishing, add one first-hand line + confirm the
+     "coming soon" children before turning them into links (no dead internal links).
+     After publishing, ADD this URL to sitemap.xml.
+     =========================================================================== -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Backbone.js Foundations — Core Concepts &amp; Guides</title>
+
+<meta name="description" content="Learn the Backbone.js core: Models, Views, Collections, Routers, events, templates, and sync, through focused, code-first guides for every concept."><meta name="robots" content="index, follow">
+<meta name="author" content="Backbone Tutorials">
+<meta name="theme-color" content="#2563eb">
+<meta name="format-detection" content="telephone=no">
+
+<link rel="canonical" href="https://backbonetutorials.com/foundations/">
+
+<link rel="icon" href="/assets/favicon.ico">
+<link rel="apple-touch-icon" href="/assets/favicon.png">
+
+<!-- Open Graph -->
+<meta property="og:title" content="Backbone.js Foundations — Core Concepts &amp; Guides">
+<meta property="og:description" content="Models, Views, Collections, Routers, events, templates, and sync — the Backbone.js core, explained with runnable code.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://backbonetutorials.com/foundations/">
+<meta property="og:image" content="https://backbonetutorials.com/assets/foundations/foundations-1200.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:type" content="image/jpeg">
+<meta property="og:image:alt" content="Backbone.js Foundations — Backbone Tutorials">
+<meta property="og:site_name" content="Backbone Tutorials">
+<meta property="og:locale" content="en_US">
+
+<!-- Twitter -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Backbone.js Foundations — Core Concepts &amp; Guides">
+<meta name="twitter:description" content="The Backbone.js core — Models, Views, Collections, Routers, events, templates, sync — with runnable code.">
+<meta name="twitter:image" content="https://backbonetutorials.com/assets/foundations/foundations-1200.jpg">
+<meta name="twitter:image:alt" content="Backbone.js Foundations — Backbone Tutorials">
+<meta name="twitter:url" content="https://backbonetutorials.com/foundations/">
+<!-- EDITOR: export a real 1200x630 og image to /assets/foundations/foundations-1200.jpg (the in-page hero is inline SVG, which OG cannot render). -->
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+
+<style>
+
+html{scroll-behavior:smooth}
+body{font-family:'Inter',sans-serif;margin:0;background:#f4f6f9;color:#1f2937;line-height:1.7}
+.container{max-width:900px;margin:30px auto;padding:20px;background:#fff;border-radius:10px;box-shadow:0 2px 10px rgba(0,0,0,0.04)}
+h1,h2,h3{color:#111827}
+.nav{background:#111827;padding:15px;display:flex;justify-content:center;align-items:center;flex-wrap:wrap;gap:8px}
+.nav a{color:white;margin:0 10px;text-decoration:none;font-weight:600}
+.nav a:hover{text-decoration:underline}
+.nav-logo img{vertical-align:middle;margin-right:12px;border-radius:8px}
+figure{margin:30px 0}
+img{width:100%;height:auto;border-radius:10px}
+pre{background:#111;color:#eee;padding:15px;border-radius:8px;overflow-x:auto;box-shadow:0 2px 8px rgba(0,0,0,0.15)}
+.cta{background:#eef2ff;padding:20px;margin-top:30px;text-align:center;border-radius:10px}
+a{color:#2563eb}
+.back-home{margin-top:25px}
+footer{background:#111827;color:white;text-align:center;padding:30px 20px;margin-top:40px}
+footer a{color:#93c5fd;text-decoration:none}
+footer a:hover{text-decoration:underline}
+.btn{display:inline-block;background:#2563eb;color:white;padding:12px 22px;border-radius:8px;text-decoration:none;font-weight:600;margin-top:15px;transition:0.2s ease}
+.btn:hover{background:#1d4ed8;transform:translateY(-1px)}
+.card{background:#fff;padding:20px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.05);overflow:hidden;max-width:100%;transition:0.2s ease}
+.card:hover{transform:translateY(-2px)}
+.toc-list{padding-left:20px}
+.toc-list li{margin-bottom:8px}
+.author-line{font-size:15px;margin-top:-6px;margin-bottom:10px;color:#4b5563}
+figcaption{font-size:14px;color:#6b7280;margin-top:10px}
+#faq h3{margin-top:25px}
+#faq p{margin-bottom:18px}
+/* breadcrumb */
+.breadcrumb{font-size:14px;color:#6b7280;margin:0 0 10px}
+.breadcrumb a{color:#2563eb;text-decoration:none}
+.breadcrumb a:hover{text-decoration:underline}
+/* cluster pieces */
+.diagram{width:100%;height:auto;display:block;border-radius:10px}
+.children{list-style:none;padding:0;margin:0}
+.children li{padding:12px 2px;border-bottom:1px solid #eef2f7}
+.children li:last-child{border-bottom:0}
+.status{font-size:12px;font-weight:600;padding:2px 9px;border-radius:999px;background:#e5e7eb;color:#4b5563;margin-left:8px;white-space:nowrap}
+.status--live{background:#dcfce7;color:#166534}
+/* social bar (3D) — footer */
+.bt-social{display:flex;gap:13px;flex-wrap:wrap;align-items:center;justify-content:center;margin:0 0 14px;padding:0;list-style:none}
+.bt-social a{position:relative;isolation:isolate;width:46px;height:46px;border-radius:14px;display:inline-flex;align-items:center;justify-content:center;text-decoration:none;-webkit-tap-highlight-color:transparent;background-color:var(--c,#333);background-image:linear-gradient(150deg,rgba(255,255,255,.30),rgba(255,255,255,0) 42%,rgba(0,0,0,.22));box-shadow:0 1px 1px rgba(0,0,0,.22),0 7px 14px -3px rgba(0,0,0,.34),inset 0 1px 0 rgba(255,255,255,.50),inset 0 -2px 5px rgba(0,0,0,.30);transition:transform .18s cubic-bezier(.2,.7,.2,1),box-shadow .18s ease}
+.bt-social a::before{content:"";position:absolute;left:3px;right:3px;top:2px;height:44%;border-radius:12px 12px 50% 50%/12px 12px 24px 24px;background:linear-gradient(180deg,rgba(255,255,255,.42),rgba(255,255,255,0));pointer-events:none;z-index:0}
+.bt-social a:hover{transform:translateY(-3px) scale(1.05);box-shadow:0 2px 2px rgba(0,0,0,.20),0 16px 26px -6px rgba(0,0,0,.40),inset 0 1px 0 rgba(255,255,255,.55),inset 0 -2px 6px rgba(0,0,0,.32)}
+.bt-social a:active{transform:translateY(-1px) scale(1.01)}
+.bt-social a:focus-visible{outline:3px solid #93c5fd;outline-offset:3px}
+.bt-social svg{position:relative;z-index:1;width:22px;height:22px;display:block;filter:drop-shadow(0 1px 1px rgba(0,0,0,.28))}
+@media (prefers-reduced-motion:reduce){.bt-social a{transition:none}.bt-social a:hover{transform:none}}
+@media(max-width:600px){.container{padding:15px}}
+
+</style>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": "https://backbonetutorials.com/#organization",
+      "name": "Backbone Tutorials",
+      "url": "https://backbonetutorials.com/",
+      "logo": { "@type": "ImageObject", "url": "https://backbonetutorials.com/assets/logo.png" },
+      "sameAs": [
+        "https://github.com/backbonetutorials/backbonetutorials",
+        "https://x.com/backbonetutor",
+        "https://www.youtube.com/@BACKBONETUTORIALS",
+        "https://bsky.app/profile/backbonetutorials.bsky.social",
+        "https://www.instagram.com/backbonetutorials/",
+        "https://www.tiktok.com/@backbonetutorials",
+        "https://www.facebook.com/BackboneTutorials"
+      ],
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "contactType": "customer support",
+        "url": "https://x.com/backbonetutor",
+        "availableLanguage": ["English"],
+        "areaServed": "Worldwide"
+      }
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://backbonetutorials.com/#website",
+      "url": "https://backbonetutorials.com/",
+      "name": "Backbone Tutorials",
+      "publisher": { "@id": "https://backbonetutorials.com/#organization" }
+    },
+    {
+      "@type": "Person",
+      "@id": "https://backbonetutorials.com/author/backbone-tutorials-team/#person",
+      "name": "Backbone Tutorials Team",
+      "url": "https://backbonetutorials.com/author/backbone-tutorials-team/",
+      "worksFor": { "@id": "https://backbonetutorials.com/#organization" },
+      "jobTitle": "Frontend JavaScript Editorial Team",
+      "knowsAbout": ["Backbone.js", "JavaScript", "SPA architecture", "Frontend Development"]
+    },
+    {
+      "@type": "CollectionPage",
+      "@id": "https://backbonetutorials.com/foundations/#webpage",
+      "url": "https://backbonetutorials.com/foundations/",
+      "name": "Backbone.js Foundations",
+      "headline": "Backbone.js Foundations — Core Concepts & Guides",
+      "description": "The core Backbone.js concepts — Models, Views, Collections, Routers, events, templates, and sync — explained with runnable code.",
+      "inLanguage": "en",
+      "isPartOf": { "@id": "https://backbonetutorials.com/#website" },
+      "about": { "@id": "https://backbonetutorials.com/#organization" },
+      "breadcrumb": { "@id": "https://backbonetutorials.com/foundations/#breadcrumb" },
+      "mainEntity": { "@id": "https://backbonetutorials.com/foundations/#faq" }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "@id": "https://backbonetutorials.com/foundations/#breadcrumb",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://backbonetutorials.com/" },
+        { "@type": "ListItem", "position": 2, "name": "Foundations", "item": "https://backbonetutorials.com/foundations/" }
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "@id": "https://backbonetutorials.com/foundations/#faq",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What should I learn first in Backbone.js?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Start with the View and the Model, then the Collection and the Router. Once those four objects make sense, the events system ties them together and the rest of the foundations build on top." }
+        },
+        {
+          "@type": "Question",
+          "name": "Do I need jQuery to use Backbone.js?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Backbone needs Underscore (or Lodash) and a DOM library for Views. Historically that was jQuery; today you can supply any compatible DOM manipulation library, or do without jQuery for non-DOM work like Models and Collections." }
+        },
+        {
+          "@type": "Question",
+          "name": "Is Backbone.js still worth learning in 2026?",
+          "acceptedAnswer": { "@type": "Answer", "text": "For new greenfield products most teams reach for React or Vue. Backbone is still worth learning to maintain existing apps and, more importantly, to understand the MVC, events, and sync patterns that modern frameworks refined rather than replaced." }
+        },
+        {
+          "@type": "Question",
+          "name": "How is this different from the Backbone.js guide?",
+          "acceptedAnswer": { "@type": "Answer", "text": "The Backbone.js guide is the single pillar overview. Foundations breaks the core into focused, code-first tutorials you can read one concept at a time." }
+        }
+      ]
+    }
+  ]
+}
+</script>
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-FYJP43XDHH"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-FYJP43XDHH');
+</script>
+
+</head>
+
+<body>
+
+<nav class="nav" aria-label="Main Navigation">
+<a href="/" class="nav-logo" title="Backbone Tutorials Homepage"><img src="/assets/logo.png" alt="Backbone Tutorials Logo" width="36" height="36" loading="lazy" decoding="async"></a>
+<a href="/" title="Backbone.js Tutorials Homepage">Home</a>
+<a href="/backbonejs/" title="Backbone.js Complete Guide">Backbone Guide</a>
+<a href="/what-is-a-router/" title="What is a Router in Backbone.js">Router</a>
+<a href="/what-is-a-model/" title="What is a Model in Backbone.js">Model</a>
+<a href="/what-is-a-view/" title="What is a View in Backbone.js">View</a>
+<a href="/what-is-a-collection/" title="What is a Collection in Backbone.js">Collection</a>
+</nav>
+
+<main>
+
+<article class="container">
+
+<nav class="breadcrumb" aria-label="Breadcrumb">
+<a href="/">Home</a> › <span aria-current="page">Foundations</span>
+</nav>
+
+<h1>Backbone.js Foundations</h1>
+
+<p class="author-line">Reviewed by <a href="/author/backbone-tutorials-team/">Backbone Tutorials Team</a></p>
+<p class="author-line">Last updated: June 2026 · 6 min read</p>
+
+<p>
+Most people meet Backbone.js through a single huge tutorial, get the gist, and then hit a wall the first time a view won't stop firing or a model update doesn't reach the screen. This section fixes that. Foundations splits the Backbone core into small, code-first guides you can read one idea at a time.
+</p>
+
+<p>
+Each guide sticks to one concept, shows code you can paste into a console, and links back to the original reference tutorials that this site is known for. Work through them in order and you will have the mental model you need before moving on to the <a href="/backbonejs/">Backbone.js guide</a> and the broader architecture and rendering topics.
+</p>
+
+<figure>
+<svg class="diagram" viewBox="0 0 720 200" role="img" aria-labelledby="mapTitle mapDesc" xmlns="http://www.w3.org/2000/svg">
+  <title id="mapTitle">Learning path from foundations to architecture</title>
+  <desc id="mapDesc">Three stages: Foundations, then Architecture, then Rendering, connected by arrows.</desc>
+  <rect x="0" y="0" width="720" height="200" rx="12" fill="#0f172a"></rect>
+  <g font-family="Inter, sans-serif" text-anchor="middle">
+    <rect x="40"  y="70" width="170" height="62" rx="10" fill="#1e293b" stroke="#2563eb" stroke-width="2"></rect>
+    <text x="125" y="96" fill="#ffffff" font-size="16" font-weight="700">Foundations</text>
+    <text x="125" y="116" fill="#93c5fd" font-size="12">Model · View · Events</text>
+    <rect x="275" y="70" width="170" height="62" rx="10" fill="#1e293b" stroke="#334155" stroke-width="2"></rect>
+    <text x="360" y="96" fill="#ffffff" font-size="16" font-weight="700">Architecture</text>
+    <text x="360" y="116" fill="#94a3b8" font-size="12">SPA · state · routing</text>
+    <rect x="510" y="70" width="170" height="62" rx="10" fill="#1e293b" stroke="#334155" stroke-width="2"></rect>
+    <text x="595" y="96" fill="#ffffff" font-size="16" font-weight="700">Rendering</text>
+    <text x="595" y="116" fill="#94a3b8" font-size="12">CSR · SSR · hydration</text>
+    <path d="M212 101 L271 101" stroke="#64748b" stroke-width="2" marker-end="url(#ar)"></path>
+    <path d="M447 101 L506 101" stroke="#64748b" stroke-width="2" marker-end="url(#ar)"></path>
+  </g>
+  <defs>
+    <marker id="ar" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0 0 L7 3 L0 6 Z" fill="#64748b"></path>
+    </marker>
+  </defs>
+</svg>
+<figcaption>Foundations is the on-ramp: master the Backbone core here, then move outward to architecture and rendering.</figcaption>
+</figure>
+
+<h2 id="core-objects">Start with the four core objects</h2>
+
+<p>
+Backbone is built from four objects that map cleanly to jobs in an interface. If you only read four pages on this site, read these, they also hold most of this domain's history, so they are the best maintained.
+</p>
+
+<ul class="toc-list">
+<li><strong><a href="/what-is-a-model/">Model</a></strong>: holds a piece of data and announces when it changes.</li>
+<li><strong><a href="/what-is-a-view/">View</a></strong>: renders a model to the DOM and handles user input.</li>
+<li><strong><a href="/what-is-a-collection/">Collection</a></strong>: an ordered set of models with its own events.</li>
+<li><strong><a href="/what-is-a-router/">Router</a></strong>: maps URLs to application states.</li>
+</ul>
+
+<h2 id="guides">Foundational guides in this cluster</h2>
+
+<p>
+These guides go a level deeper than the overview pages. Available now is the events guide, the glue between every object above. The rest are publishing on a rolling basis.
+</p>
+
+<ul class="children">
+<li><strong><a href="/foundations/backbone-events/">Backbone.js Events</a></strong>: on, off, trigger, and listenTo, plus how to avoid memory leaks. <span class="status status--live">Available now</span></li>
+<li><strong><a href="/foundations/backbone-view-lifecycle/">Backbone View Lifecycle</a></strong>: render, re-render, and clean teardown. <span class="status status--live">Available now</span></li>
+<li><strong><a href="/foundations/backbone-templates/">Backbone Templates with Underscore</a></strong>: _.template, escaping, and partials. <span class="status status--live">Available now</span></li>
+<li><strong><a href="/foundations/backbone-sync/">Backbone Sync &amp; the Server</a></strong>: fetch, save, and how Backbone talks to a REST API. <span class="status status--live">Available now</span></li>
+<li><strong><a href="/foundations/backbone-application-structure/">Application Structure</a></strong>: wiring models, collections, and views without spaghetti. <span class="status status--live">Available now</span></li>
+<li><strong><a href="/foundations/backbone-data-flow/">Data Flow in Backbone</a></strong>: how a change travels from model to screen. <span class="status status--live">Available now</span></li>
+<li><strong><a href="/foundations/backbone-routing-basics/">Routing Basics</a></strong>: routes, parameters, and the History API. <span class="status status--live">Available now</span></li>
+</ul>
+
+<h2 id="bigger-picture">How these connect to the bigger picture</h2>
+
+<p>
+Foundations is deliberately narrow. Once the core clicks, the same ideas scale up: the events you learn here become the pub/sub backbone of larger systems, and the model-to-view flow becomes the rendering pipeline. From here the natural next steps are the <a href="/backbonejs/">Backbone.js guide</a> for the full picture, <a href="/organizing-backbone-using-modules/">organizing Backbone using modules</a> for structuring real projects, and <a href="/why-would-you-use-backbone/">why you would use Backbone</a> for the trade-offs.
+</p>
+
+<h2 id="how-to">How to work through this cluster</h2>
+
+<p>
+A practical order: read the four core pages, then the events guide, then build one tiny thing, a list that adds and removes items, using only what you have read. You will learn more from 30 lines you typed yourself than from an hour of reading. When something behaves oddly, that is the moment to dig into the relevant guide.
+</p>
+
+<section id="faq">
+<h2>Frequently Asked Questions</h2>
+
+<h3>What should I learn first in Backbone.js?</h3>
+<p>Start with the View and the Model, then the Collection and the Router. Once those four objects make sense, the events system ties them together and the rest of the foundations build on top.</p>
+
+<h3>Do I need jQuery to use Backbone.js?</h3>
+<p>Backbone needs Underscore (or Lodash) and a DOM library for Views. Historically that was jQuery; today you can supply any compatible DOM manipulation library, or do without jQuery for non-DOM work like Models and Collections.</p>
+
+<h3>Is Backbone.js still worth learning in 2026?</h3>
+<p>For new greenfield products most teams reach for React or Vue. Backbone is still worth learning to maintain existing apps and, more importantly, to understand the MVC, events, and sync patterns that modern frameworks refined rather than replaced.</p>
+
+<h3>How is this different from the Backbone.js guide?</h3>
+<p>The Backbone.js guide is the single pillar overview. Foundations breaks the core into focused, code-first tutorials you can read one concept at a time.</p>
+</section>
+
+<p><strong>Read next:</strong> <a href="/foundations/backbone-events/">Backbone.js Events</a>, the glue between every object on this page.</p>
+
+<style>
+.relclu{display:flex;flex-wrap:wrap;gap:10px;margin:14px 0 4px;padding:0;list-style:none}
+.relclu a{display:inline-flex;align-items:center;gap:8px;background:#fff;border:1px solid #e5e7eb;border-radius:999px;padding:8px 15px;text-decoration:none;color:#1f2937;font-weight:600;font-size:14px;transition:border-color .15s,box-shadow .15s}
+.relclu a:hover{border-color:#94a3b8;box-shadow:0 4px 14px rgba(0,0,0,.06)}
+.relclu .dot{width:10px;height:10px;border-radius:50%;display:inline-block;flex:none}
+</style>
+<h2>Related clusters</h2>
+<p>Foundations connects to the rest of the site. Keep building from here:</p>
+<nav class="relclu" aria-label="Related clusters">
+  <a href="/backbonejs/"><span class="dot" style="background:#2563eb"></span>Backbone.js Guide</a>
+  <a href="/architecture/"><span class="dot" style="background:#6366f1"></span>Frontend Architecture</a>
+  <a href="/rendering/"><span class="dot" style="background:#a855f7"></span>Rendering</a>
+  <a href="/javascript-seo/"><span class="dot" style="background:#22c55e"></span>JavaScript SEO</a>
+  <a href="/interactive-web/"><span class="dot" style="background:#f59e0b"></span>Interactive Web</a>
+  <a href="/modern-frameworks/"><span class="dot" style="background:#06b6d4"></span>Modern Frameworks</a>
+</nav>
+
+<div class="cta">
+<p><strong>Ready for the full picture?</strong></p>
+<p>Once the foundations click, the complete guide ties Models, Views, Routers, and Collections into one application.</p>
+<a href="/backbonejs/" class="btn">Explore the Backbone Guide →</a>
+</div>
+
+<div class="back-home">
+<a href="/backbonejs/">← Back to Backbone.js Tutorial Hub</a>
+</div>
+
+</article>
+
+</main>
+
+<footer>
+
+<p>Backbone Tutorials</p>
+
+<nav class="bt-social" aria-label="Backbone Tutorials on social media">
+  <a style="--c:#181717" href="https://github.com/backbonetutorials/backbonetutorials" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on GitHub"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#fff" d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0 1 12 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222 0 1.606-.014 2.898-.014 3.293 0 .322.216.694.825.576C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg></a>
+  <a style="--c:#000000" href="https://x.com/backbonetutor" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on X (formerly Twitter)"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#fff" d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+  <a style="--c:#FF0000" href="https://www.youtube.com/@BACKBONETUTORIALS" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on YouTube"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#fff" d="M8.5 6.5 L8.5 17.5 L17.5 12 Z"/></svg></a>
+  <a style="--c:#0285FF" href="https://bsky.app/profile/backbonetutorials.bsky.social" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on Bluesky"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#fff" d="M12 10.8c-1.087-2.114-4.046-6.053-6.798-7.995C2.566.944 1.561 1.266.902 1.565.139 1.908 0 3.08 0 3.768c0 .69.378 5.65.624 6.479.815 2.736 3.713 3.66 6.383 3.364.136-.02.275-.039.415-.056-.138.022-.276.04-.415.056-3.912.58-7.387 2.005-2.83 7.078 5.013 5.19 6.87-1.113 7.823-4.308.953 3.195 2.05 9.271 7.733 4.308 4.267-4.308 1.172-6.498-2.74-7.078a8.741 8.741 0 0 1-.415-.056c.14.017.279.036.415.056 2.67.296 5.568-.628 6.383-3.364C23.622 9.418 24 4.458 24 3.768c0-.688-.139-1.86-.902-2.203-.659-.299-1.664-.621-4.3 1.24C16.046 4.747 13.087 8.686 12 10.8Z"/></svg></a>
+  <a style="--c:#d62976;background-image:linear-gradient(150deg,rgba(255,255,255,.30),rgba(255,255,255,0) 42%,rgba(0,0,0,.22)),linear-gradient(45deg,#feda75,#fa7e1e,#d62976,#962fbf,#4f5bd5)" href="https://www.instagram.com/backbonetutorials/" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on Instagram"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="4" y="4" width="16" height="16" rx="5" fill="none" stroke="#fff" stroke-width="2"/><circle cx="12" cy="12" r="3.6" fill="none" stroke="#fff" stroke-width="2"/><circle cx="17.2" cy="6.8" r="1.25" fill="#fff"/></svg></a>
+  <a style="--c:#000000" href="https://www.tiktok.com/@backbonetutorials" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on TikTok"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#fff" d="M16.5 5.82a4.79 4.79 0 0 1-1.16-3.07h-2.9v11.43a2.45 2.45 0 1 1-2.45-2.45c.17 0 .33.02.49.05V8.83a5.36 5.36 0 0 0-.49-.02 5.35 5.35 0 1 0 5.35 5.35V8.6a7.66 7.66 0 0 0 4.46 1.42V7.13a4.79 4.79 0 0 1-2.8-1.31Z"/></svg></a>
+  <a style="--c:#1877F2" href="https://www.facebook.com/BackboneTutorials" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on Facebook"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#fff" d="M13.5 21v-8h2.6l.4-3h-3V8.1c0-.87.27-1.46 1.5-1.46H17V3.96c-.28-.04-1.2-.12-2.28-.12-2.26 0-3.8 1.38-3.8 3.9V10H8.3v3h2.62v8h2.58Z"/></svg></a>
+</nav>
+
+<p>
+<a href="/">Home</a> |
+<a href="/about/">About</a> |
+<a href="/contact/">Contact</a> |
+<a href="/privacy-policy/">Privacy Policy</a> |
+<a href="/terms/">Terms</a>
+</p>
+
+<p>© 2026 Backbone Tutorials</p>
+
+</footer>
+
+</body>
+</html>

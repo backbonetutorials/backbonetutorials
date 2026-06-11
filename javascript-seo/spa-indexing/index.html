@@ -1,0 +1,437 @@
+<!-- DEPLOY TO: /javascript-seo/spa-indexing/  (index.html) · TechArticle · per MASTERMIND_SEO.md
+     EDITOR (§11.1): add a first-hand note (an SPA route you got indexed + before/after) + date before publish; add URL to sitemap.xml. -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>SPA Indexing — getting a single page app indexed</title>
+
+<meta name="description" content="How to get a single page app indexed: a real URL per view, content in the HTML, per-route head and canonical, crawlable links, and verifying in GSC.">
+
+<meta name="robots" content="index, follow">
+<meta name="author" content="Backbone Tutorials">
+<meta name="theme-color" content="#2563eb">
+<meta name="format-detection" content="telephone=no">
+
+<link rel="canonical" href="https://backbonetutorials.com/javascript-seo/spa-indexing/">
+
+<link rel="icon" href="/assets/favicon.ico">
+<link rel="apple-touch-icon" href="/assets/favicon.png">
+
+<!-- Open Graph -->
+<meta property="og:title" content="SPA Indexing — getting a single page app indexed">
+<meta property="og:description" content="Make a single page application indexable: a real URL per view, content in the initial HTML, per-route head, crawlable links, and verifying routes in Search Console.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://backbonetutorials.com/javascript-seo/spa-indexing/">
+<meta property="og:image" content="https://backbonetutorials.com/assets/javascript-seo/spa-indexing-1200.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:type" content="image/jpeg">
+<meta property="og:image:alt" content="SPA Indexing — Backbone Tutorials">
+<meta property="og:site_name" content="Backbone Tutorials">
+<meta property="og:locale" content="en_US">
+
+<!-- Twitter -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="SPA Indexing — getting a single page app indexed">
+<meta name="twitter:description" content="Make an SPA indexable: a real URL per view, content in the initial HTML, per-route head, crawlable links, and verifying in Search Console.">
+<meta name="twitter:image" content="https://backbonetutorials.com/assets/javascript-seo/spa-indexing-1200.jpg">
+<meta name="twitter:image:alt" content="SPA Indexing — Backbone Tutorials">
+<meta name="twitter:url" content="https://backbonetutorials.com/javascript-seo/spa-indexing/">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+
+<style>
+
+html{scroll-behavior:smooth}
+body{font-family:'Inter',sans-serif;margin:0;background:#f4f6f9;color:#1f2937;line-height:1.7}
+.container{max-width:900px;margin:30px auto;padding:20px;background:#fff;border-radius:10px;box-shadow:0 2px 10px rgba(0,0,0,0.04)}
+h1,h2,h3{color:#111827}
+.nav{background:#111827;padding:15px;display:flex;justify-content:center;align-items:center;flex-wrap:wrap;gap:8px}
+.nav a{color:white;margin:0 10px;text-decoration:none;font-weight:600}
+.nav a:hover{text-decoration:underline}
+.nav-logo img{vertical-align:middle;margin-right:12px;border-radius:8px}
+figure{margin:30px 0}
+img{width:100%;height:auto;border-radius:10px}
+pre{background:#111;color:#eee;padding:15px;border-radius:8px;overflow-x:auto;box-shadow:0 2px 8px rgba(0,0,0,0.15)}
+code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+p code,li code{background:#eef2ff;padding:1px 5px;border-radius:4px;font-size:.95em}
+.cta{background:#eef2ff;padding:20px;margin-top:30px;text-align:center;border-radius:10px}
+a{color:#2563eb}
+.back-home{margin-top:25px}
+footer{background:#111827;color:white;text-align:center;padding:30px 20px;margin-top:40px}
+footer a{color:#93c5fd;text-decoration:none}
+footer a:hover{text-decoration:underline}
+.btn{display:inline-block;background:#2563eb;color:white;padding:12px 22px;border-radius:8px;text-decoration:none;font-weight:600;margin-top:15px;transition:0.2s ease}
+.btn:hover{background:#1d4ed8;transform:translateY(-1px)}
+.card{background:#fff;padding:20px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.05);overflow:hidden;max-width:100%;border:1px solid #eef2f7}
+.toc-list{padding-left:20px}
+.toc-list li{margin-bottom:8px}
+.author-line{font-size:15px;margin-top:-6px;margin-bottom:10px;color:#4b5563}
+figcaption{font-size:14px;color:#6b7280;margin-top:10px}
+#faq h3{margin-top:25px}
+#faq p{margin-bottom:18px}
+.breadcrumb{font-size:14px;color:#6b7280;margin:0 0 10px}
+.breadcrumb a{color:#2563eb;text-decoration:none}
+.breadcrumb a:hover{text-decoration:underline}
+.diagram{width:100%;height:auto;display:block;border-radius:10px}
+.bt-social{display:flex;gap:13px;flex-wrap:wrap;align-items:center;justify-content:center;margin:0 0 14px;padding:0;list-style:none}
+.bt-social a{position:relative;isolation:isolate;width:46px;height:46px;border-radius:14px;display:inline-flex;align-items:center;justify-content:center;text-decoration:none;-webkit-tap-highlight-color:transparent;background-color:var(--c,#333);background-image:linear-gradient(150deg,rgba(255,255,255,.30),rgba(255,255,255,0) 42%,rgba(0,0,0,.22));box-shadow:0 1px 1px rgba(0,0,0,.22),0 7px 14px -3px rgba(0,0,0,.34),inset 0 1px 0 rgba(255,255,255,.50),inset 0 -2px 5px rgba(0,0,0,.30);transition:transform .18s cubic-bezier(.2,.7,.2,1),box-shadow .18s ease}
+.bt-social a::before{content:"";position:absolute;left:3px;right:3px;top:2px;height:44%;border-radius:12px 12px 50% 50%/12px 12px 24px 24px;background:linear-gradient(180deg,rgba(255,255,255,.42),rgba(255,255,255,0));pointer-events:none;z-index:0}
+.bt-social a:hover{transform:translateY(-3px) scale(1.05);box-shadow:0 2px 2px rgba(0,0,0,.20),0 16px 26px -6px rgba(0,0,0,.40),inset 0 1px 0 rgba(255,255,255,.55),inset 0 -2px 6px rgba(0,0,0,.32)}
+.bt-social a:active{transform:translateY(-1px) scale(1.01)}
+.bt-social a:focus-visible{outline:3px solid #93c5fd;outline-offset:3px}
+.bt-social svg{position:relative;z-index:1;width:22px;height:22px;display:block;filter:drop-shadow(0 1px 1px rgba(0,0,0,.28))}
+@media (prefers-reduced-motion:reduce){.bt-social a{transition:none}.bt-social a:hover{transform:none}}
+@media(max-width:600px){.container{padding:15px}}
+
+</style>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": "https://backbonetutorials.com/#organization",
+      "name": "Backbone Tutorials",
+      "url": "https://backbonetutorials.com/",
+      "logo": { "@type": "ImageObject", "url": "https://backbonetutorials.com/assets/logo.png" },
+      "sameAs": [
+        "https://github.com/backbonetutorials/backbonetutorials",
+        "https://x.com/backbonetutor",
+        "https://www.youtube.com/@BACKBONETUTORIALS",
+        "https://bsky.app/profile/backbonetutorials.bsky.social",
+        "https://www.instagram.com/backbonetutorials/",
+        "https://www.tiktok.com/@backbonetutorials",
+        "https://www.facebook.com/BackboneTutorials"
+      ],
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "contactType": "customer support",
+        "email": "backbonetutorials2026@gmail.com",
+        "availableLanguage": ["English"],
+        "areaServed": "Worldwide"
+      }
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://backbonetutorials.com/#website",
+      "url": "https://backbonetutorials.com/",
+      "name": "Backbone Tutorials",
+      "publisher": { "@id": "https://backbonetutorials.com/#organization" }
+    },
+    {
+      "@type": "Person",
+      "@id": "https://backbonetutorials.com/author/backbone-tutorials-team/#person",
+      "name": "Backbone Tutorials Team",
+      "url": "https://backbonetutorials.com/author/backbone-tutorials-team/",
+      "worksFor": { "@id": "https://backbonetutorials.com/#organization" },
+      "jobTitle": "Frontend JavaScript Editorial Team",
+      "knowsAbout": ["JavaScript SEO", "Single Page Applications", "Server-side rendering", "Backbone.js"]
+    },
+    {
+      "@type": "WebPage",
+      "@id": "https://backbonetutorials.com/javascript-seo/spa-indexing/#webpage",
+      "url": "https://backbonetutorials.com/javascript-seo/spa-indexing/",
+      "name": "SPA Indexing — getting a single page app indexed",
+      "headline": "SPA Indexing",
+      "description": "How to get a single page app indexed: a real URL per view, content in the initial HTML, per-route head and canonical, crawlable links, and verifying in GSC.",
+      "inLanguage": "en",
+      "isPartOf": { "@id": "https://backbonetutorials.com/#website" },
+      "author": { "@id": "https://backbonetutorials.com/author/backbone-tutorials-team/#person" },
+      "publisher": { "@id": "https://backbonetutorials.com/#organization" },
+      "breadcrumb": { "@id": "https://backbonetutorials.com/javascript-seo/spa-indexing/#breadcrumb" },
+      "mainEntity": { "@id": "https://backbonetutorials.com/javascript-seo/spa-indexing/#article" }
+    },
+    {
+      "@type": "TechArticle",
+      "@id": "https://backbonetutorials.com/javascript-seo/spa-indexing/#article",
+      "url": "https://backbonetutorials.com/javascript-seo/spa-indexing/",
+      "headline": "SPA Indexing",
+      "description": "A practical guide to indexing a single page application: why SPAs are hard to index, giving every view a real URL, rendering content into the initial HTML, per-route head and canonical, crawlable navigation, and verifying routes in Search Console.",
+      "inLanguage": "en",
+      "image": {
+        "@type": "ImageObject",
+        "url": "https://backbonetutorials.com/assets/javascript-seo/spa-indexing-1200.jpg",
+        "width": 1200,
+        "height": 630
+      },
+      "author": { "@id": "https://backbonetutorials.com/author/backbone-tutorials-team/#person" },
+      "publisher": { "@id": "https://backbonetutorials.com/#organization" },
+      "mainEntityOfPage": { "@id": "https://backbonetutorials.com/javascript-seo/spa-indexing/#webpage" },
+      "datePublished": "2026-06-12T04:30:00+07:00",
+      "dateModified": "2026-06-12T04:30:00+07:00",
+      "articleSection": ["JavaScript SEO", "Single Page Applications", "Indexing"],
+      "keywords": ["SPA indexing", "single page application SEO", "real URLs", "server-side rendering", "per-route head", "soft 404"],
+      "about": [
+        { "@type": "Thing", "name": "Single Page Application" },
+        { "@type": "Thing", "name": "Search engine indexing" },
+        { "@type": "Thing", "name": "JavaScript" }
+      ],
+      "mentions": [
+        { "@type": "Thing", "name": "History API" },
+        { "@type": "Thing", "name": "Server-side rendering" },
+        { "@type": "Thing", "name": "Canonical link element" }
+      ]
+    },
+    {
+      "@type": "BreadcrumbList",
+      "@id": "https://backbonetutorials.com/javascript-seo/spa-indexing/#breadcrumb",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://backbonetutorials.com/" },
+        { "@type": "ListItem", "position": 2, "name": "JavaScript SEO", "item": "https://backbonetutorials.com/javascript-seo/" },
+        { "@type": "ListItem", "position": 3, "name": "SPA Indexing", "item": "https://backbonetutorials.com/javascript-seo/spa-indexing/" }
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "@id": "https://backbonetutorials.com/javascript-seo/spa-indexing/#faq",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Can a single page application be indexed by Google?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Yes. A single page application can rank well if each view has its own real URL, its content reaches the rendered HTML, the head is set per route, and navigation uses real links. The difficulty is not the app model itself but the defaults, which hide content behind client rendering and stateful routing." }
+        },
+        {
+          "@type": "Question",
+          "name": "Do I need server-side rendering for an SPA?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Not strictly, but server-side rendering or prerendering is the reliable path, because it puts each route's content in the first response. Pure client-side rendering can be indexed too, but it depends on Google rendering your scripts well and promptly, which is riskier for pages that must rank." }
+        },
+        {
+          "@type": "Question",
+          "name": "Should I use hash URLs in an SPA for SEO?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Prefer real path URLs through the History API. Hash-based routes are weaker for indexing because the fragment is not treated as a separate page in the same way. Give every indexable view a clean, distinct path that returns content on a direct visit." }
+        },
+        {
+          "@type": "Question",
+          "name": "Why are my SPA routes showing as soft 404 or not indexed?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Common causes are unknown routes that render an empty 'not found' view while returning a 200, content that depends on a slow or blocked render, and views that lack a real URL or crawlable link. Fix routing and status codes, render content into the HTML, and link views with real anchors." }
+        }
+      ]
+    }
+  ]
+}
+</script>
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-FYJP43XDHH"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-FYJP43XDHH');
+</script>
+
+</head>
+
+<body>
+
+<nav class="nav" aria-label="Main Navigation">
+<a href="/" class="nav-logo" title="Backbone Tutorials Homepage"><img src="/assets/logo.png" alt="Backbone Tutorials Logo" width="36" height="36" loading="lazy" decoding="async"></a>
+<a href="/" title="Backbone.js Tutorials Homepage">Home</a>
+<a href="/backbonejs/" title="Backbone.js Complete Guide">Backbone Guide</a>
+<a href="/what-is-a-router/" title="What is a Router in Backbone.js">Router</a>
+<a href="/what-is-a-model/" title="What is a Model in Backbone.js">Model</a>
+<a href="/what-is-a-view/" title="What is a View in Backbone.js">View</a>
+<a href="/what-is-a-collection/" title="What is a Collection in Backbone.js">Collection</a>
+</nav>
+
+<main>
+
+<article class="container">
+
+<nav class="breadcrumb" aria-label="Breadcrumb">
+<a href="/">Home</a> › <a href="/javascript-seo/">JavaScript SEO</a> › <span aria-current="page">SPA Indexing</span>
+</nav>
+
+<h1>SPA Indexing</h1>
+
+<p class="author-line">Written by <a href="/author/backbone-tutorials-team/">Backbone Tutorials Team</a></p>
+<p class="author-line">Last updated: June 2026 · 10 min read</p>
+
+<p>
+A single page application is the hardest thing to get indexed well, because almost everything that makes it pleasant to use, one HTML shell, instant in-app navigation, content assembled on the fly, works against a crawler. The good news is that the fixes are concrete and they are the same handful you have met across this cluster, applied together. This guide assembles them into one playbook for getting an SPA fully indexed.
+</p>
+
+<p>
+It pulls together <a href="/javascript-seo/rendering-for-search-engines/">rendering for search engines</a>, <a href="/javascript-seo/crawlability/">crawlability</a>, and <a href="/javascript-seo/googlebot-rendering/">Googlebot rendering</a>, and is the practical companion to the <a href="/seo-for-single-page-apps/">SEO for single page apps</a> overview.
+</p>
+
+<figure>
+<svg class="diagram" viewBox="0 0 720 180" role="img" aria-labelledby="spaTitle spaDesc" xmlns="http://www.w3.org/2000/svg">
+  <title id="spaTitle">From one shell to many indexable pages</title>
+  <desc id="spaDesc">A single shell becomes indexable when each view has a real URL, content in the HTML, its own head, and crawlable links.</desc>
+  <rect x="0" y="0" width="720" height="180" rx="12" fill="#0f172a"></rect>
+  <g font-family="Inter, sans-serif" text-anchor="middle">
+    <rect x="36" y="66" width="150" height="50" rx="10" fill="#1e293b" stroke="#475569"></rect><text x="111" y="88" fill="#fff" font-size="13" font-weight="700">One shell</text><text x="111" y="105" fill="#94a3b8" font-size="10">client-rendered</text>
+    <rect x="286" y="40" width="160" height="40" rx="9" fill="#1e293b" stroke="#3b82f6"></rect><text x="366" y="65" fill="#fff" font-size="11">real URL per view</text>
+    <rect x="286" y="88" width="160" height="40" rx="9" fill="#1e293b" stroke="#3b82f6"></rect><text x="366" y="113" fill="#fff" font-size="11">content + head + links</text>
+    <rect x="546" y="66" width="150" height="50" rx="10" fill="#1e293b" stroke="#2563eb" stroke-width="2"></rect><text x="621" y="88" fill="#fff" font-size="13" font-weight="700">Indexable pages</text><text x="621" y="105" fill="#93c5fd" font-size="10">each can rank</text>
+    <g stroke="#64748b" stroke-width="2" fill="none">
+      <path d="M186 84 L284 62" marker-end="url(#as)"></path>
+      <path d="M186 98 L284 106" marker-end="url(#as)"></path>
+      <path d="M446 60 L544 84" marker-end="url(#as)"></path>
+      <path d="M446 108 L544 98" marker-end="url(#as)"></path>
+    </g>
+  </g>
+  <defs><marker id="as" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0 0 L7 3 L0 6 Z" fill="#64748b"></path></marker></defs>
+</svg>
+<figcaption>An SPA becomes indexable when each view earns a real URL, renders its content and head, and is reachable by a crawlable link.</figcaption>
+</figure>
+
+<div class="card">
+<p style="margin-top:0"><strong>What you'll learn</strong></p>
+<ul class="toc-list">
+<li><a href="#hard">Why SPAs are hard to index</a></li>
+<li><a href="#urls">Every view needs its own URL</a></li>
+<li><a href="#render">Render content into the initial HTML</a></li>
+<li><a href="#head">Per-route head and canonical</a></li>
+<li><a href="#links">Links, not click handlers</a></li>
+<li><a href="#verify">Verify the SPA is actually indexed</a></li>
+</ul>
+</div>
+
+<h2 id="hard">Why SPAs are hard to index</h2>
+
+<p>
+The defining trait of an SPA is that the server sends one shell and JavaScript builds every view inside it. To a user this feels fast and seamless; to a crawler arriving at a deep URL, it can look like a blank page that may or may not fill in.
+</p>
+
+<h3>The empty-shell problem</h3>
+
+<p>
+Three habits compound the risk: rendering only on the client, so content waits on scripts; routing through in-memory state, so views have no address; and navigating through click handlers, so there is nothing to follow. Each is solvable on its own, and an indexable SPA is simply one where all three are solved at once.
+</p>
+
+<h2 id="urls">Every view needs its own URL</h2>
+
+<p>
+Indexing happens per URL, so any view you want in search has to be a URL, one that returns that view when visited directly, not only when reached by clicking through the app.
+</p>
+
+<h3>Real routes, not hash fragments</h3>
+
+<pre><code>// Client router updates the address with a real path
+history.pushState({}, '', '/products/42');</code></pre>
+
+<p>
+Use the History API to give each view a clean path like <code>/products/42</code>, and make sure the server returns the app for that path on a direct hit so it does not 404. Prefer real paths over hash fragments, which search engines treat less reliably as distinct pages. This is exactly the discipline from the <a href="/foundations/backbone-routing-basics/">routing basics</a> guide, and it is the foundation everything else rests on.
+</p>
+
+<h2 id="render">Render content into the initial HTML</h2>
+
+<p>
+A real URL is necessary but not sufficient: when a crawler fetches it, the response should already contain the view's content, rather than an empty container that depends on a later render.
+</p>
+
+<h3>SSR or prerendering per route</h3>
+
+<p>
+Server-render the dynamic routes and prerender the stable ones so each URL's content and head ship in the first response, the approach laid out in rendering for search engines. Pure client rendering can still be indexed, but it leans on Google's renderer and its timeouts, which is a gamble on the pages you most want to rank. Putting content in the HTML removes that gamble.
+</p>
+
+<h2 id="head">Per-route head and canonical</h2>
+
+<p>
+Because the page never reloads, the document head will not change between views unless you change it. Every indexable route needs its own, correct head, or they will compete and confuse.
+</p>
+
+<h3>Unique head for each route</h3>
+
+<p>
+Give each route a unique title and description, and a self-referencing canonical pointing at that route's clean URL, ideally rendered on the server so it is right in the first response. Without this, every view inherits the shell's title and a single canonical, and Google sees many near-duplicate pages instead of distinct ones.
+</p>
+
+<h2 id="links">Links, not click handlers</h2>
+
+<p>
+Even with URLs, content, and heads in place, Google still has to discover the routes, and it does that by following links. A view nothing links to is an orphan no matter how well it renders.
+</p>
+
+<h3>Crawlable navigation between views</h3>
+
+<pre><code>&lt;!-- Real link, real path: crawlable and shareable --&gt;
+&lt;a href="/products/42"&gt;Product 42&lt;/a&gt;</code></pre>
+
+<p>
+Navigate with real anchor elements that carry an <code>href</code> to the route's path, letting your router enhance the click rather than replace it. A handler on a <code>div</code> moves a user but leaves nothing for a crawler to follow. Real links are simultaneously good navigation, good accessibility, and the mechanism by which your routes get discovered.
+</p>
+
+<h2 id="verify">Verify the SPA is actually indexed</h2>
+
+<p>
+With the four fixes shipped, confirm they worked rather than assuming. SPAs regress quietly, so verification is part of the job, not an afterthought.
+</p>
+
+<h3>Checking routes in Search Console</h3>
+
+<p>
+Run URL Inspection on a sample of routes to confirm the rendered HTML carries the content, head, and links, and watch the Pages report for routes flagged as soft 404 or "Crawled, currently not indexed", the audit habit applied to an SPA. Pay special attention to how unknown routes behave: a missing item should return a real 404, not a 200 with an empty view. Get these signals clean and a single page application indexes like any other site. The next guide turns to debugging when a render still does not produce what you expect.
+</p>
+
+<section id="faq">
+<h2>Frequently Asked Questions</h2>
+
+<h3>Can a single page application be indexed by Google?</h3>
+<p>Yes. A single page application can rank well if each view has its own real URL, its content reaches the rendered HTML, the head is set per route, and navigation uses real links. The difficulty is not the app model itself but the defaults, which hide content behind client rendering and stateful routing.</p>
+
+<h3>Do I need server-side rendering for an SPA?</h3>
+<p>Not strictly, but server-side rendering or prerendering is the reliable path, because it puts each route's content in the first response. Pure client-side rendering can be indexed too, but it depends on Google rendering your scripts well and promptly, which is riskier for pages that must rank.</p>
+
+<h3>Should I use hash URLs in an SPA for SEO?</h3>
+<p>Prefer real path URLs through the History API. Hash-based routes are weaker for indexing because the fragment is not treated as a separate page in the same way. Give every indexable view a clean, distinct path that returns content on a direct visit.</p>
+
+<h3>Why are my SPA routes showing as soft 404 or not indexed?</h3>
+<p>Common causes are unknown routes that render an empty "not found" view while returning a 200, content that depends on a slow or blocked render, and views that lack a real URL or crawlable link. Fix routing and status codes, render content into the HTML, and link views with real anchors.</p>
+</section>
+
+<p><strong>Read next:</strong> back to the <a href="/javascript-seo/">JavaScript SEO</a> hub, or revisit <a href="/javascript-seo/rendering-for-search-engines/">rendering for search engines</a> for the strategies behind step 3.</p>
+
+<div class="cta">
+<p><strong>Building the single page app itself?</strong></p>
+<p>Indexable views start with real routes and structure. See how an SPA is built in the complete Backbone guide.</p>
+<a href="/backbonejs/" class="btn">Explore the Backbone Guide →</a>
+</div>
+
+<div class="back-home">
+<a href="/javascript-seo/">← Back to JavaScript SEO</a>
+</div>
+
+</article>
+
+</main>
+
+<footer>
+
+<p>Backbone Tutorials</p>
+
+<nav class="bt-social" aria-label="Backbone Tutorials on social media">
+  <a style="--c:#181717" href="https://github.com/backbonetutorials/backbonetutorials" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on GitHub"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#fff" d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0 1 12 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222 0 1.606-.014 2.898-.014 3.293 0 .322.216.694.825.576C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg></a>
+  <a style="--c:#000000" href="https://x.com/backbonetutor" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on X (formerly Twitter)"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#fff" d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+  <a style="--c:#FF0000" href="https://www.youtube.com/@BACKBONETUTORIALS" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on YouTube"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#fff" d="M8.5 6.5 L8.5 17.5 L17.5 12 Z"/></svg></a>
+  <a style="--c:#0285FF" href="https://bsky.app/profile/backbonetutorials.bsky.social" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on Bluesky"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#fff" d="M12 10.8c-1.087-2.114-4.046-6.053-6.798-7.995C2.566.944 1.561 1.266.902 1.565.139 1.908 0 3.08 0 3.768c0 .69.378 5.65.624 6.479.815 2.736 3.713 3.66 6.383 3.364.136-.02.275-.039.415-.056-.138.022-.276.04-.415.056-3.912.58-7.387 2.005-2.83 7.078 5.013 5.19 6.87-1.113 7.823-4.308.953 3.195 2.05 9.271 7.733 4.308 4.267-4.308 1.172-6.498-2.74-7.078a8.741 8.741 0 0 1-.415-.056c.14.017.279.036.415.056 2.67.296 5.568-.628 6.383-3.364C23.622 9.418 24 4.458 24 3.768c0-.688-.139-1.86-.902-2.203-.659-.299-1.664-.621-4.3 1.24C16.046 4.747 13.087 8.686 12 10.8Z"/></svg></a>
+  <a style="--c:#d62976;background-image:linear-gradient(150deg,rgba(255,255,255,.30),rgba(255,255,255,0) 42%,rgba(0,0,0,.22)),linear-gradient(45deg,#feda75,#fa7e1e,#d62976,#962fbf,#4f5bd5)" href="https://www.instagram.com/backbonetutorials/" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on Instagram"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="4" y="4" width="16" height="16" rx="5" fill="none" stroke="#fff" stroke-width="2"/><circle cx="12" cy="12" r="3.6" fill="none" stroke="#fff" stroke-width="2"/><circle cx="17.2" cy="6.8" r="1.25" fill="#fff"/></svg></a>
+  <a style="--c:#000000" href="https://www.tiktok.com/@backbonetutorials" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on TikTok"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#fff" d="M16.5 5.82a4.79 4.79 0 0 1-1.16-3.07h-2.9v11.43a2.45 2.45 0 1 1-2.45-2.45c.17 0 .33.02.49.05V8.83a5.36 5.36 0 0 0-.49-.02 5.35 5.35 0 1 0 5.35 5.35V8.6a7.66 7.66 0 0 0 4.46 1.42V7.13a4.79 4.79 0 0 1-2.8-1.31Z"/></svg></a>
+  <a style="--c:#1877F2" href="https://www.facebook.com/BackboneTutorials" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on Facebook"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#fff" d="M13.5 21v-8h2.6l.4-3h-3V8.1c0-.87.27-1.46 1.5-1.46H17V3.96c-.28-.04-1.2-.12-2.28-.12-2.26 0-3.8 1.38-3.8 3.9V10H8.3v3h2.62v8h2.58Z"/></svg></a>
+</nav>
+
+<p>
+<a href="/">Home</a> |
+<a href="/about/">About</a> |
+<a href="/contact/">Contact</a> |
+<a href="/privacy-policy/">Privacy Policy</a> |
+<a href="/terms/">Terms</a>
+</p>
+
+<p>© 2026 Backbone Tutorials</p>
+
+</footer>
+
+</body>
+</html>

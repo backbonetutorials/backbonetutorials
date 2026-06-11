@@ -1,0 +1,485 @@
+<!-- DEPLOY TO: /interactive-web/webrtc-data-channels/  (index.html) · TechArticle · per MASTERMIND_SEO.md -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>WebRTC Data Channels — peer-to-peer in the browser</title>
+
+<meta name="description" content="WebRTC data channels for peer-to-peer data: signaling, SDP offer and answer, ICE with STUN and TURN, the RTCDataChannel API, and reliability modes.">
+
+<meta name="robots" content="index, follow">
+<meta name="author" content="Backbone Tutorials">
+<meta name="theme-color" content="#2563eb">
+<meta name="format-detection" content="telephone=no">
+
+<link rel="canonical" href="https://backbonetutorials.com/interactive-web/webrtc-data-channels/">
+
+<link rel="icon" href="/assets/favicon.ico">
+<link rel="apple-touch-icon" href="/assets/favicon.png">
+
+<meta property="og:title" content="WebRTC Data Channels — peer-to-peer in the browser">
+<meta property="og:description" content="How WebRTC data channels move data peer-to-peer: signaling and SDP offer/answer, ICE with STUN and TURN for NAT traversal, the RTCDataChannel API, and reliability modes.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://backbonetutorials.com/interactive-web/webrtc-data-channels/">
+<meta property="og:image" content="https://backbonetutorials.com/assets/interactive-web/webrtc-data-channels-1200.jpg">
+<meta property="og:site_name" content="Backbone Tutorials">
+<meta property="og:locale" content="en_US">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="WebRTC Data Channels — peer-to-peer in the browser">
+<meta name="twitter:description" content="WebRTC data channels: signaling and SDP offer/answer, ICE with STUN and TURN, the RTCDataChannel API, and reliable vs unreliable delivery.">
+<meta name="twitter:image" content="https://backbonetutorials.com/assets/interactive-web/webrtc-data-channels-1200.jpg">
+<meta name="twitter:url" content="https://backbonetutorials.com/interactive-web/webrtc-data-channels/">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+
+<style>
+html{scroll-behavior:smooth}
+body{font-family:'Inter',sans-serif;margin:0;background:#f4f6f9;color:#1f2937;line-height:1.7}
+.container{max-width:900px;margin:30px auto;padding:20px;background:#fff;border-radius:10px;box-shadow:0 2px 10px rgba(0,0,0,0.04)}
+h1,h2,h3{color:#111827}
+.nav{background:#111827;padding:15px;display:flex;justify-content:center;align-items:center;flex-wrap:wrap;gap:8px}
+.nav a{color:white;margin:0 10px;text-decoration:none;font-weight:600}
+.nav a:hover{text-decoration:underline}
+.nav-logo img{vertical-align:middle;margin-right:12px;border-radius:8px}
+figure{margin:30px 0}
+pre{background:#111;color:#eee;padding:15px;border-radius:8px;overflow-x:auto;box-shadow:0 2px 8px rgba(0,0,0,0.15)}
+code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+p code,li code{background:#eef2ff;padding:1px 5px;border-radius:4px;font-size:.95em}
+.cta{background:#eef2ff;padding:20px;margin-top:30px;text-align:center;border-radius:10px}
+a{color:#2563eb}
+.back-home{margin-top:25px}
+footer{background:#111827;color:white;text-align:center;padding:30px 20px;margin-top:40px}
+footer a{color:#93c5fd;text-decoration:none}
+footer a:hover{text-decoration:underline}
+.btn{display:inline-block;background:#2563eb;color:white;padding:12px 22px;border-radius:8px;text-decoration:none;font-weight:600;margin-top:15px;transition:0.2s ease}
+.btn:hover{background:#1d4ed8;transform:translateY(-1px)}
+.card{background:#fff;padding:20px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.05);overflow:hidden;max-width:100%;border:1px solid #eef2f7}
+.toc-list{padding-left:20px}
+.toc-list li{margin-bottom:8px}
+.author-line{font-size:15px;margin-top:-6px;margin-bottom:10px;color:#4b5563}
+figcaption{font-size:14px;color:#6b7280;margin-top:10px}
+#faq h3{margin-top:25px}
+#faq p{margin-bottom:18px}
+.breadcrumb{font-size:14px;color:#6b7280;margin:0 0 10px}
+.breadcrumb a{color:#2563eb;text-decoration:none}
+.breadcrumb a:hover{text-decoration:underline}
+.diagram{width:100%;height:auto;display:block;border-radius:10px}
+.bt-social{display:flex;gap:13px;flex-wrap:wrap;align-items:center;justify-content:center;margin:0 0 14px;padding:0;list-style:none}
+.bt-social a{position:relative;isolation:isolate;width:46px;height:46px;border-radius:14px;display:inline-flex;align-items:center;justify-content:center;text-decoration:none;-webkit-tap-highlight-color:transparent;background-color:var(--c,#333);background-image:linear-gradient(150deg,rgba(255,255,255,.30),rgba(255,255,255,0) 42%,rgba(0,0,0,.22));box-shadow:0 1px 1px rgba(0,0,0,.22),0 7px 14px -3px rgba(0,0,0,.34),inset 0 1px 0 rgba(255,255,255,.50),inset 0 -2px 5px rgba(0,0,0,.30);transition:transform .18s cubic-bezier(.2,.7,.2,1),box-shadow .18s ease}
+.bt-social a::before{content:"";position:absolute;left:3px;right:3px;top:2px;height:44%;border-radius:12px 12px 50% 50%/12px 12px 24px 24px;background:linear-gradient(180deg,rgba(255,255,255,.42),rgba(255,255,255,0));pointer-events:none;z-index:0}
+.bt-social a:hover{transform:translateY(-3px) scale(1.05);box-shadow:0 2px 2px rgba(0,0,0,.20),0 16px 26px -6px rgba(0,0,0,.40),inset 0 1px 0 rgba(255,255,255,.55),inset 0 -2px 6px rgba(0,0,0,.32)}
+.bt-social a:active{transform:translateY(-1px) scale(1.01)}
+.bt-social a:focus-visible{outline:3px solid #93c5fd;outline-offset:3px}
+.bt-social svg{position:relative;z-index:1;width:22px;height:22px;display:block;filter:drop-shadow(0 1px 1px rgba(0,0,0,.28))}
+@media (prefers-reduced-motion:reduce){.bt-social a{transition:none}.bt-social a:hover{transform:none}}
+@media(max-width:600px){.container{padding:15px}}
+</style>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": "https://backbonetutorials.com/#organization",
+      "name": "Backbone Tutorials",
+      "url": "https://backbonetutorials.com/",
+      "logo": { "@type": "ImageObject", "url": "https://backbonetutorials.com/assets/logo.png" },
+      "sameAs": [
+        "https://github.com/backbonetutorials/backbonetutorials",
+        "https://x.com/backbonetutor",
+        "https://www.youtube.com/@BACKBONETUTORIALS",
+        "https://bsky.app/profile/backbonetutorials.bsky.social",
+        "https://www.instagram.com/backbonetutorials/",
+        "https://www.tiktok.com/@backbonetutorials",
+        "https://www.facebook.com/BackboneTutorials"
+      ],
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "contactType": "customer support",
+        "email": "backbonetutorials2026@gmail.com",
+        "availableLanguage": ["English"],
+        "areaServed": "Worldwide"
+      }
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://backbonetutorials.com/#website",
+      "url": "https://backbonetutorials.com/",
+      "name": "Backbone Tutorials",
+      "publisher": { "@id": "https://backbonetutorials.com/#organization" }
+    },
+    {
+      "@type": "Person",
+      "@id": "https://backbonetutorials.com/author/backbone-tutorials-team/#person",
+      "name": "Backbone Tutorials Team",
+      "url": "https://backbonetutorials.com/author/backbone-tutorials-team/",
+      "worksFor": { "@id": "https://backbonetutorials.com/#organization" },
+      "jobTitle": "Frontend JavaScript Editorial Team",
+      "knowsAbout": ["WebRTC", "Peer-to-peer", "Realtime systems", "Backbone.js"]
+    },
+    {
+      "@type": "WebPage",
+      "@id": "https://backbonetutorials.com/interactive-web/webrtc-data-channels/#webpage",
+      "url": "https://backbonetutorials.com/interactive-web/webrtc-data-channels/",
+      "name": "WebRTC Data Channels — peer-to-peer in the browser",
+      "headline": "WebRTC Data Channels",
+      "description": "WebRTC data channels for peer-to-peer data: signaling, SDP offer and answer, ICE with STUN and TURN, the RTCDataChannel API, and reliability modes.",
+      "inLanguage": "en",
+      "isPartOf": { "@id": "https://backbonetutorials.com/#website" },
+      "author": { "@id": "https://backbonetutorials.com/author/backbone-tutorials-team/#person" },
+      "publisher": { "@id": "https://backbonetutorials.com/#organization" },
+      "breadcrumb": { "@id": "https://backbonetutorials.com/interactive-web/webrtc-data-channels/#breadcrumb" },
+      "mainEntity": { "@id": "https://backbonetutorials.com/interactive-web/webrtc-data-channels/#article" }
+    },
+    {
+      "@type": "TechArticle",
+      "@id": "https://backbonetutorials.com/interactive-web/webrtc-data-channels/#article",
+      "url": "https://backbonetutorials.com/interactive-web/webrtc-data-channels/",
+      "headline": "WebRTC Data Channels",
+      "description": "An engineering guide to WebRTC data channels: peer-to-peer data transfer beyond audio and video, signaling with SDP offer and answer, ICE candidate gathering with STUN and TURN for NAT traversal, the RTCDataChannel API, reliable and unreliable delivery modes, and when to choose WebRTC over a server transport.",
+      "inLanguage": "en",
+      "image": {
+        "@type": "ImageObject",
+        "url": "https://backbonetutorials.com/assets/interactive-web/webrtc-data-channels-1200.jpg",
+        "width": 1200,
+        "height": 630
+      },
+      "author": { "@id": "https://backbonetutorials.com/author/backbone-tutorials-team/#person" },
+      "publisher": { "@id": "https://backbonetutorials.com/#organization" },
+      "mainEntityOfPage": { "@id": "https://backbonetutorials.com/interactive-web/webrtc-data-channels/#webpage" },
+      "datePublished": "2026-06-12T04:30:00+07:00",
+      "dateModified": "2026-06-12T04:30:00+07:00",
+      "articleSection": ["Realtime Engineering", "WebRTC", "Frontend"],
+      "keywords": ["WebRTC", "RTCDataChannel", "peer-to-peer", "signaling", "STUN", "TURN", "ICE", "SDP"],
+      "about": [
+        { "@type": "Thing", "name": "WebRTC" },
+        { "@type": "Thing", "name": "Peer-to-peer" },
+        { "@type": "Thing", "name": "Realtime communication" }
+      ],
+      "mentions": [
+        { "@type": "Thing", "name": "RTCDataChannel" },
+        { "@type": "Thing", "name": "STUN" },
+        { "@type": "Thing", "name": "TURN" }
+      ]
+    },
+    {
+      "@type": "BreadcrumbList",
+      "@id": "https://backbonetutorials.com/interactive-web/webrtc-data-channels/#breadcrumb",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Home",            "item": "https://backbonetutorials.com/" },
+        { "@type": "ListItem", "position": 2, "name": "Interactive Web", "item": "https://backbonetutorials.com/interactive-web/" },
+        { "@type": "ListItem", "position": 3, "name": "WebRTC Data Channels", "item": "https://backbonetutorials.com/interactive-web/webrtc-data-channels/" }
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "@id": "https://backbonetutorials.com/interactive-web/webrtc-data-channels/#faq",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What is an RTCDataChannel?",
+          "acceptedAnswer": { "@type": "Answer", "text": "An RTCDataChannel is a bidirectional peer-to-peer channel for sending arbitrary text or binary data directly between two browsers over a WebRTC connection. It runs on SCTP over DTLS, so traffic is encrypted by default, and it can be configured for reliable or unreliable delivery." }
+        },
+        {
+          "@type": "Question",
+          "name": "Why does WebRTC need a signaling server?",
+          "acceptedAnswer": { "@type": "Answer", "text": "WebRTC does not define how two peers find each other. Before a peer-to-peer connection can open, the peers must exchange SDP offer and answer descriptions and ICE candidates over a separate channel, commonly a WebSocket connection. That exchange is called signaling, and the application is responsible for it." }
+        },
+        {
+          "@type": "Question",
+          "name": "What is the difference between STUN and TURN?",
+          "acceptedAnswer": { "@type": "Answer", "text": "A STUN server helps a peer discover its public IP address and port so two peers can try to connect directly. A TURN server relays traffic through itself when a direct path cannot be established, for example behind symmetric NAT. TURN consumes server bandwidth, so it is used only as a fallback." }
+        },
+        {
+          "@type": "Question",
+          "name": "Can a data channel be unreliable like UDP?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Yes. By default a data channel is reliable and ordered like TCP, but setting ordered to false with maxRetransmits or maxPacketLifeTime gives unordered, unreliable delivery like UDP. This suits real-time state where the latest update matters more than guaranteed delivery of every packet." }
+        }
+      ]
+    }
+  ]
+}
+</script>
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-FYJP43XDHH"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-FYJP43XDHH');
+</script>
+
+</head>
+<body>
+
+<nav class="nav" aria-label="Main Navigation">
+<a href="/" class="nav-logo" title="Backbone Tutorials Homepage"><img src="/assets/logo.png" alt="Backbone Tutorials Logo" width="36" height="36" loading="lazy" decoding="async"></a>
+<a href="/" title="Backbone.js Tutorials Homepage">Home</a>
+<a href="/backbonejs/" title="Backbone.js Complete Guide">Backbone Guide</a>
+<a href="/what-is-a-router/" title="What is a Router">Router</a>
+<a href="/what-is-a-model/" title="What is a Model">Model</a>
+<a href="/what-is-a-view/" title="What is a View">View</a>
+<a href="/what-is-a-collection/" title="What is a Collection">Collection</a>
+</nav>
+
+<main>
+<article class="container">
+
+<nav class="breadcrumb" aria-label="Breadcrumb">
+<a href="/">Home</a> › <a href="/interactive-web/">Interactive Web</a> › <span aria-current="page">WebRTC Data Channels</span>
+</nav>
+
+<h1>WebRTC Data Channels</h1>
+
+<p class="author-line">Written by <a href="/author/backbone-tutorials-team/">Backbone Tutorials Team</a></p>
+<p class="author-line">Last updated: June 2026 · 10 min read</p>
+
+<p>
+WebRTC is best known for video calls, but the same technology can move arbitrary data directly between two browsers with no server in the path. That is what a data channel does: once two peers have found each other, they exchange messages over an encrypted peer-to-peer link whose latency is bounded only by the physical distance between them. For low-latency multiplayer state, direct file transfer, and mesh topologies, nothing a server-mediated transport offers can match it. The cost is a more involved setup, and understanding that setup is the whole game.
+</p>
+
+<p>
+This guide builds on <a href="/interactive-web/websocket-fundamentals/">WebSocket fundamentals</a>, which provides the signaling channel WebRTC depends on, and sits inside the <a href="/interactive-web/">Interactive Web</a> cluster of realtime engineering patterns.
+</p>
+
+<figure>
+<svg class="diagram" viewBox="0 0 720 200" role="img" aria-labelledby="rtcTitle rtcDesc" xmlns="http://www.w3.org/2000/svg">
+  <title id="rtcTitle">WebRTC connection setup</title>
+  <desc id="rtcDesc">Two peers exchange SDP and ICE candidates through a signaling server, use STUN/TURN for NAT traversal, then open a direct peer-to-peer data channel.</desc>
+  <rect x="0" y="0" width="720" height="200" rx="12" fill="#0f172a"></rect>
+  <g font-family="Inter, sans-serif" text-anchor="middle">
+    <!-- signaling server -->
+    <rect x="285" y="16" width="150" height="38" rx="9" fill="#1e293b" stroke="#3b82f6"></rect>
+    <text x="360" y="34" fill="#93c5fd" font-size="11" font-weight="700">Signaling server</text>
+    <text x="360" y="48" fill="#64748b" font-size="9">(WebSocket: SDP + ICE)</text>
+    <!-- peers -->
+    <rect x="40"  y="92" width="150" height="44" rx="10" fill="#1e293b" stroke="#f59e0b" stroke-width="2"></rect>
+    <text x="115" y="112" fill="#fff" font-size="12" font-weight="700">Peer A</text>
+    <text x="115" y="127" fill="#fcd34d" font-size="9">RTCPeerConnection</text>
+    <rect x="530" y="92" width="150" height="44" rx="10" fill="#1e293b" stroke="#f59e0b" stroke-width="2"></rect>
+    <text x="605" y="112" fill="#fff" font-size="12" font-weight="700">Peer B</text>
+    <text x="605" y="127" fill="#fcd34d" font-size="9">RTCPeerConnection</text>
+    <!-- STUN/TURN -->
+    <rect x="285" y="150" width="150" height="36" rx="9" fill="#1e293b" stroke="#22c55e"></rect>
+    <text x="360" y="166" fill="#86efac" font-size="11" font-weight="700">STUN / TURN</text>
+    <text x="360" y="179" fill="#64748b" font-size="9">NAT traversal</text>
+    <g stroke="#64748b" stroke-width="1.5" fill="none">
+      <path d="M115 92 L300 54" marker-end="url(#artc)"></path>
+      <path d="M605 92 L420 54" marker-end="url(#artc)"></path>
+      <path d="M150 136 L300 158" stroke="#22c55e" marker-end="url(#artcg)"></path>
+      <path d="M570 136 L420 158" stroke="#22c55e" marker-end="url(#artcg)"></path>
+    </g>
+    <!-- direct P2P channel -->
+    <path d="M190 114 L528 114" stroke="#f59e0b" stroke-width="2.5" fill="none" marker-end="url(#artca)" marker-start="url(#artcas)"></path>
+    <text x="360" y="108" fill="#fcd34d" font-size="11" font-weight="700">direct P2P data channel (SCTP/DTLS)</text>
+  </g>
+  <defs>
+    <marker id="artc"  markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0 0 L6 3 L0 6 Z" fill="#64748b"></path></marker>
+    <marker id="artcg" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0 0 L6 3 L0 6 Z" fill="#22c55e"></path></marker>
+    <marker id="artca" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto"><path d="M0 0 L7 3 L0 6 Z" fill="#f59e0b"></path></marker>
+    <marker id="artcas" markerWidth="9" markerHeight="9" refX="2" refY="3" orient="auto"><path d="M7 0 L0 3 L7 6 Z" fill="#f59e0b"></path></marker>
+  </defs>
+</svg>
+<figcaption>Peers exchange SDP and ICE candidates via a signaling server and use STUN/TURN for NAT traversal, then talk directly over an encrypted data channel.</figcaption>
+</figure>
+
+<div class="card">
+<p style="margin-top:0"><strong>What you'll learn</strong></p>
+<ul class="toc-list">
+<li><a href="#what">Peer-to-peer beyond audio and video</a></li>
+<li><a href="#signaling">Signaling: SDP offer and answer</a></li>
+<li><a href="#ice">ICE, STUN, and TURN</a></li>
+<li><a href="#api">The RTCDataChannel API</a></li>
+<li><a href="#reliability">Reliable vs unreliable delivery</a></li>
+<li><a href="#choose">Choosing WebRTC vs a server transport</a></li>
+</ul>
+</div>
+
+<h2 id="what">Peer-to-peer beyond audio and video</h2>
+
+<p>
+The media side of WebRTC gets the attention, but the data channel is a general-purpose pipe. It carries whatever you put in it, directly between two clients.
+</p>
+
+<h3>A direct, encrypted pipe between two clients</h3>
+
+<p>
+A data channel sends text or binary messages over SCTP, which itself runs over DTLS, so every byte is encrypted without any extra work on your part. Because the connection is peer-to-peer, a message does not make a round trip to a server and back; it goes straight from one browser to the other. That removes a hop and, with it, latency and server cost. The trade-off is that establishing the connection is harder than opening a WebSocket, because the two peers are usually behind routers that hide their real addresses, and they have no way to find each other on their own. Solving that introduces signaling.
+</p>
+
+<h2 id="signaling">Signaling: SDP offer and answer</h2>
+
+<p>
+WebRTC deliberately leaves peer discovery to you. The specification covers the media and data transport but not how two browsers exchange the information needed to connect.
+</p>
+
+<h3>Exchanging session descriptions out of band</h3>
+
+<pre><code>// Caller creates an offer and sends it over the signaling channel
+var pc = new RTCPeerConnection({
+  iceServers: [{ urls: 'stun:stun.example.com:3478' }]
+});
+
+var offer = await pc.createOffer();
+await pc.setLocalDescription(offer);
+signaling.send({ type: 'offer', sdp: offer.sdp });
+
+// Callee receives the offer, answers, and sends it back
+signaling.on('offer', async function (msg) {
+  await pc.setRemoteDescription({ type: 'offer', sdp: msg.sdp });
+  var answer = await pc.createAnswer();
+  await pc.setLocalDescription(answer);
+  signaling.send({ type: 'answer', sdp: answer.sdp });
+});</code></pre>
+
+<p>
+Each peer produces a Session Description Protocol blob describing the media and data it supports. The caller sends an offer; the callee replies with an answer. This exchange must travel over a channel you provide, almost always the <a href="/interactive-web/websocket-fundamentals/">WebSocket</a> connection covered earlier, because the peers cannot yet reach each other directly. The signaling server's only job is to relay these messages; once the peer connection is open, the server is no longer involved in the data flow.
+</p>
+
+<h2 id="ice">ICE, STUN, and TURN</h2>
+
+<p>
+Knowing what a peer supports is not enough; you also need a network path to reach it. Most clients sit behind NAT, which rewrites addresses and blocks unsolicited inbound traffic. ICE is the framework that finds a working path.
+</p>
+
+<h3>Gathering candidates and traversing NAT</h3>
+
+<pre><code>// Each discovered candidate is relayed to the other peer
+pc.addEventListener('icecandidate', function (event) {
+  if (event.candidate) {
+    signaling.send({ type: 'ice', candidate: event.candidate });
+  }
+});
+
+signaling.on('ice', function (msg) {
+  pc.addIceCandidate(msg.candidate);
+});</code></pre>
+
+<p>
+Interactive Connectivity Establishment gathers candidate addresses for each peer and tries them in order of preference until one works. A STUN server tells a peer its own public address as seen from the internet, which is enough for two peers to connect directly in most home and office networks. When direct connection is impossible, for example behind symmetric NAT or a strict corporate firewall, a TURN server relays the traffic through itself. TURN works everywhere but consumes server bandwidth for every byte, so it is a fallback, not a default. A production deployment configures both a STUN and a TURN server in the <code>iceServers</code> list and lets ICE pick the best path automatically.
+</p>
+
+<h2 id="api">The RTCDataChannel API</h2>
+
+<p>
+With signaling and ICE handled, the data channel itself is refreshingly simple, an event-driven object much like a WebSocket.
+</p>
+
+<h3>Opening a channel and sending messages</h3>
+
+<pre><code>// Caller creates the channel before making the offer
+var channel = pc.createDataChannel('game');
+
+channel.addEventListener('open', function () {
+  channel.send(JSON.stringify({ type: 'join', name: 'Player 1' }));
+});
+
+channel.addEventListener('message', function (event) {
+  handle(JSON.parse(event.data));
+});
+
+// Callee receives the channel via the connection
+pc.addEventListener('datachannel', function (event) {
+  var remote = event.channel;
+  remote.addEventListener('message', function (e) { handle(JSON.parse(e.data)); });
+});</code></pre>
+
+<p>
+The caller creates the channel with <code>createDataChannel</code> before generating the offer; the callee receives it through the connection's <code>datachannel</code> event. After that, <code>send</code> and the <code>message</code> event mirror the WebSocket API exactly, which makes it straightforward to share message-handling code between a WebSocket fallback and a WebRTC primary path. Like WebSocket, a typed message envelope with a <code>type</code> field is the standard way to route the many kinds of events a single channel carries.
+</p>
+
+<h2 id="reliability">Reliable vs unreliable delivery</h2>
+
+<p>
+The single most useful feature of a data channel for realtime engineering is that you can turn off reliability. This is something a WebSocket cannot do.
+</p>
+
+<h3>Trading guarantees for latency</h3>
+
+<pre><code>// Reliable + ordered (default): behaves like TCP
+var chat = pc.createDataChannel('chat');
+
+// Unreliable + unordered: behaves like UDP, ideal for live state
+var state = pc.createDataChannel('state', {
+  ordered: false,
+  maxRetransmits: 0
+});</code></pre>
+
+<p>
+By default a data channel is reliable and ordered, retransmitting lost packets and delivering them in sequence, exactly like TCP. That is correct for chat or file transfer where every byte matters. For continuously updated state, position, a cursor, a simulation tick, guaranteed delivery is the wrong trade: by the time a dropped packet is retransmitted, a newer update has already made it irrelevant. Setting <code>ordered: false</code> with <code>maxRetransmits: 0</code> gives unreliable, unordered delivery like UDP, so the channel never waits on a lost packet and the freshest state always arrives as fast as the network allows. The <a href="/architecture/realtime-systems/">realtime systems</a> guide covers how to reconcile the gaps this creates.
+</p>
+
+<h2 id="choose">Choosing WebRTC vs a server transport</h2>
+
+<p>
+WebRTC data channels are powerful but not free. The decision rests on topology and latency, not novelty.
+</p>
+
+<h3>When direct peer connection earns its complexity</h3>
+
+<p>
+Choose WebRTC when peers benefit from talking directly: low-latency multiplayer state synchronization, direct file transfer that should not pass through your servers, or small mesh groups where every participant connects to every other. Choose a server transport such as <a href="/interactive-web/websocket-fundamentals/">WebSocket</a> or <a href="/interactive-web/server-sent-events/">Server-Sent Events</a> when the server must see every message anyway, when you need to broadcast to many clients, or when the operational cost of running STUN and TURN servers is not justified. Many production systems use both: WebSocket for signaling and authoritative state, WebRTC for the latency-critical peer-to-peer path. The remaining guides in this cluster build the synchronization and reconciliation patterns that sit on top of whichever transport you choose.
+</p>
+
+<section id="faq">
+<h2>Frequently Asked Questions</h2>
+
+<h3>What is an RTCDataChannel?</h3>
+<p>An RTCDataChannel is a bidirectional peer-to-peer channel for sending arbitrary text or binary data directly between two browsers over a WebRTC connection. It runs on SCTP over DTLS, so traffic is encrypted by default, and it can be configured for reliable or unreliable delivery.</p>
+
+<h3>Why does WebRTC need a signaling server?</h3>
+<p>WebRTC does not define how two peers find each other. Before a peer-to-peer connection can open, the peers must exchange SDP offer and answer descriptions and ICE candidates over a separate channel, commonly a WebSocket connection. That exchange is called signaling, and the application is responsible for it.</p>
+
+<h3>What is the difference between STUN and TURN?</h3>
+<p>A STUN server helps a peer discover its public IP address and port so two peers can try to connect directly. A TURN server relays traffic through itself when a direct path cannot be established, for example behind symmetric NAT. TURN consumes server bandwidth, so it is used only as a fallback.</p>
+
+<h3>Can a data channel be unreliable like UDP?</h3>
+<p>Yes. By default a data channel is reliable and ordered like TCP, but setting <code>ordered</code> to false with <code>maxRetransmits</code> or <code>maxPacketLifeTime</code> gives unordered, unreliable delivery like UDP. This suits real-time state where the latest update matters more than guaranteed delivery of every packet.</p>
+</section>
+
+<p><strong>Read next:</strong> the <a href="/interactive-web/">Interactive Web</a> hub, or continue to <a href="/interactive-web/server-sent-events/">Server-Sent Events</a> for a server-push transport comparison.</p>
+
+<div class="cta">
+<p><strong>Want the data layer that realtime messages update?</strong></p>
+<p>The Backbone guide covers the model and collection layer behind any realtime frontend.</p>
+<a href="/backbonejs/" class="btn">Explore the Backbone Guide →</a>
+</div>
+
+<div class="back-home">
+<a href="/interactive-web/">← Back to Interactive Web</a>
+</div>
+
+</article>
+</main>
+
+<footer>
+<p>Backbone Tutorials</p>
+<nav class="bt-social" aria-label="Backbone Tutorials on social media">
+  <a style="--c:#181717" href="https://github.com/backbonetutorials/backbonetutorials" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on GitHub"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#fff" d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0 1 12 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222 0 1.606-.014 2.898-.014 3.293 0 .322.216.694.825.576C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg></a>
+  <a style="--c:#000000" href="https://x.com/backbonetutor" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on X (formerly Twitter)"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#fff" d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+  <a style="--c:#FF0000" href="https://www.youtube.com/@BACKBONETUTORIALS" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on YouTube"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#fff" d="M8.5 6.5 L8.5 17.5 L17.5 12 Z"/></svg></a>
+  <a style="--c:#0285FF" href="https://bsky.app/profile/backbonetutorials.bsky.social" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on Bluesky"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#fff" d="M12 10.8c-1.087-2.114-4.046-6.053-6.798-7.995C2.566.944 1.561 1.266.902 1.565.139 1.908 0 3.08 0 3.768c0 .69.378 5.65.624 6.479.815 2.736 3.713 3.66 6.383 3.364.136-.02.275-.039.415-.056-.138.022-.276.04-.415.056-3.912.58-7.387 2.005-2.83 7.078 5.013 5.19 6.87-1.113 7.823-4.308.953 3.195 2.05 9.271 7.733 4.308 4.267-4.308 1.172-6.498-2.74-7.078a8.741 8.741 0 0 1-.415-.056c.14.017.279.036.415.056 2.67.296 5.568-.628 6.383-3.364C23.622 9.418 24 4.458 24 3.768c0-.688-.139-1.86-.902-2.203-.659-.299-1.664-.621-4.3 1.24C16.046 4.747 13.087 8.686 12 10.8Z"/></svg></a>
+  <a style="--c:#d62976;background-image:linear-gradient(150deg,rgba(255,255,255,.30),rgba(255,255,255,0) 42%,rgba(0,0,0,.22)),linear-gradient(45deg,#feda75,#fa7e1e,#d62976,#962fbf,#4f5bd5)" href="https://www.instagram.com/backbonetutorials/" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on Instagram"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="4" y="4" width="16" height="16" rx="5" fill="none" stroke="#fff" stroke-width="2"/><circle cx="12" cy="12" r="3.6" fill="none" stroke="#fff" stroke-width="2"/><circle cx="17.2" cy="6.8" r="1.25" fill="#fff"/></svg></a>
+  <a style="--c:#000000" href="https://www.tiktok.com/@backbonetutorials" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on TikTok"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#fff" d="M16.5 5.82a4.79 4.79 0 0 1-1.16-3.07h-2.9v11.43a2.45 2.45 0 1 1-2.45-2.45c.17 0 .33.02.49.05V8.83a5.36 5.36 0 0 0-.49-.02 5.35 5.35 0 1 0 5.35 5.35V8.6a7.66 7.66 0 0 0 4.46 1.42V7.13a4.79 4.79 0 0 1-2.8-1.31Z"/></svg></a>
+  <a style="--c:#1877F2" href="https://www.facebook.com/BackboneTutorials" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on Facebook"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#fff" d="M13.5 21v-8h2.6l.4-3h-3V8.1c0-.87.27-1.46 1.5-1.46H17V3.96c-.28-.04-1.2-.12-2.28-.12-2.26 0-3.8 1.38-3.8 3.9V10H8.3v3h2.62v8h2.58Z"/></svg></a>
+</nav>
+<p>
+<a href="/">Home</a> |
+<a href="/about/">About</a> |
+<a href="/contact/">Contact</a> |
+<a href="/privacy-policy/">Privacy Policy</a> |
+<a href="/terms/">Terms</a>
+</p>
+<p>© 2026 Backbone Tutorials</p>
+</footer>
+
+</body>
+</html>

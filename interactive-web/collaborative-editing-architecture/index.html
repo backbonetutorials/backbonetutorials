@@ -1,0 +1,515 @@
+<!-- DEPLOY TO: /interactive-web/collaborative-editing-architecture/  (index.html) · TechArticle · per MASTERMIND_SEO.md -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Collaborative Editing Architecture — design for many editors</title>
+
+<meta name="description" content="Collaborative editing architecture: document model, sync layer, awareness, per-user undo, permissions, and how the pieces connect into a working system.">
+
+<meta name="robots" content="index, follow">
+<meta name="author" content="Backbone Tutorials">
+<meta name="theme-color" content="#2563eb">
+<meta name="format-detection" content="telephone=no">
+
+<link rel="canonical" href="https://backbonetutorials.com/interactive-web/collaborative-editing-architecture/">
+
+<link rel="icon" href="/assets/favicon.ico">
+<link rel="apple-touch-icon" href="/assets/favicon.png">
+
+<meta property="og:title" content="Collaborative Editing Architecture — design for many editors">
+<meta property="og:description" content="How to architect a collaborative editor: document model, sync layer, awareness, per-user undo, permissions, and how all the layers connect into a working system.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://backbonetutorials.com/interactive-web/collaborative-editing-architecture/">
+<meta property="og:image" content="https://backbonetutorials.com/assets/interactive-web/collaborative-editing-architecture-1200.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:type" content="image/jpeg">
+<meta property="og:image:alt" content="Collaborative Editing Architecture — Backbone Tutorials">
+<meta property="og:site_name" content="Backbone Tutorials">
+<meta property="og:locale" content="en_US">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Collaborative Editing Architecture — design for many editors">
+<meta name="twitter:description" content="Collaborative editor architecture: document model, sync layer, awareness, per-user undo, permissions, and how the layers connect.">
+<meta name="twitter:image" content="https://backbonetutorials.com/assets/interactive-web/collaborative-editing-architecture-1200.jpg">
+<meta name="twitter:image:alt" content="Collaborative Editing Architecture — Backbone Tutorials">
+<meta name="twitter:url" content="https://backbonetutorials.com/interactive-web/collaborative-editing-architecture/">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+
+<style>
+html{scroll-behavior:smooth}
+body{font-family:'Inter',sans-serif;margin:0;background:#f4f6f9;color:#1f2937;line-height:1.7}
+.container{max-width:900px;margin:30px auto;padding:20px;background:#fff;border-radius:10px;box-shadow:0 2px 10px rgba(0,0,0,0.04)}
+h1,h2,h3{color:#111827}
+.nav{background:#111827;padding:15px;display:flex;justify-content:center;align-items:center;flex-wrap:wrap;gap:8px}
+.nav a{color:white;margin:0 10px;text-decoration:none;font-weight:600}
+.nav a:hover{text-decoration:underline}
+.nav-logo img{vertical-align:middle;margin-right:12px;border-radius:8px}
+figure{margin:30px 0}
+pre{background:#111;color:#eee;padding:15px;border-radius:8px;overflow-x:auto;box-shadow:0 2px 8px rgba(0,0,0,0.15)}
+code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+p code,li code{background:#eef2ff;padding:1px 5px;border-radius:4px;font-size:.95em}
+.cta{background:#eef2ff;padding:20px;margin-top:30px;text-align:center;border-radius:10px}
+a{color:#2563eb}
+.back-home{margin-top:25px}
+footer{background:#111827;color:white;text-align:center;padding:30px 20px;margin-top:40px}
+footer a{color:#93c5fd;text-decoration:none}
+footer a:hover{text-decoration:underline}
+.btn{display:inline-block;background:#2563eb;color:white;padding:12px 22px;border-radius:8px;text-decoration:none;font-weight:600;margin-top:15px;transition:0.2s ease}
+.btn:hover{background:#1d4ed8;transform:translateY(-1px)}
+.card{background:#fff;padding:20px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.05);overflow:hidden;max-width:100%;border:1px solid #eef2f7}
+.toc-list{padding-left:20px}
+.toc-list li{margin-bottom:8px}
+.author-line{font-size:15px;margin-top:-6px;margin-bottom:10px;color:#4b5563}
+figcaption{font-size:14px;color:#6b7280;margin-top:10px}
+#faq h3{margin-top:25px}
+#faq p{margin-bottom:18px}
+.breadcrumb{font-size:14px;color:#6b7280;margin:0 0 10px}
+.breadcrumb a{color:#2563eb;text-decoration:none}
+.breadcrumb a:hover{text-decoration:underline}
+.diagram{width:100%;height:auto;display:block;border-radius:10px}
+.bt-social{display:flex;gap:13px;flex-wrap:wrap;align-items:center;justify-content:center;margin:0 0 14px;padding:0;list-style:none}
+.bt-social a{position:relative;isolation:isolate;width:46px;height:46px;border-radius:14px;display:inline-flex;align-items:center;justify-content:center;text-decoration:none;-webkit-tap-highlight-color:transparent;background-color:var(--c,#333);background-image:linear-gradient(150deg,rgba(255,255,255,.30),rgba(255,255,255,0) 42%,rgba(0,0,0,.22));box-shadow:0 1px 1px rgba(0,0,0,.22),0 7px 14px -3px rgba(0,0,0,.34),inset 0 1px 0 rgba(255,255,255,.50),inset 0 -2px 5px rgba(0,0,0,.30);transition:transform .18s cubic-bezier(.2,.7,.2,1),box-shadow .18s ease}
+.bt-social a::before{content:"";position:absolute;left:3px;right:3px;top:2px;height:44%;border-radius:12px 12px 50% 50%/12px 12px 24px 24px;background:linear-gradient(180deg,rgba(255,255,255,.42),rgba(255,255,255,0));pointer-events:none;z-index:0}
+.bt-social a:hover{transform:translateY(-3px) scale(1.05);box-shadow:0 2px 2px rgba(0,0,0,.20),0 16px 26px -6px rgba(0,0,0,.40),inset 0 1px 0 rgba(255,255,255,.55),inset 0 -2px 6px rgba(0,0,0,.32)}
+.bt-social a:active{transform:translateY(-1px) scale(1.01)}
+.bt-social a:focus-visible{outline:3px solid #93c5fd;outline-offset:3px}
+.bt-social svg{position:relative;z-index:1;width:22px;height:22px;display:block;filter:drop-shadow(0 1px 1px rgba(0,0,0,.28))}
+@media (prefers-reduced-motion:reduce){.bt-social a{transition:none}.bt-social a:hover{transform:none}}
+@media(max-width:600px){.container{padding:15px}}
+</style>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": "https://backbonetutorials.com/#organization",
+      "name": "Backbone Tutorials",
+      "url": "https://backbonetutorials.com/",
+      "logo": { "@type": "ImageObject", "url": "https://backbonetutorials.com/assets/logo.png" },
+      "sameAs": [
+        "https://github.com/backbonetutorials/backbonetutorials",
+        "https://x.com/backbonetutor",
+        "https://www.youtube.com/@BACKBONETUTORIALS",
+        "https://bsky.app/profile/backbonetutorials.bsky.social",
+        "https://www.instagram.com/backbonetutorials/",
+        "https://www.tiktok.com/@backbonetutorials",
+        "https://www.facebook.com/BackboneTutorials"
+      ],
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "contactType": "customer support",
+        "email": "backbonetutorials2026@gmail.com",
+        "availableLanguage": ["English"],
+        "areaServed": "Worldwide"
+      }
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://backbonetutorials.com/#website",
+      "url": "https://backbonetutorials.com/",
+      "name": "Backbone Tutorials",
+      "publisher": { "@id": "https://backbonetutorials.com/#organization" }
+    },
+    {
+      "@type": "Person",
+      "@id": "https://backbonetutorials.com/author/backbone-tutorials-team/#person",
+      "name": "Backbone Tutorials Team",
+      "url": "https://backbonetutorials.com/author/backbone-tutorials-team/",
+      "worksFor": { "@id": "https://backbonetutorials.com/#organization" },
+      "jobTitle": "Frontend JavaScript Editorial Team",
+      "knowsAbout": ["Collaborative editing", "Realtime systems", "Frontend architecture", "Backbone.js"]
+    },
+    {
+      "@type": "WebPage",
+      "@id": "https://backbonetutorials.com/interactive-web/collaborative-editing-architecture/#webpage",
+      "url": "https://backbonetutorials.com/interactive-web/collaborative-editing-architecture/",
+      "name": "Collaborative Editing Architecture — design for many editors",
+      "headline": "Collaborative Editing Architecture",
+      "description": "Collaborative editing architecture: document model, the sync layer, awareness, undo stacks, permissions, presence, and how the pieces connect into a working system.",
+      "inLanguage": "en",
+      "isPartOf": { "@id": "https://backbonetutorials.com/#website" },
+      "author": { "@id": "https://backbonetutorials.com/author/backbone-tutorials-team/#person" },
+      "publisher": { "@id": "https://backbonetutorials.com/#organization" },
+      "breadcrumb": { "@id": "https://backbonetutorials.com/interactive-web/collaborative-editing-architecture/#breadcrumb" },
+      "mainEntity": { "@id": "https://backbonetutorials.com/interactive-web/collaborative-editing-architecture/#article" }
+    },
+    {
+      "@type": "TechArticle",
+      "@id": "https://backbonetutorials.com/interactive-web/collaborative-editing-architecture/#article",
+      "url": "https://backbonetutorials.com/interactive-web/collaborative-editing-architecture/",
+      "headline": "Collaborative Editing Architecture",
+      "description": "An engineering guide to collaborative editing architecture: the document model and its schema, the sync layer connecting OT or CRDT to the transport, the awareness layer for presence and cursors, per-user undo stacks, permission enforcement, and how all layers connect in a production system.",
+      "inLanguage": "en",
+      "image": {
+        "@type": "ImageObject",
+        "url": "https://backbonetutorials.com/assets/interactive-web/collaborative-editing-architecture-1200.jpg",
+        "width": 1200,
+        "height": 630
+      },
+      "author": { "@id": "https://backbonetutorials.com/author/backbone-tutorials-team/#person" },
+      "publisher": { "@id": "https://backbonetutorials.com/#organization" },
+      "mainEntityOfPage": { "@id": "https://backbonetutorials.com/interactive-web/collaborative-editing-architecture/#webpage" },
+      "datePublished": "2026-06-12T04:30:00+07:00",
+      "dateModified": "2026-06-12T04:30:00+07:00",
+      "articleSection": ["Realtime Engineering", "Collaborative Editing", "Architecture"],
+      "keywords": ["collaborative editing", "document model", "sync layer", "awareness", "undo stack", "permissions"],
+      "about": [
+        { "@type": "Thing", "name": "Collaborative editing" },
+        { "@type": "Thing", "name": "Realtime systems" },
+        { "@type": "Thing", "name": "Frontend architecture" }
+      ],
+      "mentions": [
+        { "@type": "Thing", "name": "Document model" },
+        { "@type": "Thing", "name": "Per-user undo" },
+        { "@type": "Thing", "name": "Permission layer" }
+      ]
+    },
+    {
+      "@type": "BreadcrumbList",
+      "@id": "https://backbonetutorials.com/interactive-web/collaborative-editing-architecture/#breadcrumb",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Home",            "item": "https://backbonetutorials.com/" },
+        { "@type": "ListItem", "position": 2, "name": "Interactive Web", "item": "https://backbonetutorials.com/interactive-web/" },
+        { "@type": "ListItem", "position": 3, "name": "Collaborative Editing Architecture", "item": "https://backbonetutorials.com/interactive-web/collaborative-editing-architecture/" }
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "@id": "https://backbonetutorials.com/interactive-web/collaborative-editing-architecture/#faq",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What layers does a collaborative editor need?",
+          "acceptedAnswer": { "@type": "Answer", "text": "A collaborative editor typically has four layers: the document model that defines the data structure, the sync layer that handles conflict resolution and transport, the awareness layer for presence and cursor positions, and the UI layer that renders the document and exposes editing controls." }
+        },
+        {
+          "@type": "Question",
+          "name": "Why is per-user undo hard in collaborative editors?",
+          "acceptedAnswer": { "@type": "Answer", "text": "In a single-user editor, undo reverses the most recent operation. In a collaborative editor, Alice and Bob interleave operations. If Alice undoes her last operation, it may sit between several of Bob's, so a simple stack revert would corrupt Bob's work. Per-user undo must invert Alice's operation and transform the inverse past all intervening operations from other users." }
+        },
+        {
+          "@type": "Question",
+          "name": "Where should permission checks happen in a collaborative editor?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Permission checks must happen on the server, not only in the client. A client can be modified to bypass UI restrictions. Every operation sent to the server must be validated against the user's role before being applied and broadcast. The server is the authority; the client UI is a convenience." }
+        },
+        {
+          "@type": "Question",
+          "name": "What is the difference between the sync layer and the awareness layer?",
+          "acceptedAnswer": { "@type": "Answer", "text": "The sync layer manages durable document state: operations, conflict resolution, and the persistent record of all changes. The awareness layer manages ephemeral presence data: who is connected, where their cursor is, and what they are doing right now. Awareness state is never persisted and is safe to lose on server restart." }
+        }
+      ]
+    }
+  ]
+}
+</script>
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-FYJP43XDHH"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-FYJP43XDHH');
+</script>
+
+</head>
+<body>
+
+<nav class="nav" aria-label="Main Navigation">
+<a href="/" class="nav-logo" title="Backbone Tutorials Homepage"><img src="/assets/logo.png" alt="Backbone Tutorials Logo" width="36" height="36" loading="lazy" decoding="async"></a>
+<a href="/" title="Backbone.js Tutorials Homepage">Home</a>
+<a href="/backbonejs/" title="Backbone.js Complete Guide">Backbone Guide</a>
+<a href="/what-is-a-router/" title="What is a Router">Router</a>
+<a href="/what-is-a-model/" title="What is a Model">Model</a>
+<a href="/what-is-a-view/" title="What is a View">View</a>
+<a href="/what-is-a-collection/" title="What is a Collection">Collection</a>
+</nav>
+
+<main>
+<article class="container">
+
+<nav class="breadcrumb" aria-label="Breadcrumb">
+<a href="/">Home</a> › <a href="/interactive-web/">Interactive Web</a> › <span aria-current="page">Collaborative Editing Architecture</span>
+</nav>
+
+<h1>Collaborative Editing Architecture</h1>
+
+<p class="author-line">Written by <a href="/author/backbone-tutorials-team/">Backbone Tutorials Team</a></p>
+<p class="author-line">Last updated: June 2026 · 11 min read</p>
+
+<p>
+Building a text editor that one person uses is a solved problem. Building one where ten people edit the same document simultaneously is an architecture problem. The algorithms, OT and CRDTs, handle the conflict resolution; the architecture handles everything around them: the document model that the algorithms operate on, the sync layer that moves operations over the network, the awareness layer that shows who is present, the undo stack that works per user rather than globally, and the permission layer that prevents one user from overwriting another's protected sections. Getting the layers right is what separates a demo from a production system.
+</p>
+
+<p>
+This guide assembles the techniques from <a href="/interactive-web/operational-transform-basics/">OT</a>, <a href="/interactive-web/conflict-resolution-crdts/">CRDTs</a>, <a href="/interactive-web/presence-and-awareness-systems/">presence and awareness</a>, and <a href="/interactive-web/realtime-data-synchronization/">data synchronization</a> into a complete architectural picture.
+</p>
+
+<figure>
+<svg class="diagram" viewBox="0 0 720 175" role="img" aria-labelledby="ceaTitle ceaDesc" xmlns="http://www.w3.org/2000/svg">
+  <title id="ceaTitle">Collaborative editor layer stack</title>
+  <desc id="ceaDesc">Four layers from bottom to top: transport, sync, awareness, and UI. Each layer has a clear responsibility boundary.</desc>
+  <rect x="0" y="0" width="720" height="175" rx="12" fill="#0f172a"></rect>
+  <g font-family="Inter, sans-serif" text-anchor="middle">
+    <rect x="40" y="18"  width="640" height="30" rx="8" fill="#1e293b" stroke="#3b82f6"></rect>
+    <text x="360" y="38" fill="#93c5fd" font-size="12" font-weight="700">UI Layer  -  editor view, toolbar, cursors, selection</text>
+    <rect x="40" y="56"  width="310" height="30" rx="8" fill="#1e293b" stroke="#f59e0b"></rect>
+    <text x="195" y="76" fill="#fcd34d" font-size="11" font-weight="700">Sync Layer  -  OT / CRDT + operations</text>
+    <rect x="370" y="56" width="310" height="30" rx="8" fill="#1e293b" stroke="#a855f7"></rect>
+    <text x="525" y="76" fill="#d8b4fe" font-size="11" font-weight="700">Awareness Layer  -  cursors, presence</text>
+    <rect x="40" y="94"  width="640" height="30" rx="8" fill="#1e293b" stroke="#22c55e"></rect>
+    <text x="360" y="114" fill="#86efac" font-size="12" font-weight="700">Transport Layer  -  WebSocket / SSE</text>
+    <rect x="40" y="132" width="640" height="30" rx="8" fill="#1e293b" stroke="#334155"></rect>
+    <text x="360" y="152" fill="#94a3b8" font-size="12">Server  -  auth, permission, document store, event log</text>
+  </g>
+</svg>
+<figcaption>A collaborative editor is four client layers over a server: transport, sync and awareness in parallel, then the UI on top.</figcaption>
+</figure>
+
+<div class="card">
+<p style="margin-top:0"><strong>What you'll learn</strong></p>
+<ul class="toc-list">
+<li><a href="#model">The document model</a></li>
+<li><a href="#sync">The sync layer</a></li>
+<li><a href="#awareness">The awareness layer</a></li>
+<li><a href="#undo">Per-user undo</a></li>
+<li><a href="#permissions">Permission enforcement</a></li>
+<li><a href="#assembly">Assembling the layers</a></li>
+</ul>
+</div>
+
+<h2 id="model">The document model</h2>
+
+<p>
+Every other layer depends on the document model. It defines the shape of data that operations transform and the UI renders.
+</p>
+
+<h3>Schema-first design</h3>
+
+<pre><code>// A simple document schema for a collaborative rich-text editor
+var doc = {
+  id: 'doc-abc',
+  version: 42,
+  content: [
+    { type: 'heading', level: 1, text: 'Introduction' },
+    { type: 'paragraph', text: 'Hello world.' },
+    { type: 'paragraph', text: '' }
+  ],
+  meta: {
+    title:     'My Document',
+    createdAt: '2026-06-12T04:30:00Z',
+    updatedAt: '2026-06-12T10:00:00Z'
+  }
+};</code></pre>
+
+<p>
+The schema defines what node types exist, what attributes they carry, and what nesting is valid. Operations are defined against the schema: insert a paragraph after node N, set the text of node N, change the level of heading N. This is important because OT and CRDT implementations must know the structure to transform operations correctly. A flat string model is simple; a rich tree model is more powerful but requires more complex operations. Choose the simplest model that covers your requirements, then extend it deliberately.
+</p>
+
+<h2 id="sync">The sync layer</h2>
+
+<p>
+The sync layer is the bridge between the document model and the network. It translates local edits into operations, applies remote operations, and ensures convergence.
+</p>
+
+<h3>Connecting the algorithm to the transport</h3>
+
+<pre><code>// Sync layer: local edit -> operation -> network; network -> operation -> apply
+var syncLayer = {
+  doc: null,
+  revision: 0,
+  pending: [],
+
+  localEdit: function (change) {
+    var op = toOperation(change, this.doc);
+    this.pending.push(op);
+    this.doc = applyOp(this.doc, op);        // optimistic local apply
+    transport.send({ type: 'op', op, revision: this.revision });
+  },
+
+  onRemoteOp: function (msg) {
+    var transformed = msg.op;
+    // Transform against any pending local ops not yet acknowledged
+    this.pending.forEach(function (local) {
+      transformed = transform(transformed, local);
+    });
+    this.doc = applyOp(this.doc, transformed);
+    this.revision = msg.revision;
+    render(this.doc);
+  },
+
+  onAck: function (msg) {
+    this.pending = this.pending.filter(function (op) { return op.id !== msg.opId; });
+    this.revision = msg.revision;
+  }
+};</code></pre>
+
+<p>
+The pending queue holds local operations that have been applied optimistically but not yet acknowledged by the server. Each incoming remote operation must be transformed against all pending local operations before application, because those pending operations changed the document state the remote operation was generated against. The acknowledgement clears the pending entry and updates the local revision. This is the client-side of the OT architecture from the previous guide, assembled into a working layer.
+</p>
+
+<h2 id="awareness">The awareness layer</h2>
+
+<p>
+Awareness is ephemeral and runs parallel to the sync layer on the same WebSocket connection but in a separate message namespace.
+</p>
+
+<h3>Cursor positions mapped to document nodes</h3>
+
+<pre><code>// Awareness update: cursor mapped to doc node ID, not character index
+var awarenessUpdate = {
+  userId:   'user-42',
+  color:    '#3b82f6',
+  cursor: {
+    nodeId: 'node-paragraph-3',
+    offset: 14
+  },
+  selection: {
+    anchor: { nodeId: 'node-paragraph-3', offset: 10 },
+    focus:  { nodeId: 'node-paragraph-3', offset: 14 }
+  }
+};</code></pre>
+
+<p>
+Cursors referenced by node ID rather than absolute character index survive the insertions and deletions that the sync layer applies. If Alice's cursor is at character 50 and Bob inserts 10 characters before it, a character-index cursor silently moves to position 60 and is now wrong. A node-relative cursor stays correctly anchored to the same paragraph. The awareness layer throttles position updates to about twenty per second, as covered in the <a href="/interactive-web/presence-and-awareness-systems/">presence guide</a>, and the UI renders remote cursors as overlays on top of the editor canvas.
+</p>
+
+<h2 id="undo">Per-user undo</h2>
+
+<p>
+Global undo, where pressing Ctrl+Z reverses the most recent operation regardless of who made it, is unacceptable in a collaborative context. Undoing a colleague's work without warning them is a collaboration failure.
+</p>
+
+<h3>Inverting and transforming the local operation</h3>
+
+<pre><code>var undoStack = [];
+
+// On local edit: push an invertible record
+function pushUndo(op, docStateBeforeOp) {
+  undoStack.push({ op, inverse: invertOp(op), atRevision: syncLayer.revision });
+}
+
+// On undo
+function undo() {
+  var entry = undoStack.pop();
+  if (!entry) return;
+
+  // Transform the inverse past all remote ops that arrived since
+  var inverse = entry.inverse;
+  var remoteOps = getRemoteOpsSince(entry.atRevision);
+  remoteOps.forEach(function (remote) {
+    inverse = transform(inverse, remote);
+  });
+
+  syncLayer.localEdit(inverse);
+}</code></pre>
+
+<p>
+Each undo entry stores the inverse of the local operation and the revision at which it was made. On undo, the inverse is transformed past all remote operations that have arrived since that revision. The result is an operation that, when applied to the current document, undoes exactly Alice's change without disturbing Bob's interleaved work. This is correct but requires keeping a list of remote operations since each undo entry's revision; the event log from the <a href="/interactive-web/event-streaming-architecture/">event streaming</a> guide is the natural place to store them.
+</p>
+
+<h2 id="permissions">Permission enforcement</h2>
+
+<p>
+In a multi-user document, not everyone should be able to edit everything. Permission enforcement must live on the server.
+</p>
+
+<h3>Server-side operation validation</h3>
+
+<pre><code>// Server: validate before applying
+function handleClientOp(userId, op, revision) {
+  var role = getRole(userId, op.docId);
+
+  if (role === 'viewer') {
+    return { error: 'read-only' };
+  }
+  if (role === 'commenter' && op.type !== 'addComment') {
+    return { error: 'comments-only' };
+  }
+  if (op.nodeId && isNodeLocked(op.nodeId, userId)) {
+    return { error: 'node-locked' };
+  }
+
+  return applyClientOp(userId, op, revision);
+}</code></pre>
+
+<p>
+Client-side permission checks are only UX conveniences. A determined user can modify JavaScript and send any operation they want. The server must re-check every incoming operation against the user's current role and the current document state before applying it. Rejected operations return an error code; the client rolls back the optimistic apply and shows appropriate feedback. Locking individual nodes, useful for template sections that only admins can edit, works the same way: the lock check runs on the server, not in the editor.
+</p>
+
+<h2 id="assembly">Assembling the layers</h2>
+
+<p>
+Four independent layers, each with a clear responsibility, compose into a full collaborative editing system with manageable complexity at each boundary.
+</p>
+
+<h3>Layer boundaries and data flow</h3>
+
+<p>
+The transport layer carries two message streams: sync messages that carry operations and revision numbers, and awareness messages that carry ephemeral state. The sync layer consumes sync messages, maintains the document, and exposes a change event that the UI subscribes to. The awareness layer consumes awareness messages and exposes a participant map that the UI renders as cursor overlays and avatar lists. The UI layer translates user input into local edits, passes them to the sync layer, and renders both the document and the awareness overlays. The server enforces permissions, applies and broadcasts operations in canonical order, and serves as the recovery point for catch-up. Each layer is testable in isolation: the sync layer with mock transports, the awareness layer with mock messages, the permission layer with unit tests against role tables. The separation is what makes this architecture manageable at production scale.
+</p>
+
+<section id="faq">
+<h2>Frequently Asked Questions</h2>
+
+<h3>What layers does a collaborative editor need?</h3>
+<p>A collaborative editor typically has four layers: the document model that defines the data structure, the sync layer that handles conflict resolution and transport, the awareness layer for presence and cursor positions, and the UI layer that renders the document and exposes editing controls.</p>
+
+<h3>Why is per-user undo hard in collaborative editors?</h3>
+<p>In a single-user editor, undo reverses the most recent operation. In a collaborative editor, Alice and Bob interleave operations. If Alice undoes her last operation, it may sit between several of Bob's, so a simple stack revert would corrupt Bob's work. Per-user undo must invert Alice's operation and transform the inverse past all intervening operations from other users.</p>
+
+<h3>Where should permission checks happen in a collaborative editor?</h3>
+<p>Permission checks must happen on the server, not only in the client. A client can be modified to bypass UI restrictions. Every operation sent to the server must be validated against the user's role before being applied and broadcast. The server is the authority; the client UI is a convenience.</p>
+
+<h3>What is the difference between the sync layer and the awareness layer?</h3>
+<p>The sync layer manages durable document state: operations, conflict resolution, and the persistent record of all changes. The awareness layer manages ephemeral presence data: who is connected, where their cursor is, and what they are doing right now. Awareness state is never persisted and is safe to lose on server restart.</p>
+</section>
+
+<p><strong>Read next:</strong> the <a href="/interactive-web/">Interactive Web</a> hub, or continue to <a href="/interactive-web/multiplayer-state-synchronization/">multiplayer state synchronization</a> for real-time shared state beyond documents.</p>
+
+<div class="cta">
+<p><strong>Want views that update cleanly as collaborative edits arrive?</strong></p>
+<p>The Backbone guide shows exactly how views respond to model changes from a live sync layer.</p>
+<a href="/backbonejs/" class="btn">Explore the Backbone Guide →</a>
+</div>
+
+<div class="back-home">
+<a href="/interactive-web/">← Back to Interactive Web</a>
+</div>
+
+</article>
+</main>
+
+<footer>
+<p>Backbone Tutorials</p>
+<nav class="bt-social" aria-label="Backbone Tutorials on social media">
+  <a style="--c:#181717" href="https://github.com/backbonetutorials/backbonetutorials" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on GitHub"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#fff" d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0 1 12 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222 0 1.606-.014 2.898-.014 3.293 0 .322.216.694.825.576C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg></a>
+  <a style="--c:#000000" href="https://x.com/backbonetutor" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on X (formerly Twitter)"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#fff" d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+  <a style="--c:#FF0000" href="https://www.youtube.com/@BACKBONETUTORIALS" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on YouTube"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#fff" d="M8.5 6.5 L8.5 17.5 L17.5 12 Z"/></svg></a>
+  <a style="--c:#0285FF" href="https://bsky.app/profile/backbonetutorials.bsky.social" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on Bluesky"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#fff" d="M12 10.8c-1.087-2.114-4.046-6.053-6.798-7.995C2.566.944 1.561 1.266.902 1.565.139 1.908 0 3.08 0 3.768c0 .69.378 5.65.624 6.479.815 2.736 3.713 3.66 6.383 3.364.136-.02.275-.039.415-.056-.138.022-.276.04-.415.056-3.912.58-7.387 2.005-2.83 7.078 5.013 5.19 6.87-1.113 7.823-4.308.953 3.195 2.05 9.271 7.733 4.308 4.267-4.308 1.172-6.498-2.74-7.078a8.741 8.741 0 0 1-.415-.056c.14.017.279.036.415.056 2.67.296 5.568-.628 6.383-3.364C23.622 9.418 24 4.458 24 3.768c0-.688-.139-1.86-.902-2.203-.659-.299-1.664-.621-4.3 1.24C16.046 4.747 13.087 8.686 12 10.8Z"/></svg></a>
+  <a style="--c:#d62976;background-image:linear-gradient(150deg,rgba(255,255,255,.30),rgba(255,255,255,0) 42%,rgba(0,0,0,.22)),linear-gradient(45deg,#feda75,#fa7e1e,#d62976,#962fbf,#4f5bd5)" href="https://www.instagram.com/backbonetutorials/" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on Instagram"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="4" y="4" width="16" height="16" rx="5" fill="none" stroke="#fff" stroke-width="2"/><circle cx="12" cy="12" r="3.6" fill="none" stroke="#fff" stroke-width="2"/><circle cx="17.2" cy="6.8" r="1.25" fill="#fff"/></svg></a>
+  <a style="--c:#000000" href="https://www.tiktok.com/@backbonetutorials" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on TikTok"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#fff" d="M16.5 5.82a4.79 4.79 0 0 1-1.16-3.07h-2.9v11.43a2.45 2.45 0 1 1-2.45-2.45c.17 0 .33.02.49.05V8.83a5.36 5.36 0 0 0-.49-.02 5.35 5.35 0 1 0 5.35 5.35V8.6a7.66 7.66 0 0 0 4.46 1.42V7.13a4.79 4.79 0 0 1-2.8-1.31Z"/></svg></a>
+  <a style="--c:#1877F2" href="https://www.facebook.com/BackboneTutorials" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on Facebook"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#fff" d="M13.5 21v-8h2.6l.4-3h-3V8.1c0-.87.27-1.46 1.5-1.46H17V3.96c-.28-.04-1.2-.12-2.28-.12-2.26 0-3.8 1.38-3.8 3.9V10H8.3v3h2.62v8h2.58Z"/></svg></a>
+</nav>
+<p>
+<a href="/">Home</a> |
+<a href="/about/">About</a> |
+<a href="/contact/">Contact</a> |
+<a href="/privacy-policy/">Privacy Policy</a> |
+<a href="/terms/">Terms</a>
+</p>
+<p>© 2026 Backbone Tutorials</p>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,504 @@
+<!-- DEPLOY TO: /interactive-web/event-streaming-architecture/  (index.html) · TechArticle · per MASTERMIND_SEO.md -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Event Streaming Architecture — append-only event logs</title>
+
+<meta name="description" content="Event streaming: append-only logs, event sourcing, consumer offsets, log compaction, replay for state rebuild, and the frontend stream client.">
+
+<meta name="robots" content="index, follow">
+<meta name="author" content="Backbone Tutorials">
+<meta name="theme-color" content="#2563eb">
+<meta name="format-detection" content="telephone=no">
+
+<link rel="canonical" href="https://backbonetutorials.com/interactive-web/event-streaming-architecture/">
+
+<link rel="icon" href="/assets/favicon.ico">
+<link rel="apple-touch-icon" href="/assets/favicon.png">
+
+<meta property="og:title" content="Event Streaming Architecture — append-only event logs">
+<meta property="og:description" content="Event streaming architecture for frontend engineers: append-only logs, event sourcing, consumer offsets, log compaction, replay for state rebuild, and the stream client.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://backbonetutorials.com/interactive-web/event-streaming-architecture/">
+<meta property="og:image" content="https://backbonetutorials.com/assets/interactive-web/event-streaming-architecture-1200.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:type" content="image/jpeg">
+<meta property="og:image:alt" content="Event Streaming Architecture — Backbone Tutorials">
+<meta property="og:site_name" content="Backbone Tutorials">
+<meta property="og:locale" content="en_US">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Event Streaming Architecture — append-only event logs">
+<meta name="twitter:description" content="Event streaming: append-only logs, event sourcing, consumer offsets, log compaction, replay for state rebuild, and the frontend stream client.">
+<meta name="twitter:image" content="https://backbonetutorials.com/assets/interactive-web/event-streaming-architecture-1200.jpg">
+<meta name="twitter:image:alt" content="Event Streaming Architecture — Backbone Tutorials">
+<meta name="twitter:url" content="https://backbonetutorials.com/interactive-web/event-streaming-architecture/">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+
+<style>
+html{scroll-behavior:smooth}
+body{font-family:'Inter',sans-serif;margin:0;background:#f4f6f9;color:#1f2937;line-height:1.7}
+.container{max-width:900px;margin:30px auto;padding:20px;background:#fff;border-radius:10px;box-shadow:0 2px 10px rgba(0,0,0,0.04)}
+h1,h2,h3{color:#111827}
+.nav{background:#111827;padding:15px;display:flex;justify-content:center;align-items:center;flex-wrap:wrap;gap:8px}
+.nav a{color:white;margin:0 10px;text-decoration:none;font-weight:600}
+.nav a:hover{text-decoration:underline}
+.nav-logo img{vertical-align:middle;margin-right:12px;border-radius:8px}
+figure{margin:30px 0}
+pre{background:#111;color:#eee;padding:15px;border-radius:8px;overflow-x:auto;box-shadow:0 2px 8px rgba(0,0,0,0.15)}
+code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+p code,li code{background:#eef2ff;padding:1px 5px;border-radius:4px;font-size:.95em}
+.cta{background:#eef2ff;padding:20px;margin-top:30px;text-align:center;border-radius:10px}
+a{color:#2563eb}
+.back-home{margin-top:25px}
+footer{background:#111827;color:white;text-align:center;padding:30px 20px;margin-top:40px}
+footer a{color:#93c5fd;text-decoration:none}
+footer a:hover{text-decoration:underline}
+.btn{display:inline-block;background:#2563eb;color:white;padding:12px 22px;border-radius:8px;text-decoration:none;font-weight:600;margin-top:15px;transition:0.2s ease}
+.btn:hover{background:#1d4ed8;transform:translateY(-1px)}
+.card{background:#fff;padding:20px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.05);overflow:hidden;max-width:100%;border:1px solid #eef2f7}
+.toc-list{padding-left:20px}
+.toc-list li{margin-bottom:8px}
+.author-line{font-size:15px;margin-top:-6px;margin-bottom:10px;color:#4b5563}
+figcaption{font-size:14px;color:#6b7280;margin-top:10px}
+#faq h3{margin-top:25px}
+#faq p{margin-bottom:18px}
+.breadcrumb{font-size:14px;color:#6b7280;margin:0 0 10px}
+.breadcrumb a{color:#2563eb;text-decoration:none}
+.breadcrumb a:hover{text-decoration:underline}
+.diagram{width:100%;height:auto;display:block;border-radius:10px}
+.bt-social{display:flex;gap:13px;flex-wrap:wrap;align-items:center;justify-content:center;margin:0 0 14px;padding:0;list-style:none}
+.bt-social a{position:relative;isolation:isolate;width:46px;height:46px;border-radius:14px;display:inline-flex;align-items:center;justify-content:center;text-decoration:none;-webkit-tap-highlight-color:transparent;background-color:var(--c,#333);background-image:linear-gradient(150deg,rgba(255,255,255,.30),rgba(255,255,255,0) 42%,rgba(0,0,0,.22));box-shadow:0 1px 1px rgba(0,0,0,.22),0 7px 14px -3px rgba(0,0,0,.34),inset 0 1px 0 rgba(255,255,255,.50),inset 0 -2px 5px rgba(0,0,0,.30);transition:transform .18s cubic-bezier(.2,.7,.2,1),box-shadow .18s ease}
+.bt-social a::before{content:"";position:absolute;left:3px;right:3px;top:2px;height:44%;border-radius:12px 12px 50% 50%/12px 12px 24px 24px;background:linear-gradient(180deg,rgba(255,255,255,.42),rgba(255,255,255,0));pointer-events:none;z-index:0}
+.bt-social a:hover{transform:translateY(-3px) scale(1.05);box-shadow:0 2px 2px rgba(0,0,0,.20),0 16px 26px -6px rgba(0,0,0,.40),inset 0 1px 0 rgba(255,255,255,.55),inset 0 -2px 6px rgba(0,0,0,.32)}
+.bt-social a:active{transform:translateY(-1px) scale(1.01)}
+.bt-social a:focus-visible{outline:3px solid #93c5fd;outline-offset:3px}
+.bt-social svg{position:relative;z-index:1;width:22px;height:22px;display:block;filter:drop-shadow(0 1px 1px rgba(0,0,0,.28))}
+@media (prefers-reduced-motion:reduce){.bt-social a{transition:none}.bt-social a:hover{transform:none}}
+@media(max-width:600px){.container{padding:15px}}
+</style>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": "https://backbonetutorials.com/#organization",
+      "name": "Backbone Tutorials",
+      "url": "https://backbonetutorials.com/",
+      "logo": { "@type": "ImageObject", "url": "https://backbonetutorials.com/assets/logo.png" },
+      "sameAs": [
+        "https://github.com/backbonetutorials/backbonetutorials",
+        "https://x.com/backbonetutor",
+        "https://www.youtube.com/@BACKBONETUTORIALS",
+        "https://bsky.app/profile/backbonetutorials.bsky.social",
+        "https://www.instagram.com/backbonetutorials/",
+        "https://www.tiktok.com/@backbonetutorials",
+        "https://www.facebook.com/BackboneTutorials"
+      ],
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "contactType": "customer support",
+        "email": "backbonetutorials2026@gmail.com",
+        "availableLanguage": ["English"],
+        "areaServed": "Worldwide"
+      }
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://backbonetutorials.com/#website",
+      "url": "https://backbonetutorials.com/",
+      "name": "Backbone Tutorials",
+      "publisher": { "@id": "https://backbonetutorials.com/#organization" }
+    },
+    {
+      "@type": "Person",
+      "@id": "https://backbonetutorials.com/author/backbone-tutorials-team/#person",
+      "name": "Backbone Tutorials Team",
+      "url": "https://backbonetutorials.com/author/backbone-tutorials-team/",
+      "worksFor": { "@id": "https://backbonetutorials.com/#organization" },
+      "jobTitle": "Frontend JavaScript Editorial Team",
+      "knowsAbout": ["Event streaming", "Event sourcing", "Realtime systems", "Backbone.js"]
+    },
+    {
+      "@type": "WebPage",
+      "@id": "https://backbonetutorials.com/interactive-web/event-streaming-architecture/#webpage",
+      "url": "https://backbonetutorials.com/interactive-web/event-streaming-architecture/",
+      "name": "Event Streaming Architecture — append-only event logs",
+      "headline": "Event Streaming Architecture",
+      "description": "Event streaming architecture: append-only event logs, event sourcing, consumers and offsets, compaction, replay for state rebuild, and the frontend event stream client.",
+      "inLanguage": "en",
+      "isPartOf": { "@id": "https://backbonetutorials.com/#website" },
+      "author": { "@id": "https://backbonetutorials.com/author/backbone-tutorials-team/#person" },
+      "publisher": { "@id": "https://backbonetutorials.com/#organization" },
+      "breadcrumb": { "@id": "https://backbonetutorials.com/interactive-web/event-streaming-architecture/#breadcrumb" },
+      "mainEntity": { "@id": "https://backbonetutorials.com/interactive-web/event-streaming-architecture/#article" }
+    },
+    {
+      "@type": "TechArticle",
+      "@id": "https://backbonetutorials.com/interactive-web/event-streaming-architecture/#article",
+      "url": "https://backbonetutorials.com/interactive-web/event-streaming-architecture/",
+      "headline": "Event Streaming Architecture",
+      "description": "An engineering guide to event streaming architecture from a frontend perspective: append-only logs, event sourcing, consumer offsets, log compaction, replay for state reconstruction, and building a frontend event stream client over WebSocket or SSE.",
+      "inLanguage": "en",
+      "image": {
+        "@type": "ImageObject",
+        "url": "https://backbonetutorials.com/assets/interactive-web/event-streaming-architecture-1200.jpg",
+        "width": 1200,
+        "height": 630
+      },
+      "author": { "@id": "https://backbonetutorials.com/author/backbone-tutorials-team/#person" },
+      "publisher": { "@id": "https://backbonetutorials.com/#organization" },
+      "mainEntityOfPage": { "@id": "https://backbonetutorials.com/interactive-web/event-streaming-architecture/#webpage" },
+      "datePublished": "2026-06-12T04:30:00+07:00",
+      "dateModified": "2026-06-12T04:30:00+07:00",
+      "articleSection": ["Realtime Engineering", "Event Streaming", "Architecture"],
+      "keywords": ["event streaming", "event sourcing", "append-only log", "consumer offset", "log compaction", "replay"],
+      "about": [
+        { "@type": "Thing", "name": "Event streaming" },
+        { "@type": "Thing", "name": "Event sourcing" },
+        { "@type": "Thing", "name": "Append-only log" }
+      ],
+      "mentions": [
+        { "@type": "Thing", "name": "Consumer offset" },
+        { "@type": "Thing", "name": "Log compaction" },
+        { "@type": "Thing", "name": "State reconstruction" }
+      ]
+    },
+    {
+      "@type": "BreadcrumbList",
+      "@id": "https://backbonetutorials.com/interactive-web/event-streaming-architecture/#breadcrumb",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Home",            "item": "https://backbonetutorials.com/" },
+        { "@type": "ListItem", "position": 2, "name": "Interactive Web", "item": "https://backbonetutorials.com/interactive-web/" },
+        { "@type": "ListItem", "position": 3, "name": "Event Streaming Architecture", "item": "https://backbonetutorials.com/interactive-web/event-streaming-architecture/" }
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "@id": "https://backbonetutorials.com/interactive-web/event-streaming-architecture/#faq",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What is an event streaming architecture?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Event streaming architecture stores all changes as an ordered, append-only log of events. Consumers read the log at their own pace, tracking their position with an offset. The current state of any entity can be reconstructed by replaying the events that describe its history." }
+        },
+        {
+          "@type": "Question",
+          "name": "What is event sourcing?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Event sourcing is the practice of storing the history of state changes as the primary record, not the current state. Every mutation is recorded as an immutable event. The current state is derived by replaying events from the beginning or from a snapshot checkpoint." }
+        },
+        {
+          "@type": "Question",
+          "name": "What is a consumer offset?",
+          "acceptedAnswer": { "@type": "Answer", "text": "A consumer offset is the position in the event log that a consumer has read up to. It lets the consumer resume from where it left off after a restart or reconnection, without reprocessing events it has already handled or missing events that arrived while it was away." }
+        },
+        {
+          "@type": "Question",
+          "name": "What is log compaction?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Log compaction removes obsolete events from the log, keeping only the most recent event for each key. It lets the log grow indefinitely in terms of event count while keeping the storage size bounded. A new consumer can read the compacted log and reconstruct current state without replaying the entire history." }
+        }
+      ]
+    }
+  ]
+}
+</script>
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-FYJP43XDHH"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-FYJP43XDHH');
+</script>
+
+</head>
+<body>
+
+<nav class="nav" aria-label="Main Navigation">
+<a href="/" class="nav-logo" title="Backbone Tutorials Homepage"><img src="/assets/logo.png" alt="Backbone Tutorials Logo" width="36" height="36" loading="lazy" decoding="async"></a>
+<a href="/" title="Backbone.js Tutorials Homepage">Home</a>
+<a href="/backbonejs/" title="Backbone.js Complete Guide">Backbone Guide</a>
+<a href="/what-is-a-router/" title="What is a Router">Router</a>
+<a href="/what-is-a-model/" title="What is a Model">Model</a>
+<a href="/what-is-a-view/" title="What is a View">View</a>
+<a href="/what-is-a-collection/" title="What is a Collection">Collection</a>
+</nav>
+
+<main>
+<article class="container">
+
+<nav class="breadcrumb" aria-label="Breadcrumb">
+<a href="/">Home</a> › <a href="/interactive-web/">Interactive Web</a> › <span aria-current="page">Event Streaming Architecture</span>
+</nav>
+
+<h1>Event Streaming Architecture</h1>
+
+<p class="author-line">Written by <a href="/author/backbone-tutorials-team/">Backbone Tutorials Team</a></p>
+<p class="author-line">Last updated: June 2026 · 10 min read</p>
+
+<p>
+Most databases store current state: the row holds the latest values for a record and past values are gone. An event log stores something different: every change that ever happened, in the order it happened, as an immutable sequence. Current state is derived from that history, not stored directly. This reversal has a quiet consequence that matters enormously for realtime systems: any client can replay the log from any position and arrive at the correct state, which makes catch-up, audit trails, undo, and time-travel debugging structural properties of the architecture rather than features you bolt on.
+</p>
+
+<p>
+This guide connects the catch-up mechanics from <a href="/interactive-web/realtime-data-synchronization/">realtime data synchronization</a> to the underlying log model and provides the architectural vocabulary for the collaborative patterns in the next guides.
+</p>
+
+<figure>
+<svg class="diagram" viewBox="0 0 720 155" role="img" aria-labelledby="esaTitle esaDesc" xmlns="http://www.w3.org/2000/svg">
+  <title id="esaTitle">Event log with consumer offsets</title>
+  <desc id="esaDesc">An append-only log holds events 1 through 8; Consumer A is at offset 8 (current); Consumer B is at offset 5 (catching up); a new consumer starts at offset 0.</desc>
+  <rect x="0" y="0" width="720" height="155" rx="12" fill="#0f172a"></rect>
+  <g font-family="Inter, sans-serif" text-anchor="middle">
+    <text x="360" y="20" fill="#6b7280" font-size="10">Append-only event log</text>
+    <g>
+      <rect x="30"  y="30" width="64" height="34" rx="7" fill="#1e293b" stroke="#3b82f6"></rect><text x="62"  y="52" fill="#93c5fd" font-size="11">evt 1</text>
+      <rect x="102" y="30" width="64" height="34" rx="7" fill="#1e293b" stroke="#3b82f6"></rect><text x="134" y="52" fill="#93c5fd" font-size="11">evt 2</text>
+      <rect x="174" y="30" width="64" height="34" rx="7" fill="#1e293b" stroke="#3b82f6"></rect><text x="206" y="52" fill="#93c5fd" font-size="11">evt 3</text>
+      <rect x="246" y="30" width="64" height="34" rx="7" fill="#1e293b" stroke="#3b82f6"></rect><text x="278" y="52" fill="#93c5fd" font-size="11">evt 4</text>
+      <rect x="318" y="30" width="64" height="34" rx="7" fill="#1e293b" stroke="#3b82f6"></rect><text x="350" y="52" fill="#93c5fd" font-size="11">evt 5</text>
+      <rect x="390" y="30" width="64" height="34" rx="7" fill="#1e293b" stroke="#3b82f6"></rect><text x="422" y="52" fill="#93c5fd" font-size="11">evt 6</text>
+      <rect x="462" y="30" width="64" height="34" rx="7" fill="#1e293b" stroke="#3b82f6"></rect><text x="494" y="52" fill="#93c5fd" font-size="11">evt 7</text>
+      <rect x="534" y="30" width="64" height="34" rx="7" fill="#1e293b" stroke="#22c55e" stroke-width="2"></rect><text x="566" y="52" fill="#86efac" font-size="11">evt 8</text>
+      <rect x="616" y="30" width="74" height="34" rx="7" fill="#1e293b" stroke="#334155" stroke-dasharray="4 2"></rect><text x="653" y="52" fill="#475569" font-size="10">tail</text>
+    </g>
+    <!-- Consumer A at 8 -->
+    <line x1="566" y1="64" x2="566" y2="88" stroke="#22c55e" stroke-width="2" stroke-dasharray="3 2"></line>
+    <rect x="506" y="90" width="120" height="28" rx="7" fill="#1e293b" stroke="#22c55e"></rect>
+    <text x="566" y="108" fill="#86efac" font-size="10">Consumer A  offset=8</text>
+    <!-- Consumer B at 5 -->
+    <line x1="350" y1="64" x2="350" y2="118" stroke="#f59e0b" stroke-width="2" stroke-dasharray="3 2"></line>
+    <rect x="290" y="120" width="120" height="28" rx="7" fill="#1e293b" stroke="#f59e0b"></rect>
+    <text x="350" y="138" fill="#fcd34d" font-size="10">Consumer B  offset=5</text>
+    <!-- new consumer at 0 -->
+    <line x1="62" y1="64" x2="62" y2="88" stroke="#a855f7" stroke-width="1.5" stroke-dasharray="3 2"></line>
+    <rect x="20" y="90" width="84" height="28" rx="7" fill="#1e293b" stroke="#a855f7"></rect>
+    <text x="62" y="108" fill="#d8b4fe" font-size="9">New  offset=0</text>
+  </g>
+</svg>
+<figcaption>Each consumer tracks its own offset; Consumer A is current, Consumer B is catching up, and a new consumer starts from the beginning.</figcaption>
+</figure>
+
+<div class="card">
+<p style="margin-top:0"><strong>What you'll learn</strong></p>
+<ul class="toc-list">
+<li><a href="#log">The append-only event log</a></li>
+<li><a href="#sourcing">Event sourcing and state reconstruction</a></li>
+<li><a href="#offsets">Consumer offsets</a></li>
+<li><a href="#compaction">Log compaction</a></li>
+<li><a href="#client">The frontend stream client</a></li>
+<li><a href="#patterns">When to use event streaming</a></li>
+</ul>
+</div>
+
+<h2 id="log">The append-only event log</h2>
+
+<p>
+An append-only log accepts writes at only one end and never modifies or deletes past entries. That constraint is what makes replay possible.
+</p>
+
+<h3>Events as immutable facts</h3>
+
+<pre><code>// Events are immutable facts, not mutable commands
+var events = [
+  { offset: 1, type: 'doc.created',  payload: { id: 'abc', title: 'Draft' } },
+  { offset: 2, type: 'doc.renamed',  payload: { id: 'abc', title: 'Final' } },
+  { offset: 3, type: 'doc.archived', payload: { id: 'abc' } },
+  { offset: 4, type: 'doc.created',  payload: { id: 'xyz', title: 'Notes' } }
+];
+
+// State is derived by reducing over events
+function buildState(events) {
+  return events.reduce(function (state, event) {
+    switch (event.type) {
+      case 'doc.created':
+        state[event.payload.id] = { title: event.payload.title, archived: false };
+        break;
+      case 'doc.renamed':
+        if (state[event.payload.id]) state[event.payload.id].title = event.payload.title;
+        break;
+      case 'doc.archived':
+        if (state[event.payload.id]) state[event.payload.id].archived = true;
+        break;
+    }
+    return state;
+  }, {});
+}</code></pre>
+
+<p>
+Past events never change. A mistake in the application is corrected by appending a compensating event, not by editing the wrong one. This means the log is a complete, auditable history: you can replay it from any offset and observe the state at any point in time. The reduce pattern above is the most direct expression of state reconstruction from an event stream.
+</p>
+
+<h2 id="sourcing">Event sourcing and state reconstruction</h2>
+
+<p>
+Event sourcing takes the log idea further: the event log <em>is</em> the primary storage, not a derived view of it.
+</p>
+
+<h3>Snapshots for fast startup</h3>
+
+<pre><code>// Rebuild from a recent snapshot + events since
+async function loadState(entityId) {
+  var snapshot = await store.getLatestSnapshot(entityId);
+  var state = snapshot ? snapshot.state : {};
+  var fromOffset = snapshot ? snapshot.offset + 1 : 0;
+
+  var events = await log.readFrom(entityId, fromOffset);
+  return events.reduce(applyEvent, state);
+}
+
+// Take a snapshot periodically to keep startup fast
+async function takeSnapshot(entityId, state, offset) {
+  await store.saveSnapshot({ entityId, state, offset, ts: Date.now() });
+}</code></pre>
+
+<p>
+Replaying every event from offset zero to reconstruct state is correct but slow for long-running entities. Periodic snapshots cut the replay to only the events since the last checkpoint. The startup process loads the latest snapshot, fetches events written after its offset, and applies them. This keeps startup latency bounded regardless of how long the entity has existed. The same catch-up mechanism from <a href="/interactive-web/realtime-data-synchronization/">realtime sync</a> is the same pattern applied at the architecture level: snapshot plus delta.
+</p>
+
+<h2 id="offsets">Consumer offsets</h2>
+
+<p>
+A consumer offset is a pointer into the log. It decouples reading from writing and lets any number of consumers read the same log independently.
+</p>
+
+<h3>Independent consumers at their own pace</h3>
+
+<pre><code>// Each consumer tracks its own position
+var offset = parseInt(localStorage.getItem('stream-offset') || '0', 10);
+
+function processEvent(event) {
+  applyEvent(localState, event);
+  offset = event.offset;
+  // Persist offset so a page reload continues from here
+  localStorage.setItem('stream-offset', offset);
+}
+
+// On reconnect: request events from saved offset
+ws.addEventListener('open', function () {
+  ws.send(JSON.stringify({ type: 'subscribe', fromOffset: offset }));
+});</code></pre>
+
+<p>
+Each consumer owns its offset. Two consumers reading the same log never interfere with each other. A slow consumer simply lags behind without blocking the fast one. For a frontend client, the offset acts as the catch-up cursor described in the sync guide: on reconnect, send the last offset and receive only the events missed during the disconnection. Storing the offset in <code>localStorage</code> across page reloads keeps the client from reprocessing the entire log on every visit.
+</p>
+
+<h2 id="compaction">Log compaction</h2>
+
+<p>
+An unbounded append-only log grows forever. Compaction trims it while preserving the information needed for new consumers to reconstruct current state.
+</p>
+
+<h3>Keeping the last event per key</h3>
+
+<p>
+Compaction scans the log and removes events that have been superseded, keeping only the most recent event for each entity key. A document renamed three times has three rename events in the uncompacted log; after compaction it has one, the final name. A new consumer reading the compacted log still reconstructs current state correctly, because the last event for each key is the only one that matters for the current value. Events that represent facts with no successor, a deletion, a creation, remain untouched. Log compaction is the mechanism that lets event-sourced systems serve new clients efficiently without a separate snapshot store.
+</p>
+
+<h2 id="client">The frontend stream client</h2>
+
+<p>
+From the browser's perspective, an event stream is a sequence of typed messages that arrive over a WebSocket or SSE connection and are reduced into local state.
+</p>
+
+<h3>A typed stream reducer</h3>
+
+<pre><code>var state = {};
+var offset = 0;
+
+var handlers = {
+  'doc.created':  function (s, p) { s[p.id] = { title: p.title }; },
+  'doc.renamed':  function (s, p) { if (s[p.id]) s[p.id].title = p.title; },
+  'doc.archived': function (s, p) { if (s[p.id]) s[p.id].archived = true; }
+};
+
+ws.addEventListener('message', function (e) {
+  var event = JSON.parse(e.data);
+  if (event.offset <= offset) return; // deduplicate
+  var handler = handlers[event.type];
+  if (handler) handler(state, event.payload);
+  offset = event.offset;
+  render(state);
+});</code></pre>
+
+<p>
+The reducer pattern keeps the client logic clean: each event type maps to a pure function that updates state, and the client never reads state from the server directly. It only ever receives events and derives state from them. This makes the client predictable, testable, and easy to debug because any state is reproducible by replaying the events that produced it. The <code>render</code> call after each event is where Backbone's event-driven views connect: a <code>model.set</code> or <code>collection.reset</code> after the reduction triggers all subscribed views automatically.
+</p>
+
+<h2 id="patterns">When to use event streaming</h2>
+
+<p>
+Event streaming adds complexity. The investment pays off in specific situations.
+</p>
+
+<h3>Audit, undo, and collaborative history</h3>
+
+<p>
+Use event streaming when the history of changes is itself valuable, not just the current state. Audit logs, undo stacks, time-travel debugging, and collaborative editing history are all natural fits. Use it when multiple independent consumers need to read the same changes without coordinating with each other, as the frontend client, a background indexer, and an analytics pipeline all consuming the same document event stream do. Use it when catch-up on reconnect must be robust: the log is the authoritative recovery mechanism and no special catch-up path is needed. Avoid it for ephemeral data, like <a href="/interactive-web/presence-and-awareness-systems/">presence and cursor positions</a>, where history has no value and the overhead of a log is pure cost.
+</p>
+
+<section id="faq">
+<h2>Frequently Asked Questions</h2>
+
+<h3>What is an event streaming architecture?</h3>
+<p>Event streaming architecture stores all changes as an ordered, append-only log of events. Consumers read the log at their own pace, tracking their position with an offset. The current state of any entity can be reconstructed by replaying the events that describe its history.</p>
+
+<h3>What is event sourcing?</h3>
+<p>Event sourcing is the practice of storing the history of state changes as the primary record, not the current state. Every mutation is recorded as an immutable event. The current state is derived by replaying events from the beginning or from a snapshot checkpoint.</p>
+
+<h3>What is a consumer offset?</h3>
+<p>A consumer offset is the position in the event log that a consumer has read up to. It lets the consumer resume from where it left off after a restart or reconnection, without reprocessing events it has already handled or missing events that arrived while it was away.</p>
+
+<h3>What is log compaction?</h3>
+<p>Log compaction removes obsolete events from the log, keeping only the most recent event for each key. It lets the log grow indefinitely in terms of event count while keeping the storage size bounded. A new consumer can read the compacted log and reconstruct current state without replaying the entire history.</p>
+</section>
+
+<p><strong>Read next:</strong> the <a href="/interactive-web/">Interactive Web</a> hub, or continue to <a href="/interactive-web/realtime-data-synchronization/">realtime data synchronization</a> for the catch-up mechanics this architecture powers.</p>
+
+<div class="cta">
+<p><strong>Want event-driven Backbone models that reduce over a live stream?</strong></p>
+<p>The Backbone guide shows how models and collections integrate with event-based data sources.</p>
+<a href="/backbonejs/" class="btn">Explore the Backbone Guide →</a>
+</div>
+
+<div class="back-home">
+<a href="/interactive-web/">← Back to Interactive Web</a>
+</div>
+
+</article>
+</main>
+
+<footer>
+<p>Backbone Tutorials</p>
+<nav class="bt-social" aria-label="Backbone Tutorials on social media">
+  <a style="--c:#181717" href="https://github.com/backbonetutorials/backbonetutorials" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on GitHub"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#fff" d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0 1 12 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222 0 1.606-.014 2.898-.014 3.293 0 .322.216.694.825.576C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg></a>
+  <a style="--c:#000000" href="https://x.com/backbonetutor" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on X (formerly Twitter)"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#fff" d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+  <a style="--c:#FF0000" href="https://www.youtube.com/@BACKBONETUTORIALS" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on YouTube"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#fff" d="M8.5 6.5 L8.5 17.5 L17.5 12 Z"/></svg></a>
+  <a style="--c:#0285FF" href="https://bsky.app/profile/backbonetutorials.bsky.social" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on Bluesky"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#fff" d="M12 10.8c-1.087-2.114-4.046-6.053-6.798-7.995C2.566.944 1.561 1.266.902 1.565.139 1.908 0 3.08 0 3.768c0 .69.378 5.65.624 6.479.815 2.736 3.713 3.66 6.383 3.364.136-.02.275-.039.415-.056-.138.022-.276.04-.415.056-3.912.58-7.387 2.005-2.83 7.078 5.013 5.19 6.87-1.113 7.823-4.308.953 3.195 2.05 9.271 7.733 4.308 4.267-4.308 1.172-6.498-2.74-7.078a8.741 8.741 0 0 1-.415-.056c.14.017.279.036.415.056 2.67.296 5.568-.628 6.383-3.364C23.622 9.418 24 4.458 24 3.768c0-.688-.139-1.86-.902-2.203-.659-.299-1.664-.621-4.3 1.24C16.046 4.747 13.087 8.686 12 10.8Z"/></svg></a>
+  <a style="--c:#d62976;background-image:linear-gradient(150deg,rgba(255,255,255,.30),rgba(255,255,255,0) 42%,rgba(0,0,0,.22)),linear-gradient(45deg,#feda75,#fa7e1e,#d62976,#962fbf,#4f5bd5)" href="https://www.instagram.com/backbonetutorials/" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on Instagram"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="4" y="4" width="16" height="16" rx="5" fill="none" stroke="#fff" stroke-width="2"/><circle cx="12" cy="12" r="3.6" fill="none" stroke="#fff" stroke-width="2"/><circle cx="17.2" cy="6.8" r="1.25" fill="#fff"/></svg></a>
+  <a style="--c:#000000" href="https://www.tiktok.com/@backbonetutorials" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on TikTok"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#fff" d="M16.5 5.82a4.79 4.79 0 0 1-1.16-3.07h-2.9v11.43a2.45 2.45 0 1 1-2.45-2.45c.17 0 .33.02.49.05V8.83a5.36 5.36 0 0 0-.49-.02 5.35 5.35 0 1 0 5.35 5.35V8.6a7.66 7.66 0 0 0 4.46 1.42V7.13a4.79 4.79 0 0 1-2.8-1.31Z"/></svg></a>
+  <a style="--c:#1877F2" href="https://www.facebook.com/BackboneTutorials" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on Facebook"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#fff" d="M13.5 21v-8h2.6l.4-3h-3V8.1c0-.87.27-1.46 1.5-1.46H17V3.96c-.28-.04-1.2-.12-2.28-.12-2.26 0-3.8 1.38-3.8 3.9V10H8.3v3h2.62v8h2.58Z"/></svg></a>
+</nav>
+<p>
+<a href="/">Home</a> |
+<a href="/about/">About</a> |
+<a href="/contact/">Contact</a> |
+<a href="/privacy-policy/">Privacy Policy</a> |
+<a href="/terms/">Terms</a>
+</p>
+<p>© 2026 Backbone Tutorials</p>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,457 @@
+<!-- DEPLOY TO: /foundations/backbone-data-flow/  (index.html) · TechArticle · per MASTERMIND_SEO.md
+     EDITOR (§11.1): add real console output + a screenshot + version tested before publish; add URL to sitemap.xml. -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Backbone.js Data Flow — from model to screen</title>
+
+<meta name="description" content="How data moves through a Backbone app: a user action updates the model, the change event triggers a re-render, and collections and the server stay in sync.">
+
+<meta name="robots" content="index, follow">
+<meta name="author" content="Backbone Tutorials">
+<meta name="theme-color" content="#2563eb">
+<meta name="format-detection" content="telephone=no">
+
+<link rel="canonical" href="https://backbonetutorials.com/foundations/backbone-data-flow/">
+
+<link rel="icon" href="/assets/favicon.ico">
+<link rel="apple-touch-icon" href="/assets/favicon.png">
+
+<!-- Open Graph -->
+<meta property="og:title" content="Backbone.js Data Flow — from model to screen">
+<meta property="og:description" content="Trace data through a Backbone app: user action to model.set, the change event to a re-render, collections in sync, and the server round-trip.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://backbonetutorials.com/foundations/backbone-data-flow/">
+<meta property="og:image" content="https://backbonetutorials.com/assets/foundations/backbone-data-flow-1200.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:type" content="image/jpeg">
+<meta property="og:image:alt" content="Backbone.js Data Flow — Backbone Tutorials">
+<meta property="og:site_name" content="Backbone Tutorials">
+<meta property="og:locale" content="en_US">
+
+<!-- Twitter -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Backbone.js Data Flow — from model to screen">
+<meta name="twitter:description" content="How a change travels through Backbone: action to model, change event to re-render, collections in sync, server round-trip.">
+<meta name="twitter:image" content="https://backbonetutorials.com/assets/foundations/backbone-data-flow-1200.jpg">
+<meta name="twitter:image:alt" content="Backbone.js Data Flow — Backbone Tutorials">
+<meta name="twitter:url" content="https://backbonetutorials.com/foundations/backbone-data-flow/">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+
+<style>
+
+html{scroll-behavior:smooth}
+body{font-family:'Inter',sans-serif;margin:0;background:#f4f6f9;color:#1f2937;line-height:1.7}
+.container{max-width:900px;margin:30px auto;padding:20px;background:#fff;border-radius:10px;box-shadow:0 2px 10px rgba(0,0,0,0.04)}
+h1,h2,h3{color:#111827}
+.nav{background:#111827;padding:15px;display:flex;justify-content:center;align-items:center;flex-wrap:wrap;gap:8px}
+.nav a{color:white;margin:0 10px;text-decoration:none;font-weight:600}
+.nav a:hover{text-decoration:underline}
+.nav-logo img{vertical-align:middle;margin-right:12px;border-radius:8px}
+figure{margin:30px 0}
+img{width:100%;height:auto;border-radius:10px}
+pre{background:#111;color:#eee;padding:15px;border-radius:8px;overflow-x:auto;box-shadow:0 2px 8px rgba(0,0,0,0.15)}
+code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+p code,li code{background:#eef2ff;padding:1px 5px;border-radius:4px;font-size:.95em}
+.cta{background:#eef2ff;padding:20px;margin-top:30px;text-align:center;border-radius:10px}
+a{color:#2563eb}
+.back-home{margin-top:25px}
+footer{background:#111827;color:white;text-align:center;padding:30px 20px;margin-top:40px}
+footer a{color:#93c5fd;text-decoration:none}
+footer a:hover{text-decoration:underline}
+.btn{display:inline-block;background:#2563eb;color:white;padding:12px 22px;border-radius:8px;text-decoration:none;font-weight:600;margin-top:15px;transition:0.2s ease}
+.btn:hover{background:#1d4ed8;transform:translateY(-1px)}
+.card{background:#fff;padding:20px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.05);overflow:hidden;max-width:100%;transition:0.2s ease;border:1px solid #eef2f7}
+.toc-list{padding-left:20px}
+.toc-list li{margin-bottom:8px}
+.author-line{font-size:15px;margin-top:-6px;margin-bottom:10px;color:#4b5563}
+figcaption{font-size:14px;color:#6b7280;margin-top:10px}
+#faq h3{margin-top:25px}
+#faq p{margin-bottom:18px}
+.breadcrumb{font-size:14px;color:#6b7280;margin:0 0 10px}
+.breadcrumb a{color:#2563eb;text-decoration:none}
+.breadcrumb a:hover{text-decoration:underline}
+.diagram{width:100%;height:auto;display:block;border-radius:10px}
+.bt-social{display:flex;gap:13px;flex-wrap:wrap;align-items:center;justify-content:center;margin:0 0 14px;padding:0;list-style:none}
+.bt-social a{position:relative;isolation:isolate;width:46px;height:46px;border-radius:14px;display:inline-flex;align-items:center;justify-content:center;text-decoration:none;-webkit-tap-highlight-color:transparent;background-color:var(--c,#333);background-image:linear-gradient(150deg,rgba(255,255,255,.30),rgba(255,255,255,0) 42%,rgba(0,0,0,.22));box-shadow:0 1px 1px rgba(0,0,0,.22),0 7px 14px -3px rgba(0,0,0,.34),inset 0 1px 0 rgba(255,255,255,.50),inset 0 -2px 5px rgba(0,0,0,.30);transition:transform .18s cubic-bezier(.2,.7,.2,1),box-shadow .18s ease}
+.bt-social a::before{content:"";position:absolute;left:3px;right:3px;top:2px;height:44%;border-radius:12px 12px 50% 50%/12px 12px 24px 24px;background:linear-gradient(180deg,rgba(255,255,255,.42),rgba(255,255,255,0));pointer-events:none;z-index:0}
+.bt-social a:hover{transform:translateY(-3px) scale(1.05);box-shadow:0 2px 2px rgba(0,0,0,.20),0 16px 26px -6px rgba(0,0,0,.40),inset 0 1px 0 rgba(255,255,255,.55),inset 0 -2px 6px rgba(0,0,0,.32)}
+.bt-social a:active{transform:translateY(-1px) scale(1.01)}
+.bt-social a:focus-visible{outline:3px solid #93c5fd;outline-offset:3px}
+.bt-social svg{position:relative;z-index:1;width:22px;height:22px;display:block;filter:drop-shadow(0 1px 1px rgba(0,0,0,.28))}
+@media (prefers-reduced-motion:reduce){.bt-social a{transition:none}.bt-social a:hover{transform:none}}
+@media(max-width:600px){.container{padding:15px}}
+
+</style>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": "https://backbonetutorials.com/#organization",
+      "name": "Backbone Tutorials",
+      "url": "https://backbonetutorials.com/",
+      "logo": { "@type": "ImageObject", "url": "https://backbonetutorials.com/assets/logo.png" },
+      "sameAs": [
+        "https://github.com/backbonetutorials/backbonetutorials",
+        "https://x.com/backbonetutor",
+        "https://www.youtube.com/@BACKBONETUTORIALS",
+        "https://bsky.app/profile/backbonetutorials.bsky.social",
+        "https://www.instagram.com/backbonetutorials/",
+        "https://www.tiktok.com/@backbonetutorials",
+        "https://www.facebook.com/BackboneTutorials"
+      ],
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "contactType": "customer support",
+        "email": "backbonetutorials2026@gmail.com",
+        "availableLanguage": ["English"],
+        "areaServed": "Worldwide"
+      }
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://backbonetutorials.com/#website",
+      "url": "https://backbonetutorials.com/",
+      "name": "Backbone Tutorials",
+      "publisher": { "@id": "https://backbonetutorials.com/#organization" }
+    },
+    {
+      "@type": "Person",
+      "@id": "https://backbonetutorials.com/author/backbone-tutorials-team/#person",
+      "name": "Backbone Tutorials Team",
+      "url": "https://backbonetutorials.com/author/backbone-tutorials-team/",
+      "worksFor": { "@id": "https://backbonetutorials.com/#organization" },
+      "jobTitle": "Frontend JavaScript Editorial Team",
+      "knowsAbout": ["Backbone.js", "JavaScript", "SPA architecture", "State management"]
+    },
+    {
+      "@type": "WebPage",
+      "@id": "https://backbonetutorials.com/foundations/backbone-data-flow/#webpage",
+      "url": "https://backbonetutorials.com/foundations/backbone-data-flow/",
+      "name": "Backbone.js Data Flow — from model to screen",
+      "headline": "Backbone.js Data Flow",
+      "description": "How data moves through a Backbone app: a user action updates the model, the change event triggers a re-render, and collections and the server stay in sync.",
+      "inLanguage": "en",
+      "isPartOf": { "@id": "https://backbonetutorials.com/#website" },
+      "author": { "@id": "https://backbonetutorials.com/author/backbone-tutorials-team/#person" },
+      "publisher": { "@id": "https://backbonetutorials.com/#organization" },
+      "breadcrumb": { "@id": "https://backbonetutorials.com/foundations/backbone-data-flow/#breadcrumb" },
+      "mainEntity": { "@id": "https://backbonetutorials.com/foundations/backbone-data-flow/#article" }
+    },
+    {
+      "@type": "TechArticle",
+      "@id": "https://backbonetutorials.com/foundations/backbone-data-flow/#article",
+      "url": "https://backbonetutorials.com/foundations/backbone-data-flow/",
+      "headline": "Backbone.js Data Flow",
+      "description": "A code-first guide to data flow in Backbone: from a user action to model.set, from the change event to a re-render, keeping collections in sync, the server round-trip, and why one direction beats two-way binding.",
+      "inLanguage": "en",
+      "image": {
+        "@type": "ImageObject",
+        "url": "https://backbonetutorials.com/assets/foundations/backbone-data-flow-1200.jpg",
+        "width": 1200,
+        "height": 630
+      },
+      "author": { "@id": "https://backbonetutorials.com/author/backbone-tutorials-team/#person" },
+      "publisher": { "@id": "https://backbonetutorials.com/#organization" },
+      "mainEntityOfPage": { "@id": "https://backbonetutorials.com/foundations/backbone-data-flow/#webpage" },
+      "datePublished": "2026-06-12T04:30:00+07:00",
+      "dateModified": "2026-06-12T04:30:00+07:00",
+      "articleSection": ["Backbone.js", "Foundations", "State"],
+      "keywords": ["Backbone data flow", "single source of truth", "change event", "unidirectional data flow", "collection sync"],
+      "about": [
+        { "@type": "Thing", "name": "Backbone.js" },
+        { "@type": "Thing", "name": "State management" },
+        { "@type": "Thing", "name": "JavaScript" }
+      ],
+      "mentions": [
+        { "@type": "Thing", "name": "Unidirectional data flow" },
+        { "@type": "Thing", "name": "Flux" },
+        { "@type": "Thing", "name": "Observer pattern" }
+      ]
+    },
+    {
+      "@type": "BreadcrumbList",
+      "@id": "https://backbonetutorials.com/foundations/backbone-data-flow/#breadcrumb",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://backbonetutorials.com/" },
+        { "@type": "ListItem", "position": 2, "name": "Foundations", "item": "https://backbonetutorials.com/foundations/" },
+        { "@type": "ListItem", "position": 3, "name": "Backbone.js Data Flow", "item": "https://backbonetutorials.com/foundations/backbone-data-flow/" }
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "@id": "https://backbonetutorials.com/foundations/backbone-data-flow/#faq",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Is data binding in Backbone one-way or two-way?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Backbone has no automatic two-way binding. You wire the flow yourself: a view handler writes to the model, and the model's change event drives the view to re-render. That explicitness is intentional and makes the path of an update easy to follow." }
+        },
+        {
+          "@type": "Question",
+          "name": "What is the single source of truth in a Backbone app?",
+          "acceptedAnswer": { "@type": "Answer", "text": "The model and collection hold the truth; the DOM is only a projection of them. Always read and write state through the model, never scrape it back out of the rendered HTML, or the two will drift apart." }
+        },
+        {
+          "@type": "Question",
+          "name": "How does a change in one model update the screen?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Calling model.set fires a change event. A view that listened with listenTo runs its render in response, and the DOM is rewritten to reflect the new data. The view never edits the DOM directly from the handler." }
+        },
+        {
+          "@type": "Question",
+          "name": "How is Backbone's data flow related to Flux or Redux?",
+          "acceptedAnswer": { "@type": "Answer", "text": "They share the core idea: a single source of truth and updates flowing in one direction. Backbone wires that loop by hand with models and events, while Flux and Redux formalise it with stores and dispatched actions." }
+        }
+      ]
+    }
+  ]
+}
+</script>
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-FYJP43XDHH"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-FYJP43XDHH');
+</script>
+
+</head>
+
+<body>
+
+<nav class="nav" aria-label="Main Navigation">
+<a href="/" class="nav-logo" title="Backbone Tutorials Homepage"><img src="/assets/logo.png" alt="Backbone Tutorials Logo" width="36" height="36" loading="lazy" decoding="async"></a>
+<a href="/" title="Backbone.js Tutorials Homepage">Home</a>
+<a href="/backbonejs/" title="Backbone.js Complete Guide">Backbone Guide</a>
+<a href="/what-is-a-router/" title="What is a Router in Backbone.js">Router</a>
+<a href="/what-is-a-model/" title="What is a Model in Backbone.js">Model</a>
+<a href="/what-is-a-view/" title="What is a View in Backbone.js">View</a>
+<a href="/what-is-a-collection/" title="What is a Collection in Backbone.js">Collection</a>
+</nav>
+
+<main>
+
+<article class="container">
+
+<nav class="breadcrumb" aria-label="Breadcrumb">
+<a href="/">Home</a> › <a href="/foundations/">Foundations</a> › <span aria-current="page">Backbone.js Data Flow</span>
+</nav>
+
+<h1>Backbone.js Data Flow</h1>
+
+<p class="author-line">Written by <a href="/author/backbone-tutorials-team/">Backbone Tutorials Team</a></p>
+<p class="author-line">Last updated: June 2026 · 9 min read</p>
+
+<p>
+Click a star to favourite an item, and three things should happen: the data records it, the star fills in, and a counter ticks up somewhere else on the page. The bugs start when those three try to update each other directly. Backbone avoids that by sending every change through one path, and once you can trace that path, the whole app becomes predictable.
+</p>
+
+<p>
+This guide draws the path end to end. It pulls together the <a href="/foundations/backbone-events/">events</a>, <a href="/foundations/backbone-view-lifecycle/">view lifecycle</a>, and <a href="/foundations/backbone-sync/">sync</a> guides into a single mental model of how a value travels from a click to the screen and back to the server.
+</p>
+
+<figure>
+<svg class="diagram" viewBox="0 0 720 240" role="img" aria-labelledby="dfTitle dfDesc" xmlns="http://www.w3.org/2000/svg">
+  <title id="dfTitle">The Backbone data loop</title>
+  <desc id="dfDesc">A user action updates the model, which fires a change event, which re-renders the view and updates the DOM; the server connects to the model.</desc>
+  <rect x="0" y="0" width="720" height="240" rx="12" fill="#0f172a"></rect>
+  <g font-family="Inter, sans-serif" text-anchor="middle">
+    <rect x="40"  y="95" width="150" height="50" rx="10" fill="#1e293b" stroke="#334155"></rect><text x="115" y="125" fill="#fff" font-size="13" font-weight="600">User action</text>
+    <rect x="245" y="95" width="150" height="50" rx="10" fill="#1e293b" stroke="#2563eb" stroke-width="2"></rect><text x="320" y="118" fill="#fff" font-size="13" font-weight="700">Model</text><text x="320" y="135" fill="#93c5fd" font-size="11">set() → change</text>
+    <rect x="450" y="95" width="150" height="50" rx="10" fill="#1e293b" stroke="#3b82f6"></rect><text x="525" y="118" fill="#fff" font-size="13" font-weight="600">View</text><text x="525" y="135" fill="#93c5fd" font-size="11">render()</text>
+    <rect x="450" y="180" width="150" height="40" rx="9" fill="#0b1220" stroke="#334155"></rect><text x="525" y="205" fill="#fff" font-size="12">DOM</text>
+    <rect x="245" y="20" width="150" height="40" rx="9" fill="#0b1220" stroke="#a855f7"></rect><text x="320" y="45" fill="#e9d5ff" font-size="12" font-weight="600">Server</text>
+    <g stroke="#64748b" stroke-width="2" fill="none">
+      <path d="M192 120 L243 120" marker-end="url(#ad)"></path>
+      <path d="M397 120 L448 120" marker-end="url(#ad)"></path>
+      <path d="M525 145 L525 178" marker-end="url(#ad)"></path>
+      <path d="M115 95 C 115 40, 240 40, 300 60" marker-end="url(#ad)"></path>
+    </g>
+    <text x="180" y="80" fill="#94a3b8" font-size="10">DOM event back to action</text>
+    <g stroke="#a855f7" stroke-width="2" stroke-dasharray="5 4" fill="none">
+      <path d="M320 60 L320 93" marker-end="url(#ap)"></path>
+    </g>
+    <text x="372" y="80" fill="#c4b5fd" font-size="10">fetch / save</text>
+  </g>
+  <defs>
+    <marker id="ad" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0 0 L7 3 L0 6 Z" fill="#64748b"></path></marker>
+    <marker id="ap" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0 0 L7 3 L0 6 Z" fill="#a855f7"></path></marker>
+  </defs>
+</svg>
+<figcaption>Every change follows one loop: action updates the model, the model notifies the view, the view repaints the DOM. The server feeds the same model.</figcaption>
+</figure>
+
+<div class="card">
+<p style="margin-top:0"><strong>What you'll learn</strong></p>
+<ul class="toc-list">
+<li><a href="#loop">The one loop: action, model, event, view</a></li>
+<li><a href="#action">From a user action to model.set()</a></li>
+<li><a href="#render">From change events to a re-render</a></li>
+<li><a href="#collections">Collections: many models, one list view</a></li>
+<li><a href="#server">The server in the loop</a></li>
+<li><a href="#oneway">One direction beats two-way binding</a></li>
+</ul>
+</div>
+
+<h2 id="loop">The one loop: action, model, event, view</h2>
+
+<p>
+At the centre of every Backbone screen is a short, repeating cycle. Something happens, the model is updated, the model announces the update, and the view redraws to match. Learn to see this loop and most "why did the UI not update" questions answer themselves.
+</p>
+
+<h3>Why the model is the single source of truth</h3>
+
+<p>
+The rule that makes the loop work is simple: the model holds the truth, and the DOM is just a picture of it. You never read state back out of the HTML, because the moment you do, you have two copies that can disagree. There is one authority, and everything else reflects it.
+</p>
+
+<h2 id="action">From a user action to model.set()</h2>
+
+<p>
+The loop begins when a handler runs, and the handler's job is narrow: it updates data, not the screen. Reaching into the DOM here to flip a class would break the cycle before it starts.
+</p>
+
+<h3>Update data, not the DOM</h3>
+
+<pre><code>events: { 'click .like': 'like' },
+
+like: function () {
+  this.model.set('liked', true); // change the data, not the DOM
+}</code></pre>
+
+<p>
+Notice what the handler does not do: it never touches the star element. It changes one attribute and trusts the rest of the loop to update the view. That single discipline is what keeps the data and the display from drifting apart.
+</p>
+
+<h2 id="render">From change events to a re-render</h2>
+
+<p>
+Setting an attribute fires a <code>change</code> event, and that event is the hinge of the whole system. A view that subscribed to it redraws itself; a view that did not, sits still. This is the same wiring from the events and lifecycle guides, now doing real work.
+</p>
+
+<h3>Listening with listenTo, rendering once</h3>
+
+<pre><code>initialize: function () {
+  this.listenTo(this.model, 'change', this.render);
+}</code></pre>
+
+<p>
+With that one line, every future <code>set</code> on the model triggers a fresh, idempotent <code>render</code>. The view stays a pure function of the model: give it the same data and it produces the same DOM, every time, with no leftover state from the previous render.
+</p>
+
+<h2 id="collections">Collections: many models, one list view</h2>
+
+<p>
+Scale the loop from one model to many and you have a collection. The same pattern holds, except now the events that matter are about membership: a model joining, leaving, or the whole set being replaced.
+</p>
+
+<h3>How list views stay in sync</h3>
+
+<pre><code>initialize: function () {
+  this.listenTo(this.collection, 'add remove reset', this.render);
+}</code></pre>
+
+<p>
+A list view listens for <code>add</code>, <code>remove</code>, and <code>reset</code> and redraws when the membership changes, while each row listens to its own model for content changes. Responsibility splits cleanly: the list owns which rows exist, and each row owns what it shows.
+</p>
+
+<h2 id="server">The server in the loop</h2>
+
+<p>
+The loop is not sealed inside the browser; the server is part of it. Data flows out when you persist and flows back in when you load, and both ends meet at the same model rather than at the view.
+</p>
+
+<h3>Round-tripping through the server</h3>
+
+<pre><code>this.model.save();       // data flows out: POST or PUT
+this.collection.fetch(); // data flows in: GET, views re-render on 'sync'</code></pre>
+
+<p>
+A <code>save</code> sends the model's current state outward; a <code>fetch</code> brings fresh state in and, through the <code>sync</code> event, kicks the same render path you already use. The server becomes just another source that updates the one source of truth, as covered in the <a href="/foundations/backbone-sync/">sync guide</a>.
+</p>
+
+<h2 id="oneway">One direction beats two-way binding</h2>
+
+<p>
+It can feel tempting to wish for automatic two-way binding, where editing an input silently rewrites the model and back again. Backbone's deliberate, one-directional path is the better deal, because every change has exactly one route you can put a breakpoint on.
+</p>
+
+<h3>Why predictable flow scales</h3>
+
+<p>
+When data only ever moves action to model to view, debugging is tracing a line, not untangling a web. This is the same realisation that produced Flux and the reducers in Redux, and the reason React leans on one-way data flow. Backbone got there first, by simply not adding the magic. With the loop understood, the final foundations topic, <a href="/foundations/backbone-routing-basics/">routing</a>, adds the one more input that drives it: the URL.
+</p>
+
+<section id="faq">
+<h2>Frequently Asked Questions</h2>
+
+<h3>Is data binding in Backbone one-way or two-way?</h3>
+<p>Backbone has no automatic two-way binding. You wire the flow yourself: a view handler writes to the model, and the model's <code>change</code> event drives the view to re-render. That explicitness is intentional and makes the path of an update easy to follow.</p>
+
+<h3>What is the single source of truth in a Backbone app?</h3>
+<p>The model and collection hold the truth; the DOM is only a projection of them. Always read and write state through the model, never scrape it back out of the rendered HTML, or the two will drift apart.</p>
+
+<h3>How does a change in one model update the screen?</h3>
+<p>Calling <code>model.set</code> fires a <code>change</code> event. A view that listened with <code>listenTo</code> runs its <code>render</code> in response, and the DOM is rewritten to reflect the new data. The view never edits the DOM directly from the handler.</p>
+
+<h3>How is Backbone's data flow related to Flux or Redux?</h3>
+<p>They share the core idea: a single source of truth and updates flowing in one direction. Backbone wires that loop by hand with models and events, while Flux and Redux formalise it with stores and dispatched actions.</p>
+</section>
+
+<p><strong>Read next:</strong> <a href="/foundations/backbone-routing-basics/">Backbone.js Routing Basics</a>, the last foundations guide, or revisit <a href="/what-is-a-model/">What is a Model?</a> for the source of every change.</p>
+
+<div class="cta">
+<p><strong>Watch the loop in a full app</strong></p>
+<p>Data flow ties the parts together. The complete guide shows Models, Views, Routers, and Collections working as one.</p>
+<a href="/backbonejs/" class="btn">Explore the Backbone Guide →</a>
+</div>
+
+<div class="back-home">
+<a href="/foundations/">← Back to Backbone.js Foundations</a>
+</div>
+
+</article>
+
+</main>
+
+<footer>
+
+<p>Backbone Tutorials</p>
+
+<nav class="bt-social" aria-label="Backbone Tutorials on social media">
+  <a style="--c:#181717" href="https://github.com/backbonetutorials/backbonetutorials" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on GitHub"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#fff" d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0 1 12 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222 0 1.606-.014 2.898-.014 3.293 0 .322.216.694.825.576C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg></a>
+  <a style="--c:#000000" href="https://x.com/backbonetutor" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on X (formerly Twitter)"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#fff" d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+  <a style="--c:#FF0000" href="https://www.youtube.com/@BACKBONETUTORIALS" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on YouTube"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#fff" d="M8.5 6.5 L8.5 17.5 L17.5 12 Z"/></svg></a>
+  <a style="--c:#0285FF" href="https://bsky.app/profile/backbonetutorials.bsky.social" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on Bluesky"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#fff" d="M12 10.8c-1.087-2.114-4.046-6.053-6.798-7.995C2.566.944 1.561 1.266.902 1.565.139 1.908 0 3.08 0 3.768c0 .69.378 5.65.624 6.479.815 2.736 3.713 3.66 6.383 3.364.136-.02.275-.039.415-.056-.138.022-.276.04-.415.056-3.912.58-7.387 2.005-2.83 7.078 5.013 5.19 6.87-1.113 7.823-4.308.953 3.195 2.05 9.271 7.733 4.308 4.267-4.308 1.172-6.498-2.74-7.078a8.741 8.741 0 0 1-.415-.056c.14.017.279.036.415.056 2.67.296 5.568-.628 6.383-3.364C23.622 9.418 24 4.458 24 3.768c0-.688-.139-1.86-.902-2.203-.659-.299-1.664-.621-4.3 1.24C16.046 4.747 13.087 8.686 12 10.8Z"/></svg></a>
+  <a style="--c:#d62976;background-image:linear-gradient(150deg,rgba(255,255,255,.30),rgba(255,255,255,0) 42%,rgba(0,0,0,.22)),linear-gradient(45deg,#feda75,#fa7e1e,#d62976,#962fbf,#4f5bd5)" href="https://www.instagram.com/backbonetutorials/" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on Instagram"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="4" y="4" width="16" height="16" rx="5" fill="none" stroke="#fff" stroke-width="2"/><circle cx="12" cy="12" r="3.6" fill="none" stroke="#fff" stroke-width="2"/><circle cx="17.2" cy="6.8" r="1.25" fill="#fff"/></svg></a>
+  <a style="--c:#000000" href="https://www.tiktok.com/@backbonetutorials" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on TikTok"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#fff" d="M16.5 5.82a4.79 4.79 0 0 1-1.16-3.07h-2.9v11.43a2.45 2.45 0 1 1-2.45-2.45c.17 0 .33.02.49.05V8.83a5.36 5.36 0 0 0-.49-.02 5.35 5.35 0 1 0 5.35 5.35V8.6a7.66 7.66 0 0 0 4.46 1.42V7.13a4.79 4.79 0 0 1-2.8-1.31Z"/></svg></a>
+  <a style="--c:#1877F2" href="https://www.facebook.com/BackboneTutorials" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on Facebook"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#fff" d="M13.5 21v-8h2.6l.4-3h-3V8.1c0-.87.27-1.46 1.5-1.46H17V3.96c-.28-.04-1.2-.12-2.28-.12-2.26 0-3.8 1.38-3.8 3.9V10H8.3v3h2.62v8h2.58Z"/></svg></a>
+</nav>
+
+<p>
+<a href="/">Home</a> |
+<a href="/about/">About</a> |
+<a href="/contact/">Contact</a> |
+<a href="/privacy-policy/">Privacy Policy</a> |
+<a href="/terms/">Terms</a>
+</p>
+
+<p>© 2026 Backbone Tutorials</p>
+
+</footer>
+
+</body>
+</html>

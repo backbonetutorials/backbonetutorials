@@ -1,0 +1,511 @@
+<!-- DEPLOY TO: /interactive-web/operational-transform-basics/  (index.html) · TechArticle · per MASTERMIND_SEO.md -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Operational Transform Basics — concurrent edits</title>
+
+<meta name="description" content="Operational transform basics: insert and delete operations, the transform function, convergence, server coordination, and collaborative text editing.">
+
+<meta name="robots" content="index, follow">
+<meta name="author" content="Backbone Tutorials">
+<meta name="theme-color" content="#2563eb">
+<meta name="format-detection" content="telephone=no">
+
+<link rel="canonical" href="https://backbonetutorials.com/interactive-web/operational-transform-basics/">
+
+<link rel="icon" href="/assets/favicon.ico">
+<link rel="apple-touch-icon" href="/assets/favicon.png">
+
+<meta property="og:title" content="Operational Transform Basics — concurrent edits without conflict">
+<meta property="og:description" content="How operational transform works: insert and delete operations, the transform function, convergence guarantees, server coordination, and OT in collaborative text editors.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://backbonetutorials.com/interactive-web/operational-transform-basics/">
+<meta property="og:image" content="https://backbonetutorials.com/assets/interactive-web/operational-transform-basics-1200.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:type" content="image/jpeg">
+<meta property="og:image:alt" content="Operational Transform Basics — Backbone Tutorials">
+<meta property="og:site_name" content="Backbone Tutorials">
+<meta property="og:locale" content="en_US">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Operational Transform Basics — concurrent edits without conflict">
+<meta name="twitter:description" content="OT basics: insert and delete operations, the transform function, convergence, server coordination, and collaborative text editing.">
+<meta name="twitter:image" content="https://backbonetutorials.com/assets/interactive-web/operational-transform-basics-1200.jpg">
+<meta name="twitter:image:alt" content="Operational Transform Basics — Backbone Tutorials">
+<meta name="twitter:url" content="https://backbonetutorials.com/interactive-web/operational-transform-basics/">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+
+<style>
+html{scroll-behavior:smooth}
+body{font-family:'Inter',sans-serif;margin:0;background:#f4f6f9;color:#1f2937;line-height:1.7}
+.container{max-width:900px;margin:30px auto;padding:20px;background:#fff;border-radius:10px;box-shadow:0 2px 10px rgba(0,0,0,0.04)}
+h1,h2,h3{color:#111827}
+.nav{background:#111827;padding:15px;display:flex;justify-content:center;align-items:center;flex-wrap:wrap;gap:8px}
+.nav a{color:white;margin:0 10px;text-decoration:none;font-weight:600}
+.nav a:hover{text-decoration:underline}
+.nav-logo img{vertical-align:middle;margin-right:12px;border-radius:8px}
+figure{margin:30px 0}
+pre{background:#111;color:#eee;padding:15px;border-radius:8px;overflow-x:auto;box-shadow:0 2px 8px rgba(0,0,0,0.15)}
+code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+p code,li code{background:#eef2ff;padding:1px 5px;border-radius:4px;font-size:.95em}
+.cta{background:#eef2ff;padding:20px;margin-top:30px;text-align:center;border-radius:10px}
+a{color:#2563eb}
+.back-home{margin-top:25px}
+footer{background:#111827;color:white;text-align:center;padding:30px 20px;margin-top:40px}
+footer a{color:#93c5fd;text-decoration:none}
+footer a:hover{text-decoration:underline}
+.btn{display:inline-block;background:#2563eb;color:white;padding:12px 22px;border-radius:8px;text-decoration:none;font-weight:600;margin-top:15px;transition:0.2s ease}
+.btn:hover{background:#1d4ed8;transform:translateY(-1px)}
+.card{background:#fff;padding:20px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.05);overflow:hidden;max-width:100%;border:1px solid #eef2f7}
+.toc-list{padding-left:20px}
+.toc-list li{margin-bottom:8px}
+.author-line{font-size:15px;margin-top:-6px;margin-bottom:10px;color:#4b5563}
+figcaption{font-size:14px;color:#6b7280;margin-top:10px}
+#faq h3{margin-top:25px}
+#faq p{margin-bottom:18px}
+.breadcrumb{font-size:14px;color:#6b7280;margin:0 0 10px}
+.breadcrumb a{color:#2563eb;text-decoration:none}
+.breadcrumb a:hover{text-decoration:underline}
+.diagram{width:100%;height:auto;display:block;border-radius:10px}
+.bt-social{display:flex;gap:13px;flex-wrap:wrap;align-items:center;justify-content:center;margin:0 0 14px;padding:0;list-style:none}
+.bt-social a{position:relative;isolation:isolate;width:46px;height:46px;border-radius:14px;display:inline-flex;align-items:center;justify-content:center;text-decoration:none;-webkit-tap-highlight-color:transparent;background-color:var(--c,#333);background-image:linear-gradient(150deg,rgba(255,255,255,.30),rgba(255,255,255,0) 42%,rgba(0,0,0,.22));box-shadow:0 1px 1px rgba(0,0,0,.22),0 7px 14px -3px rgba(0,0,0,.34),inset 0 1px 0 rgba(255,255,255,.50),inset 0 -2px 5px rgba(0,0,0,.30);transition:transform .18s cubic-bezier(.2,.7,.2,1),box-shadow .18s ease}
+.bt-social a::before{content:"";position:absolute;left:3px;right:3px;top:2px;height:44%;border-radius:12px 12px 50% 50%/12px 12px 24px 24px;background:linear-gradient(180deg,rgba(255,255,255,.42),rgba(255,255,255,0));pointer-events:none;z-index:0}
+.bt-social a:hover{transform:translateY(-3px) scale(1.05);box-shadow:0 2px 2px rgba(0,0,0,.20),0 16px 26px -6px rgba(0,0,0,.40),inset 0 1px 0 rgba(255,255,255,.55),inset 0 -2px 6px rgba(0,0,0,.32)}
+.bt-social a:active{transform:translateY(-1px) scale(1.01)}
+.bt-social a:focus-visible{outline:3px solid #93c5fd;outline-offset:3px}
+.bt-social svg{position:relative;z-index:1;width:22px;height:22px;display:block;filter:drop-shadow(0 1px 1px rgba(0,0,0,.28))}
+@media (prefers-reduced-motion:reduce){.bt-social a{transition:none}.bt-social a:hover{transform:none}}
+@media(max-width:600px){.container{padding:15px}}
+</style>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": "https://backbonetutorials.com/#organization",
+      "name": "Backbone Tutorials",
+      "url": "https://backbonetutorials.com/",
+      "logo": { "@type": "ImageObject", "url": "https://backbonetutorials.com/assets/logo.png" },
+      "sameAs": [
+        "https://github.com/backbonetutorials/backbonetutorials",
+        "https://x.com/backbonetutor",
+        "https://www.youtube.com/@BACKBONETUTORIALS",
+        "https://bsky.app/profile/backbonetutorials.bsky.social",
+        "https://www.instagram.com/backbonetutorials/",
+        "https://www.tiktok.com/@backbonetutorials",
+        "https://www.facebook.com/BackboneTutorials"
+      ],
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "contactType": "customer support",
+        "email": "backbonetutorials2026@gmail.com",
+        "availableLanguage": ["English"],
+        "areaServed": "Worldwide"
+      }
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://backbonetutorials.com/#website",
+      "url": "https://backbonetutorials.com/",
+      "name": "Backbone Tutorials",
+      "publisher": { "@id": "https://backbonetutorials.com/#organization" }
+    },
+    {
+      "@type": "Person",
+      "@id": "https://backbonetutorials.com/author/backbone-tutorials-team/#person",
+      "name": "Backbone Tutorials Team",
+      "url": "https://backbonetutorials.com/author/backbone-tutorials-team/",
+      "worksFor": { "@id": "https://backbonetutorials.com/#organization" },
+      "jobTitle": "Frontend JavaScript Editorial Team",
+      "knowsAbout": ["Operational transform", "Collaborative editing", "Realtime systems", "Backbone.js"]
+    },
+    {
+      "@type": "WebPage",
+      "@id": "https://backbonetutorials.com/interactive-web/operational-transform-basics/#webpage",
+      "url": "https://backbonetutorials.com/interactive-web/operational-transform-basics/",
+      "name": "Operational Transform Basics — concurrent edits without conflict",
+      "headline": "Operational Transform Basics",
+      "description": "Operational transform basics: insert and delete operations, the transform function, convergence, server-side OT coordination, and why OT powers collaborative text editing.",
+      "inLanguage": "en",
+      "isPartOf": { "@id": "https://backbonetutorials.com/#website" },
+      "author": { "@id": "https://backbonetutorials.com/author/backbone-tutorials-team/#person" },
+      "publisher": { "@id": "https://backbonetutorials.com/#organization" },
+      "breadcrumb": { "@id": "https://backbonetutorials.com/interactive-web/operational-transform-basics/#breadcrumb" },
+      "mainEntity": { "@id": "https://backbonetutorials.com/interactive-web/operational-transform-basics/#article" }
+    },
+    {
+      "@type": "TechArticle",
+      "@id": "https://backbonetutorials.com/interactive-web/operational-transform-basics/#article",
+      "url": "https://backbonetutorials.com/interactive-web/operational-transform-basics/",
+      "headline": "Operational Transform Basics",
+      "description": "An engineering guide to operational transform: insert and delete operations on a shared text document, the transform function that adjusts positions after concurrent edits, convergence guarantees, server-side OT coordination with a revision log, and the practical limits of OT compared with CRDTs.",
+      "inLanguage": "en",
+      "image": {
+        "@type": "ImageObject",
+        "url": "https://backbonetutorials.com/assets/interactive-web/operational-transform-basics-1200.jpg",
+        "width": 1200,
+        "height": 630
+      },
+      "author": { "@id": "https://backbonetutorials.com/author/backbone-tutorials-team/#person" },
+      "publisher": { "@id": "https://backbonetutorials.com/#organization" },
+      "mainEntityOfPage": { "@id": "https://backbonetutorials.com/interactive-web/operational-transform-basics/#webpage" },
+      "datePublished": "2026-06-12T04:30:00+07:00",
+      "dateModified": "2026-06-12T04:30:00+07:00",
+      "articleSection": ["Realtime Engineering", "Operational Transform", "Collaborative Editing"],
+      "keywords": ["operational transform", "OT", "collaborative editing", "concurrent edits", "convergence", "transform function"],
+      "about": [
+        { "@type": "Thing", "name": "Operational transformation" },
+        { "@type": "Thing", "name": "Collaborative editing" },
+        { "@type": "Thing", "name": "Realtime systems" }
+      ],
+      "mentions": [
+        { "@type": "Thing", "name": "Convergence" },
+        { "@type": "Thing", "name": "Revision log" },
+        { "@type": "Thing", "name": "Transform function" }
+      ]
+    },
+    {
+      "@type": "BreadcrumbList",
+      "@id": "https://backbonetutorials.com/interactive-web/operational-transform-basics/#breadcrumb",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Home",            "item": "https://backbonetutorials.com/" },
+        { "@type": "ListItem", "position": 2, "name": "Interactive Web", "item": "https://backbonetutorials.com/interactive-web/" },
+        { "@type": "ListItem", "position": 3, "name": "Operational Transform Basics", "item": "https://backbonetutorials.com/interactive-web/operational-transform-basics/" }
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "@id": "https://backbonetutorials.com/interactive-web/operational-transform-basics/#faq",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What is operational transform?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Operational transform is an algorithm that lets two clients apply concurrent edits to a shared document and arrive at the same result. When two operations are generated against the same document state, OT adjusts each one so it can be correctly applied after the other without producing inconsistent output." }
+        },
+        {
+          "@type": "Question",
+          "name": "Why does inserting text before a cursor shift it?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Character positions are indices into a string. Inserting text before position N shifts everything at N and beyond one position to the right for each inserted character. An operation generated before that insertion was applied must have its position adjusted upward to still refer to the same content." }
+        },
+        {
+          "@type": "Question",
+          "name": "What is convergence in OT?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Convergence means that all clients end up with the same document state after applying the same set of operations, regardless of the order in which they received and applied them. A correctly implemented OT algorithm guarantees convergence for any combination of concurrent operations." }
+        },
+        {
+          "@type": "Question",
+          "name": "How is OT different from CRDTs?",
+          "acceptedAnswer": { "@type": "Answer", "text": "OT transforms operations against each other and typically requires a central server to order them. CRDTs use data structures designed so that any two replicas can be merged without coordination. CRDTs work peer-to-peer and handle network partitions better; OT is simpler to understand and implement for linear text." }
+        }
+      ]
+    }
+  ]
+}
+</script>
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-FYJP43XDHH"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-FYJP43XDHH');
+</script>
+
+</head>
+<body>
+
+<nav class="nav" aria-label="Main Navigation">
+<a href="/" class="nav-logo" title="Backbone Tutorials Homepage"><img src="/assets/logo.png" alt="Backbone Tutorials Logo" width="36" height="36" loading="lazy" decoding="async"></a>
+<a href="/" title="Backbone.js Tutorials Homepage">Home</a>
+<a href="/backbonejs/" title="Backbone.js Complete Guide">Backbone Guide</a>
+<a href="/what-is-a-router/" title="What is a Router">Router</a>
+<a href="/what-is-a-model/" title="What is a Model">Model</a>
+<a href="/what-is-a-view/" title="What is a View">View</a>
+<a href="/what-is-a-collection/" title="What is a Collection">Collection</a>
+</nav>
+
+<main>
+<article class="container">
+
+<nav class="breadcrumb" aria-label="Breadcrumb">
+<a href="/">Home</a> › <a href="/interactive-web/">Interactive Web</a> › <span aria-current="page">Operational Transform Basics</span>
+</nav>
+
+<h1>Operational Transform Basics</h1>
+
+<p class="author-line">Written by <a href="/author/backbone-tutorials-team/">Backbone Tutorials Team</a></p>
+<p class="author-line">Last updated: June 2026 · 10 min read</p>
+
+<p>
+Two people open the same document and start typing at the same time. Alice inserts "Hello" at position zero. Bob inserts "World" at position zero. Both changes are valid; both must appear in the final document. But if each client simply applies both operations in the order they receive them, they diverge: Alice's client ends up with "WorldHello" and Bob's ends up with "HelloWorld". Operational transform is the algorithm that prevents this. It adjusts the position of each operation to account for concurrent operations that have already been applied, so every client converges to the same result.
+</p>
+
+<p>
+This guide sits between the sync mechanics of <a href="/interactive-web/realtime-data-synchronization/">realtime data synchronization</a> and the deeper data-structure approach in <a href="/interactive-web/conflict-resolution-crdts/">conflict-resolution CRDTs</a>.
+</p>
+
+<figure>
+<svg class="diagram" viewBox="0 0 720 160" role="img" aria-labelledby="otTitle otDesc" xmlns="http://www.w3.org/2000/svg">
+  <title id="otTitle">OT transform diamond</title>
+  <desc id="otDesc">State S branches to S1 via op A and S2 via op B; OT transforms each op against the other so both paths reach the same final state S12.</desc>
+  <rect x="0" y="0" width="720" height="160" rx="12" fill="#0f172a"></rect>
+  <g font-family="Inter, sans-serif" text-anchor="middle">
+    <rect x="310" y="14" width="100" height="34" rx="9" fill="#1e293b" stroke="#3b82f6" stroke-width="2"></rect>
+    <text x="360" y="36" fill="#93c5fd" font-size="12" font-weight="700">State S</text>
+    <rect x="130" y="90" width="140" height="34" rx="9" fill="#1e293b" stroke="#f59e0b"></rect>
+    <text x="200" y="112" fill="#fcd34d" font-size="11">S + op_A = S1</text>
+    <rect x="450" y="90" width="140" height="34" rx="9" fill="#1e293b" stroke="#a855f7"></rect>
+    <text x="520" y="112" fill="#d8b4fe" font-size="11">S + op_B = S2</text>
+    <rect x="290" y="118" width="140" height="34" rx="9" fill="#1e293b" stroke="#22c55e" stroke-width="2"></rect>
+    <text x="360" y="136" fill="#86efac" font-size="11" font-weight="700">S12 = S21</text>
+    <g stroke="#64748b" stroke-width="1.5" fill="none">
+      <path d="M330 48 L230 88"  marker-end="url(#aot)"></path>
+      <path d="M390 48 L490 88"  marker-end="url(#aot)"></path>
+      <path d="M270 115 L310 125" stroke="#22c55e" marker-end="url(#aotg)"></path>
+      <path d="M450 115 L415 125" stroke="#22c55e" marker-end="url(#aotg)"></path>
+    </g>
+    <text x="248" y="76" fill="#f59e0b" font-size="9">op_A</text>
+    <text x="472" y="76" fill="#a855f7" font-size="9">op_B</text>
+    <text x="270" y="127" fill="#22c55e" font-size="9">T(op_B, op_A)</text>
+    <text x="468" y="127" fill="#22c55e" font-size="9">T(op_A, op_B)</text>
+  </g>
+  <defs>
+    <marker id="aot"  markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0 0 L6 3 L0 6 Z" fill="#64748b"></path></marker>
+    <marker id="aotg" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0 0 L6 3 L0 6 Z" fill="#22c55e"></path></marker>
+  </defs>
+</svg>
+<figcaption>The OT diamond: two concurrent operations each transformed against the other so both paths reach the identical final state.</figcaption>
+</figure>
+
+<div class="card">
+<p style="margin-top:0"><strong>What you'll learn</strong></p>
+<ul class="toc-list">
+<li><a href="#ops">Insert and delete operations</a></li>
+<li><a href="#problem">The concurrent edit problem</a></li>
+<li><a href="#transform">The transform function</a></li>
+<li><a href="#server">Server-side OT coordination</a></li>
+<li><a href="#convergence">Convergence and correctness</a></li>
+<li><a href="#limits">Practical limits of OT</a></li>
+</ul>
+</div>
+
+<h2 id="ops">Insert and delete operations</h2>
+
+<p>
+OT works with operations: discrete, typed descriptions of a change to a document. For linear text, two operation types cover everything.
+</p>
+
+<h3>Representing edits as typed operations</h3>
+
+<pre><code>// Insert: put a string at a position
+var insert = { type: 'insert', pos: 3, text: 'Hello ' };
+
+// Delete: remove a run of characters starting at a position
+var del = { type: 'delete', pos: 3, len: 6 };
+
+// Apply an operation to a string
+function apply(doc, op) {
+  if (op.type === 'insert') {
+    return doc.slice(0, op.pos) + op.text + doc.slice(op.pos);
+  }
+  if (op.type === 'delete') {
+    return doc.slice(0, op.pos) + doc.slice(op.pos + op.len);
+  }
+  return doc;
+}</code></pre>
+
+<p>
+Both operations describe a change in terms of a character position in the document at the moment the edit was made. That moment is the key detail: a position is only valid relative to the document state it was generated against. Apply two concurrent operations without adjusting their positions and the positions refer to different document states, producing garbage.
+</p>
+
+<h2 id="problem">The concurrent edit problem</h2>
+
+<p>
+The problem is easy to make concrete. It appears whenever two clients each generate an operation against the same document version and then receive each other's operations.
+</p>
+
+<h3>Position collision without transform</h3>
+
+<pre><code>// Initial doc: "Helo"
+// Alice (client A) generates: insert at pos 3, text "l"  -> "Hello"
+// Bob   (client B) generates: insert at pos 0, text "Say " -> "Say Helo"
+
+// Without OT:
+// Alice applies Bob's op at pos 0 -> "Say Hello"  (correct)
+// Bob   applies Alice's op at pos 3 -> "Say Helo" -> insert "l" at pos 3
+//   -> "SayHelo" ... wait, pos 3 is now inside "Say " -> "Say" + "l" + " Helo" = wrong
+
+// The same character index means different places after a concurrent insertion.</code></pre>
+
+<p>
+Bob's insert at position zero pushed every subsequent character four positions to the right. Alice's operation at position three was generated before that shift happened. Without adjustment, Alice's position three now lands inside Bob's inserted text rather than at the intended character.
+</p>
+
+<h2 id="transform">The transform function</h2>
+
+<p>
+The transform function takes two concurrent operations and produces adjusted versions of each that can be applied in either order to reach the same document.
+</p>
+
+<h3>Adjusting positions for concurrent inserts</h3>
+
+<pre><code>// transform(op_a, op_b) -> op_a adjusted for op_b having been applied
+function transform(a, b) {
+  if (a.type === 'insert' && b.type === 'insert') {
+    if (b.pos <= a.pos) {
+      // b inserts before a's position: shift a right by b's length
+      return { type: 'insert', pos: a.pos + b.text.length, text: a.text };
+    }
+    return a; // b inserts after a, no adjustment needed
+  }
+
+  if (a.type === 'insert' && b.type === 'delete') {
+    if (b.pos < a.pos) {
+      var shift = Math.min(b.len, a.pos - b.pos);
+      return { type: 'insert', pos: a.pos - shift, text: a.text };
+    }
+    return a;
+  }
+
+  if (a.type === 'delete' && b.type === 'insert') {
+    if (b.pos <= a.pos) {
+      return { type: 'delete', pos: a.pos + b.text.length, len: a.len };
+    }
+    return a;
+  }
+
+  // delete vs delete: handle overlap
+  if (a.type === 'delete' && b.type === 'delete') {
+    if (b.pos + b.len <= a.pos) return { type: 'delete', pos: a.pos - b.len, len: a.len };
+    if (b.pos >= a.pos + a.len) return a;
+    // overlapping deletes: adjust length and position
+    var newPos = Math.min(a.pos, b.pos);
+    var aEnd = a.pos + a.len; var bEnd = b.pos + b.len;
+    var newLen = Math.max(0, aEnd - Math.max(a.pos, bEnd) +
+                              Math.min(aEnd, b.pos) - a.pos);
+    return { type: 'delete', pos: newPos, len: newLen };
+  }
+  return a;
+}</code></pre>
+
+<p>
+The function covers the four combinations of insert and delete pairs. The most common case, two inserts, is also the simplest: if one inserts before the other, shift the other right by the inserted length. Delete versus delete is the trickiest because deletions can overlap, requiring the lengths to be recalculated to avoid deleting characters that the other operation already removed.
+</p>
+
+<h2 id="server">Server-side OT coordination</h2>
+
+<p>
+A client-only OT implementation can guarantee convergence for exactly two clients. More than two requires a server to order operations and apply transforms against the revision log.
+</p>
+
+<h3>The server as the transformation arbiter</h3>
+
+<pre><code>// Server maintains the authoritative document + revision log
+var doc = '';
+var revisions = [];
+
+function applyClientOp(clientOp, clientRevision) {
+  // Transform op against all server ops since clientRevision
+  var transformedOp = clientOp;
+  for (var i = clientRevision; i < revisions.length; i++) {
+    transformedOp = transform(transformedOp, revisions[i]);
+  }
+  // Apply and store
+  doc = apply(doc, transformedOp);
+  revisions.push(transformedOp);
+  return { op: transformedOp, revision: revisions.length - 1 };
+}</code></pre>
+
+<p>
+Each client sends its operation together with the revision number it was generated against. The server transforms that operation against every server operation since that revision, applies it, appends it to the log, and broadcasts the transformed operation and its new revision number to all connected clients. Clients receiving the broadcast apply it directly because it is already transformed against the canonical server state. This is the architecture Google Docs used in its first collaborative editing implementation.
+</p>
+
+<h2 id="convergence">Convergence and correctness</h2>
+
+<p>
+Convergence is the property that all clients end up with the same document state. It is not automatic: the transform function must be correct for every pair of operation types, including the edge cases around overlapping deletions and equal positions.
+</p>
+
+<h3>Testing convergence with round-trip scenarios</h3>
+
+<p>
+The standard test is the diamond: generate two operations against the same state, transform each against the other, apply them both in opposite order on two copies of the document, and verify the copies match. Running this test across hundreds of random operation pairs catches most bugs in a transform implementation. Production OT libraries such as ShareDB and ot.js have extensive test suites for this reason. Building a correct OT implementation from scratch is genuinely hard; the edge cases compound quickly as the operation set grows beyond plain text to rich formatting, embedded objects, and nested structures.
+</p>
+
+<h2 id="limits">Practical limits of OT</h2>
+
+<p>
+OT is powerful for linear text but has well-known difficulties that have driven the industry toward CRDTs for more complex data structures.
+</p>
+
+<h3>When OT stops being practical</h3>
+
+<p>
+OT requires a server to order operations. In a peer-to-peer or offline-first scenario where clients cannot reach a server, OT breaks down because there is no arbiter to assign a canonical order. The transform function also grows in complexity as the document model grows: adding rich text formatting, embedded media, or tree-structured content requires writing new transform cases for every new pair of operation types, and the combinatorial explosion of edge cases makes correctness proofs difficult. CRDTs, covered in the next guide, solve both problems at the cost of more complex data structures. For linear text in a server-coordinated system, OT remains a solid, well-understood choice, and its client-side API, a stream of typed operations to apply, is the same regardless of the coordination mechanism underneath.
+</p>
+
+<section id="faq">
+<h2>Frequently Asked Questions</h2>
+
+<h3>What is operational transform?</h3>
+<p>Operational transform is an algorithm that lets two clients apply concurrent edits to a shared document and arrive at the same result. When two operations are generated against the same document state, OT adjusts each one so it can be correctly applied after the other without producing inconsistent output.</p>
+
+<h3>Why does inserting text before a cursor shift it?</h3>
+<p>Character positions are indices into a string. Inserting text before position N shifts everything at N and beyond one position to the right for each inserted character. An operation generated before that insertion was applied must have its position adjusted upward to still refer to the same content.</p>
+
+<h3>What is convergence in OT?</h3>
+<p>Convergence means that all clients end up with the same document state after applying the same set of operations, regardless of the order in which they received and applied them. A correctly implemented OT algorithm guarantees convergence for any combination of concurrent operations.</p>
+
+<h3>How is OT different from CRDTs?</h3>
+<p>OT transforms operations against each other and typically requires a central server to order them. CRDTs use data structures designed so that any two replicas can be merged without coordination. CRDTs work peer-to-peer and handle network partitions better; OT is simpler to understand for linear text in a server-coordinated system.</p>
+</section>
+
+<p><strong>Read next:</strong> the <a href="/interactive-web/">Interactive Web</a> hub, or continue to <a href="/interactive-web/conflict-resolution-crdts/">conflict-resolution CRDTs</a> for the peer-to-peer alternative to OT.</p>
+
+<div class="cta">
+<p><strong>Want to see how document models connect to Backbone views?</strong></p>
+<p>The Backbone guide shows views that update cleanly when an underlying model changes.</p>
+<a href="/backbonejs/" class="btn">Explore the Backbone Guide →</a>
+</div>
+
+<div class="back-home">
+<a href="/interactive-web/">← Back to Interactive Web</a>
+</div>
+
+</article>
+</main>
+
+<footer>
+<p>Backbone Tutorials</p>
+<nav class="bt-social" aria-label="Backbone Tutorials on social media">
+  <a style="--c:#181717" href="https://github.com/backbonetutorials/backbonetutorials" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on GitHub"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#fff" d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0 1 12 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222 0 1.606-.014 2.898-.014 3.293 0 .322.216.694.825.576C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg></a>
+  <a style="--c:#000000" href="https://x.com/backbonetutor" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on X (formerly Twitter)"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#fff" d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+  <a style="--c:#FF0000" href="https://www.youtube.com/@BACKBONETUTORIALS" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on YouTube"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#fff" d="M8.5 6.5 L8.5 17.5 L17.5 12 Z"/></svg></a>
+  <a style="--c:#0285FF" href="https://bsky.app/profile/backbonetutorials.bsky.social" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on Bluesky"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#fff" d="M12 10.8c-1.087-2.114-4.046-6.053-6.798-7.995C2.566.944 1.561 1.266.902 1.565.139 1.908 0 3.08 0 3.768c0 .69.378 5.65.624 6.479.815 2.736 3.713 3.66 6.383 3.364.136-.02.275-.039.415-.056-.138.022-.276.04-.415.056-3.912.58-7.387 2.005-2.83 7.078 5.013 5.19 6.87-1.113 7.823-4.308.953 3.195 2.05 9.271 7.733 4.308 4.267-4.308 1.172-6.498-2.74-7.078a8.741 8.741 0 0 1-.415-.056c.14.017.279.036.415.056 2.67.296 5.568-.628 6.383-3.364C23.622 9.418 24 4.458 24 3.768c0-.688-.139-1.86-.902-2.203-.659-.299-1.664-.621-4.3 1.24C16.046 4.747 13.087 8.686 12 10.8Z"/></svg></a>
+  <a style="--c:#d62976;background-image:linear-gradient(150deg,rgba(255,255,255,.30),rgba(255,255,255,0) 42%,rgba(0,0,0,.22)),linear-gradient(45deg,#feda75,#fa7e1e,#d62976,#962fbf,#4f5bd5)" href="https://www.instagram.com/backbonetutorials/" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on Instagram"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="4" y="4" width="16" height="16" rx="5" fill="none" stroke="#fff" stroke-width="2"/><circle cx="12" cy="12" r="3.6" fill="none" stroke="#fff" stroke-width="2"/><circle cx="17.2" cy="6.8" r="1.25" fill="#fff"/></svg></a>
+  <a style="--c:#000000" href="https://www.tiktok.com/@backbonetutorials" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on TikTok"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#fff" d="M16.5 5.82a4.79 4.79 0 0 1-1.16-3.07h-2.9v11.43a2.45 2.45 0 1 1-2.45-2.45c.17 0 .33.02.49.05V8.83a5.36 5.36 0 0 0-.49-.02 5.35 5.35 0 1 0 5.35 5.35V8.6a7.66 7.66 0 0 0 4.46 1.42V7.13a4.79 4.79 0 0 1-2.8-1.31Z"/></svg></a>
+  <a style="--c:#1877F2" href="https://www.facebook.com/BackboneTutorials" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on Facebook"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#fff" d="M13.5 21v-8h2.6l.4-3h-3V8.1c0-.87.27-1.46 1.5-1.46H17V3.96c-.28-.04-1.2-.12-2.28-.12-2.26 0-3.8 1.38-3.8 3.9V10H8.3v3h2.62v8h2.58Z"/></svg></a>
+</nav>
+<p>
+<a href="/">Home</a> |
+<a href="/about/">About</a> |
+<a href="/contact/">Contact</a> |
+<a href="/privacy-policy/">Privacy Policy</a> |
+<a href="/terms/">Terms</a>
+</p>
+<p>© 2026 Backbone Tutorials</p>
+</footer>
+
+</body>
+</html>

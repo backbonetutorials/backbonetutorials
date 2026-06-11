@@ -1,0 +1,443 @@
+<!-- DEPLOY TO: /javascript-seo/framework-seo/  (index.html) · TechArticle · per MASTERMIND_SEO.md
+     EDITOR (§11.1): add a first-hand note (a framework SEO fix you shipped + result) + date before publish; add URL to sitemap.xml. -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Framework SEO — rendering, not the framework</title>
+
+<meta name="description" content="How frontend frameworks affect SEO: why default client rendering is the risk, per-route head management, what meta-frameworks add, and structured data.">
+
+<meta name="robots" content="index, follow">
+<meta name="author" content="Backbone Tutorials">
+<meta name="theme-color" content="#2563eb">
+<meta name="format-detection" content="telephone=no">
+
+<link rel="canonical" href="https://backbonetutorials.com/javascript-seo/framework-seo/">
+
+<link rel="icon" href="/assets/favicon.ico">
+<link rel="apple-touch-icon" href="/assets/favicon.png">
+
+<!-- Open Graph -->
+<meta property="og:title" content="Framework SEO — rendering, not the framework">
+<meta property="og:description" content="The framework does not rank you; the rendering does. SEO patterns that apply across React, Vue, Angular, and meta-frameworks, with where Backbone fits.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://backbonetutorials.com/javascript-seo/framework-seo/">
+<meta property="og:image" content="https://backbonetutorials.com/assets/javascript-seo/framework-seo-1200.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:type" content="image/jpeg">
+<meta property="og:image:alt" content="Framework SEO — Backbone Tutorials">
+<meta property="og:site_name" content="Backbone Tutorials">
+<meta property="og:locale" content="en_US">
+
+<!-- Twitter -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Framework SEO — rendering, not the framework">
+<meta name="twitter:description" content="SEO patterns across React, Vue, Angular, and meta-frameworks: default rendering, head management, links, and structured data.">
+<meta name="twitter:image" content="https://backbonetutorials.com/assets/javascript-seo/framework-seo-1200.jpg">
+<meta name="twitter:image:alt" content="Framework SEO — Backbone Tutorials">
+<meta name="twitter:url" content="https://backbonetutorials.com/javascript-seo/framework-seo/">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+
+<style>
+
+html{scroll-behavior:smooth}
+body{font-family:'Inter',sans-serif;margin:0;background:#f4f6f9;color:#1f2937;line-height:1.7}
+.container{max-width:900px;margin:30px auto;padding:20px;background:#fff;border-radius:10px;box-shadow:0 2px 10px rgba(0,0,0,0.04)}
+h1,h2,h3{color:#111827}
+.nav{background:#111827;padding:15px;display:flex;justify-content:center;align-items:center;flex-wrap:wrap;gap:8px}
+.nav a{color:white;margin:0 10px;text-decoration:none;font-weight:600}
+.nav a:hover{text-decoration:underline}
+.nav-logo img{vertical-align:middle;margin-right:12px;border-radius:8px}
+figure{margin:30px 0}
+img{width:100%;height:auto;border-radius:10px}
+pre{background:#111;color:#eee;padding:15px;border-radius:8px;overflow-x:auto;box-shadow:0 2px 8px rgba(0,0,0,0.15)}
+code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+p code,li code{background:#eef2ff;padding:1px 5px;border-radius:4px;font-size:.95em}
+.cta{background:#eef2ff;padding:20px;margin-top:30px;text-align:center;border-radius:10px}
+a{color:#2563eb}
+.back-home{margin-top:25px}
+footer{background:#111827;color:white;text-align:center;padding:30px 20px;margin-top:40px}
+footer a{color:#93c5fd;text-decoration:none}
+footer a:hover{text-decoration:underline}
+.btn{display:inline-block;background:#2563eb;color:white;padding:12px 22px;border-radius:8px;text-decoration:none;font-weight:600;margin-top:15px;transition:0.2s ease}
+.btn:hover{background:#1d4ed8;transform:translateY(-1px)}
+.card{background:#fff;padding:20px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.05);overflow:hidden;max-width:100%;border:1px solid #eef2f7}
+.toc-list{padding-left:20px}
+.toc-list li{margin-bottom:8px}
+.author-line{font-size:15px;margin-top:-6px;margin-bottom:10px;color:#4b5563}
+figcaption{font-size:14px;color:#6b7280;margin-top:10px}
+#faq h3{margin-top:25px}
+#faq p{margin-bottom:18px}
+.breadcrumb{font-size:14px;color:#6b7280;margin:0 0 10px}
+.breadcrumb a{color:#2563eb;text-decoration:none}
+.breadcrumb a:hover{text-decoration:underline}
+.diagram{width:100%;height:auto;display:block;border-radius:10px}
+.bt-social{display:flex;gap:13px;flex-wrap:wrap;align-items:center;justify-content:center;margin:0 0 14px;padding:0;list-style:none}
+.bt-social a{position:relative;isolation:isolate;width:46px;height:46px;border-radius:14px;display:inline-flex;align-items:center;justify-content:center;text-decoration:none;-webkit-tap-highlight-color:transparent;background-color:var(--c,#333);background-image:linear-gradient(150deg,rgba(255,255,255,.30),rgba(255,255,255,0) 42%,rgba(0,0,0,.22));box-shadow:0 1px 1px rgba(0,0,0,.22),0 7px 14px -3px rgba(0,0,0,.34),inset 0 1px 0 rgba(255,255,255,.50),inset 0 -2px 5px rgba(0,0,0,.30);transition:transform .18s cubic-bezier(.2,.7,.2,1),box-shadow .18s ease}
+.bt-social a::before{content:"";position:absolute;left:3px;right:3px;top:2px;height:44%;border-radius:12px 12px 50% 50%/12px 12px 24px 24px;background:linear-gradient(180deg,rgba(255,255,255,.42),rgba(255,255,255,0));pointer-events:none;z-index:0}
+.bt-social a:hover{transform:translateY(-3px) scale(1.05);box-shadow:0 2px 2px rgba(0,0,0,.20),0 16px 26px -6px rgba(0,0,0,.40),inset 0 1px 0 rgba(255,255,255,.55),inset 0 -2px 6px rgba(0,0,0,.32)}
+.bt-social a:active{transform:translateY(-1px) scale(1.01)}
+.bt-social a:focus-visible{outline:3px solid #93c5fd;outline-offset:3px}
+.bt-social svg{position:relative;z-index:1;width:22px;height:22px;display:block;filter:drop-shadow(0 1px 1px rgba(0,0,0,.28))}
+@media (prefers-reduced-motion:reduce){.bt-social a{transition:none}.bt-social a:hover{transform:none}}
+@media(max-width:600px){.container{padding:15px}}
+
+</style>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": "https://backbonetutorials.com/#organization",
+      "name": "Backbone Tutorials",
+      "url": "https://backbonetutorials.com/",
+      "logo": { "@type": "ImageObject", "url": "https://backbonetutorials.com/assets/logo.png" },
+      "sameAs": [
+        "https://github.com/backbonetutorials/backbonetutorials",
+        "https://x.com/backbonetutor",
+        "https://www.youtube.com/@BACKBONETUTORIALS",
+        "https://bsky.app/profile/backbonetutorials.bsky.social",
+        "https://www.instagram.com/backbonetutorials/",
+        "https://www.tiktok.com/@backbonetutorials",
+        "https://www.facebook.com/BackboneTutorials"
+      ],
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "contactType": "customer support",
+        "email": "backbonetutorials2026@gmail.com",
+        "availableLanguage": ["English"],
+        "areaServed": "Worldwide"
+      }
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://backbonetutorials.com/#website",
+      "url": "https://backbonetutorials.com/",
+      "name": "Backbone Tutorials",
+      "publisher": { "@id": "https://backbonetutorials.com/#organization" }
+    },
+    {
+      "@type": "Person",
+      "@id": "https://backbonetutorials.com/author/backbone-tutorials-team/#person",
+      "name": "Backbone Tutorials Team",
+      "url": "https://backbonetutorials.com/author/backbone-tutorials-team/",
+      "worksFor": { "@id": "https://backbonetutorials.com/#organization" },
+      "jobTitle": "Frontend JavaScript Editorial Team",
+      "knowsAbout": ["JavaScript SEO", "Frontend frameworks", "Server-side rendering", "Backbone.js"]
+    },
+    {
+      "@type": "WebPage",
+      "@id": "https://backbonetutorials.com/javascript-seo/framework-seo/#webpage",
+      "url": "https://backbonetutorials.com/javascript-seo/framework-seo/",
+      "name": "Framework SEO — rendering, not the framework",
+      "headline": "Framework SEO",
+      "description": "How frontend frameworks affect SEO: why default client rendering is the risk, per-route head management, what meta-frameworks add, links, and structured data.",
+      "inLanguage": "en",
+      "isPartOf": { "@id": "https://backbonetutorials.com/#website" },
+      "author": { "@id": "https://backbonetutorials.com/author/backbone-tutorials-team/#person" },
+      "publisher": { "@id": "https://backbonetutorials.com/#organization" },
+      "breadcrumb": { "@id": "https://backbonetutorials.com/javascript-seo/framework-seo/#breadcrumb" },
+      "mainEntity": { "@id": "https://backbonetutorials.com/javascript-seo/framework-seo/#article" }
+    },
+    {
+      "@type": "TechArticle",
+      "@id": "https://backbonetutorials.com/javascript-seo/framework-seo/#article",
+      "url": "https://backbonetutorials.com/javascript-seo/framework-seo/",
+      "headline": "Framework SEO",
+      "description": "A guide to SEO across frontend frameworks: why default client rendering is the risk, per-route head management, what meta-frameworks add with SSR and SSG, crawlable links and routing, shared basics like structured data, and where Backbone fits.",
+      "inLanguage": "en",
+      "image": {
+        "@type": "ImageObject",
+        "url": "https://backbonetutorials.com/assets/javascript-seo/framework-seo-1200.jpg",
+        "width": 1200,
+        "height": 630
+      },
+      "author": { "@id": "https://backbonetutorials.com/author/backbone-tutorials-team/#person" },
+      "publisher": { "@id": "https://backbonetutorials.com/#organization" },
+      "mainEntityOfPage": { "@id": "https://backbonetutorials.com/javascript-seo/framework-seo/#webpage" },
+      "datePublished": "2026-06-12T04:30:00+07:00",
+      "dateModified": "2026-06-12T04:30:00+07:00",
+      "articleSection": ["JavaScript SEO", "Frameworks", "Rendering"],
+      "keywords": ["framework SEO", "React SEO", "Vue SEO", "meta-frameworks", "head management", "structured data"],
+      "about": [
+        { "@type": "Thing", "name": "Frontend framework" },
+        { "@type": "Thing", "name": "Search engine optimization" },
+        { "@type": "Thing", "name": "JavaScript" }
+      ],
+      "mentions": [
+        { "@type": "Thing", "name": "Server-side rendering" },
+        { "@type": "Thing", "name": "Structured data" },
+        { "@type": "Thing", "name": "Single Page Application" }
+      ]
+    },
+    {
+      "@type": "BreadcrumbList",
+      "@id": "https://backbonetutorials.com/javascript-seo/framework-seo/#breadcrumb",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://backbonetutorials.com/" },
+        { "@type": "ListItem", "position": 2, "name": "JavaScript SEO", "item": "https://backbonetutorials.com/javascript-seo/" },
+        { "@type": "ListItem", "position": 3, "name": "Framework SEO", "item": "https://backbonetutorials.com/javascript-seo/framework-seo/" }
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "@id": "https://backbonetutorials.com/javascript-seo/framework-seo/#faq",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Is React, Vue, or Angular bad for SEO?",
+          "acceptedAnswer": { "@type": "Answer", "text": "No framework is inherently bad for SEO. The risk is that these libraries render on the client by default, so without server-side rendering or prerendering the content depends on Google rendering your scripts. Add SSR or SSG and the framework choice stops mattering for indexing." }
+        },
+        {
+          "@type": "Question",
+          "name": "Do I need Next.js or Nuxt for SEO?",
+          "acceptedAnswer": { "@type": "Answer", "text": "You do not strictly need a meta-framework, but they make server rendering, static generation, and per-route head management easy, which removes most JavaScript SEO risk. You can also prerender or server-render a plain framework app yourself." }
+        },
+        {
+          "@type": "Question",
+          "name": "How do I set per-page titles in a single page app?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Use the framework's head or meta management to set the title, description, and canonical for each route, and render them on the server where possible so they are correct in the first response rather than patched in after the script runs." }
+        },
+        {
+          "@type": "Question",
+          "name": "Does the choice of framework affect rankings?",
+          "acceptedAnswer": { "@type": "Answer", "text": "The framework itself is not a ranking factor. What ranks is the rendered HTML it produces, the page speed, and the crawlability, so two sites on the same framework can perform very differently depending on how they render." }
+        }
+      ]
+    }
+  ]
+}
+</script>
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-FYJP43XDHH"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-FYJP43XDHH');
+</script>
+
+</head>
+
+<body>
+
+<nav class="nav" aria-label="Main Navigation">
+<a href="/" class="nav-logo" title="Backbone Tutorials Homepage"><img src="/assets/logo.png" alt="Backbone Tutorials Logo" width="36" height="36" loading="lazy" decoding="async"></a>
+<a href="/" title="Backbone.js Tutorials Homepage">Home</a>
+<a href="/backbonejs/" title="Backbone.js Complete Guide">Backbone Guide</a>
+<a href="/what-is-a-router/" title="What is a Router in Backbone.js">Router</a>
+<a href="/what-is-a-model/" title="What is a Model in Backbone.js">Model</a>
+<a href="/what-is-a-view/" title="What is a View in Backbone.js">View</a>
+<a href="/what-is-a-collection/" title="What is a Collection in Backbone.js">Collection</a>
+</nav>
+
+<main>
+
+<article class="container">
+
+<nav class="breadcrumb" aria-label="Breadcrumb">
+<a href="/">Home</a> › <a href="/javascript-seo/">JavaScript SEO</a> › <span aria-current="page">Framework SEO</span>
+</nav>
+
+<h1>Framework SEO</h1>
+
+<p class="author-line">Written by <a href="/author/backbone-tutorials-team/">Backbone Tutorials Team</a></p>
+<p class="author-line">Last updated: June 2026 · 9 min read</p>
+
+<p>
+Search teams love to argue about whether one framework is better for SEO than another, and the argument mostly misses the point. A search engine does not see your framework; it sees the HTML that framework produced and how reachable it is. Two sites built with the same library can rank worlds apart, and two sites on rival libraries can rank identically, because what differs is the rendering, not the badge in the footer.
+</p>
+
+<p>
+This guide pulls the framework-specific noise out and leaves the patterns that actually move rankings. It builds on <a href="/javascript-seo/rendering-for-search-engines/">rendering for search engines</a> and the <a href="/seo-for-single-page-apps/">SEO for single page apps</a> overview.
+</p>
+
+<figure>
+<svg class="diagram" viewBox="0 0 720 170" role="img" aria-labelledby="fwTitle fwDesc" xmlns="http://www.w3.org/2000/svg">
+  <title id="fwTitle">Different frameworks, same output that matters</title>
+  <desc id="fwDesc">Several frameworks all pass through a rendering choice to produce the HTML a search engine sees.</desc>
+  <rect x="0" y="0" width="720" height="170" rx="12" fill="#0f172a"></rect>
+  <g font-family="Inter, sans-serif" text-anchor="middle">
+    <rect x="30"  y="26" width="150" height="30" rx="7" fill="#1e293b" stroke="#334155"></rect><text x="105" y="46" fill="#fff" font-size="12">React</text>
+    <rect x="30"  y="66" width="150" height="30" rx="7" fill="#1e293b" stroke="#334155"></rect><text x="105" y="86" fill="#fff" font-size="12">Vue</text>
+    <rect x="30"  y="106" width="150" height="30" rx="7" fill="#1e293b" stroke="#334155"></rect><text x="105" y="126" fill="#fff" font-size="12">Angular / Svelte</text>
+    <rect x="285" y="58" width="160" height="50" rx="10" fill="#1e293b" stroke="#3b82f6"></rect><text x="365" y="80" fill="#fff" font-size="13" font-weight="700">Rendering choice</text><text x="365" y="98" fill="#93c5fd" font-size="10">CSR / SSR / SSG</text>
+    <rect x="520" y="58" width="170" height="50" rx="10" fill="#1e293b" stroke="#2563eb" stroke-width="2"></rect><text x="605" y="80" fill="#fff" font-size="13" font-weight="700">HTML Google sees</text><text x="605" y="98" fill="#93c5fd" font-size="10">what ranks</text>
+    <g stroke="#64748b" stroke-width="2" fill="none">
+      <path d="M182 41 L283 70" marker-end="url(#af)"></path>
+      <path d="M182 81 L283 83" marker-end="url(#af)"></path>
+      <path d="M182 121 L283 96" marker-end="url(#af)"></path>
+      <path d="M447 83 L518 83" marker-end="url(#af)"></path>
+    </g>
+  </g>
+  <defs><marker id="af" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0 0 L7 3 L0 6 Z" fill="#64748b"></path></marker></defs>
+</svg>
+<figcaption>The framework feeds a rendering choice, and that choice, not the framework, decides the HTML a search engine indexes.</figcaption>
+</figure>
+
+<div class="card">
+<p style="margin-top:0"><strong>What you'll learn</strong></p>
+<ul class="toc-list">
+<li><a href="#rendering">The framework does not rank you; the rendering does</a></li>
+<li><a href="#head">Managing the head per route</a></li>
+<li><a href="#meta">Meta-frameworks give you SSR and SSG</a></li>
+<li><a href="#links">Routing, links, and history</a></li>
+<li><a href="#basics">Structured data and shared basics</a></li>
+<li><a href="#backbone">Where Backbone fits</a></li>
+</ul>
+</div>
+
+<h2 id="rendering">The framework does not rank you; the rendering does</h2>
+
+<p>
+React, Vue, Angular, Svelte, and their peers all render on the client by default. Ship one straight out of the box and you ship an empty shell that fills in after the scripts run, which is exactly the situation the earlier guides warned about. The framework is not the problem; its default mode is.
+</p>
+
+<h3>Default client rendering is the real issue</h3>
+
+<p>
+Because the default is client rendering, the single most important framework SEO decision is whether you change that default. Add server-side rendering or prerendering and the content lands in the first response no matter which library drew it. Skip that step and even the most popular framework leaves your content waiting on Google's renderer.
+</p>
+
+<h2 id="head">Managing the head per route</h2>
+
+<p>
+In a single page app the page never reloads, so the title and head tags do not change on their own. Every framework needs a deliberate way to update them as the route changes, and getting it right is a recurring SEO task regardless of the tool.
+</p>
+
+<h3>Per-route titles and canonicals</h3>
+
+<pre><code>// Concept, framework-agnostic: set the head for the current route
+setHead({
+  title: 'Product 42 - Acme',
+  description: 'Buy the Acme 42 widget.',
+  canonical: 'https://example.com/products/42'
+});</code></pre>
+
+<p>
+Whether your framework calls it a head component, a meta plugin, or a built-in API, the pattern is identical: set a unique title, description, and canonical for each route. As the rendering and indexing guide stressed, render these on the server when you can, so they are correct from the first byte rather than patched in afterward.
+</p>
+
+<h2 id="meta">Meta-frameworks give you SSR and SSG</h2>
+
+<p>
+Most teams do not bolt rendering onto a bare framework by hand; they reach for a meta-framework built on top of one. These layers exist largely to make server rendering, static generation, and routing turnkey.
+</p>
+
+<h3>What meta-frameworks add</h3>
+
+<p>
+A meta-framework typically provides server-side rendering, static generation, file-based routing with real URLs, and head management in one package. Choosing one is often how a team solves the bulk of its JavaScript SEO in a single decision, because the defaults flip from client-only to content-in-the-first-response. The specific names change over time; the capability you are buying does not.
+</p>
+
+<h2 id="links">Routing, links, and history</h2>
+
+<p>
+Client-side routers are everywhere, and they all face the same crawlability test. A router that swaps views without real URLs, or that navigates through click handlers instead of anchors, hides pages from crawlers no matter how modern it is.
+</p>
+
+<h3>Real links regardless of router</h3>
+
+<p>
+Use real anchor elements with <code>href</code> attributes and real paths through the History API, so every view has an address a crawler can follow and a user can share. This is the same rule from the <a href="/foundations/backbone-routing-basics/">routing guide</a>, and it holds across every framework: the router may be clever, but Google still only follows links it can see.
+</p>
+
+<h2 id="basics">Structured data and shared basics</h2>
+
+<p>
+Beyond rendering, a large part of SEO is framework-neutral. The same fundamentals apply whether you wrote the page in a library, a meta-framework, or hand-rolled HTML.
+</p>
+
+<h3>The basics every framework still needs</h3>
+
+<p>
+Valid structured data in JSON-LD, an accurate sitemap, a sensible <code>robots.txt</code>, a correct canonical, fast Core Web Vitals, and descriptive, crawlable links matter identically everywhere. No framework grants these for free, and none prevents them. Treat them as a checklist you run on top of whatever rendering choice you made.
+</p>
+
+<h2 id="backbone">Where Backbone fits</h2>
+
+<p>
+It is easy to think of these concerns as new, but they predate today's frameworks. Backbone faced the same questions years earlier, just without the conveniences.
+</p>
+
+<h3>The manual baseline behind the magic</h3>
+
+<p>
+In a Backbone app you set the head yourself, route with real URLs through the History API, and choose whether to render on the server, exactly the levers a modern framework wraps in tooling. Learning the manual baseline, as the <a href="/foundations/">Foundations</a> guides teach, makes the framework versions legible: you can see which problem each feature is quietly solving. The principles are constant; only the ergonomics improved.
+</p>
+
+<p>
+So the framework SEO debate resolves to a quieter truth: pick the tool your team is productive in, then make the rendering, head management, links, and basics correct. Do that and any framework ranks; skip it and none do. Next, the cluster turns to crawlability, the links and resources that let a crawler reach all of this in the first place.
+</p>
+
+<section id="faq">
+<h2>Frequently Asked Questions</h2>
+
+<h3>Is React, Vue, or Angular bad for SEO?</h3>
+<p>No framework is inherently bad for SEO. The risk is that these libraries render on the client by default, so without server-side rendering or prerendering the content depends on Google rendering your scripts. Add SSR or SSG and the framework choice stops mattering for indexing.</p>
+
+<h3>Do I need Next.js or Nuxt for SEO?</h3>
+<p>You do not strictly need a meta-framework, but they make server rendering, static generation, and per-route head management easy, which removes most JavaScript SEO risk. You can also prerender or server-render a plain framework app yourself.</p>
+
+<h3>How do I set per-page titles in a single page app?</h3>
+<p>Use the framework's head or meta management to set the title, description, and canonical for each route, and render them on the server where possible so they are correct in the first response rather than patched in after the script runs.</p>
+
+<h3>Does the choice of framework affect rankings?</h3>
+<p>The framework itself is not a ranking factor. What ranks is the rendered HTML it produces, the page speed, and the crawlability, so two sites on the same framework can perform very differently depending on how they render.</p>
+</section>
+
+<p><strong>Read next:</strong> back to the <a href="/javascript-seo/">JavaScript SEO</a> hub, or revisit <a href="/javascript-seo/rendering-for-search-engines/">rendering for search engines</a> for the strategies behind this.</p>
+
+<div class="cta">
+<p><strong>Curious about the manual baseline?</strong></p>
+<p>The same SEO levers, hand-wired, live in a classic stack. See how a single page app is built in the complete Backbone guide.</p>
+<a href="/backbonejs/" class="btn">Explore the Backbone Guide →</a>
+</div>
+
+<div class="back-home">
+<a href="/javascript-seo/">← Back to JavaScript SEO</a>
+</div>
+
+</article>
+
+</main>
+
+<footer>
+
+<p>Backbone Tutorials</p>
+
+<nav class="bt-social" aria-label="Backbone Tutorials on social media">
+  <a style="--c:#181717" href="https://github.com/backbonetutorials/backbonetutorials" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on GitHub"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#fff" d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0 1 12 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222 0 1.606-.014 2.898-.014 3.293 0 .322.216.694.825.576C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg></a>
+  <a style="--c:#000000" href="https://x.com/backbonetutor" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on X (formerly Twitter)"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#fff" d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+  <a style="--c:#FF0000" href="https://www.youtube.com/@BACKBONETUTORIALS" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on YouTube"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#fff" d="M8.5 6.5 L8.5 17.5 L17.5 12 Z"/></svg></a>
+  <a style="--c:#0285FF" href="https://bsky.app/profile/backbonetutorials.bsky.social" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on Bluesky"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#fff" d="M12 10.8c-1.087-2.114-4.046-6.053-6.798-7.995C2.566.944 1.561 1.266.902 1.565.139 1.908 0 3.08 0 3.768c0 .69.378 5.65.624 6.479.815 2.736 3.713 3.66 6.383 3.364.136-.02.275-.039.415-.056-.138.022-.276.04-.415.056-3.912.58-7.387 2.005-2.83 7.078 5.013 5.19 6.87-1.113 7.823-4.308.953 3.195 2.05 9.271 7.733 4.308 4.267-4.308 1.172-6.498-2.74-7.078a8.741 8.741 0 0 1-.415-.056c.14.017.279.036.415.056 2.67.296 5.568-.628 6.383-3.364C23.622 9.418 24 4.458 24 3.768c0-.688-.139-1.86-.902-2.203-.659-.299-1.664-.621-4.3 1.24C16.046 4.747 13.087 8.686 12 10.8Z"/></svg></a>
+  <a style="--c:#d62976;background-image:linear-gradient(150deg,rgba(255,255,255,.30),rgba(255,255,255,0) 42%,rgba(0,0,0,.22)),linear-gradient(45deg,#feda75,#fa7e1e,#d62976,#962fbf,#4f5bd5)" href="https://www.instagram.com/backbonetutorials/" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on Instagram"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="4" y="4" width="16" height="16" rx="5" fill="none" stroke="#fff" stroke-width="2"/><circle cx="12" cy="12" r="3.6" fill="none" stroke="#fff" stroke-width="2"/><circle cx="17.2" cy="6.8" r="1.25" fill="#fff"/></svg></a>
+  <a style="--c:#000000" href="https://www.tiktok.com/@backbonetutorials" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on TikTok"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#fff" d="M16.5 5.82a4.79 4.79 0 0 1-1.16-3.07h-2.9v11.43a2.45 2.45 0 1 1-2.45-2.45c.17 0 .33.02.49.05V8.83a5.36 5.36 0 0 0-.49-.02 5.35 5.35 0 1 0 5.35 5.35V8.6a7.66 7.66 0 0 0 4.46 1.42V7.13a4.79 4.79 0 0 1-2.8-1.31Z"/></svg></a>
+  <a style="--c:#1877F2" href="https://www.facebook.com/BackboneTutorials" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on Facebook"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#fff" d="M13.5 21v-8h2.6l.4-3h-3V8.1c0-.87.27-1.46 1.5-1.46H17V3.96c-.28-.04-1.2-.12-2.28-.12-2.26 0-3.8 1.38-3.8 3.9V10H8.3v3h2.62v8h2.58Z"/></svg></a>
+</nav>
+
+<p>
+<a href="/">Home</a> |
+<a href="/about/">About</a> |
+<a href="/contact/">Contact</a> |
+<a href="/privacy-policy/">Privacy Policy</a> |
+<a href="/terms/">Terms</a>
+</p>
+
+<p>© 2026 Backbone Tutorials</p>
+
+</footer>
+
+</body>
+</html>

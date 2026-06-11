@@ -1,0 +1,506 @@
+<!-- DEPLOY TO: /interactive-web/realtime-rendering-loops/  (index.html) · TechArticle · per MASTERMIND_SEO.md -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Realtime Rendering Loops — network state to the screen</title>
+
+<meta name="description" content="Realtime rendering loops: the game loop pattern, requestAnimationFrame, fixed update vs variable render, network state to frame, and loop performance.">
+
+<meta name="robots" content="index, follow">
+<meta name="author" content="Backbone Tutorials">
+<meta name="theme-color" content="#2563eb">
+<meta name="format-detection" content="telephone=no">
+
+<link rel="canonical" href="https://backbonetutorials.com/interactive-web/realtime-rendering-loops/">
+
+<link rel="icon" href="/assets/favicon.ico">
+<link rel="apple-touch-icon" href="/assets/favicon.png">
+
+<meta property="og:title" content="Realtime Rendering Loops — network state to the screen">
+<meta property="og:description" content="The realtime rendering loop: the game loop pattern, requestAnimationFrame, fixed update vs variable render, driving frames from network state, and loop performance.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://backbonetutorials.com/interactive-web/realtime-rendering-loops/">
+<meta property="og:image" content="https://backbonetutorials.com/assets/interactive-web/realtime-rendering-loops-1200.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:type" content="image/jpeg">
+<meta property="og:image:alt" content="Realtime Rendering Loops — Backbone Tutorials">
+<meta property="og:site_name" content="Backbone Tutorials">
+<meta property="og:locale" content="en_US">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Realtime Rendering Loops — network state to the screen">
+<meta name="twitter:description" content="The realtime rendering loop: rAF, fixed update vs variable render, driving frames from network state, and keeping the loop performant.">
+<meta name="twitter:image" content="https://backbonetutorials.com/assets/interactive-web/realtime-rendering-loops-1200.jpg">
+<meta name="twitter:image:alt" content="Realtime Rendering Loops — Backbone Tutorials">
+<meta name="twitter:url" content="https://backbonetutorials.com/interactive-web/realtime-rendering-loops/">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+
+<style>
+html{scroll-behavior:smooth}
+body{font-family:'Inter',sans-serif;margin:0;background:#f4f6f9;color:#1f2937;line-height:1.7}
+.container{max-width:900px;margin:30px auto;padding:20px;background:#fff;border-radius:10px;box-shadow:0 2px 10px rgba(0,0,0,0.04)}
+h1,h2,h3{color:#111827}
+.nav{background:#111827;padding:15px;display:flex;justify-content:center;align-items:center;flex-wrap:wrap;gap:8px}
+.nav a{color:white;margin:0 10px;text-decoration:none;font-weight:600}
+.nav a:hover{text-decoration:underline}
+.nav-logo img{vertical-align:middle;margin-right:12px;border-radius:8px}
+figure{margin:30px 0}
+pre{background:#111;color:#eee;padding:15px;border-radius:8px;overflow-x:auto;box-shadow:0 2px 8px rgba(0,0,0,0.15)}
+code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+p code,li code{background:#eef2ff;padding:1px 5px;border-radius:4px;font-size:.95em}
+.cta{background:#eef2ff;padding:20px;margin-top:30px;text-align:center;border-radius:10px}
+a{color:#2563eb}
+.back-home{margin-top:25px}
+footer{background:#111827;color:white;text-align:center;padding:30px 20px;margin-top:40px}
+footer a{color:#93c5fd;text-decoration:none}
+footer a:hover{text-decoration:underline}
+.btn{display:inline-block;background:#2563eb;color:white;padding:12px 22px;border-radius:8px;text-decoration:none;font-weight:600;margin-top:15px;transition:0.2s ease}
+.btn:hover{background:#1d4ed8;transform:translateY(-1px)}
+.card{background:#fff;padding:20px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.05);overflow:hidden;max-width:100%;border:1px solid #eef2f7}
+.toc-list{padding-left:20px}
+.toc-list li{margin-bottom:8px}
+.author-line{font-size:15px;margin-top:-6px;margin-bottom:10px;color:#4b5563}
+figcaption{font-size:14px;color:#6b7280;margin-top:10px}
+#faq h3{margin-top:25px}
+#faq p{margin-bottom:18px}
+.breadcrumb{font-size:14px;color:#6b7280;margin:0 0 10px}
+.breadcrumb a{color:#2563eb;text-decoration:none}
+.breadcrumb a:hover{text-decoration:underline}
+.diagram{width:100%;height:auto;display:block;border-radius:10px}
+.bt-social{display:flex;gap:13px;flex-wrap:wrap;align-items:center;justify-content:center;margin:0 0 14px;padding:0;list-style:none}
+.bt-social a{position:relative;isolation:isolate;width:46px;height:46px;border-radius:14px;display:inline-flex;align-items:center;justify-content:center;text-decoration:none;-webkit-tap-highlight-color:transparent;background-color:var(--c,#333);background-image:linear-gradient(150deg,rgba(255,255,255,.30),rgba(255,255,255,0) 42%,rgba(0,0,0,.22));box-shadow:0 1px 1px rgba(0,0,0,.22),0 7px 14px -3px rgba(0,0,0,.34),inset 0 1px 0 rgba(255,255,255,.50),inset 0 -2px 5px rgba(0,0,0,.30);transition:transform .18s cubic-bezier(.2,.7,.2,1),box-shadow .18s ease}
+.bt-social a::before{content:"";position:absolute;left:3px;right:3px;top:2px;height:44%;border-radius:12px 12px 50% 50%/12px 12px 24px 24px;background:linear-gradient(180deg,rgba(255,255,255,.42),rgba(255,255,255,0));pointer-events:none;z-index:0}
+.bt-social a:hover{transform:translateY(-3px) scale(1.05);box-shadow:0 2px 2px rgba(0,0,0,.20),0 16px 26px -6px rgba(0,0,0,.40),inset 0 1px 0 rgba(255,255,255,.55),inset 0 -2px 6px rgba(0,0,0,.32)}
+.bt-social a:active{transform:translateY(-1px) scale(1.01)}
+.bt-social a:focus-visible{outline:3px solid #93c5fd;outline-offset:3px}
+.bt-social svg{position:relative;z-index:1;width:22px;height:22px;display:block;filter:drop-shadow(0 1px 1px rgba(0,0,0,.28))}
+@media (prefers-reduced-motion:reduce){.bt-social a{transition:none}.bt-social a:hover{transform:none}}
+@media(max-width:600px){.container{padding:15px}}
+</style>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": "https://backbonetutorials.com/#organization",
+      "name": "Backbone Tutorials",
+      "url": "https://backbonetutorials.com/",
+      "logo": { "@type": "ImageObject", "url": "https://backbonetutorials.com/assets/logo.png" },
+      "sameAs": [
+        "https://github.com/backbonetutorials/backbonetutorials",
+        "https://x.com/backbonetutor",
+        "https://www.youtube.com/@BACKBONETUTORIALS",
+        "https://bsky.app/profile/backbonetutorials.bsky.social",
+        "https://www.instagram.com/backbonetutorials/",
+        "https://www.tiktok.com/@backbonetutorials",
+        "https://www.facebook.com/BackboneTutorials"
+      ],
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "contactType": "customer support",
+        "url": "https://x.com/backbonetutor",
+        "availableLanguage": ["English"],
+        "areaServed": "Worldwide"
+      }
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://backbonetutorials.com/#website",
+      "url": "https://backbonetutorials.com/",
+      "name": "Backbone Tutorials",
+      "publisher": { "@id": "https://backbonetutorials.com/#organization" }
+    },
+    {
+      "@type": "Person",
+      "@id": "https://backbonetutorials.com/author/backbone-tutorials-team/#person",
+      "name": "Backbone Tutorials Team",
+      "url": "https://backbonetutorials.com/author/backbone-tutorials-team/",
+      "worksFor": { "@id": "https://backbonetutorials.com/#organization" },
+      "jobTitle": "Frontend JavaScript Editorial Team",
+      "knowsAbout": ["Rendering loops", "requestAnimationFrame", "Realtime systems", "Frontend engineering"]
+    },
+    {
+      "@type": "WebPage",
+      "@id": "https://backbonetutorials.com/interactive-web/realtime-rendering-loops/#webpage",
+      "url": "https://backbonetutorials.com/interactive-web/realtime-rendering-loops/",
+      "name": "Realtime Rendering Loops — network state to the screen",
+      "headline": "Realtime Rendering Loops",
+      "description": "Realtime rendering loops: the game loop pattern, requestAnimationFrame, fixed update vs variable render, network state to frame, and keeping the loop performant.",
+      "inLanguage": "en",
+      "isPartOf": { "@id": "https://backbonetutorials.com/#website" },
+      "author": { "@id": "https://backbonetutorials.com/author/backbone-tutorials-team/#person" },
+      "publisher": { "@id": "https://backbonetutorials.com/#organization" },
+      "breadcrumb": { "@id": "https://backbonetutorials.com/interactive-web/realtime-rendering-loops/#breadcrumb" },
+      "mainEntity": { "@id": "https://backbonetutorials.com/interactive-web/realtime-rendering-loops/#article" }
+    },
+    {
+      "@type": "TechArticle",
+      "@id": "https://backbonetutorials.com/interactive-web/realtime-rendering-loops/#article",
+      "url": "https://backbonetutorials.com/interactive-web/realtime-rendering-loops/",
+      "headline": "Realtime Rendering Loops",
+      "description": "The capstone guide to realtime rendering loops: the game loop pattern, requestAnimationFrame as the browser hook, separating fixed-rate simulation updates from variable-rate rendering, integrating network state into the frame, visibility-based pausing, and keeping the loop inside the 16ms budget.",
+      "inLanguage": "en",
+      "image": {
+        "@type": "ImageObject",
+        "url": "https://backbonetutorials.com/assets/interactive-web/realtime-rendering-loops-1200.jpg",
+        "width": 1200,
+        "height": 630
+      },
+      "author": { "@id": "https://backbonetutorials.com/author/backbone-tutorials-team/#person" },
+      "publisher": { "@id": "https://backbonetutorials.com/#organization" },
+      "mainEntityOfPage": { "@id": "https://backbonetutorials.com/interactive-web/realtime-rendering-loops/#webpage" },
+      "datePublished": "2026-06-12T04:30:00+07:00",
+      "dateModified": "2026-06-12T04:30:00+07:00",
+      "articleSection": ["Realtime Engineering", "Rendering", "Performance"],
+      "keywords": ["realtime rendering loop", "requestAnimationFrame", "game loop", "fixed update", "variable render", "frame budget"],
+      "about": [
+        { "@type": "Thing", "name": "Rendering loop" },
+        { "@type": "Thing", "name": "requestAnimationFrame" },
+        { "@type": "Thing", "name": "Realtime systems" }
+      ],
+      "mentions": [
+        { "@type": "Thing", "name": "Game loop" },
+        { "@type": "Thing", "name": "Fixed timestep" },
+        { "@type": "Thing", "name": "Frame budget" }
+      ]
+    },
+    {
+      "@type": "BreadcrumbList",
+      "@id": "https://backbonetutorials.com/interactive-web/realtime-rendering-loops/#breadcrumb",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Home",            "item": "https://backbonetutorials.com/" },
+        { "@type": "ListItem", "position": 2, "name": "Interactive Web", "item": "https://backbonetutorials.com/interactive-web/" },
+        { "@type": "ListItem", "position": 3, "name": "Realtime Rendering Loops", "item": "https://backbonetutorials.com/interactive-web/realtime-rendering-loops/" }
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "@id": "https://backbonetutorials.com/interactive-web/realtime-rendering-loops/#faq",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What is a realtime rendering loop?",
+          "acceptedAnswer": { "@type": "Answer", "text": "A realtime rendering loop is a continuous cycle that runs on every animation frame, reads the latest application state including network updates, updates the simulation, and draws the frame. It is the bridge between asynchronous data arriving from a server and synchronous pixel output on the screen." }
+        },
+        {
+          "@type": "Question",
+          "name": "Why separate simulation updates from rendering?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Simulation updates at a fixed rate produce deterministic, reproducible results regardless of frame rate. Rendering at the variable display rate uses interpolation to produce smooth visuals even when the simulation step does not align with the frame. Separating them lets each run at its optimal rate." }
+        },
+        {
+          "@type": "Question",
+          "name": "How do I stop the loop when the tab is not visible?",
+          "acceptedAnswer": { "@type": "Answer", "text": "The Page Visibility API fires a visibilitychange event when a tab is hidden or restored. Pause the loop on hidden and resume on visible. requestAnimationFrame already stops firing for hidden tabs in most browsers, but explicitly pausing prevents accumulated delta-time from producing a huge timestep jump when the tab becomes visible again." }
+        },
+        {
+          "@type": "Question",
+          "name": "How do network messages fit into the rendering loop?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Network messages should not be applied directly inside the loop. Instead they are buffered in a queue as they arrive. At the start of each loop tick, the loop drains the queue and applies pending messages to the simulation state before running the update and render steps. This keeps the loop deterministic and the message handling off the critical render path." }
+        }
+      ]
+    }
+  ]
+}
+</script>
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-FYJP43XDHH"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-FYJP43XDHH');
+</script>
+
+</head>
+<body>
+
+<nav class="nav" aria-label="Main Navigation">
+<a href="/" class="nav-logo" title="Backbone Tutorials Homepage"><img src="/assets/logo.png" alt="Backbone Tutorials Logo" width="36" height="36" loading="lazy" decoding="async"></a>
+<a href="/" title="Backbone.js Tutorials Homepage">Home</a>
+<a href="/backbonejs/" title="Backbone.js Complete Guide">Backbone Guide</a>
+<a href="/what-is-a-router/" title="What is a Router">Router</a>
+<a href="/what-is-a-model/" title="What is a Model">Model</a>
+<a href="/what-is-a-view/" title="What is a View">View</a>
+<a href="/what-is-a-collection/" title="What is a Collection">Collection</a>
+</nav>
+
+<main>
+<article class="container">
+
+<nav class="breadcrumb" aria-label="Breadcrumb">
+<a href="/">Home</a> › <a href="/interactive-web/">Interactive Web</a> › <span aria-current="page">Realtime Rendering Loops</span>
+</nav>
+
+<h1>Realtime Rendering Loops</h1>
+
+<p class="author-line">Written by <a href="/author/backbone-tutorials-team/">Backbone Tutorials Team</a></p>
+<p class="author-line">Last updated: June 2026 · 11 min read</p>
+
+<p>
+Every technique in this cluster, WebSocket connections, presence awareness, optimistic updates, synchronization, latency hiding, ultimately has to produce pixels on a screen. The rendering loop is where all of it converges. It runs once per animation frame, reads the current state of the world including updates that arrived from the network, advances the simulation, and draws. Get it right and the interface feels fluid regardless of what the network is doing. Get it wrong and network events stutter the frame, delta-time explosions freeze the simulation, and the CPU runs at full speed even when the tab is invisible.
+</p>
+
+<p>
+This is the capstone of the <a href="/interactive-web/">Interactive Web</a> cluster. It connects the rendering mechanics from <a href="/rendering/browser-rendering-pipeline/">the browser rendering pipeline</a> to the realtime data patterns built across the previous thirteen guides.
+</p>
+
+<figure>
+<svg class="diagram" viewBox="0 0 720 145" role="img" aria-labelledby="rrlTitle rrlDesc" xmlns="http://www.w3.org/2000/svg">
+  <title id="rrlTitle">Realtime rendering loop structure</title>
+  <desc id="rrlDesc">Each frame: drain network queue, run fixed simulation updates, interpolate for render, draw. requestAnimationFrame drives the outer loop.</desc>
+  <rect x="0" y="0" width="720" height="145" rx="12" fill="#0f172a"></rect>
+  <g font-family="Inter, sans-serif" text-anchor="middle">
+    <rect x="30"  y="30" width="120" height="36" rx="9" fill="#1e293b" stroke="#f59e0b"></rect>
+    <text x="90"  y="54" fill="#fcd34d" font-size="11" font-weight="700">rAF fires</text>
+    <rect x="174" y="30" width="130" height="36" rx="9" fill="#1e293b" stroke="#3b82f6"></rect>
+    <text x="239" y="50" fill="#93c5fd" font-size="11" font-weight="700">Drain network</text>
+    <text x="239" y="61" fill="#64748b" font-size="9">queue</text>
+    <rect x="328" y="30" width="130" height="36" rx="9" fill="#1e293b" stroke="#a855f7"></rect>
+    <text x="393" y="50" fill="#d8b4fe" font-size="11" font-weight="700">Fixed update</text>
+    <text x="393" y="61" fill="#64748b" font-size="9">simulation</text>
+    <rect x="482" y="30" width="120" height="36" rx="9" fill="#1e293b" stroke="#22c55e"></rect>
+    <text x="542" y="50" fill="#86efac" font-size="11" font-weight="700">Interpolate</text>
+    <text x="542" y="61" fill="#64748b" font-size="9">for render</text>
+    <rect x="626" y="30" width="64" height="36" rx="9" fill="#1e293b" stroke="#2563eb" stroke-width="2"></rect>
+    <text x="658" y="54" fill="#fff" font-size="11" font-weight="700">Draw</text>
+    <g stroke="#64748b" stroke-width="1.5" fill="none">
+      <path d="M150 48 L172 48" marker-end="url(#arrl)"></path>
+      <path d="M304 48 L326 48" marker-end="url(#arrl)"></path>
+      <path d="M458 48 L480 48" marker-end="url(#arrl)"></path>
+      <path d="M602 48 L624 48" marker-end="url(#arrl)"></path>
+    </g>
+    <rect x="30" y="88" width="660" height="32" rx="8" fill="none" stroke="#f59e0b" stroke-width="1.5" stroke-dasharray="5 3"></rect>
+    <text x="360" y="108" fill="#fcd34d" font-size="10" font-weight="700">16.67ms frame budget (60 Hz) - loop must complete entirely within budget</text>
+  </g>
+  <defs><marker id="arrl" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0 0 L6 3 L0 6 Z" fill="#64748b"></path></marker></defs>
+</svg>
+<figcaption>Each frame: drain network queue, run fixed-rate simulation, interpolate for the display rate, draw - all within 16ms.</figcaption>
+</figure>
+
+<div class="card">
+<p style="margin-top:0"><strong>What you'll learn</strong></p>
+<ul class="toc-list">
+<li><a href="#gameloop">The game loop pattern</a></li>
+<li><a href="#raf">requestAnimationFrame as the driver</a></li>
+<li><a href="#fixed">Fixed update vs variable render</a></li>
+<li><a href="#network">Integrating network state</a></li>
+<li><a href="#pause">Visibility-based pausing</a></li>
+<li><a href="#budget">Staying inside the frame budget</a></li>
+</ul>
+</div>
+
+<h2 id="gameloop">The game loop pattern</h2>
+
+<p>
+The game loop is the oldest pattern in interactive software, and its structure is directly applicable to any web application that must update and render continuously.
+</p>
+
+<h3>Update, then draw, repeat</h3>
+
+<pre><code>// Classic game loop structure adapted for the web
+var lastTime = 0;
+
+function loop(timestamp) {
+  var dt = (timestamp - lastTime) / 1000; // seconds
+  lastTime = timestamp;
+
+  // Cap dt to avoid spiral of death on tab resume
+  dt = Math.min(dt, 0.1);
+
+  update(dt);  // advance simulation
+  render();    // draw current state
+
+  requestAnimationFrame(loop);
+}
+
+requestAnimationFrame(loop);</code></pre>
+
+<p>
+The loop does exactly two things every frame: update and render. The delta time, the elapsed seconds since the last frame, drives the update so the simulation advances proportionally to real time regardless of frame rate. Capping <code>dt</code> at around a hundred milliseconds prevents the simulation from making a huge jump when the tab was hidden and the loop was paused, which would otherwise launch objects to impossible positions.
+</p>
+
+<h2 id="raf">requestAnimationFrame as the driver</h2>
+
+<p>
+<code>requestAnimationFrame</code> is the only correct way to drive a rendering loop in the browser. <code>setInterval</code> and <code>setTimeout</code> are wrong for this purpose, even at equivalent intervals.
+</p>
+
+<h3>Why rAF, not timers</h3>
+
+<p>
+<code>requestAnimationFrame</code> calls the callback exactly once before the browser paints the next frame, which means the loop and the display refresh are perfectly synchronised. This prevents tearing, where the screen shows half of one frame and half of the next. It also passes a high-resolution timestamp with sub-millisecond precision, making delta-time calculations accurate. Most importantly, <code>requestAnimationFrame</code> stops firing when the tab is hidden, automatically suspending the loop and sparing the CPU and battery. <code>setInterval</code> continues firing regardless. The <a href="/rendering/browser-rendering-pipeline/">browser rendering pipeline</a> guide explained why this synchronisation matters for the full render pipeline: the loop must complete within the sixteen millisecond frame budget before the browser's own style, layout, and paint steps run.
+</p>
+
+<h2 id="fixed">Fixed update vs variable render</h2>
+
+<p>
+Tying simulation advancement directly to the display frame rate produces different results on a sixty-hertz monitor versus a one-hundred-twenty-hertz display. Separating the two rates solves this.
+</p>
+
+<h3>Accumulator-based fixed timestep</h3>
+
+<pre><code>var FIXED_STEP = 1 / 60; // 60 Hz simulation
+var accumulator = 0;
+
+function loop(timestamp) {
+  var dt = Math.min((timestamp - lastTime) / 1000, 0.1);
+  lastTime = timestamp;
+
+  // Accumulate real time and drain it in fixed steps
+  accumulator += dt;
+  while (accumulator >= FIXED_STEP) {
+    fixedUpdate(FIXED_STEP);  // deterministic simulation step
+    accumulator -= FIXED_STEP;
+  }
+
+  // Alpha: how far into the current step we are
+  var alpha = accumulator / FIXED_STEP;
+  render(alpha);  // interpolate between last and current state
+
+  requestAnimationFrame(loop);
+}</code></pre>
+
+<p>
+The accumulator absorbs the variable real-time delta and drains it in fixed increments. The simulation advances by the same amount every step, making it deterministic and reproducible. The render pass receives an alpha value between zero and one representing how far through the current fixed step the display moment falls, and uses it to interpolate the drawn position between the previous and current simulation state. A sixty-hertz simulation running on a one-hundred-twenty-hertz display renders two frames per simulation step, each slightly ahead of the other, producing perfectly smooth output.
+</p>
+
+<h2 id="network">Integrating network state</h2>
+
+<p>
+Network messages arrive asynchronously and must not directly mutate simulation state from outside the loop. The correct integration point is at the start of each tick.
+</p>
+
+<h3>Network queue drained at tick start</h3>
+
+<pre><code>var networkQueue = [];
+
+// WebSocket handler: buffer only, never mutate state directly
+ws.addEventListener('message', function (event) {
+  networkQueue.push(JSON.parse(event.data));
+});
+
+function fixedUpdate(dt) {
+  // 1. Drain network messages into simulation
+  while (networkQueue.length) {
+    applyNetworkMessage(networkQueue.shift(), simulationState);
+  }
+
+  // 2. Process local inputs
+  var inputs = inputQueue.splice(0);
+  inputs.forEach(function (input) { simulate(simulationState, input, dt); });
+
+  // 3. Advance physics / animation
+  advanceSimulation(simulationState, dt);
+}</code></pre>
+
+<p>
+The WebSocket handler only pushes messages onto a queue; it never touches the simulation directly. At the start of each fixed update, the loop drains the queue and applies messages in order. This keeps the simulation update deterministic: within any given tick, messages are applied before the simulation advances, so the order of operations is always queue drain, input process, physics advance. Mixing asynchronous message handlers directly into a running simulation produces race conditions that are nearly impossible to debug.
+</p>
+
+<h2 id="pause">Visibility-based pausing</h2>
+
+<p>
+A tab the user cannot see should not consume CPU. Beyond the automatic pausing <code>requestAnimationFrame</code> provides, explicit state management prevents problems on resume.
+</p>
+
+<h3>Pause on hidden, reset accumulator on restore</h3>
+
+<pre><code>var loopId = null;
+var paused = false;
+
+document.addEventListener('visibilitychange', function () {
+  if (document.hidden) {
+    paused = true;
+    // cancelAnimationFrame is optional since rAF already stops,
+    // but explicit cancellation prevents any pending callback from firing
+    if (loopId) { cancelAnimationFrame(loopId); loopId = null; }
+  } else {
+    paused = false;
+    // Reset lastTime so dt starts from zero, not from the hidden duration
+    lastTime = performance.now();
+    accumulator = 0;
+    loopId = requestAnimationFrame(loop);
+  }
+});</code></pre>
+
+<p>
+Without the explicit reset, <code>lastTime</code> still holds the timestamp from when the tab was hidden. The first frame after restore would produce a huge <code>dt</code>, which the accumulator cap limits but does not eliminate gracefully. Resetting both <code>lastTime</code> and <code>accumulator</code> on restore gives the loop a clean start, as if the session had just begun. The network queue continues to fill while the tab is hidden; the loop drains it all on the first tick after restore, catching up to the current server state without a visible stutter.
+</p>
+
+<h2 id="budget">Staying inside the frame budget</h2>
+
+<p>
+Every instruction in the loop competes for the same sixteen milliseconds. The capstone discipline is knowing where the time goes.
+</p>
+
+<h3>Profile, batch, and offload</h3>
+
+<p>
+The fixed update step should run in under two milliseconds to leave time for interpolation, rendering, and the browser's own style and layout work. If it does not, the first diagnostic is to profile with <code>performance.mark</code> and <code>performance.measure</code> around each phase, then look at the flame chart in Chrome DevTools. The most common causes of an overloaded update step are too many entities in the simulation, expensive collision or physics calculations, and DOM mutations triggered from inside the loop. The last is particularly destructive: any read of a layout-triggering property like <code>offsetWidth</code> inside the loop forces a synchronous layout, which alone can consume more than the entire budget. All DOM reads should happen before the loop's update phase and all DOM writes should happen in the render phase, separating them cleanly as the <a href="/rendering/rendering-lifecycle/">rendering lifecycle</a> guide demanded. Heavy computation that does not need the DOM can be moved to a web worker, leaving the main thread free to stay inside budget for every frame.
+</p>
+
+<section id="faq">
+<h2>Frequently Asked Questions</h2>
+
+<h3>What is a realtime rendering loop?</h3>
+<p>A realtime rendering loop is a continuous cycle that runs on every animation frame, reads the latest application state including network updates, updates the simulation, and draws the frame. It is the bridge between asynchronous data arriving from a server and synchronous pixel output on the screen.</p>
+
+<h3>Why separate simulation updates from rendering?</h3>
+<p>Simulation updates at a fixed rate produce deterministic, reproducible results regardless of frame rate. Rendering at the variable display rate uses interpolation to produce smooth visuals even when the simulation step does not align with the frame. Separating them lets each run at its optimal rate.</p>
+
+<h3>How do I stop the loop when the tab is not visible?</h3>
+<p>The Page Visibility API fires a <code>visibilitychange</code> event when a tab is hidden or restored. Pause the loop on hidden and resume on visible. <code>requestAnimationFrame</code> already stops firing for hidden tabs in most browsers, but explicitly pausing and resetting <code>lastTime</code> and the accumulator prevents a large delta-time jump when the tab becomes visible again.</p>
+
+<h3>How do network messages fit into the rendering loop?</h3>
+<p>Network messages should not be applied directly inside the loop. Instead they are buffered in a queue as they arrive. At the start of each loop tick, the loop drains the queue and applies pending messages to the simulation state before running the update and render steps. This keeps the loop deterministic and the message handling off the critical render path.</p>
+</section>
+
+<p><strong>Read next:</strong> the <a href="/interactive-web/">Interactive Web</a> hub for the complete cluster, or revisit <a href="/rendering/browser-rendering-pipeline/">the browser rendering pipeline</a> to see the browser-side mechanics this loop feeds into.</p>
+
+<div class="cta">
+<p><strong>Want Backbone views that update cleanly on every frame?</strong></p>
+<p>The Backbone guide shows how event-driven views stay in sync with a continuously updating model.</p>
+<a href="/backbonejs/" class="btn">Explore the Backbone Guide →</a>
+</div>
+
+<div class="back-home">
+<a href="/interactive-web/">← Back to Interactive Web</a>
+</div>
+
+</article>
+</main>
+
+<footer>
+<p>Backbone Tutorials</p>
+<nav class="bt-social" aria-label="Backbone Tutorials on social media">
+  <a style="--c:#181717" href="https://github.com/backbonetutorials/backbonetutorials" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on GitHub"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#fff" d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0 1 12 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222 0 1.606-.014 2.898-.014 3.293 0 .322.216.694.825.576C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg></a>
+  <a style="--c:#000000" href="https://x.com/backbonetutor" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on X (formerly Twitter)"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#fff" d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+  <a style="--c:#FF0000" href="https://www.youtube.com/@BACKBONETUTORIALS" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on YouTube"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#fff" d="M8.5 6.5 L8.5 17.5 L17.5 12 Z"/></svg></a>
+  <a style="--c:#0285FF" href="https://bsky.app/profile/backbonetutorials.bsky.social" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on Bluesky"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#fff" d="M12 10.8c-1.087-2.114-4.046-6.053-6.798-7.995C2.566.944 1.561 1.266.902 1.565.139 1.908 0 3.08 0 3.768c0 .69.378 5.65.624 6.479.815 2.736 3.713 3.66 6.383 3.364.136-.02.275-.039.415-.056-.138.022-.276.04-.415.056-3.912.58-7.387 2.005-2.83 7.078 5.013 5.19 6.87-1.113 7.823-4.308.953 3.195 2.05 9.271 7.733 4.308 4.267-4.308 1.172-6.498-2.74-7.078a8.741 8.741 0 0 1-.415-.056c.14.017.279.036.415.056 2.67.296 5.568-.628 6.383-3.364C23.622 9.418 24 4.458 24 3.768c0-.688-.139-1.86-.902-2.203-.659-.299-1.664-.621-4.3 1.24C16.046 4.747 13.087 8.686 12 10.8Z"/></svg></a>
+  <a style="--c:#d62976;background-image:linear-gradient(150deg,rgba(255,255,255,.30),rgba(255,255,255,0) 42%,rgba(0,0,0,.22)),linear-gradient(45deg,#feda75,#fa7e1e,#d62976,#962fbf,#4f5bd5)" href="https://www.instagram.com/backbonetutorials/" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on Instagram"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="4" y="4" width="16" height="16" rx="5" fill="none" stroke="#fff" stroke-width="2"/><circle cx="12" cy="12" r="3.6" fill="none" stroke="#fff" stroke-width="2"/><circle cx="17.2" cy="6.8" r="1.25" fill="#fff"/></svg></a>
+  <a style="--c:#000000" href="https://www.tiktok.com/@backbonetutorials" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on TikTok"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#fff" d="M16.5 5.82a4.79 4.79 0 0 1-1.16-3.07h-2.9v11.43a2.45 2.45 0 1 1-2.45-2.45c.17 0 .33.02.49.05V8.83a5.36 5.36 0 0 0-.49-.02 5.35 5.35 0 1 0 5.35 5.35V8.6a7.66 7.66 0 0 0 4.46 1.42V7.13a4.79 4.79 0 0 1-2.8-1.31Z"/></svg></a>
+  <a style="--c:#1877F2" href="https://www.facebook.com/BackboneTutorials" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on Facebook"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#fff" d="M13.5 21v-8h2.6l.4-3h-3V8.1c0-.87.27-1.46 1.5-1.46H17V3.96c-.28-.04-1.2-.12-2.28-.12-2.26 0-3.8 1.38-3.8 3.9V10H8.3v3h2.62v8h2.58Z"/></svg></a>
+</nav>
+<p>
+<a href="/">Home</a> |
+<a href="/about/">About</a> |
+<a href="/contact/">Contact</a> |
+<a href="/privacy-policy/">Privacy Policy</a> |
+<a href="/terms/">Terms</a>
+</p>
+<p>© 2026 Backbone Tutorials</p>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,493 @@
+<!-- ===========================================================================
+     DEPLOY TO: /foundations/backbone-templates/   (index.html)
+     Third article in the Foundations cluster. Page type = TechArticle.
+     Built per MASTERMIND_SEO.md §6/§7/§8/§9/§10/§11/§11.1.
+     EDITOR (§11.1) BEFORE PUBLISH — AI-assisted first draft:
+       1) Run the snippets in a real Backbone build; paste your actual console/DOM output
+          and add ONE screenshot (e.g. an escaped vs unescaped value rendering).
+       2) State the version tested (e.g. Backbone 1.6.0 / Underscore 1.13.x / jQuery 3.x).
+       3) Add one first-hand remark/trade-off in your own voice; vary a few sentences.
+       4) Export /assets/foundations/backbone-templates-1200.jpg for OG.
+       5) Add this URL to sitemap.xml.
+     =========================================================================== -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Backbone.js Templates with Underscore _.template</title>
+
+<meta name="description" content="Render markup in Backbone with Underscore _.template: the interpolate, escape, and evaluate tags, looping a collection, XSS-safe output, and precompiling.">
+
+<meta name="robots" content="index, follow">
+<meta name="author" content="Backbone Tutorials">
+<meta name="theme-color" content="#2563eb">
+<meta name="format-detection" content="telephone=no">
+
+<link rel="canonical" href="https://backbonetutorials.com/foundations/backbone-templates/">
+
+<link rel="icon" href="/assets/favicon.ico">
+<link rel="apple-touch-icon" href="/assets/favicon.png">
+
+<!-- Open Graph -->
+<meta property="og:title" content="Backbone.js Templates with Underscore _.template">
+<meta property="og:description" content="A code-first guide to Backbone templating with Underscore _.template: interpolate, escape, and evaluate tags, collection loops, XSS-safe output, and precompiling.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://backbonetutorials.com/foundations/backbone-templates/">
+<meta property="og:image" content="https://backbonetutorials.com/assets/foundations/backbone-templates-1200.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:type" content="image/jpeg">
+<meta property="og:image:alt" content="Backbone.js Templates with Underscore — Backbone Tutorials">
+<meta property="og:site_name" content="Backbone Tutorials">
+<meta property="og:locale" content="en_US">
+
+<!-- Twitter -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Backbone.js Templates with Underscore _.template">
+<meta name="twitter:description" content="Backbone templating with Underscore _.template: the three tags, collection loops, escaping for XSS safety, and precompiling for speed.">
+<meta name="twitter:image" content="https://backbonetutorials.com/assets/foundations/backbone-templates-1200.jpg">
+<meta name="twitter:image:alt" content="Backbone.js Templates with Underscore — Backbone Tutorials">
+<meta name="twitter:url" content="https://backbonetutorials.com/foundations/backbone-templates/">
+<!-- EDITOR: export a real 1200x630 og image to /assets/foundations/backbone-templates-1200.jpg -->
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+
+<style>
+
+html{scroll-behavior:smooth}
+body{font-family:'Inter',sans-serif;margin:0;background:#f4f6f9;color:#1f2937;line-height:1.7}
+.container{max-width:900px;margin:30px auto;padding:20px;background:#fff;border-radius:10px;box-shadow:0 2px 10px rgba(0,0,0,0.04)}
+h1,h2,h3{color:#111827}
+.nav{background:#111827;padding:15px;display:flex;justify-content:center;align-items:center;flex-wrap:wrap;gap:8px}
+.nav a{color:white;margin:0 10px;text-decoration:none;font-weight:600}
+.nav a:hover{text-decoration:underline}
+.nav-logo img{vertical-align:middle;margin-right:12px;border-radius:8px}
+figure{margin:30px 0}
+img{width:100%;height:auto;border-radius:10px}
+pre{background:#111;color:#eee;padding:15px;border-radius:8px;overflow-x:auto;box-shadow:0 2px 8px rgba(0,0,0,0.15)}
+code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+p code,li code{background:#eef2ff;padding:1px 5px;border-radius:4px;font-size:.95em}
+.cta{background:#eef2ff;padding:20px;margin-top:30px;text-align:center;border-radius:10px}
+a{color:#2563eb}
+.back-home{margin-top:25px}
+footer{background:#111827;color:white;text-align:center;padding:30px 20px;margin-top:40px}
+footer a{color:#93c5fd;text-decoration:none}
+footer a:hover{text-decoration:underline}
+.btn{display:inline-block;background:#2563eb;color:white;padding:12px 22px;border-radius:8px;text-decoration:none;font-weight:600;margin-top:15px;transition:0.2s ease}
+.btn:hover{background:#1d4ed8;transform:translateY(-1px)}
+.card{background:#fff;padding:20px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.05);overflow:hidden;max-width:100%;transition:0.2s ease;border:1px solid #eef2f7}
+.toc-list{padding-left:20px}
+.toc-list li{margin-bottom:8px}
+.author-line{font-size:15px;margin-top:-6px;margin-bottom:10px;color:#4b5563}
+figcaption{font-size:14px;color:#6b7280;margin-top:10px}
+#faq h3{margin-top:25px}
+#faq p{margin-bottom:18px}
+.breadcrumb{font-size:14px;color:#6b7280;margin:0 0 10px}
+.breadcrumb a{color:#2563eb;text-decoration:none}
+.breadcrumb a:hover{text-decoration:underline}
+.diagram{width:100%;height:auto;display:block;border-radius:10px}
+.note{background:#fffbeb;border:1px solid #fde68a;border-radius:10px;padding:14px 16px;margin:22px 0}
+.note strong{color:#92400e}
+.bt-social{display:flex;gap:13px;flex-wrap:wrap;align-items:center;justify-content:center;margin:0 0 14px;padding:0;list-style:none}
+.bt-social a{position:relative;isolation:isolate;width:46px;height:46px;border-radius:14px;display:inline-flex;align-items:center;justify-content:center;text-decoration:none;-webkit-tap-highlight-color:transparent;background-color:var(--c,#333);background-image:linear-gradient(150deg,rgba(255,255,255,.30),rgba(255,255,255,0) 42%,rgba(0,0,0,.22));box-shadow:0 1px 1px rgba(0,0,0,.22),0 7px 14px -3px rgba(0,0,0,.34),inset 0 1px 0 rgba(255,255,255,.50),inset 0 -2px 5px rgba(0,0,0,.30);transition:transform .18s cubic-bezier(.2,.7,.2,1),box-shadow .18s ease}
+.bt-social a::before{content:"";position:absolute;left:3px;right:3px;top:2px;height:44%;border-radius:12px 12px 50% 50%/12px 12px 24px 24px;background:linear-gradient(180deg,rgba(255,255,255,.42),rgba(255,255,255,0));pointer-events:none;z-index:0}
+.bt-social a:hover{transform:translateY(-3px) scale(1.05);box-shadow:0 2px 2px rgba(0,0,0,.20),0 16px 26px -6px rgba(0,0,0,.40),inset 0 1px 0 rgba(255,255,255,.55),inset 0 -2px 6px rgba(0,0,0,.32)}
+.bt-social a:active{transform:translateY(-1px) scale(1.01)}
+.bt-social a:focus-visible{outline:3px solid #93c5fd;outline-offset:3px}
+.bt-social svg{position:relative;z-index:1;width:22px;height:22px;display:block;filter:drop-shadow(0 1px 1px rgba(0,0,0,.28))}
+@media (prefers-reduced-motion:reduce){.bt-social a{transition:none}.bt-social a:hover{transform:none}}
+@media(max-width:600px){.container{padding:15px}}
+
+</style>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": "https://backbonetutorials.com/#organization",
+      "name": "Backbone Tutorials",
+      "url": "https://backbonetutorials.com/",
+      "logo": { "@type": "ImageObject", "url": "https://backbonetutorials.com/assets/logo.png" },
+      "sameAs": [
+        "https://github.com/backbonetutorials/backbonetutorials",
+        "https://x.com/backbonetutor",
+        "https://www.youtube.com/@BACKBONETUTORIALS",
+        "https://bsky.app/profile/backbonetutorials.bsky.social",
+        "https://www.instagram.com/backbonetutorials/",
+        "https://www.tiktok.com/@backbonetutorials",
+        "https://www.facebook.com/BackboneTutorials"
+      ],
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "contactType": "customer support",
+        "email": "backbonetutorials2026@gmail.com",
+        "availableLanguage": ["English"],
+        "areaServed": "Worldwide"
+      }
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://backbonetutorials.com/#website",
+      "url": "https://backbonetutorials.com/",
+      "name": "Backbone Tutorials",
+      "publisher": { "@id": "https://backbonetutorials.com/#organization" }
+    },
+    {
+      "@type": "Person",
+      "@id": "https://backbonetutorials.com/author/backbone-tutorials-team/#person",
+      "name": "Backbone Tutorials Team",
+      "url": "https://backbonetutorials.com/author/backbone-tutorials-team/",
+      "worksFor": { "@id": "https://backbonetutorials.com/#organization" },
+      "jobTitle": "Frontend JavaScript Editorial Team",
+      "knowsAbout": ["Backbone.js", "JavaScript", "SPA architecture", "Frontend Development"]
+    },
+    {
+      "@type": "WebPage",
+      "@id": "https://backbonetutorials.com/foundations/backbone-templates/#webpage",
+      "url": "https://backbonetutorials.com/foundations/backbone-templates/",
+      "name": "Backbone.js Templates with Underscore _.template",
+      "headline": "Backbone.js Templates with Underscore",
+      "description": "Render markup in Backbone with Underscore _.template: the interpolate, escape, and evaluate tags, looping a collection, XSS-safe output, and precompiling.",
+      "inLanguage": "en",
+      "isPartOf": { "@id": "https://backbonetutorials.com/#website" },
+      "author": { "@id": "https://backbonetutorials.com/author/backbone-tutorials-team/#person" },
+      "publisher": { "@id": "https://backbonetutorials.com/#organization" },
+      "breadcrumb": { "@id": "https://backbonetutorials.com/foundations/backbone-templates/#breadcrumb" },
+      "mainEntity": { "@id": "https://backbonetutorials.com/foundations/backbone-templates/#article" }
+    },
+    {
+      "@type": "TechArticle",
+      "@id": "https://backbonetutorials.com/foundations/backbone-templates/#article",
+      "url": "https://backbonetutorials.com/foundations/backbone-templates/",
+      "headline": "Backbone.js Templates with Underscore",
+      "description": "A code-first guide to Backbone templating with Underscore _.template: the three template tags, collection loops, escaping for XSS safety, and precompiling for speed.",
+      "inLanguage": "en",
+      "image": {
+        "@type": "ImageObject",
+        "url": "https://backbonetutorials.com/assets/foundations/backbone-templates-1200.jpg",
+        "width": 1200,
+        "height": 630
+      },
+      "author": { "@id": "https://backbonetutorials.com/author/backbone-tutorials-team/#person" },
+      "publisher": { "@id": "https://backbonetutorials.com/#organization" },
+      "mainEntityOfPage": { "@id": "https://backbonetutorials.com/foundations/backbone-templates/#webpage" },
+      "datePublished": "2026-06-12T04:30:00+07:00",
+      "dateModified": "2026-06-12T04:30:00+07:00",
+      "articleSection": ["Backbone.js", "Foundations", "Templating"],
+      "keywords": ["Backbone templates", "Underscore _.template", "interpolate escape evaluate", "XSS escaping", "precompiled templates"],
+      "about": [
+        { "@type": "Thing", "name": "Backbone.js" },
+        { "@type": "Thing", "name": "HTML templating" },
+        { "@type": "Thing", "name": "Underscore.js" }
+      ],
+      "mentions": [
+        { "@type": "Thing", "name": "Cross-site scripting" },
+        { "@type": "Thing", "name": "jQuery" },
+        { "@type": "Thing", "name": "Handlebars.js" }
+      ]
+    },
+    {
+      "@type": "BreadcrumbList",
+      "@id": "https://backbonetutorials.com/foundations/backbone-templates/#breadcrumb",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://backbonetutorials.com/" },
+        { "@type": "ListItem", "position": 2, "name": "Foundations", "item": "https://backbonetutorials.com/foundations/" },
+        { "@type": "ListItem", "position": 3, "name": "Backbone.js Templates with Underscore", "item": "https://backbonetutorials.com/foundations/backbone-templates/" }
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "@id": "https://backbonetutorials.com/foundations/backbone-templates/#faq",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Does Backbone come with a template engine?",
+          "acceptedAnswer": { "@type": "Answer", "text": "No. Backbone leaves rendering to you and, by convention, pairs with Underscore's _.template, which ships alongside it. You can swap in Handlebars, Mustache, or any engine by overriding how your views turn data into HTML." }
+        },
+        {
+          "@type": "Question",
+          "name": "What is the difference between the interpolate and escape tags in Underscore templates?",
+          "acceptedAnswer": { "@type": "Answer", "text": "The interpolate tag prints a value exactly as given, so any HTML in it is inserted as markup. The escape tag converts characters like the angle brackets and ampersand to entities first, so the value is shown as plain text. Use escape for anything a user can influence." }
+        },
+        {
+          "@type": "Question",
+          "name": "How do I render a list or collection in a Backbone template?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Either loop inside the template with an evaluate block calling _.each over the data, or render one child view per model and append each into a parent. For static lists the loop is simplest; for rows with their own behaviour, child views scale better." }
+        },
+        {
+          "@type": "Question",
+          "name": "Are Underscore templates safe from XSS?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Only when you escape untrusted data. The interpolate tag is raw and will inject whatever it is given, including a script or image tag. Use the escape tag for any value that came from a user or an external source, and reserve the raw tag for trusted markup." }
+        }
+      ]
+    }
+  ]
+}
+</script>
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-FYJP43XDHH"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-FYJP43XDHH');
+</script>
+
+</head>
+
+<body>
+
+<nav class="nav" aria-label="Main Navigation">
+<a href="/" class="nav-logo" title="Backbone Tutorials Homepage"><img src="/assets/logo.png" alt="Backbone Tutorials Logo" width="36" height="36" loading="lazy" decoding="async"></a>
+<a href="/" title="Backbone.js Tutorials Homepage">Home</a>
+<a href="/backbonejs/" title="Backbone.js Complete Guide">Backbone Guide</a>
+<a href="/what-is-a-router/" title="What is a Router in Backbone.js">Router</a>
+<a href="/what-is-a-model/" title="What is a Model in Backbone.js">Model</a>
+<a href="/what-is-a-view/" title="What is a View in Backbone.js">View</a>
+<a href="/what-is-a-collection/" title="What is a Collection in Backbone.js">Collection</a>
+</nav>
+
+<main>
+
+<article class="container">
+
+<nav class="breadcrumb" aria-label="Breadcrumb">
+<a href="/">Home</a> › <a href="/foundations/">Foundations</a> › <span aria-current="page">Backbone.js Templates with Underscore</span>
+</nav>
+
+<h1>Backbone.js Templates with Underscore</h1>
+
+<p class="author-line">Written by <a href="/author/backbone-tutorials-team/">Backbone Tutorials Team</a></p>
+<p class="author-line">Last updated: June 2026 · 9 min read</p>
+
+<p>
+You have a model full of data and a view that needs to show it. The tempting first move is to build the HTML with string concatenation, and within a day that turns into a tangle of plus signs and quotes that nobody wants to touch. Templates are the way out: you write the markup once, with little slots where the data goes, and let a function fill them in. In Backbone, that function almost always comes from Underscore.
+</p>
+
+<p>
+This guide is code-first and builds on the <a href="/foundations/backbone-view-lifecycle/">view lifecycle</a>, since a template is simply what goes inside <code>render</code>. We will cover the three template tags, where templates should live, how to feed them model data, the escaping rule that keeps you safe, and how to compile once for speed.
+</p>
+
+<figure>
+<svg class="diagram" viewBox="0 0 720 230" role="img" aria-labelledby="tplTitle tplDesc" xmlns="http://www.w3.org/2000/svg">
+  <title id="tplTitle">How a template becomes HTML</title>
+  <desc id="tplDesc">Model data plus a template string pass through Underscore's _.template to produce HTML in the view.</desc>
+  <rect x="0" y="0" width="720" height="230" rx="12" fill="#0f172a"></rect>
+  <g font-family="Inter, sans-serif">
+    <rect x="30" y="40" width="170" height="52" rx="10" fill="#1e293b" stroke="#2563eb" stroke-width="2"></rect>
+    <text x="115" y="63" text-anchor="middle" fill="#fff" font-size="14" font-weight="700">Model data</text>
+    <text x="115" y="81" text-anchor="middle" fill="#93c5fd" font-size="11">model.toJSON()</text>
+    <rect x="30" y="138" width="170" height="52" rx="10" fill="#1e293b" stroke="#334155" stroke-width="2"></rect>
+    <text x="115" y="161" text-anchor="middle" fill="#fff" font-size="14" font-weight="700">Template</text>
+    <text x="115" y="179" text-anchor="middle" fill="#94a3b8" font-size="11">markup + slots</text>
+    <rect x="285" y="89" width="160" height="52" rx="10" fill="#0b1220" stroke="#3b82f6" stroke-width="2"></rect>
+    <text x="365" y="112" text-anchor="middle" fill="#fff" font-size="13" font-weight="700">_.template</text>
+    <text x="365" y="130" text-anchor="middle" fill="#93c5fd" font-size="11">compile + fill</text>
+    <rect x="520" y="89" width="170" height="52" rx="10" fill="#1e293b" stroke="#2563eb" stroke-width="2"></rect>
+    <text x="605" y="112" text-anchor="middle" fill="#fff" font-size="14" font-weight="700">HTML in view</text>
+    <text x="605" y="130" text-anchor="middle" fill="#93c5fd" font-size="11">$el.html(...)</text>
+    <path d="M202 78 L283 104" stroke="#64748b" stroke-width="2" marker-end="url(#a4)"></path>
+    <path d="M202 152 L283 126" stroke="#64748b" stroke-width="2" marker-end="url(#a4)"></path>
+    <path d="M447 115 L516 115" stroke="#3b82f6" stroke-width="2" marker-end="url(#a4)"></path>
+  </g>
+  <defs>
+    <marker id="a4" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0 0 L7 3 L0 6 Z" fill="#64748b"></path>
+    </marker>
+  </defs>
+</svg>
+<figcaption>A template plus model data goes through one function and comes out as the HTML your view drops into its element.</figcaption>
+</figure>
+
+<div class="card">
+<p style="margin-top:0"><strong>What you'll learn</strong></p>
+<ul class="toc-list">
+<li><a href="#no-engine">Backbone leaves templating to you</a></li>
+<li><a href="#tags">The three Underscore template tags</a></li>
+<li><a href="#where">Where your templates live</a></li>
+<li><a href="#data">Feeding data from a model</a></li>
+<li><a href="#escaping">Escaping and XSS: escape by default</a></li>
+<li><a href="#precompile">Compile once, render many</a></li>
+</ul>
+</div>
+
+<h2 id="no-engine">Backbone leaves templating to you</h2>
+
+<p>
+Backbone deliberately ships no template engine. That sounds like a gap, but it is the same flexibility that lets the library stay small: you pick how data becomes markup. Because Underscore is already a dependency, its <code>_.template</code> is the path of least resistance, and it is what nearly every Backbone codebase reaches for.
+</p>
+
+<h3>Why there is no built-in engine</h3>
+
+<pre><code>var greet = _.template('Hello, &lt;%= name %&gt;!');
+
+console.log(greet({ name: 'Ada' }));
+// =&gt; Hello, Ada!</code></pre>
+
+<p>
+<code>_.template</code> takes a string with slots and returns a function. Call that function with an object and you get a finished string back. Nothing about it is Backbone-specific, which is exactly the point: if you prefer Handlebars or Mustache, you swap the engine and the rest of your view stays the same.
+</p>
+
+<h2 id="tags">The three Underscore template tags</h2>
+
+<p>
+Underscore templates have three kinds of slot, and knowing which is which removes most confusion. Two of them print a value; the third runs JavaScript without printing anything.
+</p>
+
+<h3>Interpolate, escape, and evaluate</h3>
+
+<pre><code>&lt;%= value %&gt;   prints the value as-is (raw)
+&lt;%- value %&gt;   prints the value HTML-escaped (safe)
+&lt;% if (ok) { %&gt; ... &lt;% } %&gt;   runs logic, prints nothing</code></pre>
+
+<p>
+The first prints raw, the second prints an escaped copy, and the third is for control flow such as <code>if</code> and loops. A useful habit: treat the escaping tag as your default for data, and use the raw tag only when you genuinely mean to inject HTML you control.
+</p>
+
+<h2 id="where">Where your templates live</h2>
+
+<p>
+A one-line template can sit in your JavaScript, but anything real wants its own home. The classic Backbone approach is a script block with a non-executable type, which the browser ignores as code but hands you as text.
+</p>
+
+<h3>Using a script template block</h3>
+
+<pre><code>&lt;script type="text/template" id="row-tpl"&gt;
+  &lt;li class="todo"&gt;&lt;%- title %&gt;&lt;/li&gt;
+&lt;/script&gt;</code></pre>
+
+<p>
+You read that markup with <code>$('#row-tpl').html()</code> and pass it to <code>_.template</code>. The browser never tries to run the contents, the markup keeps its indentation, and your HTML stays out of your JavaScript files. For larger apps, the same idea moves into separate template files bundled at build time.
+</p>
+
+<h2 id="data">Feeding data from a model</h2>
+
+<p>
+A template function expects a plain object, and a Backbone model hands you one with <code>toJSON</code>. That single call is the bridge between the data layer and the markup.
+</p>
+
+<h3>Looping over a collection in a template</h3>
+
+<pre><code>&lt;ul&gt;
+  &lt;% _.each(items, function (item) { %&gt;
+    &lt;li&gt;&lt;%- item.title %&gt;&lt;/li&gt;
+  &lt;% }); %&gt;
+&lt;/ul&gt;</code></pre>
+
+<p>
+Here the evaluate tag drives an <code>_.each</code> loop while the escaping tag prints each title safely. This is perfect for a static list. The moment each row needs its own click handling or state, prefer a child view per model instead, rendering each one as covered in the <a href="/foundations/backbone-view-lifecycle/">lifecycle guide</a>.
+</p>
+
+<h2 id="escaping">Escaping and XSS: escape by default</h2>
+
+<p>
+This is the section that protects your users, so it earns extra attention. The raw tag prints exactly what it is given, which means a value that contains markup becomes live markup, including a script that runs.
+</p>
+
+<h3>When to use the escape tag instead of the raw tag</h3>
+
+<pre><code>// suppose bio came from a user:
+//   bio = '&lt;img src=x onerror=alert(1)&gt;'
+
+&lt;%= bio %&gt;   DANGER: the tag is injected and the script runs
+&lt;%- bio %&gt;   SAFE: the value is shown as harmless text</code></pre>
+
+<p>
+The rule is short: escape anything a person or an external system could influence, and use the raw tag only for markup you authored yourself. Getting this backwards is one of the most common ways a front end ends up with a cross-site scripting hole.
+</p>
+
+<h2 id="precompile">Compile once, render many</h2>
+
+<p>
+Compiling a template parses its string into a function, and doing that on every render is wasted work. Compile each template once, then reuse the returned function as many times as you like.
+</p>
+
+<h3>Precompiling for performance</h3>
+
+<pre><code>// compile once when the module loads
+var rowTpl = _.template($('#row-tpl').html());
+
+var Row = Backbone.View.extend({
+  tagName: 'li',
+  render: function () {
+    this.$el.html(rowTpl(this.model.toJSON()));
+    return this;
+  }
+});</code></pre>
+
+<p>
+Now <code>render</code> only fills the slots; the parsing happened a single time. For a list of hundreds of rows that difference is real. If you ever need to change the slot syntax, <code>_.templateSettings</code> lets you redefine the tags globally, though the defaults serve almost everyone.
+</p>
+
+<p>
+That is templating in Backbone: pick an engine, learn three tags, keep the markup in its own block, feed it model data, escape what you do not trust, and compile once. With render now producing clean HTML, the next foundations topic, <em>sync</em>, is about where that model data comes from and how it gets back to the server.
+</p>
+
+<section id="faq">
+<h2>Frequently Asked Questions</h2>
+
+<h3>Does Backbone come with a template engine?</h3>
+<p>No. Backbone leaves rendering to you and, by convention, pairs with Underscore's <code>_.template</code>, which ships alongside it. You can swap in Handlebars, Mustache, or any engine by overriding how your views turn data into HTML.</p>
+
+<h3>What is the difference between the interpolate and escape tags in Underscore templates?</h3>
+<p>The interpolate tag prints a value exactly as given, so any HTML in it is inserted as markup. The escape tag converts characters like the angle brackets and ampersand to entities first, so the value is shown as plain text. Use escape for anything a user can influence.</p>
+
+<h3>How do I render a list or collection in a Backbone template?</h3>
+<p>Either loop inside the template with an evaluate block calling <code>_.each</code> over the data, or render one child view per model and append each into a parent. For static lists the loop is simplest; for rows with their own behaviour, child views scale better.</p>
+
+<h3>Are Underscore templates safe from XSS?</h3>
+<p>Only when you escape untrusted data. The interpolate tag is raw and will inject whatever it is given, including a script or image tag. Use the escape tag for any value that came from a user or an external source, and reserve the raw tag for trusted markup.</p>
+</section>
+
+<p><strong>Read next:</strong> <a href="/foundations/backbone-sync/">Backbone.js Sync and the Server</a>, the next foundations guide, or revisit <a href="/what-is-a-collection/">What is a Collection?</a> to see the data a list template loops over.</p>
+
+<div class="cta">
+<p><strong>Put the pieces together</strong></p>
+<p>Templates feed your views. The complete guide shows how Models, Views, Routers, and Collections combine into one application.</p>
+<a href="/backbonejs/" class="btn">Explore the Backbone Guide →</a>
+</div>
+
+<div class="back-home">
+<a href="/foundations/">← Back to Backbone.js Foundations</a>
+</div>
+
+</article>
+
+</main>
+
+<footer>
+
+<p>Backbone Tutorials</p>
+
+<nav class="bt-social" aria-label="Backbone Tutorials on social media">
+  <a style="--c:#181717" href="https://github.com/backbonetutorials/backbonetutorials" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on GitHub"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#fff" d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0 1 12 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222 0 1.606-.014 2.898-.014 3.293 0 .322.216.694.825.576C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg></a>
+  <a style="--c:#000000" href="https://x.com/backbonetutor" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on X (formerly Twitter)"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#fff" d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+  <a style="--c:#FF0000" href="https://www.youtube.com/@BACKBONETUTORIALS" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on YouTube"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#fff" d="M8.5 6.5 L8.5 17.5 L17.5 12 Z"/></svg></a>
+  <a style="--c:#0285FF" href="https://bsky.app/profile/backbonetutorials.bsky.social" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on Bluesky"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#fff" d="M12 10.8c-1.087-2.114-4.046-6.053-6.798-7.995C2.566.944 1.561 1.266.902 1.565.139 1.908 0 3.08 0 3.768c0 .69.378 5.65.624 6.479.815 2.736 3.713 3.66 6.383 3.364.136-.02.275-.039.415-.056-.138.022-.276.04-.415.056-3.912.58-7.387 2.005-2.83 7.078 5.013 5.19 6.87-1.113 7.823-4.308.953 3.195 2.05 9.271 7.733 4.308 4.267-4.308 1.172-6.498-2.74-7.078a8.741 8.741 0 0 1-.415-.056c.14.017.279.036.415.056 2.67.296 5.568-.628 6.383-3.364C23.622 9.418 24 4.458 24 3.768c0-.688-.139-1.86-.902-2.203-.659-.299-1.664-.621-4.3 1.24C16.046 4.747 13.087 8.686 12 10.8Z"/></svg></a>
+  <a style="--c:#d62976;background-image:linear-gradient(150deg,rgba(255,255,255,.30),rgba(255,255,255,0) 42%,rgba(0,0,0,.22)),linear-gradient(45deg,#feda75,#fa7e1e,#d62976,#962fbf,#4f5bd5)" href="https://www.instagram.com/backbonetutorials/" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on Instagram"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="4" y="4" width="16" height="16" rx="5" fill="none" stroke="#fff" stroke-width="2"/><circle cx="12" cy="12" r="3.6" fill="none" stroke="#fff" stroke-width="2"/><circle cx="17.2" cy="6.8" r="1.25" fill="#fff"/></svg></a>
+  <a style="--c:#000000" href="https://www.tiktok.com/@backbonetutorials" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on TikTok"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#fff" d="M16.5 5.82a4.79 4.79 0 0 1-1.16-3.07h-2.9v11.43a2.45 2.45 0 1 1-2.45-2.45c.17 0 .33.02.49.05V8.83a5.36 5.36 0 0 0-.49-.02 5.35 5.35 0 1 0 5.35 5.35V8.6a7.66 7.66 0 0 0 4.46 1.42V7.13a4.79 4.79 0 0 1-2.8-1.31Z"/></svg></a>
+  <a style="--c:#1877F2" href="https://www.facebook.com/BackboneTutorials" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on Facebook"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#fff" d="M13.5 21v-8h2.6l.4-3h-3V8.1c0-.87.27-1.46 1.5-1.46H17V3.96c-.28-.04-1.2-.12-2.28-.12-2.26 0-3.8 1.38-3.8 3.9V10H8.3v3h2.62v8h2.58Z"/></svg></a>
+</nav>
+
+<p>
+<a href="/">Home</a> |
+<a href="/about/">About</a> |
+<a href="/contact/">Contact</a> |
+<a href="/privacy-policy/">Privacy Policy</a> |
+<a href="/terms/">Terms</a>
+</p>
+
+<p>© 2026 Backbone Tutorials</p>
+
+</footer>
+
+</body>
+</html>

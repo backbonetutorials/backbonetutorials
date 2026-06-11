@@ -1,0 +1,338 @@
+<!-- DEPLOY TO: /modern-frameworks/  (index.html) · CollectionPage hub · per MASTERMIND_SEO.md -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Modern Frameworks — Backbone to React, Vue & Beyond</title>
+
+<meta name="description" content="How frontend evolved from Backbone to React, Vue, and signals: migration guides, architecture, reactivity, and framework comparisons.">
+
+<meta name="robots" content="index, follow">
+<meta name="author" content="Backbone Tutorials">
+<meta name="theme-color" content="#2563eb">
+<meta name="format-detection" content="telephone=no">
+
+<link rel="canonical" href="https://backbonetutorials.com/modern-frameworks/">
+
+<link rel="icon" href="/assets/favicon.ico">
+<link rel="apple-touch-icon" href="/assets/favicon.png">
+
+<meta property="og:title" content="Modern Frameworks — Backbone to React, Vue & Beyond">
+<meta property="og:description" content="How frontend evolved from Backbone to React, Vue, and signals: migration guides, architecture, reactivity, and framework comparisons.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://backbonetutorials.com/modern-frameworks/">
+<meta property="og:image" content="https://backbonetutorials.com/assets/modern-frameworks/hub-1200.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:site_name" content="Backbone Tutorials">
+<meta property="og:locale" content="en_US">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Modern Frameworks — Backbone to React, Vue & Beyond">
+<meta name="twitter:description" content="How frontend evolved from Backbone to React, Vue, and signals: migration guides, architecture, reactivity, and framework comparisons.">
+<meta name="twitter:image" content="https://backbonetutorials.com/assets/modern-frameworks/hub-1200.jpg">
+<meta name="twitter:url" content="https://backbonetutorials.com/modern-frameworks/">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+
+<style>
+html{scroll-behavior:smooth}
+body{font-family:'Inter',sans-serif;margin:0;background:#f4f6f9;color:#1f2937;line-height:1.7}
+.container{max-width:900px;margin:30px auto;padding:20px;background:#fff;border-radius:10px;box-shadow:0 2px 10px rgba(0,0,0,0.04)}
+h1,h2,h3{color:#111827}
+.nav{background:#111827;padding:15px;display:flex;justify-content:center;align-items:center;flex-wrap:wrap;gap:8px}
+.nav a{color:white;margin:0 10px;text-decoration:none;font-weight:600}
+.nav a:hover{text-decoration:underline}
+.nav-logo img{vertical-align:middle;margin-right:12px;border-radius:8px}
+figure{margin:30px 0}
+pre{background:#111;color:#eee;padding:15px;border-radius:8px;overflow-x:auto;box-shadow:0 2px 8px rgba(0,0,0,0.15)}
+code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+p code,li code{background:#eef2ff;padding:1px 5px;border-radius:4px;font-size:.95em}
+.cta{background:#eef2ff;padding:20px;margin-top:30px;text-align:center;border-radius:10px}
+a{color:#2563eb}
+.back-home{margin-top:25px}
+footer{background:#111827;color:white;text-align:center;padding:30px 20px;margin-top:40px}
+footer a{color:#93c5fd;text-decoration:none}
+footer a:hover{text-decoration:underline}
+.btn{display:inline-block;background:#2563eb;color:white;padding:12px 22px;border-radius:8px;text-decoration:none;font-weight:600;margin-top:15px;transition:0.2s ease}
+.btn:hover{background:#1d4ed8;transform:translateY(-1px)}
+.card{background:#fff;padding:20px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.05);overflow:hidden;max-width:100%;border:1px solid #eef2f7;border-left:4px solid #06b6d4}
+.toc-list{padding-left:20px}
+.toc-list li{margin-bottom:8px}
+.author-line{font-size:15px;margin-top:-6px;margin-bottom:10px;color:#4b5563}
+figcaption{font-size:14px;color:#6b7280;margin-top:10px}
+#faq h3{margin-top:25px}
+#faq p{margin-bottom:18px}
+.breadcrumb{font-size:14px;color:#6b7280;margin:0 0 10px}
+.breadcrumb a{color:#2563eb;text-decoration:none}
+.breadcrumb a:hover{text-decoration:underline}
+.diagram{width:100%;height:auto;display:block;border-radius:10px}
+table.cmp{border-collapse:collapse;width:100%;margin:20px 0;font-size:14.5px}
+table.cmp th,table.cmp td{border:1px solid #e5e7eb;padding:9px 12px;text-align:left;vertical-align:top}
+table.cmp th{background:#f9fafb;font-weight:700}
+.bt-social{display:flex;gap:13px;flex-wrap:wrap;align-items:center;justify-content:center;margin:0 0 14px;padding:0;list-style:none}
+.bt-social a{position:relative;isolation:isolate;width:46px;height:46px;border-radius:14px;display:inline-flex;align-items:center;justify-content:center;text-decoration:none;-webkit-tap-highlight-color:transparent;background-color:var(--c,#333);background-image:linear-gradient(150deg,rgba(255,255,255,.30),rgba(255,255,255,0) 42%,rgba(0,0,0,.22));box-shadow:0 1px 1px rgba(0,0,0,.22),0 7px 14px -3px rgba(0,0,0,.34),inset 0 1px 0 rgba(255,255,255,.50),inset 0 -2px 5px rgba(0,0,0,.30);transition:transform .18s cubic-bezier(.2,.7,.2,1),box-shadow .18s ease}
+.bt-social a::before{content:"";position:absolute;left:3px;right:3px;top:2px;height:44%;border-radius:12px 12px 50% 50%/12px 12px 24px 24px;background:linear-gradient(180deg,rgba(255,255,255,.42),rgba(255,255,255,0));pointer-events:none;z-index:0}
+.bt-social a:hover{transform:translateY(-3px) scale(1.05);box-shadow:0 2px 2px rgba(0,0,0,.20),0 16px 26px -6px rgba(0,0,0,.40),inset 0 1px 0 rgba(255,255,255,.55),inset 0 -2px 6px rgba(0,0,0,.32)}
+.bt-social a:active{transform:translateY(-1px) scale(1.01)}
+.bt-social a:focus-visible{outline:3px solid #93c5fd;outline-offset:3px}
+.bt-social svg{position:relative;z-index:1;width:22px;height:22px;display:block;filter:drop-shadow(0 1px 1px rgba(0,0,0,.28))}
+@media (prefers-reduced-motion:reduce){.bt-social a{transition:none}.bt-social a:hover{transform:none}}
+@media(max-width:600px){.container{padding:15px}}
+.art-list{list-style:none;padding:0;margin:0 0 30px;display:grid;gap:12px}
+.art{background:#fff;border:1px solid #eef2f7;border-left:4px solid #06b6d4;border-radius:10px;padding:15px 18px;box-shadow:0 2px 8px rgba(0,0,0,0.04)}
+.art a{font-size:17px;text-decoration:none}
+.art a:hover{text-decoration:underline}
+.art span{display:block;color:#4b5563;font-size:14.5px;margin-top:5px}
+.related{background:#f8fafc;border:1px solid #eef2f7;border-radius:10px;padding:18px 20px;margin-top:10px}
+.related a{text-decoration:none;font-weight:600}
+.intro-lead{font-size:18px;color:#374151}
+</style>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": "https://backbonetutorials.com/#organization",
+      "name": "Backbone Tutorials",
+      "url": "https://backbonetutorials.com/",
+      "logo": { "@type": "ImageObject", "url": "https://backbonetutorials.com/assets/logo.png" },
+      "sameAs": [
+        "https://github.com/backbonetutorials/backbonetutorials",
+        "https://x.com/backbonetutor",
+        "https://www.youtube.com/@BACKBONETUTORIALS",
+        "https://bsky.app/profile/backbonetutorials.bsky.social",
+        "https://www.instagram.com/backbonetutorials/",
+        "https://www.tiktok.com/@backbonetutorials",
+        "https://www.facebook.com/BackboneTutorials"
+      ],
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "contactType": "customer support",
+        "url": "https://x.com/backbonetutor",
+        "availableLanguage": ["English"],
+        "areaServed": "Worldwide"
+      }
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://backbonetutorials.com/#website",
+      "url": "https://backbonetutorials.com/",
+      "name": "Backbone Tutorials",
+      "publisher": { "@id": "https://backbonetutorials.com/#organization" }
+    },
+    {
+      "@type": "CollectionPage",
+      "@id": "https://backbonetutorials.com/modern-frameworks/#webpage",
+      "url": "https://backbonetutorials.com/modern-frameworks/",
+      "name": "Modern Frameworks \u2014 Backbone to React, Vue & Beyond",
+      "headline": "Modern Frameworks",
+      "description": "How frontend evolved from Backbone to React, Vue, and signals: migration guides, architecture, reactivity, and framework comparisons.",
+      "inLanguage": "en",
+      "isPartOf": { "@id": "https://backbonetutorials.com/#website" },
+      "publisher": { "@id": "https://backbonetutorials.com/#organization" },
+      "breadcrumb": { "@id": "https://backbonetutorials.com/modern-frameworks/#breadcrumb" },
+      "hasPart": [
+        { "@id": "https://backbonetutorials.com/modern-frameworks/is-backbonejs-dead/#webpage" },
+        { "@id": "https://backbonetutorials.com/modern-frameworks/framework-evolution/#webpage" },
+        { "@id": "https://backbonetutorials.com/modern-frameworks/frontend-frameworks/#webpage" },
+        { "@id": "https://backbonetutorials.com/modern-frameworks/mvc-vs-components/#webpage" },
+        { "@id": "https://backbonetutorials.com/modern-frameworks/component-based-architecture/#webpage" },
+        { "@id": "https://backbonetutorials.com/modern-frameworks/reactivity-systems/#webpage" },
+        { "@id": "https://backbonetutorials.com/modern-frameworks/state-management-evolution/#webpage" },
+        { "@id": "https://backbonetutorials.com/modern-frameworks/backbone-to-react/#webpage" },
+        { "@id": "https://backbonetutorials.com/modern-frameworks/backbone-to-vue/#webpage" },
+        { "@id": "https://backbonetutorials.com/modern-frameworks/frontend-framework-comparisons/#webpage" }
+      ],
+      "mainEntity": { "@id": "https://backbonetutorials.com/modern-frameworks/#list" }
+    },
+    {
+      "@type": "ItemList",
+      "@id": "https://backbonetutorials.com/modern-frameworks/#list",
+      "name": "Modern Frameworks articles",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "url": "https://backbonetutorials.com/modern-frameworks/is-backbonejs-dead/", "name": "Is Backbone.js Dead?" },
+        { "@type": "ListItem", "position": 2, "url": "https://backbonetutorials.com/modern-frameworks/framework-evolution/", "name": "The Evolution of Frontend Frameworks" },
+        { "@type": "ListItem", "position": 3, "url": "https://backbonetutorials.com/modern-frameworks/frontend-frameworks/", "name": "The Frontend Framework Landscape" },
+        { "@type": "ListItem", "position": 4, "url": "https://backbonetutorials.com/modern-frameworks/mvc-vs-components/", "name": "MVC vs Components" },
+        { "@type": "ListItem", "position": 5, "url": "https://backbonetutorials.com/modern-frameworks/component-based-architecture/", "name": "Component-Based Architecture" },
+        { "@type": "ListItem", "position": 6, "url": "https://backbonetutorials.com/modern-frameworks/reactivity-systems/", "name": "Reactivity Systems" },
+        { "@type": "ListItem", "position": 7, "url": "https://backbonetutorials.com/modern-frameworks/state-management-evolution/", "name": "State Management Evolution" },
+        { "@type": "ListItem", "position": 8, "url": "https://backbonetutorials.com/modern-frameworks/backbone-to-react/", "name": "Backbone to React" },
+        { "@type": "ListItem", "position": 9, "url": "https://backbonetutorials.com/modern-frameworks/backbone-to-vue/", "name": "Backbone to Vue" },
+        { "@type": "ListItem", "position": 10, "url": "https://backbonetutorials.com/modern-frameworks/frontend-framework-comparisons/", "name": "Frontend Framework Comparisons" }
+      ]
+    },
+    {
+      "@type": "BreadcrumbList",
+      "@id": "https://backbonetutorials.com/modern-frameworks/#breadcrumb",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://backbonetutorials.com/" },
+        { "@type": "ListItem", "position": 2, "name": "Modern Frameworks", "item": "https://backbonetutorials.com/modern-frameworks/" }
+      ]
+    }
+  ]
+}
+</script>
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-FYJP43XDHH"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-FYJP43XDHH');
+</script>
+
+</head>
+<body>
+
+<nav class="nav" aria-label="Main Navigation">
+<a href="/" class="nav-logo" title="Backbone Tutorials Homepage"><img src="/assets/logo.png" alt="Backbone Tutorials Logo" width="36" height="36" loading="lazy" decoding="async"></a>
+<a href="/" title="Backbone.js Tutorials Homepage">Home</a>
+<a href="/backbonejs/" title="Backbone.js Complete Guide">Backbone Guide</a>
+<a href="/what-is-a-router/" title="What is a Router">Router</a>
+<a href="/what-is-a-model/" title="What is a Model">Model</a>
+<a href="/what-is-a-view/" title="What is a View">View</a>
+<a href="/what-is-a-collection/" title="What is a Collection">Collection</a>
+</nav>
+
+<main>
+<article class="container">
+
+<nav class="breadcrumb" aria-label="Breadcrumb">
+<a href="/">Home</a> › <span aria-current="page">Modern Frameworks</span>
+</nav>
+
+<h1>Modern Frameworks</h1>
+<p class="intro-lead">How frontend development evolved from Backbone.js to React, Vue, and the signals-based tools of today, and what to do with a Backbone app now.</p>
+<p>This cluster traces the ideas that carried frontend engineering from manual DOM scripting through MVC libraries to components, reactivity, and compilers. It covers where Backbone.js honestly stands today, the architecture patterns that replaced it, and practical, incremental paths for migrating an existing Backbone application to a modern framework. Start anywhere, or read top to bottom as a connected story.</p>
+
+<figure>
+<svg class="diagram" viewBox="0 0 720 120" role="img" aria-labelledby="ht hd" xmlns="http://www.w3.org/2000/svg">
+<title id="ht">Modern frameworks learning path</title>
+<desc id="hd">A path from Backbone through framework evolution and architecture to migration and comparison.</desc>
+<rect x="0" y="0" width="720" height="120" rx="12" fill="#0f172a"></rect>
+<g font-family="Inter,sans-serif" text-anchor="middle" font-size="11" font-weight="700">
+<rect x="30" y="44" width="150" height="40" rx="9" fill="#1e293b" stroke="#06b6d4"></rect><text x="105" y="68" fill="#67e8f9">Where it stands</text>
+<rect x="206" y="44" width="150" height="40" rx="9" fill="#1e293b" stroke="#a855f7"></rect><text x="281" y="68" fill="#d8b4fe">Architecture</text>
+<rect x="382" y="44" width="150" height="40" rx="9" fill="#1e293b" stroke="#22c55e"></rect><text x="457" y="68" fill="#86efac">Migration</text>
+<rect x="558" y="44" width="132" height="40" rx="9" fill="#1e293b" stroke="#f59e0b"></rect><text x="624" y="68" fill="#fcd34d">Comparison</text>
+<g stroke="#475569" stroke-width="2" fill="none">
+<path d="M180 64 L204 64" marker-end="url(#ha)"></path>
+<path d="M356 64 L380 64" marker-end="url(#ha)"></path>
+<path d="M532 64 L556 64" marker-end="url(#ha)"></path>
+</g>
+</g>
+<defs><marker id="ha" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0 0 L6 3 L0 6 Z" fill="#475569"></path></marker></defs>
+</svg>
+<figcaption>Read top to bottom as a curriculum, or jump to the topic you need.</figcaption>
+</figure>
+
+<h2>Where Backbone stands and the big picture</h2>
+<ul class="art-list">
+<li class="art">
+<a href="/modern-frameworks/is-backbonejs-dead/"><strong>Is Backbone.js Dead?</strong></a>
+<span>An honest 2026 answer: finished and stable, not dead, and when it is still worth learning.</span>
+</li>
+<li class="art">
+<a href="/modern-frameworks/framework-evolution/"><strong>The Evolution of Frontend Frameworks</strong></a>
+<span>From jQuery to MVC to components to compilers, and the pattern behind every transition.</span>
+</li>
+<li class="art">
+<a href="/modern-frameworks/frontend-frameworks/"><strong>The Frontend Framework Landscape</strong></a>
+<span>Libraries, component frameworks, full frameworks, and compilers, mapped by what they provide.</span>
+</li>
+</ul>
+<h2>Architecture and rendering models</h2>
+<ul class="art-list">
+<li class="art">
+<a href="/modern-frameworks/mvc-vs-components/"><strong>MVC vs Components</strong></a>
+<span>How Backbone's layered MVC differs from React and Vue components, and why the industry shifted.</span>
+</li>
+<li class="art">
+<a href="/modern-frameworks/component-based-architecture/"><strong>Component-Based Architecture</strong></a>
+<span>The anatomy of a component, composition into a tree, and its roots in Backbone views.</span>
+</li>
+<li class="art">
+<a href="/modern-frameworks/reactivity-systems/"><strong>Reactivity Systems</strong></a>
+<span>Dependency tracking, virtual DOM versus fine-grained reactivity, and how signals work.</span>
+</li>
+<li class="art">
+<a href="/modern-frameworks/state-management-evolution/"><strong>State Management Evolution</strong></a>
+<span>From Backbone Models to Flux, stores, and signals, and how to choose an approach today.</span>
+</li>
+</ul>
+<h2>Migration and comparison</h2>
+<ul class="art-list">
+<li class="art">
+<a href="/modern-frameworks/backbone-to-react/"><strong>Backbone to React</strong></a>
+<span>An incremental migration: map Models and Views to React and mount React inside Backbone views.</span>
+</li>
+<li class="art">
+<a href="/modern-frameworks/backbone-to-vue/"><strong>Backbone to Vue</strong></a>
+<span>An incremental migration: trade change events for reactivity and convert one view at a time.</span>
+</li>
+<li class="art">
+<a href="/modern-frameworks/frontend-framework-comparisons/"><strong>Frontend Framework Comparisons</strong></a>
+<span>Compare honestly on rendering, learning curve, ecosystem, and performance, then decide.</span>
+</li>
+</ul>
+
+
+<h2>Explore related clusters</h2>
+<div class="related">
+<p>Modern frameworks build on ideas from across the site. Continue with:</p>
+<ul>
+<li><a href="/backbonejs/">Backbone.js Guide</a> &middot; the framework everything here responds to.</li>
+<li><a href="/foundations/">Backbone Foundations</a> &middot; events, templates, sync, and view lifecycle.</li>
+<li><a href="/architecture/">Frontend Architecture</a> &middot; SPA structure, state, and browser systems.</li>
+<li><a href="/rendering/">Rendering Systems</a> &middot; the browser pipeline behind every framework.</li>
+<li><a href="/javascript-seo/">JavaScript SEO</a> &middot; how search engines crawl and index framework output.</li>
+<li><a href="/interactive-web/">Interactive Web</a> &middot; realtime and multiplayer engineering.</li>
+</ul>
+</div>
+
+<div class="cta">
+<p><strong>New to all of this?</strong></p>
+<p>Start with the framework that taught a generation of developers how the frontend fits together.</p>
+<a href="/backbonejs/" class="btn">Explore the Backbone Guide →</a>
+</div>
+
+<div class="back-home">
+<a href="/">← Back to Homepage</a>
+</div>
+
+</article>
+</main>
+
+<footer>
+<p>Backbone Tutorials</p>
+<nav class="bt-social" aria-label="Backbone Tutorials on social media">
+  <a style="--c:#181717" href="https://github.com/backbonetutorials/backbonetutorials" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on GitHub"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#fff" d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0 1 12 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222 0 1.606-.014 2.898-.014 3.293 0 .322.216.694.825.576C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg></a>
+  <a style="--c:#000000" href="https://x.com/backbonetutor" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on X (formerly Twitter)"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#fff" d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+  <a style="--c:#FF0000" href="https://www.youtube.com/@BACKBONETUTORIALS" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on YouTube"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#fff" d="M8.5 6.5 L8.5 17.5 L17.5 12 Z"/></svg></a>
+  <a style="--c:#0285FF" href="https://bsky.app/profile/backbonetutorials.bsky.social" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on Bluesky"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#fff" d="M12 10.8c-1.087-2.114-4.046-6.053-6.798-7.995C2.566.944 1.561 1.266.902 1.565.139 1.908 0 3.08 0 3.768c0 .69.378 5.65.624 6.479.815 2.736 3.713 3.66 6.383 3.364.136-.02.275-.039.415-.056-.138.022-.276.04-.415.056-3.912.58-7.387 2.005-2.83 7.078 5.013 5.19 6.87-1.113 7.823-4.308.953 3.195 2.05 9.271 7.733 4.308 4.267-4.308 1.172-6.498-2.74-7.078a8.741 8.741 0 0 1-.415-.056c.14.017.279.036.415.056 2.67.296 5.568-.628 6.383-3.364C23.622 9.418 24 4.458 24 3.768c0-.688-.139-1.86-.902-2.203-.659-.299-1.664-.621-4.3 1.24C16.046 4.747 13.087 8.686 12 10.8Z"/></svg></a>
+  <a style="--c:#d62976;background-image:linear-gradient(150deg,rgba(255,255,255,.30),rgba(255,255,255,0) 42%,rgba(0,0,0,.22)),linear-gradient(45deg,#feda75,#fa7e1e,#d62976,#962fbf,#4f5bd5)" href="https://www.instagram.com/backbonetutorials/" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on Instagram"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="4" y="4" width="16" height="16" rx="5" fill="none" stroke="#fff" stroke-width="2"/><circle cx="12" cy="12" r="3.6" fill="none" stroke="#fff" stroke-width="2"/><circle cx="17.2" cy="6.8" r="1.25" fill="#fff"/></svg></a>
+  <a style="--c:#000000" href="https://www.tiktok.com/@backbonetutorials" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on TikTok"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#fff" d="M16.5 5.82a4.79 4.79 0 0 1-1.16-3.07h-2.9v11.43a2.45 2.45 0 1 1-2.45-2.45c.17 0 .33.02.49.05V8.83a5.36 5.36 0 0 0-.49-.02 5.35 5.35 0 1 0 5.35 5.35V8.6a7.66 7.66 0 0 0 4.46 1.42V7.13a4.79 4.79 0 0 1-2.8-1.31Z"/></svg></a>
+  <a style="--c:#1877F2" href="https://www.facebook.com/BackboneTutorials" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on Facebook"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#fff" d="M13.5 21v-8h2.6l.4-3h-3V8.1c0-.87.27-1.46 1.5-1.46H17V3.96c-.28-.04-1.2-.12-2.28-.12-2.26 0-3.8 1.38-3.8 3.9V10H8.3v3h2.62v8h2.58Z"/></svg></a>
+</nav>
+<p>
+<a href="/">Home</a> |
+<a href="/about/">About</a> |
+<a href="/contact/">Contact</a> |
+<a href="/privacy-policy/">Privacy Policy</a> |
+<a href="/terms/">Terms</a>
+</p>
+<p>© 2026 Backbone Tutorials</p>
+</footer>
+
+</body>
+</html>

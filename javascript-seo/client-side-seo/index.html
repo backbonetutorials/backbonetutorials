@@ -1,0 +1,434 @@
+<!-- DEPLOY TO: /javascript-seo/client-side-seo/  (index.html) · TechArticle · per MASTERMIND_SEO.md
+     EDITOR (§11.1): add a first-hand note (a client-rendered site you improved + the metric that moved) + date before publish; add URL to sitemap.xml. -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Client-side SEO — ranking when the browser renders</title>
+
+<meta name="description" content="Client-side SEO explained: making browser-rendered content rank with real URLs, content in the HTML, per-route head, crawlable links, and performance.">
+
+<meta name="robots" content="index, follow">
+<meta name="author" content="Backbone Tutorials">
+<meta name="theme-color" content="#2563eb">
+<meta name="format-detection" content="telephone=no">
+
+<link rel="canonical" href="https://backbonetutorials.com/javascript-seo/client-side-seo/">
+
+<link rel="icon" href="/assets/favicon.ico">
+<link rel="apple-touch-icon" href="/assets/favicon.png">
+
+<!-- Open Graph -->
+<meta property="og:title" content="Client-side SEO — ranking when the browser renders">
+<meta property="og:description" content="The discipline of client-side SEO: making browser-rendered content discoverable and indexable, the non-negotiables, performance, and why the principles outlast frameworks.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://backbonetutorials.com/javascript-seo/client-side-seo/">
+<meta property="og:image" content="https://backbonetutorials.com/assets/javascript-seo/client-side-seo-1200.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:type" content="image/jpeg">
+<meta property="og:image:alt" content="Client-side SEO — Backbone Tutorials">
+<meta property="og:site_name" content="Backbone Tutorials">
+<meta property="og:locale" content="en_US">
+
+<!-- Twitter -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Client-side SEO — ranking when the browser renders">
+<meta name="twitter:description" content="Client-side SEO: making browser-rendered content rank with real URLs, content in the HTML, per-route head, crawlable links, and performance.">
+<meta name="twitter:image" content="https://backbonetutorials.com/assets/javascript-seo/client-side-seo-1200.jpg">
+<meta name="twitter:image:alt" content="Client-side SEO — Backbone Tutorials">
+<meta name="twitter:url" content="https://backbonetutorials.com/javascript-seo/client-side-seo/">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+
+<style>
+
+html{scroll-behavior:smooth}
+body{font-family:'Inter',sans-serif;margin:0;background:#f4f6f9;color:#1f2937;line-height:1.7}
+.container{max-width:900px;margin:30px auto;padding:20px;background:#fff;border-radius:10px;box-shadow:0 2px 10px rgba(0,0,0,0.04)}
+h1,h2,h3{color:#111827}
+.nav{background:#111827;padding:15px;display:flex;justify-content:center;align-items:center;flex-wrap:wrap;gap:8px}
+.nav a{color:white;margin:0 10px;text-decoration:none;font-weight:600}
+.nav a:hover{text-decoration:underline}
+.nav-logo img{vertical-align:middle;margin-right:12px;border-radius:8px}
+figure{margin:30px 0}
+img{width:100%;height:auto;border-radius:10px}
+pre{background:#111;color:#eee;padding:15px;border-radius:8px;overflow-x:auto;box-shadow:0 2px 8px rgba(0,0,0,0.15)}
+code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+p code,li code{background:#eef2ff;padding:1px 5px;border-radius:4px;font-size:.95em}
+.cta{background:#eef2ff;padding:20px;margin-top:30px;text-align:center;border-radius:10px}
+a{color:#2563eb}
+.back-home{margin-top:25px}
+footer{background:#111827;color:white;text-align:center;padding:30px 20px;margin-top:40px}
+footer a{color:#93c5fd;text-decoration:none}
+footer a:hover{text-decoration:underline}
+.btn{display:inline-block;background:#2563eb;color:white;padding:12px 22px;border-radius:8px;text-decoration:none;font-weight:600;margin-top:15px;transition:0.2s ease}
+.btn:hover{background:#1d4ed8;transform:translateY(-1px)}
+.card{background:#fff;padding:20px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.05);overflow:hidden;max-width:100%;border:1px solid #eef2f7}
+.toc-list{padding-left:20px}
+.toc-list li{margin-bottom:8px}
+.author-line{font-size:15px;margin-top:-6px;margin-bottom:10px;color:#4b5563}
+figcaption{font-size:14px;color:#6b7280;margin-top:10px}
+#faq h3{margin-top:25px}
+#faq p{margin-bottom:18px}
+.breadcrumb{font-size:14px;color:#6b7280;margin:0 0 10px}
+.breadcrumb a{color:#2563eb;text-decoration:none}
+.breadcrumb a:hover{text-decoration:underline}
+.diagram{width:100%;height:auto;display:block;border-radius:10px}
+.bt-social{display:flex;gap:13px;flex-wrap:wrap;align-items:center;justify-content:center;margin:0 0 14px;padding:0;list-style:none}
+.bt-social a{position:relative;isolation:isolate;width:46px;height:46px;border-radius:14px;display:inline-flex;align-items:center;justify-content:center;text-decoration:none;-webkit-tap-highlight-color:transparent;background-color:var(--c,#333);background-image:linear-gradient(150deg,rgba(255,255,255,.30),rgba(255,255,255,0) 42%,rgba(0,0,0,.22));box-shadow:0 1px 1px rgba(0,0,0,.22),0 7px 14px -3px rgba(0,0,0,.34),inset 0 1px 0 rgba(255,255,255,.50),inset 0 -2px 5px rgba(0,0,0,.30);transition:transform .18s cubic-bezier(.2,.7,.2,1),box-shadow .18s ease}
+.bt-social a::before{content:"";position:absolute;left:3px;right:3px;top:2px;height:44%;border-radius:12px 12px 50% 50%/12px 12px 24px 24px;background:linear-gradient(180deg,rgba(255,255,255,.42),rgba(255,255,255,0));pointer-events:none;z-index:0}
+.bt-social a:hover{transform:translateY(-3px) scale(1.05);box-shadow:0 2px 2px rgba(0,0,0,.20),0 16px 26px -6px rgba(0,0,0,.40),inset 0 1px 0 rgba(255,255,255,.55),inset 0 -2px 6px rgba(0,0,0,.32)}
+.bt-social a:active{transform:translateY(-1px) scale(1.01)}
+.bt-social a:focus-visible{outline:3px solid #93c5fd;outline-offset:3px}
+.bt-social svg{position:relative;z-index:1;width:22px;height:22px;display:block;filter:drop-shadow(0 1px 1px rgba(0,0,0,.28))}
+@media (prefers-reduced-motion:reduce){.bt-social a{transition:none}.bt-social a:hover{transform:none}}
+@media(max-width:600px){.container{padding:15px}}
+
+</style>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": "https://backbonetutorials.com/#organization",
+      "name": "Backbone Tutorials",
+      "url": "https://backbonetutorials.com/",
+      "logo": { "@type": "ImageObject", "url": "https://backbonetutorials.com/assets/logo.png" },
+      "sameAs": [
+        "https://github.com/backbonetutorials/backbonetutorials",
+        "https://x.com/backbonetutor",
+        "https://www.youtube.com/@BACKBONETUTORIALS",
+        "https://bsky.app/profile/backbonetutorials.bsky.social",
+        "https://www.instagram.com/backbonetutorials/",
+        "https://www.tiktok.com/@backbonetutorials",
+        "https://www.facebook.com/BackboneTutorials"
+      ],
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "contactType": "customer support",
+        "email": "backbonetutorials2026@gmail.com",
+        "availableLanguage": ["English"],
+        "areaServed": "Worldwide"
+      }
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://backbonetutorials.com/#website",
+      "url": "https://backbonetutorials.com/",
+      "name": "Backbone Tutorials",
+      "publisher": { "@id": "https://backbonetutorials.com/#organization" }
+    },
+    {
+      "@type": "Person",
+      "@id": "https://backbonetutorials.com/author/backbone-tutorials-team/#person",
+      "name": "Backbone Tutorials Team",
+      "url": "https://backbonetutorials.com/author/backbone-tutorials-team/",
+      "worksFor": { "@id": "https://backbonetutorials.com/#organization" },
+      "jobTitle": "Frontend JavaScript Editorial Team",
+      "knowsAbout": ["JavaScript SEO", "Client-side rendering", "Core Web Vitals", "Backbone.js"]
+    },
+    {
+      "@type": "WebPage",
+      "@id": "https://backbonetutorials.com/javascript-seo/client-side-seo/#webpage",
+      "url": "https://backbonetutorials.com/javascript-seo/client-side-seo/",
+      "name": "Client-side SEO — ranking when the browser renders",
+      "headline": "Client-side SEO",
+      "description": "Client-side SEO explained: making browser-rendered content rank with real URLs, content in the HTML, per-route head, crawlable links, and strong performance.",
+      "inLanguage": "en",
+      "isPartOf": { "@id": "https://backbonetutorials.com/#website" },
+      "author": { "@id": "https://backbonetutorials.com/author/backbone-tutorials-team/#person" },
+      "publisher": { "@id": "https://backbonetutorials.com/#organization" },
+      "breadcrumb": { "@id": "https://backbonetutorials.com/javascript-seo/client-side-seo/#breadcrumb" },
+      "mainEntity": { "@id": "https://backbonetutorials.com/javascript-seo/client-side-seo/#article" }
+    },
+    {
+      "@type": "TechArticle",
+      "@id": "https://backbonetutorials.com/javascript-seo/client-side-seo/#article",
+      "url": "https://backbonetutorials.com/javascript-seo/client-side-seo/",
+      "headline": "Client-side SEO",
+      "description": "A synthesis of client-side SEO: what it means, the tension between client-rendering UX and crawlability, the non-negotiables, performance and Core Web Vitals, measuring and maintaining, and why the principles outlast any framework.",
+      "inLanguage": "en",
+      "image": {
+        "@type": "ImageObject",
+        "url": "https://backbonetutorials.com/assets/javascript-seo/client-side-seo-1200.jpg",
+        "width": 1200,
+        "height": 630
+      },
+      "author": { "@id": "https://backbonetutorials.com/author/backbone-tutorials-team/#person" },
+      "publisher": { "@id": "https://backbonetutorials.com/#organization" },
+      "mainEntityOfPage": { "@id": "https://backbonetutorials.com/javascript-seo/client-side-seo/#webpage" },
+      "datePublished": "2026-06-12T04:30:00+07:00",
+      "dateModified": "2026-06-12T04:30:00+07:00",
+      "articleSection": ["JavaScript SEO", "Client-side rendering", "Performance"],
+      "keywords": ["client-side SEO", "client-side rendering", "Core Web Vitals", "JavaScript SEO", "real URLs", "structured data"],
+      "about": [
+        { "@type": "Thing", "name": "Client-side rendering" },
+        { "@type": "Thing", "name": "Search engine optimization" },
+        { "@type": "Thing", "name": "JavaScript" }
+      ],
+      "mentions": [
+        { "@type": "Thing", "name": "Core Web Vitals" },
+        { "@type": "Thing", "name": "Server-side rendering" },
+        { "@type": "Thing", "name": "Single Page Application" }
+      ]
+    },
+    {
+      "@type": "BreadcrumbList",
+      "@id": "https://backbonetutorials.com/javascript-seo/client-side-seo/#breadcrumb",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://backbonetutorials.com/" },
+        { "@type": "ListItem", "position": 2, "name": "JavaScript SEO", "item": "https://backbonetutorials.com/javascript-seo/" },
+        { "@type": "ListItem", "position": 3, "name": "Client-side SEO", "item": "https://backbonetutorials.com/javascript-seo/client-side-seo/" }
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "@id": "https://backbonetutorials.com/javascript-seo/client-side-seo/#faq",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What is client-side SEO?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Client-side SEO is the practice of making content that renders in the browser discoverable and indexable. In practice it means giving views real URLs, getting content into the HTML, setting the head per route, linking with real anchors, shipping valid structured data, and keeping performance strong." }
+        },
+        {
+          "@type": "Question",
+          "name": "Is client-side rendering bad for SEO?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Not inherently, but its defaults hide content from crawlers behind scripts and stateful routing. With server-side rendering or prerendering, real routing, and a per-route head, a client-rendered site can rank like any other site." }
+        },
+        {
+          "@type": "Question",
+          "name": "Does page speed affect client-side SEO?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Yes. Core Web Vitals are a ranking signal, and heavy JavaScript hurts both the user experience and how reliably the page crawls and renders. Keep bundles lean and the first response fast, since client-rendered sites carry more of this cost up front." }
+        },
+        {
+          "@type": "Question",
+          "name": "How do I make a client-rendered site rank?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Give each view a real URL, put its content in the initial HTML through SSR or prerendering, set a unique head per route, link with real anchors, ship valid structured data, and keep performance strong. Then measure indexing and Core Web Vitals in Search Console and fix regressions." }
+        }
+      ]
+    }
+  ]
+}
+</script>
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-FYJP43XDHH"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-FYJP43XDHH');
+</script>
+
+</head>
+
+<body>
+
+<nav class="nav" aria-label="Main Navigation">
+<a href="/" class="nav-logo" title="Backbone Tutorials Homepage"><img src="/assets/logo.png" alt="Backbone Tutorials Logo" width="36" height="36" loading="lazy" decoding="async"></a>
+<a href="/" title="Backbone.js Tutorials Homepage">Home</a>
+<a href="/backbonejs/" title="Backbone.js Complete Guide">Backbone Guide</a>
+<a href="/what-is-a-router/" title="What is a Router in Backbone.js">Router</a>
+<a href="/what-is-a-model/" title="What is a Model in Backbone.js">Model</a>
+<a href="/what-is-a-view/" title="What is a View in Backbone.js">View</a>
+<a href="/what-is-a-collection/" title="What is a Collection in Backbone.js">Collection</a>
+</nav>
+
+<main>
+
+<article class="container">
+
+<nav class="breadcrumb" aria-label="Breadcrumb">
+<a href="/">Home</a> › <a href="/javascript-seo/">JavaScript SEO</a> › <span aria-current="page">Client-side SEO</span>
+</nav>
+
+<h1>Client-side SEO</h1>
+
+<p class="author-line">Written by <a href="/author/backbone-tutorials-team/">Backbone Tutorials Team</a></p>
+<p class="author-line">Last updated: June 2026 · 10 min read</p>
+
+<p>
+Every other guide in this cluster solved one piece of the puzzle. This one steps back and names the whole picture: client-side SEO, the discipline of ranking a site whose content is assembled in the browser rather than delivered as finished HTML. It is not a separate kind of SEO so much as ordinary SEO carried out under harder conditions, and once you see the pattern, the individual fixes stop feeling like a checklist and start feeling like one coherent practice.
+</p>
+
+<p>
+Consider this the capstone. It ties together <a href="/javascript-seo/rendering-for-search-engines/">rendering for search engines</a>, <a href="/javascript-seo/spa-indexing/">SPA indexing</a>, and the <a href="/javascript-seo/javascript-seo-audits/">audit</a> habit, and rounds out the <a href="/seo-for-single-page-apps/">SEO for single page apps</a> overview.
+</p>
+
+<figure>
+<svg class="diagram" viewBox="0 0 720 180" role="img" aria-labelledby="csTitle csDesc" xmlns="http://www.w3.org/2000/svg">
+  <title id="csTitle">The pillars of client-side SEO</title>
+  <desc id="csDesc">Real URLs, content in HTML, per-route head, crawlable links, and performance together support ranking.</desc>
+  <rect x="0" y="0" width="720" height="180" rx="12" fill="#0f172a"></rect>
+  <g font-family="Inter, sans-serif" text-anchor="middle">
+    <rect x="565" y="30" width="130" height="44" rx="10" fill="#1e293b" stroke="#2563eb" stroke-width="2"></rect><text x="630" y="51" fill="#fff" font-size="13" font-weight="700">Ranking</text><text x="630" y="67" fill="#93c5fd" font-size="10">indexed + fast</text>
+    <rect x="24"  y="22" width="150" height="30" rx="7" fill="#1e293b" stroke="#3b82f6"></rect><text x="99" y="42" fill="#fff" font-size="11">Real URLs</text>
+    <rect x="24"  y="58" width="150" height="30" rx="7" fill="#1e293b" stroke="#3b82f6"></rect><text x="99" y="78" fill="#fff" font-size="11">Content in HTML</text>
+    <rect x="24"  y="94" width="150" height="30" rx="7" fill="#1e293b" stroke="#3b82f6"></rect><text x="99" y="114" fill="#fff" font-size="11">Per-route head</text>
+    <rect x="24"  y="130" width="150" height="30" rx="7" fill="#1e293b" stroke="#3b82f6"></rect><text x="99" y="150" fill="#fff" font-size="11">Crawlable links</text>
+    <rect x="205" y="130" width="150" height="30" rx="7" fill="#1e293b" stroke="#22c55e"></rect><text x="280" y="150" fill="#fff" font-size="11">Performance</text>
+    <g stroke="#64748b" stroke-width="2" fill="none">
+      <path d="M174 37 C 420 37, 470 50, 563 50" marker-end="url(#acs)"></path>
+      <path d="M174 73 C 420 73, 470 56, 563 56" marker-end="url(#acs)"></path>
+      <path d="M174 109 C 430 109, 470 60, 563 60" marker-end="url(#acs)"></path>
+      <path d="M174 145 C 430 145, 470 64, 563 64" marker-end="url(#acs)"></path>
+      <path d="M355 145 C 470 145, 500 70, 563 68" marker-end="url(#acs)"></path>
+    </g>
+  </g>
+  <defs><marker id="acs" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0 0 L7 3 L0 6 Z" fill="#64748b"></path></marker></defs>
+</svg>
+<figcaption>Client-side SEO is five pillars working together: real URLs, content in the HTML, a per-route head, crawlable links, and performance.</figcaption>
+</figure>
+
+<div class="card">
+<p style="margin-top:0"><strong>What you'll learn</strong></p>
+<ul class="toc-list">
+<li><a href="#meaning">What client-side SEO actually means</a></li>
+<li><a href="#tension">The core tension: UX speed versus crawlability</a></li>
+<li><a href="#nonneg">The non-negotiables</a></li>
+<li><a href="#perf">Performance is part of SEO</a></li>
+<li><a href="#measure">Measuring and maintaining</a></li>
+<li><a href="#backbone">Where this leaves the classic stack</a></li>
+</ul>
+</div>
+
+<h2 id="meaning">What client-side SEO actually means</h2>
+
+<p>
+A traditional site sends finished HTML; a client-rendered one sends a shell and a program that builds the HTML once it runs. Client-side SEO is everything you do to make that second kind of site as discoverable and indexable as the first.
+</p>
+
+<h3>SEO when the browser does the work</h3>
+
+<p>
+The shift in where rendering happens, from the server to the browser, is the whole reason this discipline exists. None of the goals change: pages still need to be found, fetched, rendered, understood, and ranked. What changes is that you now have to guarantee each of those steps survives a trip through JavaScript, which is what every technique in this cluster is really about.
+</p>
+
+<h2 id="tension">The core tension: UX speed versus crawlability</h2>
+
+<p>
+Client rendering became popular for a good reason: after the first load, navigation feels instant and apps feel fluid. That same architecture is, by default, hostile to a crawler that arrives cold at a deep URL.
+</p>
+
+<h3>Why the default fights search</h3>
+
+<p>
+The defaults optimize for a returning, interactive human and assume the very things a crawler lacks: a warm cache, prior state, time, and a willingness to click. Client-side SEO is the work of resolving that tension, keeping the snappy experience for users while making sure a first-time, non-interactive crawler still gets real content. You are not choosing between UX and SEO; you are bridging them.
+</p>
+
+<h2 id="nonneg">The non-negotiables</h2>
+
+<p>
+Strip the cluster down and the same short list remains, the things a client-rendered site cannot rank without. If you do nothing else, do these.
+</p>
+
+<h3>Five things every client-rendered site needs</h3>
+
+<p>
+First, a real URL for every indexable view. Second, that view's content present in the rendered HTML, via server-side rendering or prerendering rather than client rendering alone. Third, a unique, correct head per route, the title, description, and canonical. Fourth, navigation through crawlable links, real anchors with real paths. Fifth, valid structured data describing the page. Each has its own guide in this cluster; together they are the floor, not the ceiling.
+</p>
+
+<h2 id="perf">Performance is part of SEO</h2>
+
+<p>
+It is tempting to treat speed as a separate concern from indexing, but for a client-rendered site they are entwined. The same heavy JavaScript that slows a user can also push a render past its budget.
+</p>
+
+<h3>Core Web Vitals and bundle weight</h3>
+
+<p>
+Core Web Vitals are a ranking signal, and client-rendered sites carry their cost up front: large bundles delay interactivity, layout shifts hurt stability, and a slow first response delays everything. Keep JavaScript lean, split and defer what you can, send a fast first response, and reserve space for content to avoid shifts. Good performance here pays twice, in rankings and in the reliability of the render itself.
+</p>
+
+<h2 id="measure">Measuring and maintaining</h2>
+
+<p>
+Client-side SEO is never finished, because a single deploy can change how a route renders and quietly undo months of work. The only defense is measurement that runs continuously.
+</p>
+
+<h3>Monitoring client-side SEO over time</h3>
+
+<p>
+Watch the Search Console Pages report for indexing and exclusions, track Core Web Vitals, and run the audit after significant releases, exactly the routine from the audit guide. Treat a drop in indexed pages or a regression in vitals as a bug to triage, not a number to admire. Sustained rankings come from catching these early, which is a habit more than a one-time fix.
+</p>
+
+<h2 id="backbone">Where this leaves the classic stack</h2>
+
+<p>
+For all the modern framing, none of this is new. The browser-rendered web has faced these questions since the first JavaScript apps, and a classic stack like Backbone met them without any of today's conveniences.
+</p>
+
+<h3>Principles outlast frameworks</h3>
+
+<p>
+In a Backbone app you give views real URLs, set the head yourself, link with real anchors, and decide whether to render on the server, the same five non-negotiables, done by hand. That is why the <a href="/foundations/">Foundations</a> guides are more than nostalgia: learning the principles on a stack that hides nothing makes them legible everywhere, so when frameworks change, as they always do, your understanding carries over intact. Tools come and go; the discipline of getting browser-rendered content to rank is the part worth keeping.
+</p>
+
+<section id="faq">
+<h2>Frequently Asked Questions</h2>
+
+<h3>What is client-side SEO?</h3>
+<p>Client-side SEO is the practice of making content that renders in the browser discoverable and indexable. In practice it means giving views real URLs, getting content into the HTML, setting the head per route, linking with real anchors, shipping valid structured data, and keeping performance strong.</p>
+
+<h3>Is client-side rendering bad for SEO?</h3>
+<p>Not inherently, but its defaults hide content from crawlers behind scripts and stateful routing. With server-side rendering or prerendering, real routing, and a per-route head, a client-rendered site can rank like any other site.</p>
+
+<h3>Does page speed affect client-side SEO?</h3>
+<p>Yes. Core Web Vitals are a ranking signal, and heavy JavaScript hurts both the user experience and how reliably the page crawls and renders. Keep bundles lean and the first response fast, since client-rendered sites carry more of this cost up front.</p>
+
+<h3>How do I make a client-rendered site rank?</h3>
+<p>Give each view a real URL, put its content in the initial HTML through SSR or prerendering, set a unique head per route, link with real anchors, ship valid structured data, and keep performance strong. Then measure indexing and Core Web Vitals in Search Console and fix regressions.</p>
+</section>
+
+<p><strong>Read next:</strong> back to the <a href="/javascript-seo/">JavaScript SEO</a> hub, or revisit <a href="/javascript-seo/spa-indexing/">SPA indexing</a> for the hardest case of all this.</p>
+
+<div class="cta">
+<p><strong>Want the principles, not just the framework?</strong></p>
+<p>The five non-negotiables, hand-wired, live in a classic stack. See how a single page app is built in the complete Backbone guide.</p>
+<a href="/backbonejs/" class="btn">Explore the Backbone Guide →</a>
+</div>
+
+<div class="back-home">
+<a href="/javascript-seo/">← Back to JavaScript SEO</a>
+</div>
+
+</article>
+
+</main>
+
+<footer>
+
+<p>Backbone Tutorials</p>
+
+<nav class="bt-social" aria-label="Backbone Tutorials on social media">
+  <a style="--c:#181717" href="https://github.com/backbonetutorials/backbonetutorials" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on GitHub"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#fff" d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0 1 12 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222 0 1.606-.014 2.898-.014 3.293 0 .322.216.694.825.576C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg></a>
+  <a style="--c:#000000" href="https://x.com/backbonetutor" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on X (formerly Twitter)"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#fff" d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+  <a style="--c:#FF0000" href="https://www.youtube.com/@BACKBONETUTORIALS" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on YouTube"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#fff" d="M8.5 6.5 L8.5 17.5 L17.5 12 Z"/></svg></a>
+  <a style="--c:#0285FF" href="https://bsky.app/profile/backbonetutorials.bsky.social" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on Bluesky"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#fff" d="M12 10.8c-1.087-2.114-4.046-6.053-6.798-7.995C2.566.944 1.561 1.266.902 1.565.139 1.908 0 3.08 0 3.768c0 .69.378 5.65.624 6.479.815 2.736 3.713 3.66 6.383 3.364.136-.02.275-.039.415-.056-.138.022-.276.04-.415.056-3.912.58-7.387 2.005-2.83 7.078 5.013 5.19 6.87-1.113 7.823-4.308.953 3.195 2.05 9.271 7.733 4.308 4.267-4.308 1.172-6.498-2.74-7.078a8.741 8.741 0 0 1-.415-.056c.14.017.279.036.415.056 2.67.296 5.568-.628 6.383-3.364C23.622 9.418 24 4.458 24 3.768c0-.688-.139-1.86-.902-2.203-.659-.299-1.664-.621-4.3 1.24C16.046 4.747 13.087 8.686 12 10.8Z"/></svg></a>
+  <a style="--c:#d62976;background-image:linear-gradient(150deg,rgba(255,255,255,.30),rgba(255,255,255,0) 42%,rgba(0,0,0,.22)),linear-gradient(45deg,#feda75,#fa7e1e,#d62976,#962fbf,#4f5bd5)" href="https://www.instagram.com/backbonetutorials/" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on Instagram"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="4" y="4" width="16" height="16" rx="5" fill="none" stroke="#fff" stroke-width="2"/><circle cx="12" cy="12" r="3.6" fill="none" stroke="#fff" stroke-width="2"/><circle cx="17.2" cy="6.8" r="1.25" fill="#fff"/></svg></a>
+  <a style="--c:#000000" href="https://www.tiktok.com/@backbonetutorials" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on TikTok"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#fff" d="M16.5 5.82a4.79 4.79 0 0 1-1.16-3.07h-2.9v11.43a2.45 2.45 0 1 1-2.45-2.45c.17 0 .33.02.49.05V8.83a5.36 5.36 0 0 0-.49-.02 5.35 5.35 0 1 0 5.35 5.35V8.6a7.66 7.66 0 0 0 4.46 1.42V7.13a4.79 4.79 0 0 1-2.8-1.31Z"/></svg></a>
+  <a style="--c:#1877F2" href="https://www.facebook.com/BackboneTutorials" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on Facebook"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#fff" d="M13.5 21v-8h2.6l.4-3h-3V8.1c0-.87.27-1.46 1.5-1.46H17V3.96c-.28-.04-1.2-.12-2.28-.12-2.26 0-3.8 1.38-3.8 3.9V10H8.3v3h2.62v8h2.58Z"/></svg></a>
+</nav>
+
+<p>
+<a href="/">Home</a> |
+<a href="/about/">About</a> |
+<a href="/contact/">Contact</a> |
+<a href="/privacy-policy/">Privacy Policy</a> |
+<a href="/terms/">Terms</a>
+</p>
+
+<p>© 2026 Backbone Tutorials</p>
+
+</footer>
+
+</body>
+</html>

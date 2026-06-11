@@ -1,0 +1,435 @@
+<!-- DEPLOY TO: /javascript-seo/rendering-for-search-engines/  (index.html) · TechArticle · per MASTERMIND_SEO.md
+     EDITOR (§11.1): add a first-hand note (a render approach you shipped, with a result) + version/date before publish; add URL to sitemap.xml. -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Rendering for Search Engines — SSR, SSG, dynamic</title>
+
+<meta name="description" content="Render so search engines get content: server-side rendering and hydration, static prerendering, hybrid rendering, dynamic rendering, and how to choose.">
+
+<meta name="robots" content="index, follow">
+<meta name="author" content="Backbone Tutorials">
+<meta name="theme-color" content="#2563eb">
+<meta name="format-detection" content="telephone=no">
+
+<link rel="canonical" href="https://backbonetutorials.com/javascript-seo/rendering-for-search-engines/">
+
+<link rel="icon" href="/assets/favicon.ico">
+<link rel="apple-touch-icon" href="/assets/favicon.png">
+
+<!-- Open Graph -->
+<meta property="og:title" content="Rendering for Search Engines — SSR, SSG, dynamic">
+<meta property="og:description" content="A guide to rendering strategies for SEO: server-side rendering and hydration, static prerendering, hybrid and incremental rendering, and dynamic rendering.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://backbonetutorials.com/javascript-seo/rendering-for-search-engines/">
+<meta property="og:image" content="https://backbonetutorials.com/assets/javascript-seo/rendering-for-search-engines-1200.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:type" content="image/jpeg">
+<meta property="og:image:alt" content="Rendering for Search Engines — Backbone Tutorials">
+<meta property="og:site_name" content="Backbone Tutorials">
+<meta property="og:locale" content="en_US">
+
+<!-- Twitter -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Rendering for Search Engines — SSR, SSG, dynamic">
+<meta name="twitter:description" content="Rendering strategies for SEO: SSR and hydration, static prerendering, hybrid rendering, and dynamic rendering, with a decision guide.">
+<meta name="twitter:image" content="https://backbonetutorials.com/assets/javascript-seo/rendering-for-search-engines-1200.jpg">
+<meta name="twitter:image:alt" content="Rendering for Search Engines — Backbone Tutorials">
+<meta name="twitter:url" content="https://backbonetutorials.com/javascript-seo/rendering-for-search-engines/">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+
+<style>
+
+html{scroll-behavior:smooth}
+body{font-family:'Inter',sans-serif;margin:0;background:#f4f6f9;color:#1f2937;line-height:1.7}
+.container{max-width:900px;margin:30px auto;padding:20px;background:#fff;border-radius:10px;box-shadow:0 2px 10px rgba(0,0,0,0.04)}
+h1,h2,h3{color:#111827}
+.nav{background:#111827;padding:15px;display:flex;justify-content:center;align-items:center;flex-wrap:wrap;gap:8px}
+.nav a{color:white;margin:0 10px;text-decoration:none;font-weight:600}
+.nav a:hover{text-decoration:underline}
+.nav-logo img{vertical-align:middle;margin-right:12px;border-radius:8px}
+figure{margin:30px 0}
+img{width:100%;height:auto;border-radius:10px}
+pre{background:#111;color:#eee;padding:15px;border-radius:8px;overflow-x:auto;box-shadow:0 2px 8px rgba(0,0,0,0.15)}
+code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+p code,li code{background:#eef2ff;padding:1px 5px;border-radius:4px;font-size:.95em}
+.cta{background:#eef2ff;padding:20px;margin-top:30px;text-align:center;border-radius:10px}
+a{color:#2563eb}
+.back-home{margin-top:25px}
+footer{background:#111827;color:white;text-align:center;padding:30px 20px;margin-top:40px}
+footer a{color:#93c5fd;text-decoration:none}
+footer a:hover{text-decoration:underline}
+.btn{display:inline-block;background:#2563eb;color:white;padding:12px 22px;border-radius:8px;text-decoration:none;font-weight:600;margin-top:15px;transition:0.2s ease}
+.btn:hover{background:#1d4ed8;transform:translateY(-1px)}
+.card{background:#fff;padding:20px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.05);overflow:hidden;max-width:100%;border:1px solid #eef2f7}
+.toc-list{padding-left:20px}
+.toc-list li{margin-bottom:8px}
+.author-line{font-size:15px;margin-top:-6px;margin-bottom:10px;color:#4b5563}
+figcaption{font-size:14px;color:#6b7280;margin-top:10px}
+#faq h3{margin-top:25px}
+#faq p{margin-bottom:18px}
+.breadcrumb{font-size:14px;color:#6b7280;margin:0 0 10px}
+.breadcrumb a{color:#2563eb;text-decoration:none}
+.breadcrumb a:hover{text-decoration:underline}
+.diagram{width:100%;height:auto;display:block;border-radius:10px}
+.bt-social{display:flex;gap:13px;flex-wrap:wrap;align-items:center;justify-content:center;margin:0 0 14px;padding:0;list-style:none}
+.bt-social a{position:relative;isolation:isolate;width:46px;height:46px;border-radius:14px;display:inline-flex;align-items:center;justify-content:center;text-decoration:none;-webkit-tap-highlight-color:transparent;background-color:var(--c,#333);background-image:linear-gradient(150deg,rgba(255,255,255,.30),rgba(255,255,255,0) 42%,rgba(0,0,0,.22));box-shadow:0 1px 1px rgba(0,0,0,.22),0 7px 14px -3px rgba(0,0,0,.34),inset 0 1px 0 rgba(255,255,255,.50),inset 0 -2px 5px rgba(0,0,0,.30);transition:transform .18s cubic-bezier(.2,.7,.2,1),box-shadow .18s ease}
+.bt-social a::before{content:"";position:absolute;left:3px;right:3px;top:2px;height:44%;border-radius:12px 12px 50% 50%/12px 12px 24px 24px;background:linear-gradient(180deg,rgba(255,255,255,.42),rgba(255,255,255,0));pointer-events:none;z-index:0}
+.bt-social a:hover{transform:translateY(-3px) scale(1.05);box-shadow:0 2px 2px rgba(0,0,0,.20),0 16px 26px -6px rgba(0,0,0,.40),inset 0 1px 0 rgba(255,255,255,.55),inset 0 -2px 6px rgba(0,0,0,.32)}
+.bt-social a:active{transform:translateY(-1px) scale(1.01)}
+.bt-social a:focus-visible{outline:3px solid #93c5fd;outline-offset:3px}
+.bt-social svg{position:relative;z-index:1;width:22px;height:22px;display:block;filter:drop-shadow(0 1px 1px rgba(0,0,0,.28))}
+@media (prefers-reduced-motion:reduce){.bt-social a{transition:none}.bt-social a:hover{transform:none}}
+@media(max-width:600px){.container{padding:15px}}
+
+</style>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": "https://backbonetutorials.com/#organization",
+      "name": "Backbone Tutorials",
+      "url": "https://backbonetutorials.com/",
+      "logo": { "@type": "ImageObject", "url": "https://backbonetutorials.com/assets/logo.png" },
+      "sameAs": [
+        "https://github.com/backbonetutorials/backbonetutorials",
+        "https://x.com/backbonetutor",
+        "https://www.youtube.com/@BACKBONETUTORIALS",
+        "https://bsky.app/profile/backbonetutorials.bsky.social",
+        "https://www.instagram.com/backbonetutorials/",
+        "https://www.tiktok.com/@backbonetutorials",
+        "https://www.facebook.com/BackboneTutorials"
+      ],
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "contactType": "customer support",
+        "email": "backbonetutorials2026@gmail.com",
+        "availableLanguage": ["English"],
+        "areaServed": "Worldwide"
+      }
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://backbonetutorials.com/#website",
+      "url": "https://backbonetutorials.com/",
+      "name": "Backbone Tutorials",
+      "publisher": { "@id": "https://backbonetutorials.com/#organization" }
+    },
+    {
+      "@type": "Person",
+      "@id": "https://backbonetutorials.com/author/backbone-tutorials-team/#person",
+      "name": "Backbone Tutorials Team",
+      "url": "https://backbonetutorials.com/author/backbone-tutorials-team/",
+      "worksFor": { "@id": "https://backbonetutorials.com/#organization" },
+      "jobTitle": "Frontend JavaScript Editorial Team",
+      "knowsAbout": ["JavaScript SEO", "Server-side rendering", "SPA architecture", "Backbone.js"]
+    },
+    {
+      "@type": "WebPage",
+      "@id": "https://backbonetutorials.com/javascript-seo/rendering-for-search-engines/#webpage",
+      "url": "https://backbonetutorials.com/javascript-seo/rendering-for-search-engines/",
+      "name": "Rendering for Search Engines — SSR, SSG, dynamic",
+      "headline": "Rendering for Search Engines",
+      "description": "Render so search engines get content: server-side rendering and hydration, static prerendering, hybrid rendering, dynamic rendering, and how to choose.",
+      "inLanguage": "en",
+      "isPartOf": { "@id": "https://backbonetutorials.com/#website" },
+      "author": { "@id": "https://backbonetutorials.com/author/backbone-tutorials-team/#person" },
+      "publisher": { "@id": "https://backbonetutorials.com/#organization" },
+      "breadcrumb": { "@id": "https://backbonetutorials.com/javascript-seo/rendering-for-search-engines/#breadcrumb" },
+      "mainEntity": { "@id": "https://backbonetutorials.com/javascript-seo/rendering-for-search-engines/#article" }
+    },
+    {
+      "@type": "TechArticle",
+      "@id": "https://backbonetutorials.com/javascript-seo/rendering-for-search-engines/#article",
+      "url": "https://backbonetutorials.com/javascript-seo/rendering-for-search-engines/",
+      "headline": "Rendering for Search Engines",
+      "description": "A guide to rendering strategies for SEO: server-side rendering and hydration, static prerendering, hybrid and incremental rendering, dynamic rendering as a legacy workaround, and how to choose.",
+      "inLanguage": "en",
+      "image": {
+        "@type": "ImageObject",
+        "url": "https://backbonetutorials.com/assets/javascript-seo/rendering-for-search-engines-1200.jpg",
+        "width": 1200,
+        "height": 630
+      },
+      "author": { "@id": "https://backbonetutorials.com/author/backbone-tutorials-team/#person" },
+      "publisher": { "@id": "https://backbonetutorials.com/#organization" },
+      "mainEntityOfPage": { "@id": "https://backbonetutorials.com/javascript-seo/rendering-for-search-engines/#webpage" },
+      "datePublished": "2026-06-12T04:30:00+07:00",
+      "dateModified": "2026-06-12T04:30:00+07:00",
+      "articleSection": ["JavaScript SEO", "Rendering", "Architecture"],
+      "keywords": ["rendering for search engines", "server-side rendering", "static prerendering", "hydration", "dynamic rendering", "SSG"],
+      "about": [
+        { "@type": "Thing", "name": "Server-side rendering" },
+        { "@type": "Thing", "name": "Static site generation" },
+        { "@type": "Thing", "name": "JavaScript" }
+      ],
+      "mentions": [
+        { "@type": "Thing", "name": "Hydration" },
+        { "@type": "Thing", "name": "Dynamic rendering" },
+        { "@type": "Thing", "name": "Single Page Application" }
+      ]
+    },
+    {
+      "@type": "BreadcrumbList",
+      "@id": "https://backbonetutorials.com/javascript-seo/rendering-for-search-engines/#breadcrumb",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://backbonetutorials.com/" },
+        { "@type": "ListItem", "position": 2, "name": "JavaScript SEO", "item": "https://backbonetutorials.com/javascript-seo/" },
+        { "@type": "ListItem", "position": 3, "name": "Rendering for Search Engines", "item": "https://backbonetutorials.com/javascript-seo/rendering-for-search-engines/" }
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "@id": "https://backbonetutorials.com/javascript-seo/rendering-for-search-engines/#faq",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What is the difference between SSR and prerendering?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Server-side rendering builds the HTML fresh on the server for each request, so it suits content that changes per user or often. Prerendering, or static generation, builds the HTML ahead of time at deploy, so it suits content that is the same for everyone. Both put real content in the first response." }
+        },
+        {
+          "@type": "Question",
+          "name": "What is hydration?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Hydration is the step where the client JavaScript attaches to already-rendered HTML and wires up its event handlers and state. The important part for SEO is that the content is visible and indexable from the server HTML, before hydration runs." }
+        },
+        {
+          "@type": "Question",
+          "name": "Is dynamic rendering still recommended?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Google now treats dynamic rendering, serving a prerendered version only to bots, as a workaround rather than a long-term solution. It can bridge a gap, but server-side rendering or static prerendering is the recommended path." }
+        },
+        {
+          "@type": "Question",
+          "name": "Do I need SSR for SEO?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Not strictly. What matters is that content is in the initial HTML, which SSR or prerendering both achieve. Pure client-side rendering can rank too, but it depends on Google rendering your scripts well and promptly, which is a risk on important pages." }
+        }
+      ]
+    }
+  ]
+}
+</script>
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-FYJP43XDHH"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-FYJP43XDHH');
+</script>
+
+</head>
+
+<body>
+
+<nav class="nav" aria-label="Main Navigation">
+<a href="/" class="nav-logo" title="Backbone Tutorials Homepage"><img src="/assets/logo.png" alt="Backbone Tutorials Logo" width="36" height="36" loading="lazy" decoding="async"></a>
+<a href="/" title="Backbone.js Tutorials Homepage">Home</a>
+<a href="/backbonejs/" title="Backbone.js Complete Guide">Backbone Guide</a>
+<a href="/what-is-a-router/" title="What is a Router in Backbone.js">Router</a>
+<a href="/what-is-a-model/" title="What is a Model in Backbone.js">Model</a>
+<a href="/what-is-a-view/" title="What is a View in Backbone.js">View</a>
+<a href="/what-is-a-collection/" title="What is a Collection in Backbone.js">Collection</a>
+</nav>
+
+<main>
+
+<article class="container">
+
+<nav class="breadcrumb" aria-label="Breadcrumb">
+<a href="/">Home</a> › <a href="/javascript-seo/">JavaScript SEO</a> › <span aria-current="page">Rendering for Search Engines</span>
+</nav>
+
+<h1>Rendering for Search Engines</h1>
+
+<p class="author-line">Written by <a href="/author/backbone-tutorials-team/">Backbone Tutorials Team</a></p>
+<p class="author-line">Last updated: June 2026 · 10 min read</p>
+
+<p>
+Once you accept that Google indexes the rendered result and that the render can lag, the fix follows naturally: put the content in the HTML before the browser does any work. That is what every rendering strategy in this guide is really for. They differ in where and when the HTML is built, but they share one aim, which is to stop depending on the search engine to run your JavaScript.
+</p>
+
+<p>
+This guide compares the options and helps you pick. It follows directly from <a href="/javascript-seo/javascript-rendering-and-indexing/">rendering and indexing</a>, which explained why the rendered DOM is what counts, and pairs with the <a href="/seo-for-single-page-apps/">SEO for single page apps</a> overview.
+</p>
+
+<figure>
+<svg class="diagram" viewBox="0 0 720 170" role="img" aria-labelledby="rsTitle rsDesc" xmlns="http://www.w3.org/2000/svg">
+  <title id="rsTitle">Where the HTML is built</title>
+  <desc id="rsDesc">A spectrum from client-side rendering, through prerendering and server-side rendering, with content in the first response increasing to the right.</desc>
+  <rect x="0" y="0" width="720" height="170" rx="12" fill="#0f172a"></rect>
+  <g font-family="Inter, sans-serif" text-anchor="middle">
+    <rect x="30"  y="58" width="150" height="54" rx="10" fill="#1e293b" stroke="#475569"></rect><text x="105" y="80" fill="#fff" font-size="13" font-weight="700">CSR</text><text x="105" y="98" fill="#94a3b8" font-size="10">built in browser</text>
+    <rect x="220" y="58" width="150" height="54" rx="10" fill="#1e293b" stroke="#3b82f6"></rect><text x="295" y="80" fill="#fff" font-size="13" font-weight="700">Prerender / SSG</text><text x="295" y="98" fill="#93c5fd" font-size="10">built at deploy</text>
+    <rect x="410" y="58" width="150" height="54" rx="10" fill="#1e293b" stroke="#2563eb" stroke-width="2"></rect><text x="485" y="80" fill="#fff" font-size="13" font-weight="700">SSR</text><text x="485" y="98" fill="#93c5fd" font-size="10">built per request</text>
+    <rect x="585" y="58" width="110" height="54" rx="10" fill="#0b1220" stroke="#a855f7" stroke-dasharray="5 4"></rect><text x="640" y="80" fill="#e9d5ff" font-size="12" font-weight="700">Dynamic</text><text x="640" y="98" fill="#c4b5fd" font-size="10">bots only</text>
+    <text x="360" y="140" fill="#94a3b8" font-size="11">more content in the first response →</text>
+  </g>
+</svg>
+<figcaption>The strategies sit on a spectrum: the further right, the more real content arrives in the first response.</figcaption>
+</figure>
+
+<div class="card">
+<p style="margin-top:0"><strong>What you'll learn</strong></p>
+<ul class="toc-list">
+<li><a href="#goal">The goal: content in the first response</a></li>
+<li><a href="#ssr">Server-side rendering</a></li>
+<li><a href="#ssg">Static generation and prerendering</a></li>
+<li><a href="#hybrid">Incremental and hybrid rendering</a></li>
+<li><a href="#dynamic">Dynamic rendering: the legacy workaround</a></li>
+<li><a href="#choose">Choosing a strategy</a></li>
+</ul>
+</div>
+
+<h2 id="goal">The goal: content in the first response</h2>
+
+<p>
+Every strategy here is judged by one question: when the very first HTTP response arrives, is the content already in it? If yes, a crawler can index the page without rendering anything, and a visitor sees text immediately. If no, both are waiting on JavaScript.
+</p>
+
+<h3>Why the first response matters most</h3>
+
+<p>
+The first response is the only thing guaranteed to reach every client, crawler, link preview, and slow connection alike. Content that lives there is robust; content that depends on a later render is fragile. So the strategies below are really just different ways of getting more into that first response.
+</p>
+
+<h2 id="ssr">Server-side rendering</h2>
+
+<p>
+Server-side rendering builds the page's HTML on the server, fresh for each request, and sends it down complete. The browser then loads the same JavaScript and takes over the already-painted page.
+</p>
+
+<h3>SSR and hydration</h3>
+
+<pre><code>// Server (concept): render the app to HTML per request
+app.get('/products/:id', function (req, res) {
+  var html = renderAppToString(req.params.id);
+  res.send(html); // full content in the first response
+});</code></pre>
+
+<p>
+After that HTML loads, hydration runs: the client script attaches event handlers and state to the existing markup so the page becomes interactive. Crucially, the content was indexable before hydration ever happened. SSR suits pages that change often or per user, at the cost of running and scaling a rendering server.
+</p>
+
+<h2 id="ssg">Static generation and prerendering</h2>
+
+<p>
+Static generation builds the HTML ahead of time, at deploy, and serves the same prebuilt files to everyone. Since the work happened once, the pages are fast, cheap to host, and trivially cacheable on a CDN.
+</p>
+
+<h3>When prerendering fits</h3>
+
+<p>
+This is the strongest fit for content that is the same for all visitors and does not change minute to minute: documentation, articles, marketing pages, product descriptions. The trade-off is that updating content means rebuilding, so highly dynamic or per-user pages either need frequent rebuilds or a different approach.
+</p>
+
+<h2 id="hybrid">Incremental and hybrid rendering</h2>
+
+<p>
+Real sites are rarely all-static or all-dynamic, and modern frameworks let you mix per route. A mostly static site can render a few dynamic routes on the server, and a mostly dynamic app can prebuild its stable pages.
+</p>
+
+<h3>Mixing static and dynamic per route</h3>
+
+<p>
+Incremental approaches go further, serving a static page and quietly regenerating it on a schedule or after a set time, so you get static speed with periodic freshness. The practical rule is to choose per route, not per app: prerender what is stable, server-render what is personal or fast-changing, and avoid forcing one mode onto pages that do not suit it.
+</p>
+
+<h2 id="dynamic">Dynamic rendering: the legacy workaround</h2>
+
+<p>
+Dynamic rendering detects crawlers and serves them a prerendered snapshot while sending users the normal client-rendered app. It was once a common bridge for sites that could not adopt SSR quickly.
+</p>
+
+<h3>Why dynamic rendering is a last resort</h3>
+
+<p>
+Google now describes dynamic rendering as a workaround rather than a recommended, long-term setup, partly because maintaining two paths is error-prone and brushes against serving different content to bots. Treat it as a temporary stopgap while you migrate toward server rendering or prerendering, not as the destination.
+</p>
+
+<h2 id="choose">Choosing a strategy</h2>
+
+<p>
+The decision is less about fashion and more about the shape of your content and team. A handful of questions settle most cases.
+</p>
+
+<h3>A simple decision guide</h3>
+
+<p>
+If content is the same for everyone and changes rarely, prerender it. If it changes often or differs per request, render it on the server. If only some routes are dynamic, go hybrid and decide per route. Reserve dynamic rendering for a migration you have not finished, and treat pure client-side rendering as acceptable only for pages that do not need to rank. Whatever you choose, pair it with crawlable URLs and a server that returns your app for client routes, the foundation from the <a href="/foundations/backbone-routing-basics/">routing guide</a>.
+</p>
+
+<p>
+Rendering strategy is the biggest lever you have over JavaScript SEO, because it decides what exists before anyone renders anything. Get content into that first response and most of the remaining work is verification. The next guides narrow in on specific cases, starting with how these choices play out across different frontend frameworks.
+</p>
+
+<section id="faq">
+<h2>Frequently Asked Questions</h2>
+
+<h3>What is the difference between SSR and prerendering?</h3>
+<p>Server-side rendering builds the HTML fresh on the server for each request, so it suits content that changes per user or often. Prerendering, or static generation, builds the HTML ahead of time at deploy, so it suits content that is the same for everyone. Both put real content in the first response.</p>
+
+<h3>What is hydration?</h3>
+<p>Hydration is the step where the client JavaScript attaches to already-rendered HTML and wires up its event handlers and state. The important part for SEO is that the content is visible and indexable from the server HTML, before hydration runs.</p>
+
+<h3>Is dynamic rendering still recommended?</h3>
+<p>Google now treats dynamic rendering, serving a prerendered version only to bots, as a workaround rather than a long-term solution. It can bridge a gap, but server-side rendering or static prerendering is the recommended path.</p>
+
+<h3>Do I need SSR for SEO?</h3>
+<p>Not strictly. What matters is that content is in the initial HTML, which SSR or prerendering both achieve. Pure client-side rendering can rank too, but it depends on Google rendering your scripts well and promptly, which is a risk on important pages.</p>
+</section>
+
+<p><strong>Read next:</strong> back to the <a href="/javascript-seo/">JavaScript SEO</a> hub, or revisit <a href="/javascript-seo/javascript-rendering-and-indexing/">rendering and indexing</a> for what survives the render.</p>
+
+<div class="cta">
+<p><strong>Building the app behind the strategy?</strong></p>
+<p>Rendering choices wrap around your frontend. See how a single page app is structured in the complete Backbone guide.</p>
+<a href="/backbonejs/" class="btn">Explore the Backbone Guide →</a>
+</div>
+
+<div class="back-home">
+<a href="/javascript-seo/">← Back to JavaScript SEO</a>
+</div>
+
+</article>
+
+</main>
+
+<footer>
+
+<p>Backbone Tutorials</p>
+
+<nav class="bt-social" aria-label="Backbone Tutorials on social media">
+  <a style="--c:#181717" href="https://github.com/backbonetutorials/backbonetutorials" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on GitHub"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#fff" d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0 1 12 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222 0 1.606-.014 2.898-.014 3.293 0 .322.216.694.825.576C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg></a>
+  <a style="--c:#000000" href="https://x.com/backbonetutor" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on X (formerly Twitter)"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#fff" d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+  <a style="--c:#FF0000" href="https://www.youtube.com/@BACKBONETUTORIALS" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on YouTube"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#fff" d="M8.5 6.5 L8.5 17.5 L17.5 12 Z"/></svg></a>
+  <a style="--c:#0285FF" href="https://bsky.app/profile/backbonetutorials.bsky.social" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on Bluesky"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#fff" d="M12 10.8c-1.087-2.114-4.046-6.053-6.798-7.995C2.566.944 1.561 1.266.902 1.565.139 1.908 0 3.08 0 3.768c0 .69.378 5.65.624 6.479.815 2.736 3.713 3.66 6.383 3.364.136-.02.275-.039.415-.056-.138.022-.276.04-.415.056-3.912.58-7.387 2.005-2.83 7.078 5.013 5.19 6.87-1.113 7.823-4.308.953 3.195 2.05 9.271 7.733 4.308 4.267-4.308 1.172-6.498-2.74-7.078a8.741 8.741 0 0 1-.415-.056c.14.017.279.036.415.056 2.67.296 5.568-.628 6.383-3.364C23.622 9.418 24 4.458 24 3.768c0-.688-.139-1.86-.902-2.203-.659-.299-1.664-.621-4.3 1.24C16.046 4.747 13.087 8.686 12 10.8Z"/></svg></a>
+  <a style="--c:#d62976;background-image:linear-gradient(150deg,rgba(255,255,255,.30),rgba(255,255,255,0) 42%,rgba(0,0,0,.22)),linear-gradient(45deg,#feda75,#fa7e1e,#d62976,#962fbf,#4f5bd5)" href="https://www.instagram.com/backbonetutorials/" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on Instagram"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="4" y="4" width="16" height="16" rx="5" fill="none" stroke="#fff" stroke-width="2"/><circle cx="12" cy="12" r="3.6" fill="none" stroke="#fff" stroke-width="2"/><circle cx="17.2" cy="6.8" r="1.25" fill="#fff"/></svg></a>
+  <a style="--c:#000000" href="https://www.tiktok.com/@backbonetutorials" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on TikTok"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#fff" d="M16.5 5.82a4.79 4.79 0 0 1-1.16-3.07h-2.9v11.43a2.45 2.45 0 1 1-2.45-2.45c.17 0 .33.02.49.05V8.83a5.36 5.36 0 0 0-.49-.02 5.35 5.35 0 1 0 5.35 5.35V8.6a7.66 7.66 0 0 0 4.46 1.42V7.13a4.79 4.79 0 0 1-2.8-1.31Z"/></svg></a>
+  <a style="--c:#1877F2" href="https://www.facebook.com/BackboneTutorials" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on Facebook"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#fff" d="M13.5 21v-8h2.6l.4-3h-3V8.1c0-.87.27-1.46 1.5-1.46H17V3.96c-.28-.04-1.2-.12-2.28-.12-2.26 0-3.8 1.38-3.8 3.9V10H8.3v3h2.62v8h2.58Z"/></svg></a>
+</nav>
+
+<p>
+<a href="/">Home</a> |
+<a href="/about/">About</a> |
+<a href="/contact/">Contact</a> |
+<a href="/privacy-policy/">Privacy Policy</a> |
+<a href="/terms/">Terms</a>
+</p>
+
+<p>© 2026 Backbone Tutorials</p>
+
+</footer>
+
+</body>
+</html>

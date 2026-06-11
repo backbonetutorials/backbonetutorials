@@ -1,0 +1,443 @@
+<!-- DEPLOY TO: /architecture/realtime-systems/  (index.html) · TechArticle · per MASTERMIND_SEO.md -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Realtime Systems — building live, collaborative UIs</title>
+
+<meta name="description" content="Building realtime web apps: push versus request-response, transport choices, syncing clients, optimistic updates, presence, and reconnection.">
+
+<meta name="robots" content="index, follow">
+<meta name="author" content="Backbone Tutorials">
+<meta name="theme-color" content="#2563eb">
+<meta name="format-detection" content="telephone=no">
+
+<link rel="canonical" href="https://backbonetutorials.com/architecture/realtime-systems/">
+
+<link rel="icon" href="/assets/favicon.ico">
+<link rel="apple-touch-icon" href="/assets/favicon.png">
+
+<!-- Open Graph -->
+<meta property="og:title" content="Realtime Systems — building live, collaborative UIs">
+<meta property="og:description" content="The engineering of realtime frontends like collaborative editors and chat: transports, syncing clients, optimistic updates, presence, and resilient reconnection.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://backbonetutorials.com/architecture/realtime-systems/">
+<meta property="og:image" content="https://backbonetutorials.com/assets/architecture/realtime-systems-1200.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:type" content="image/jpeg">
+<meta property="og:image:alt" content="Realtime Systems — Backbone Tutorials">
+<meta property="og:site_name" content="Backbone Tutorials">
+<meta property="og:locale" content="en_US">
+
+<!-- Twitter -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Realtime Systems — building live, collaborative UIs">
+<meta name="twitter:description" content="Engineering realtime frontends: transports, syncing clients, optimistic updates and reconciliation, presence, and resilient reconnection.">
+<meta name="twitter:image" content="https://backbonetutorials.com/assets/architecture/realtime-systems-1200.jpg">
+<meta name="twitter:image:alt" content="Realtime Systems — Backbone Tutorials">
+<meta name="twitter:url" content="https://backbonetutorials.com/architecture/realtime-systems/">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+
+<style>
+
+html{scroll-behavior:smooth}
+body{font-family:'Inter',sans-serif;margin:0;background:#f4f6f9;color:#1f2937;line-height:1.7}
+.container{max-width:900px;margin:30px auto;padding:20px;background:#fff;border-radius:10px;box-shadow:0 2px 10px rgba(0,0,0,0.04)}
+h1,h2,h3{color:#111827}
+.nav{background:#111827;padding:15px;display:flex;justify-content:center;align-items:center;flex-wrap:wrap;gap:8px}
+.nav a{color:white;margin:0 10px;text-decoration:none;font-weight:600}
+.nav a:hover{text-decoration:underline}
+.nav-logo img{vertical-align:middle;margin-right:12px;border-radius:8px}
+figure{margin:30px 0}
+img{width:100%;height:auto;border-radius:10px}
+pre{background:#111;color:#eee;padding:15px;border-radius:8px;overflow-x:auto;box-shadow:0 2px 8px rgba(0,0,0,0.15)}
+code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+p code,li code{background:#eef2ff;padding:1px 5px;border-radius:4px;font-size:.95em}
+.cta{background:#eef2ff;padding:20px;margin-top:30px;text-align:center;border-radius:10px}
+a{color:#2563eb}
+.back-home{margin-top:25px}
+footer{background:#111827;color:white;text-align:center;padding:30px 20px;margin-top:40px}
+footer a{color:#93c5fd;text-decoration:none}
+footer a:hover{text-decoration:underline}
+.btn{display:inline-block;background:#2563eb;color:white;padding:12px 22px;border-radius:8px;text-decoration:none;font-weight:600;margin-top:15px;transition:0.2s ease}
+.btn:hover{background:#1d4ed8;transform:translateY(-1px)}
+.card{background:#fff;padding:20px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.05);overflow:hidden;max-width:100%;border:1px solid #eef2f7}
+.toc-list{padding-left:20px}
+.toc-list li{margin-bottom:8px}
+.author-line{font-size:15px;margin-top:-6px;margin-bottom:10px;color:#4b5563}
+figcaption{font-size:14px;color:#6b7280;margin-top:10px}
+#faq h3{margin-top:25px}
+#faq p{margin-bottom:18px}
+.breadcrumb{font-size:14px;color:#6b7280;margin:0 0 10px}
+.breadcrumb a{color:#2563eb;text-decoration:none}
+.breadcrumb a:hover{text-decoration:underline}
+.diagram{width:100%;height:auto;display:block;border-radius:10px}
+.bt-social{display:flex;gap:13px;flex-wrap:wrap;align-items:center;justify-content:center;margin:0 0 14px;padding:0;list-style:none}
+.bt-social a{position:relative;isolation:isolate;width:46px;height:46px;border-radius:14px;display:inline-flex;align-items:center;justify-content:center;text-decoration:none;-webkit-tap-highlight-color:transparent;background-color:var(--c,#333);background-image:linear-gradient(150deg,rgba(255,255,255,.30),rgba(255,255,255,0) 42%,rgba(0,0,0,.22));box-shadow:0 1px 1px rgba(0,0,0,.22),0 7px 14px -3px rgba(0,0,0,.34),inset 0 1px 0 rgba(255,255,255,.50),inset 0 -2px 5px rgba(0,0,0,.30);transition:transform .18s cubic-bezier(.2,.7,.2,1),box-shadow .18s ease}
+.bt-social a::before{content:"";position:absolute;left:3px;right:3px;top:2px;height:44%;border-radius:12px 12px 50% 50%/12px 12px 24px 24px;background:linear-gradient(180deg,rgba(255,255,255,.42),rgba(255,255,255,0));pointer-events:none;z-index:0}
+.bt-social a:hover{transform:translateY(-3px) scale(1.05);box-shadow:0 2px 2px rgba(0,0,0,.20),0 16px 26px -6px rgba(0,0,0,.40),inset 0 1px 0 rgba(255,255,255,.55),inset 0 -2px 6px rgba(0,0,0,.32)}
+.bt-social a:active{transform:translateY(-1px) scale(1.01)}
+.bt-social a:focus-visible{outline:3px solid #93c5fd;outline-offset:3px}
+.bt-social svg{position:relative;z-index:1;width:22px;height:22px;display:block;filter:drop-shadow(0 1px 1px rgba(0,0,0,.28))}
+@media (prefers-reduced-motion:reduce){.bt-social a{transition:none}.bt-social a:hover{transform:none}}
+@media(max-width:600px){.container{padding:15px}}
+
+</style>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": "https://backbonetutorials.com/#organization",
+      "name": "Backbone Tutorials",
+      "url": "https://backbonetutorials.com/",
+      "logo": { "@type": "ImageObject", "url": "https://backbonetutorials.com/assets/logo.png" },
+      "sameAs": [
+        "https://github.com/backbonetutorials/backbonetutorials",
+        "https://x.com/backbonetutor",
+        "https://www.youtube.com/@BACKBONETUTORIALS",
+        "https://bsky.app/profile/backbonetutorials.bsky.social",
+        "https://www.instagram.com/backbonetutorials/",
+        "https://www.tiktok.com/@backbonetutorials",
+        "https://www.facebook.com/BackboneTutorials"
+      ],
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "contactType": "customer support",
+        "email": "backbonetutorials2026@gmail.com",
+        "availableLanguage": ["English"],
+        "areaServed": "Worldwide"
+      }
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://backbonetutorials.com/#website",
+      "url": "https://backbonetutorials.com/",
+      "name": "Backbone Tutorials",
+      "publisher": { "@id": "https://backbonetutorials.com/#organization" }
+    },
+    {
+      "@type": "Person",
+      "@id": "https://backbonetutorials.com/author/backbone-tutorials-team/#person",
+      "name": "Backbone Tutorials Team",
+      "url": "https://backbonetutorials.com/author/backbone-tutorials-team/",
+      "worksFor": { "@id": "https://backbonetutorials.com/#organization" },
+      "jobTitle": "Frontend JavaScript Editorial Team",
+      "knowsAbout": ["Frontend architecture", "Realtime systems", "WebSocket", "Backbone.js"]
+    },
+    {
+      "@type": "WebPage",
+      "@id": "https://backbonetutorials.com/architecture/realtime-systems/#webpage",
+      "url": "https://backbonetutorials.com/architecture/realtime-systems/",
+      "name": "Realtime Systems — building live, collaborative UIs",
+      "headline": "Realtime Systems",
+      "description": "Building realtime web apps: push versus request-response, transport choices, syncing clients, optimistic updates and reconciliation, presence, and reconnection.",
+      "inLanguage": "en",
+      "isPartOf": { "@id": "https://backbonetutorials.com/#website" },
+      "author": { "@id": "https://backbonetutorials.com/author/backbone-tutorials-team/#person" },
+      "publisher": { "@id": "https://backbonetutorials.com/#organization" },
+      "breadcrumb": { "@id": "https://backbonetutorials.com/architecture/realtime-systems/#breadcrumb" },
+      "mainEntity": { "@id": "https://backbonetutorials.com/architecture/realtime-systems/#article" }
+    },
+    {
+      "@type": "TechArticle",
+      "@id": "https://backbonetutorials.com/architecture/realtime-systems/#article",
+      "url": "https://backbonetutorials.com/architecture/realtime-systems/",
+      "headline": "Realtime Systems",
+      "description": "An engineering guide to realtime frontend systems such as collaborative editors and chat: what makes a system realtime, transport choices, keeping clients in sync, optimistic updates and reconciliation, presence and awareness, and resilient reconnection.",
+      "inLanguage": "en",
+      "image": {
+        "@type": "ImageObject",
+        "url": "https://backbonetutorials.com/assets/architecture/realtime-systems-1200.jpg",
+        "width": 1200,
+        "height": 630
+      },
+      "author": { "@id": "https://backbonetutorials.com/author/backbone-tutorials-team/#person" },
+      "publisher": { "@id": "https://backbonetutorials.com/#organization" },
+      "mainEntityOfPage": { "@id": "https://backbonetutorials.com/architecture/realtime-systems/#webpage" },
+      "datePublished": "2026-06-12T04:30:00+07:00",
+      "dateModified": "2026-06-12T04:30:00+07:00",
+      "articleSection": ["Frontend Architecture", "Realtime", "Engineering"],
+      "keywords": ["realtime systems", "WebSocket", "server-sent events", "optimistic updates", "presence", "reconnection"],
+      "about": [
+        { "@type": "Thing", "name": "Real-time communication" },
+        { "@type": "Thing", "name": "Software architecture" },
+        { "@type": "Thing", "name": "JavaScript" }
+      ],
+      "mentions": [
+        { "@type": "Thing", "name": "WebSocket" },
+        { "@type": "Thing", "name": "Server-sent events" },
+        { "@type": "Thing", "name": "Collaborative software" }
+      ]
+    },
+    {
+      "@type": "BreadcrumbList",
+      "@id": "https://backbonetutorials.com/architecture/realtime-systems/#breadcrumb",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://backbonetutorials.com/" },
+        { "@type": "ListItem", "position": 2, "name": "Frontend Architecture", "item": "https://backbonetutorials.com/architecture/" },
+        { "@type": "ListItem", "position": 3, "name": "Realtime Systems", "item": "https://backbonetutorials.com/architecture/realtime-systems/" }
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "@id": "https://backbonetutorials.com/architecture/realtime-systems/#faq",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What is a realtime web application?",
+          "acceptedAnswer": { "@type": "Answer", "text": "A realtime web application is one where the server can push updates to clients so the interface reflects changes as they happen, without the user refreshing. Collaborative editors, chat, and live dashboards are typical examples, where several people or data sources update a shared view continuously." }
+        },
+        {
+          "@type": "Question",
+          "name": "What is the difference between WebSocket and Server-Sent Events?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Server-Sent Events is a one-way stream from server to client over HTTP, ideal for pushing updates like notifications or a live feed. WebSocket is a persistent two-way channel, better when the client also needs to send messages frequently, such as in a collaborative editor or chat." }
+        },
+        {
+          "@type": "Question",
+          "name": "What are optimistic updates?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Optimistic updates apply a change in the interface immediately, before the server has confirmed it, then reconcile with the server's response, rolling back if it failed. The result feels instant to the user because the UI does not wait for a network round trip to show the effect." }
+        },
+        {
+          "@type": "Question",
+          "name": "How do realtime apps handle dropped connections?",
+          "acceptedAnswer": { "@type": "Answer", "text": "They detect the drop, reconnect with a backoff delay, and resync state by replaying missed messages or re-fetching a snapshot. Because messages can arrive twice or out of order around a reconnect, handlers are written to be idempotent and to order updates correctly." }
+        }
+      ]
+    }
+  ]
+}
+</script>
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-FYJP43XDHH"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-FYJP43XDHH');
+</script>
+
+</head>
+
+<body>
+
+<nav class="nav" aria-label="Main Navigation">
+<a href="/" class="nav-logo" title="Backbone Tutorials Homepage"><img src="/assets/logo.png" alt="Backbone Tutorials Logo" width="36" height="36" loading="lazy" decoding="async"></a>
+<a href="/" title="Backbone.js Tutorials Homepage">Home</a>
+<a href="/backbonejs/" title="Backbone.js Complete Guide">Backbone Guide</a>
+<a href="/what-is-a-router/" title="What is a Router in Backbone.js">Router</a>
+<a href="/what-is-a-model/" title="What is a Model in Backbone.js">Model</a>
+<a href="/what-is-a-view/" title="What is a View in Backbone.js">View</a>
+<a href="/what-is-a-collection/" title="What is a Collection in Backbone.js">Collection</a>
+</nav>
+
+<main>
+
+<article class="container">
+
+<nav class="breadcrumb" aria-label="Breadcrumb">
+<a href="/">Home</a> › <a href="/architecture/">Frontend Architecture</a> › <span aria-current="page">Realtime Systems</span>
+</nav>
+
+<h1>Realtime Systems</h1>
+
+<p class="author-line">Written by <a href="/author/backbone-tutorials-team/">Backbone Tutorials Team</a></p>
+<p class="author-line">Last updated: June 2026 · 10 min read</p>
+
+<p>
+Open a document a colleague is editing and watch their cursor move, their text appear, their name light up in the corner. Nothing about that experience fits the request-response model the web was built on, where the browser asks and the server answers. Realtime systems flip that around so the server can speak first, and building one means solving a cluster of new problems: how data arrives, how many clients stay in agreement, and what happens when the network misbehaves. This guide is the engineering overview of that world, the architecture behind collaborative editors, chat, and live dashboards.
+</p>
+
+<p>
+It extends the events thinking in <a href="/architecture/event-driven-ui/">event-driven UI</a> and the shared-state ideas from <a href="/architecture/state-management/">state management</a> into the realtime setting.
+</p>
+
+<figure>
+<svg class="diagram" viewBox="0 0 720 180" role="img" aria-labelledby="rsTitle rsDesc" xmlns="http://www.w3.org/2000/svg">
+  <title id="rsTitle">A server pushing to many clients</title>
+  <desc id="rsDesc">A change from one client reaches the server, which broadcasts it to all connected clients in realtime.</desc>
+  <rect x="0" y="0" width="720" height="180" rx="12" fill="#0f172a"></rect>
+  <g font-family="Inter, sans-serif" text-anchor="middle">
+    <rect x="285" y="68" width="150" height="46" rx="10" fill="#1e293b" stroke="#2563eb" stroke-width="2"></rect><text x="360" y="89" fill="#fff" font-size="13" font-weight="700">Realtime server</text><text x="360" y="105" fill="#93c5fd" font-size="10">broadcasts changes</text>
+    <rect x="40"  y="26" width="140" height="36" rx="9" fill="#1e293b" stroke="#a855f7"></rect><text x="110" y="49" fill="#fff" font-size="11">Client A (edits)</text>
+    <rect x="40"  y="120" width="140" height="36" rx="9" fill="#1e293b" stroke="#334155"></rect><text x="110" y="143" fill="#fff" font-size="11">Client B</text>
+    <rect x="540" y="26" width="140" height="36" rx="9" fill="#1e293b" stroke="#334155"></rect><text x="610" y="49" fill="#fff" font-size="11">Client C</text>
+    <rect x="540" y="120" width="140" height="36" rx="9" fill="#1e293b" stroke="#334155"></rect><text x="610" y="143" fill="#fff" font-size="11">Client D</text>
+    <g stroke="#a855f7" stroke-width="2" fill="none"><path d="M180 46 L284 78" marker-end="url(#ars)"></path></g>
+    <g stroke="#64748b" stroke-width="2" fill="none">
+      <path d="M285 96 L182 132" marker-end="url(#ars)"></path>
+      <path d="M435 84 L538 46" marker-end="url(#ars)"></path>
+      <path d="M435 98 L538 132" marker-end="url(#ars)"></path>
+    </g>
+  </g>
+  <defs><marker id="ars" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0 0 L7 3 L0 6 Z" fill="#64748b"></path></marker></defs>
+</svg>
+<figcaption>One client's change reaches the server, which broadcasts it to every connected client so all views stay in agreement.</figcaption>
+</figure>
+
+<div class="card">
+<p style="margin-top:0"><strong>What you'll learn</strong></p>
+<ul class="toc-list">
+<li><a href="#what">What makes a system realtime</a></li>
+<li><a href="#transport">Transport choices</a></li>
+<li><a href="#sync">Keeping clients in sync</a></li>
+<li><a href="#optimistic">Optimistic updates and reconciliation</a></li>
+<li><a href="#presence">Presence and awareness</a></li>
+<li><a href="#resilience">Resilience: reconnection and ordering</a></li>
+</ul>
+</div>
+
+<h2 id="what">What makes a system realtime</h2>
+
+<p>
+The defining trait is direction. In an ordinary app the client initiates every exchange; in a realtime one the server can deliver updates the client never asked for, the moment they happen.
+</p>
+
+<h3>From request-response to push</h3>
+
+<p>
+That ability to push, combined with low latency, is what lets a shared view reflect other people's actions live. The architectural consequence is that your UI must be ready to update at any time, not only after its own requests, which is why the event-driven style underpins every realtime app. Once you accept that updates can arrive unprompted, the rest of the design is about delivering, merging, and surviving them.
+</p>
+
+<h2 id="transport">Transport choices</h2>
+
+<p>
+Before anything can be pushed, you need a channel that supports it, and the platform offers several with different shapes. Choosing well starts with the direction and frequency of your messages.
+</p>
+
+<h3>Polling, SSE, WebSocket, WebRTC</h3>
+
+<pre><code>// A persistent two-way channel; updates arrive as messages
+var socket = new WebSocket('wss://example.com/live');
+socket.onmessage = function (e) {
+  applyUpdate(JSON.parse(e.data));
+};</code></pre>
+
+<p>
+Polling repeatedly asks the server for changes and is simple but wasteful. Server-Sent Events open a one-way stream from server to client, ideal for feeds and notifications. WebSocket, shown above, is a persistent two-way channel, the workhorse for chat and collaborative editing where the client sends often too. WebRTC adds peer-to-peer data channels for the lowest-latency direct connections. Pick the lightest transport that covers your direction and latency needs rather than defaulting to the most powerful.
+</p>
+
+<h2 id="sync">Keeping clients in sync</h2>
+
+<p>
+A transport moves messages, but the real challenge is keeping many clients agreeing on one shared state. When several people change the same thing, those changes have to converge.
+</p>
+
+<h3>Broadcasting state to many clients</h3>
+
+<p>
+The basic loop is that a client sends a change, the server applies it to the authoritative state and broadcasts it to everyone else, who apply it to their local copy. The hard part is conflict: two people editing the same place at once. Simple apps let the server serialize changes and last-write-wins; collaborative editors reach for conflict-free replicated data types or operational transforms so concurrent edits merge without losing work. Either way, the goal is convergence, every client ending in the same state.
+</p>
+
+<h2 id="optimistic">Optimistic updates and reconciliation</h2>
+
+<p>
+Even on a fast connection, waiting for the server to confirm every action makes an interface feel sluggish. Realtime apps hide that latency by acting first and confirming after.
+</p>
+
+<h3>Apply locally, reconcile with the server</h3>
+
+<pre><code>// Show the change now; reconcile when the server replies
+applyLocally(change);
+send(change).catch(function () {
+  rollback(change); // server rejected it, undo
+});</code></pre>
+
+<p>
+An optimistic update applies the change to local state immediately so the UI responds at once, then reconciles when the server answers, keeping it if confirmed and rolling back if rejected. This is what makes typing in a shared document feel instant despite the round trip. The discipline is to treat the server as the source of truth, so a local guess that turns out wrong is corrected cleanly rather than left to drift, the reconciliation half being as important as the optimism.
+</p>
+
+<h2 id="presence">Presence and awareness</h2>
+
+<p>
+Collaboration is not only about shared data; it is about seeing each other. Presence is the layer that shows who is here and what they are doing.
+</p>
+
+<h3>Cursors, typing, and online status</h3>
+
+<p>
+Presence covers who is online, where their cursors are, what they have selected, and whether they are typing, the ambient awareness that makes a space feel shared. This state is ephemeral and high-frequency, so it is usually kept separate from the durable document data and broadcast on its own lighter channel, often without being persisted. Throttling cursor and typing updates, as the <a href="/architecture/event-driven-ui/">event-driven UI</a> guide advised for noisy events, keeps presence smooth without flooding the connection.
+</p>
+
+<h2 id="resilience">Resilience: reconnection and ordering</h2>
+
+<p>
+Realtime connections live on imperfect networks, so they will drop, stall, and deliver messages in the wrong order. A realtime system is only as good as its behaviour when things go wrong.
+</p>
+
+<h3>Reconnecting and resyncing cleanly</h3>
+
+<p>
+When a connection drops, the client should detect it, reconnect with an increasing backoff so it does not hammer the server, and then resync, either by replaying the messages it missed or by re-fetching a fresh snapshot. Because messages can arrive twice or out of sequence around a reconnect, design handlers to be idempotent and to order updates by a sequence number or version, so applying the same change twice is harmless. Handle this well and a brief network blip becomes invisible to the user instead of corrupting their state. The next guide builds on this to look at interactive applications more broadly.
+</p>
+
+<section id="faq">
+<h2>Frequently Asked Questions</h2>
+
+<h3>What is a realtime web application?</h3>
+<p>A realtime web application is one where the server can push updates to clients so the interface reflects changes as they happen, without the user refreshing. Collaborative editors, chat, and live dashboards are typical examples, where several people or data sources update a shared view continuously.</p>
+
+<h3>What is the difference between WebSocket and Server-Sent Events?</h3>
+<p>Server-Sent Events is a one-way stream from server to client over HTTP, ideal for pushing updates like notifications or a live feed. WebSocket is a persistent two-way channel, better when the client also needs to send messages frequently, such as in a collaborative editor or chat.</p>
+
+<h3>What are optimistic updates?</h3>
+<p>Optimistic updates apply a change in the interface immediately, before the server has confirmed it, then reconcile with the server's response, rolling back if it failed. The result feels instant to the user because the UI does not wait for a network round trip to show the effect.</p>
+
+<h3>How do realtime apps handle dropped connections?</h3>
+<p>They detect the drop, reconnect with a backoff delay, and resync state by replaying missed messages or re-fetching a snapshot. Because messages can arrive twice or out of order around a reconnect, handlers are written to be idempotent and to order updates correctly.</p>
+</section>
+
+<p><strong>Read next:</strong> back to the <a href="/architecture/">Frontend Architecture</a> hub, or revisit <a href="/architecture/event-driven-ui/">event-driven UI</a> for the reactions realtime relies on.</p>
+
+<div class="cta">
+<p><strong>Want the event foundations first?</strong></p>
+<p>The complete Backbone guide covers the models, events, and sync that realtime systems build on.</p>
+<a href="/backbonejs/" class="btn">Explore the Backbone Guide →</a>
+</div>
+
+<div class="back-home">
+<a href="/architecture/">← Back to Frontend Architecture</a>
+</div>
+
+</article>
+
+</main>
+
+<footer>
+
+<p>Backbone Tutorials</p>
+
+<nav class="bt-social" aria-label="Backbone Tutorials on social media">
+  <a style="--c:#181717" href="https://github.com/backbonetutorials/backbonetutorials" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on GitHub"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#fff" d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0 1 12 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222 0 1.606-.014 2.898-.014 3.293 0 .322.216.694.825.576C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg></a>
+  <a style="--c:#000000" href="https://x.com/backbonetutor" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on X (formerly Twitter)"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#fff" d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+  <a style="--c:#FF0000" href="https://www.youtube.com/@BACKBONETUTORIALS" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on YouTube"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#fff" d="M8.5 6.5 L8.5 17.5 L17.5 12 Z"/></svg></a>
+  <a style="--c:#0285FF" href="https://bsky.app/profile/backbonetutorials.bsky.social" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on Bluesky"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#fff" d="M12 10.8c-1.087-2.114-4.046-6.053-6.798-7.995C2.566.944 1.561 1.266.902 1.565.139 1.908 0 3.08 0 3.768c0 .69.378 5.65.624 6.479.815 2.736 3.713 3.66 6.383 3.364.136-.02.275-.039.415-.056-.138.022-.276.04-.415.056-3.912.58-7.387 2.005-2.83 7.078 5.013 5.19 6.87-1.113 7.823-4.308.953 3.195 2.05 9.271 7.733 4.308 4.267-4.308 1.172-6.498-2.74-7.078a8.741 8.741 0 0 1-.415-.056c.14.017.279.036.415.056 2.67.296 5.568-.628 6.383-3.364C23.622 9.418 24 4.458 24 3.768c0-.688-.139-1.86-.902-2.203-.659-.299-1.664-.621-4.3 1.24C16.046 4.747 13.087 8.686 12 10.8Z"/></svg></a>
+  <a style="--c:#d62976;background-image:linear-gradient(150deg,rgba(255,255,255,.30),rgba(255,255,255,0) 42%,rgba(0,0,0,.22)),linear-gradient(45deg,#feda75,#fa7e1e,#d62976,#962fbf,#4f5bd5)" href="https://www.instagram.com/backbonetutorials/" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on Instagram"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="4" y="4" width="16" height="16" rx="5" fill="none" stroke="#fff" stroke-width="2"/><circle cx="12" cy="12" r="3.6" fill="none" stroke="#fff" stroke-width="2"/><circle cx="17.2" cy="6.8" r="1.25" fill="#fff"/></svg></a>
+  <a style="--c:#000000" href="https://www.tiktok.com/@backbonetutorials" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on TikTok"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#fff" d="M16.5 5.82a4.79 4.79 0 0 1-1.16-3.07h-2.9v11.43a2.45 2.45 0 1 1-2.45-2.45c.17 0 .33.02.49.05V8.83a5.36 5.36 0 0 0-.49-.02 5.35 5.35 0 1 0 5.35 5.35V8.6a7.66 7.66 0 0 0 4.46 1.42V7.13a4.79 4.79 0 0 1-2.8-1.31Z"/></svg></a>
+  <a style="--c:#1877F2" href="https://www.facebook.com/BackboneTutorials" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on Facebook"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#fff" d="M13.5 21v-8h2.6l.4-3h-3V8.1c0-.87.27-1.46 1.5-1.46H17V3.96c-.28-.04-1.2-.12-2.28-.12-2.26 0-3.8 1.38-3.8 3.9V10H8.3v3h2.62v8h2.58Z"/></svg></a>
+</nav>
+
+<p>
+<a href="/">Home</a> |
+<a href="/about/">About</a> |
+<a href="/contact/">Contact</a> |
+<a href="/privacy-policy/">Privacy Policy</a> |
+<a href="/terms/">Terms</a>
+</p>
+
+<p>© 2026 Backbone Tutorials</p>
+
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,376 @@
+<!-- DEPLOY TO: /interactive-web/  (index.html) · CollectionPage · per MASTERMIND_SEO.md — NO datePublished/dateModified on hubs -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Interactive Web — realtime engineering patterns</title>
+
+<meta name="description" content="14 guides to realtime web engineering: WebSocket, WebRTC, pub-sub, OT, CRDTs, multiplayer sync, latency, and collaborative editing.">
+
+<meta name="robots" content="index, follow">
+<meta name="author" content="Backbone Tutorials">
+<meta name="theme-color" content="#2563eb">
+<meta name="format-detection" content="telephone=no">
+
+<link rel="canonical" href="https://backbonetutorials.com/interactive-web/">
+
+<link rel="icon" href="/assets/favicon.ico">
+<link rel="apple-touch-icon" href="/assets/favicon.png">
+
+<meta property="og:title" content="Interactive Web — realtime engineering patterns">
+<meta property="og:description" content="14 realtime engineering guides: WebSocket, WebRTC, pub-sub, OT, CRDTs, multiplayer sync, latency and reconciliation, collaborative editing, and rendering loops.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://backbonetutorials.com/interactive-web/">
+<meta property="og:image" content="https://backbonetutorials.com/assets/interactive-web/hub-1200.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:type" content="image/jpeg">
+<meta property="og:image:alt" content="Interactive Web — Backbone Tutorials">
+<meta property="og:site_name" content="Backbone Tutorials">
+<meta property="og:locale" content="en_US">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Interactive Web — realtime engineering patterns">
+<meta name="twitter:description" content="14 realtime engineering guides: WebSocket, WebRTC, pub-sub, OT, CRDTs, multiplayer sync, latency, and rendering loops.">
+<meta name="twitter:image" content="https://backbonetutorials.com/assets/interactive-web/hub-1200.jpg">
+<meta name="twitter:image:alt" content="Interactive Web — Backbone Tutorials">
+<meta name="twitter:url" content="https://backbonetutorials.com/interactive-web/">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+
+<style>
+html{scroll-behavior:smooth}
+body{font-family:'Inter',sans-serif;margin:0;background:#f4f6f9;color:#1f2937;line-height:1.7}
+.container{max-width:900px;margin:30px auto;padding:20px;background:#fff;border-radius:10px;box-shadow:0 2px 10px rgba(0,0,0,0.04)}
+h1,h2,h3{color:#111827}
+.nav{background:#111827;padding:15px;display:flex;justify-content:center;align-items:center;flex-wrap:wrap;gap:8px}
+.nav a{color:white;margin:0 10px;text-decoration:none;font-weight:600}
+.nav a:hover{text-decoration:underline}
+.nav-logo img{vertical-align:middle;margin-right:12px;border-radius:8px}
+a{color:#2563eb}
+.back-home{margin-top:25px}
+footer{background:#111827;color:white;text-align:center;padding:30px 20px;margin-top:40px}
+footer a{color:#93c5fd;text-decoration:none}
+footer a:hover{text-decoration:underline}
+.btn{display:inline-block;background:#2563eb;color:white;padding:12px 22px;border-radius:8px;text-decoration:none;font-weight:600;margin-top:15px;transition:0.2s ease}
+.btn:hover{background:#1d4ed8;transform:translateY(-1px)}
+.breadcrumb{font-size:14px;color:#6b7280;margin:0 0 10px}
+.breadcrumb a{color:#2563eb;text-decoration:none}
+.breadcrumb a:hover{text-decoration:underline}
+.cluster-badge{display:inline-block;background:#f59e0b;color:#111827;font-size:12px;font-weight:700;padding:3px 12px;border-radius:20px;margin-bottom:14px;letter-spacing:.03em}
+.hub-intro{font-size:17px;line-height:1.75;margin-bottom:28px;color:#374151}
+.article-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px;margin:20px 0}
+.article-card{background:#fff;border:1.5px solid #f3f4f6;border-radius:10px;padding:18px 20px;text-decoration:none;color:inherit;transition:border-color .18s,box-shadow .18s;display:flex;flex-direction:column;gap:6px}
+.article-card:hover{border-color:#f59e0b;box-shadow:0 4px 18px rgba(245,158,11,0.10)}
+.article-card .num{font-size:12px;font-weight:700;color:#f59e0b;letter-spacing:.06em}
+.article-card .title{font-size:15px;font-weight:700;color:#111827;line-height:1.35}
+.article-card .desc{font-size:13px;color:#6b7280;line-height:1.5}
+.article-card .tag{font-size:11px;font-weight:600;color:#f59e0b;margin-top:4px}
+.section-label{font-size:13px;font-weight:700;color:#9ca3af;letter-spacing:.08em;text-transform:uppercase;margin:28px 0 10px}
+.cluster-links{display:flex;flex-wrap:wrap;gap:10px;margin:20px 0 0}
+.cluster-link{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border-radius:8px;border:1.5px solid #e5e7eb;text-decoration:none;font-size:14px;font-weight:600;color:#374151;transition:border-color .18s,color .18s}
+.cluster-link:hover{border-color:#2563eb;color:#2563eb}
+.cluster-link .dot{width:9px;height:9px;border-radius:50%;flex-shrink:0}
+.diagram{width:100%;height:auto;display:block;border-radius:10px;margin:24px 0}
+.bt-social{display:flex;gap:13px;flex-wrap:wrap;align-items:center;justify-content:center;margin:0 0 14px;padding:0;list-style:none}
+.bt-social a{position:relative;isolation:isolate;width:46px;height:46px;border-radius:14px;display:inline-flex;align-items:center;justify-content:center;text-decoration:none;-webkit-tap-highlight-color:transparent;background-color:var(--c,#333);background-image:linear-gradient(150deg,rgba(255,255,255,.30),rgba(255,255,255,0) 42%,rgba(0,0,0,.22));box-shadow:0 1px 1px rgba(0,0,0,.22),0 7px 14px -3px rgba(0,0,0,.34),inset 0 1px 0 rgba(255,255,255,.50),inset 0 -2px 5px rgba(0,0,0,.30);transition:transform .18s cubic-bezier(.2,.7,.2,1),box-shadow .18s ease}
+.bt-social a::before{content:"";position:absolute;left:3px;right:3px;top:2px;height:44%;border-radius:12px 12px 50% 50%/12px 12px 24px 24px;background:linear-gradient(180deg,rgba(255,255,255,.42),rgba(255,255,255,0));pointer-events:none;z-index:0}
+.bt-social a:hover{transform:translateY(-3px) scale(1.05);box-shadow:0 2px 2px rgba(0,0,0,.20),0 16px 26px -6px rgba(0,0,0,.40),inset 0 1px 0 rgba(255,255,255,.55),inset 0 -2px 6px rgba(0,0,0,.32)}
+.bt-social a:active{transform:translateY(-1px) scale(1.01)}
+.bt-social a:focus-visible{outline:3px solid #93c5fd;outline-offset:3px}
+.bt-social svg{position:relative;z-index:1;width:22px;height:22px;display:block;filter:drop-shadow(0 1px 1px rgba(0,0,0,.28))}
+@media (prefers-reduced-motion:reduce){.bt-social a{transition:none}.bt-social a:hover{transform:none}}
+@media(max-width:600px){.container{padding:15px}.article-grid{grid-template-columns:1fr}}
+</style>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": "https://backbonetutorials.com/#organization",
+      "name": "Backbone Tutorials",
+      "url": "https://backbonetutorials.com/",
+      "logo": { "@type": "ImageObject", "url": "https://backbonetutorials.com/assets/logo.png" },
+      "sameAs": [
+        "https://github.com/backbonetutorials/backbonetutorials",
+        "https://x.com/backbonetutor",
+        "https://www.youtube.com/@BACKBONETUTORIALS",
+        "https://bsky.app/profile/backbonetutorials.bsky.social",
+        "https://www.instagram.com/backbonetutorials/",
+        "https://www.tiktok.com/@backbonetutorials",
+        "https://www.facebook.com/BackboneTutorials"
+      ],
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "contactType": "customer support",
+        "url": "https://x.com/backbonetutor",
+        "availableLanguage": ["English"],
+        "areaServed": "Worldwide"
+      }
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://backbonetutorials.com/#website",
+      "url": "https://backbonetutorials.com/",
+      "name": "Backbone Tutorials",
+      "publisher": { "@id": "https://backbonetutorials.com/#organization" }
+    },
+    {
+      "@type": "CollectionPage",
+      "@id": "https://backbonetutorials.com/interactive-web/#collection",
+      "url": "https://backbonetutorials.com/interactive-web/",
+      "name": "Interactive Web — realtime engineering patterns",
+      "description": "14 guides to realtime and interactive web engineering: WebSocket, WebRTC, pub-sub, OT, CRDTs, multiplayer sync, latency, and collaborative editing architecture.",
+      "inLanguage": "en",
+      "isPartOf": { "@id": "https://backbonetutorials.com/#website" },
+      "publisher": { "@id": "https://backbonetutorials.com/#organization" },
+      "breadcrumb": { "@id": "https://backbonetutorials.com/interactive-web/#breadcrumb" },
+      "hasPart": [
+        { "@type": "TechArticle", "url": "https://backbonetutorials.com/interactive-web/websocket-fundamentals/",              "name": "WebSocket Fundamentals" },
+        { "@type": "TechArticle", "url": "https://backbonetutorials.com/interactive-web/server-sent-events/",                  "name": "Server-Sent Events" },
+        { "@type": "TechArticle", "url": "https://backbonetutorials.com/interactive-web/webrtc-data-channels/",                "name": "WebRTC Data Channels" },
+        { "@type": "TechArticle", "url": "https://backbonetutorials.com/interactive-web/realtime-data-synchronization/",       "name": "Realtime Data Synchronization" },
+        { "@type": "TechArticle", "url": "https://backbonetutorials.com/interactive-web/presence-and-awareness-systems/",      "name": "Presence and Awareness Systems" },
+        { "@type": "TechArticle", "url": "https://backbonetutorials.com/interactive-web/pub-sub-messaging-patterns/",          "name": "Pub-Sub Messaging Patterns" },
+        { "@type": "TechArticle", "url": "https://backbonetutorials.com/interactive-web/optimistic-ui-updates/",               "name": "Optimistic UI Updates" },
+        { "@type": "TechArticle", "url": "https://backbonetutorials.com/interactive-web/event-streaming-architecture/",        "name": "Event Streaming Architecture" },
+        { "@type": "TechArticle", "url": "https://backbonetutorials.com/interactive-web/operational-transform-basics/",        "name": "Operational Transform Basics" },
+        { "@type": "TechArticle", "url": "https://backbonetutorials.com/interactive-web/conflict-resolution-crdts/",           "name": "Conflict-Resolution CRDTs" },
+        { "@type": "TechArticle", "url": "https://backbonetutorials.com/interactive-web/collaborative-editing-architecture/",  "name": "Collaborative Editing Architecture" },
+        { "@type": "TechArticle", "url": "https://backbonetutorials.com/interactive-web/multiplayer-state-synchronization/",   "name": "Multiplayer State Synchronization" },
+        { "@type": "TechArticle", "url": "https://backbonetutorials.com/interactive-web/latency-and-reconciliation/",          "name": "Latency and Reconciliation" },
+        { "@type": "TechArticle", "url": "https://backbonetutorials.com/interactive-web/realtime-rendering-loops/",            "name": "Realtime Rendering Loops" }
+      ]
+    },
+    {
+      "@type": "BreadcrumbList",
+      "@id": "https://backbonetutorials.com/interactive-web/#breadcrumb",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Home",            "item": "https://backbonetutorials.com/" },
+        { "@type": "ListItem", "position": 2, "name": "Interactive Web", "item": "https://backbonetutorials.com/interactive-web/" }
+      ]
+    }
+  ]
+}
+</script>
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-FYJP43XDHH"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-FYJP43XDHH');
+</script>
+
+</head>
+<body>
+
+<nav class="nav" aria-label="Main Navigation">
+<a href="/" class="nav-logo" title="Backbone Tutorials Homepage"><img src="/assets/logo.png" alt="Backbone Tutorials Logo" width="36" height="36" loading="lazy" decoding="async"></a>
+<a href="/" title="Backbone.js Tutorials Homepage">Home</a>
+<a href="/backbonejs/" title="Backbone.js Complete Guide">Backbone Guide</a>
+<a href="/what-is-a-router/" title="What is a Router">Router</a>
+<a href="/what-is-a-model/" title="What is a Model">Model</a>
+<a href="/what-is-a-view/" title="What is a View">View</a>
+<a href="/what-is-a-collection/" title="What is a Collection">Collection</a>
+</nav>
+
+<main>
+<div class="container">
+
+<nav class="breadcrumb" aria-label="Breadcrumb">
+<a href="/">Home</a> › <span aria-current="page">Interactive Web</span>
+</nav>
+
+<span class="cluster-badge">INTERACTIVE WEB</span>
+
+<h1>Interactive Web</h1>
+
+<p class="hub-intro">
+Everything you need to build realtime, collaborative, and multiplayer web applications: from the first WebSocket connection to operational transforms, CRDTs, lag compensation, and rendering loops. Fourteen engineering guides, each focused on one problem, connected into a complete picture.
+</p>
+
+<svg class="diagram" viewBox="0 0 720 130" role="img" aria-labelledby="hubTitle hubDesc" xmlns="http://www.w3.org/2000/svg">
+  <title id="hubTitle">Interactive Web cluster map</title>
+  <desc id="hubDesc">Four topic groups: transports, sync and state, collaboration, and multiplayer and rendering.</desc>
+  <rect x="0" y="0" width="720" height="130" rx="12" fill="#0f172a"></rect>
+  <g font-family="Inter,sans-serif" text-anchor="middle">
+    <rect x="16"  y="16" width="160" height="98" rx="9" fill="#1e293b" stroke="#f59e0b" stroke-width="1.5"></rect>
+    <text x="96"  y="38" fill="#fcd34d" font-size="10" font-weight="700">TRANSPORT</text>
+    <text x="96"  y="56" fill="#94a3b8" font-size="9">WebSocket</text>
+    <text x="96"  y="70" fill="#94a3b8" font-size="9">Server-Sent Events</text>
+    <text x="96"  y="84" fill="#94a3b8" font-size="9">WebRTC Data Channels</text>
+    <rect x="192" y="16" width="160" height="98" rx="9" fill="#1e293b" stroke="#f59e0b" stroke-width="1.5"></rect>
+    <text x="272" y="38" fill="#fcd34d" font-size="10" font-weight="700">SYNC AND STATE</text>
+    <text x="272" y="56" fill="#94a3b8" font-size="9">Realtime Data Sync</text>
+    <text x="272" y="70" fill="#94a3b8" font-size="9">Presence and Awareness</text>
+    <text x="272" y="84" fill="#94a3b8" font-size="9">Pub-Sub · Optimistic UI</text>
+    <text x="272" y="98" fill="#94a3b8" font-size="9">Event Streaming</text>
+    <rect x="368" y="16" width="164" height="98" rx="9" fill="#1e293b" stroke="#f59e0b" stroke-width="1.5"></rect>
+    <text x="450" y="38" fill="#fcd34d" font-size="10" font-weight="700">COLLABORATION</text>
+    <text x="450" y="56" fill="#94a3b8" font-size="9">OT Basics</text>
+    <text x="450" y="70" fill="#94a3b8" font-size="9">Conflict-Free CRDTs</text>
+    <text x="450" y="84" fill="#94a3b8" font-size="9">Collab Editing Arch</text>
+    <rect x="548" y="16" width="156" height="98" rx="9" fill="#1e293b" stroke="#f59e0b" stroke-width="1.5"></rect>
+    <text x="626" y="38" fill="#fcd34d" font-size="10" font-weight="700">MULTIPLAYER</text>
+    <text x="626" y="56" fill="#94a3b8" font-size="9">State Synchronization</text>
+    <text x="626" y="70" fill="#94a3b8" font-size="9">Latency + Reconciliation</text>
+    <text x="626" y="84" fill="#94a3b8" font-size="9">Rendering Loops</text>
+  </g>
+</svg>
+
+<h2>Transport layer</h2>
+<p>The three browser APIs that carry realtime data. Each has a different delivery model and a different use case.</p>
+<div class="article-grid">
+  <a href="/interactive-web/websocket-fundamentals/" class="article-card">
+    <span class="num">01</span>
+    <span class="title">WebSocket Fundamentals</span>
+    <span class="desc">Full-duplex persistent connections, the handshake, framing, heartbeats, and reconnection with exponential backoff.</span>
+    <span class="tag">Available now</span>
+  </a>
+  <a href="/interactive-web/server-sent-events/" class="article-card">
+    <span class="num">02</span>
+    <span class="title">Server-Sent Events</span>
+    <span class="desc">One-way server push over HTTP, automatic reconnection, event IDs for replay, and when to choose SSE over WebSocket.</span>
+    <span class="tag">Available now</span>
+  </a>
+  <a href="/interactive-web/webrtc-data-channels/" class="article-card">
+    <span class="num">03</span>
+    <span class="title">WebRTC Data Channels</span>
+    <span class="desc">Peer-to-peer data over SCTP/DTLS, SDP offer and answer, ICE with STUN and TURN, and reliable vs unreliable delivery.</span>
+    <span class="tag">Available now</span>
+  </a>
+</div>
+
+<h2>Sync and state</h2>
+<p>Patterns for keeping shared state consistent across clients and handling the asynchrony of a live network.</p>
+<div class="article-grid">
+  <a href="/interactive-web/realtime-data-synchronization/" class="article-card">
+    <span class="num">04</span>
+    <span class="title">Realtime Data Synchronization</span>
+    <span class="desc">Full-state broadcast vs delta updates, sequence numbers, gap detection, catch-up on reconnect, and idempotent handling.</span>
+    <span class="tag">Available now</span>
+  </a>
+  <a href="/interactive-web/presence-and-awareness-systems/" class="article-card">
+    <span class="num">05</span>
+    <span class="title">Presence and Awareness</span>
+    <span class="desc">Online indicators, typing signals, live cursors, heartbeat expiry, and a self-contained awareness layer over WebSocket.</span>
+    <span class="tag">Available now</span>
+  </a>
+  <a href="/interactive-web/pub-sub-messaging-patterns/" class="article-card">
+    <span class="num">06</span>
+    <span class="title">Pub-Sub Messaging Patterns</span>
+    <span class="desc">Topic channels, fan-out broadcast, hierarchical namespacing, subscription lifecycle, and a typed client dispatcher.</span>
+    <span class="tag">Available now</span>
+  </a>
+  <a href="/interactive-web/optimistic-ui-updates/" class="article-card">
+    <span class="num">07</span>
+    <span class="title">Optimistic UI Updates</span>
+    <span class="desc">Snapshot, apply, confirm or revert. Pending counters, animated rollbacks, server reconciliation, and Backbone save patterns.</span>
+    <span class="tag">Available now</span>
+  </a>
+  <a href="/interactive-web/event-streaming-architecture/" class="article-card">
+    <span class="num">08</span>
+    <span class="title">Event Streaming Architecture</span>
+    <span class="desc">Append-only logs, event sourcing, consumer offsets, log compaction, replay for state rebuild, and the frontend stream client.</span>
+    <span class="tag">Available now</span>
+  </a>
+</div>
+
+<h2>Collaboration</h2>
+<p>Algorithms and architectures for concurrent editing where multiple users change the same data simultaneously.</p>
+<div class="article-grid">
+  <a href="/interactive-web/operational-transform-basics/" class="article-card">
+    <span class="num">09</span>
+    <span class="title">Operational Transform Basics</span>
+    <span class="desc">Insert and delete operations, the transform function, convergence, server-side OT coordination, and the limits of OT.</span>
+    <span class="tag">Available now</span>
+  </a>
+  <a href="/interactive-web/conflict-resolution-crdts/" class="article-card">
+    <span class="num">10</span>
+    <span class="title">Conflict-Resolution CRDTs</span>
+    <span class="desc">G-Counter, LWW register, OR-Set, RGA for text, merge semantics, and when to use CRDTs instead of OT.</span>
+    <span class="tag">Available now</span>
+  </a>
+  <a href="/interactive-web/collaborative-editing-architecture/" class="article-card">
+    <span class="num">11</span>
+    <span class="title">Collaborative Editing Architecture</span>
+    <span class="desc">Document model, sync layer, awareness layer, per-user undo, server-side permissions, and how the layers connect.</span>
+    <span class="tag">Available now</span>
+  </a>
+</div>
+
+<h2>Multiplayer and rendering</h2>
+<p>Shared world state across many clients, latency engineering, and the rendering loop that turns network data into pixels.</p>
+<div class="article-grid">
+  <a href="/interactive-web/multiplayer-state-synchronization/" class="article-card">
+    <span class="num">12</span>
+    <span class="title">Multiplayer State Synchronization</span>
+    <span class="desc">Authoritative server, client prediction, input queues, state interpolation, dead reckoning, and lag compensation.</span>
+    <span class="tag">Available now</span>
+  </a>
+  <a href="/interactive-web/latency-and-reconciliation/" class="article-card">
+    <span class="num">13</span>
+    <span class="title">Latency and Reconciliation</span>
+    <span class="desc">Measuring RTT and clock offset, hiding latency with prediction, smooth correction, jitter buffers, and reconnection.</span>
+    <span class="tag">Available now</span>
+  </a>
+  <a href="/interactive-web/realtime-rendering-loops/" class="article-card">
+    <span class="num">14</span>
+    <span class="title">Realtime Rendering Loops</span>
+    <span class="desc">The game loop, requestAnimationFrame, fixed-rate simulation, variable-rate render, network queue integration, frame budget.</span>
+    <span class="tag">Available now  -  Capstone</span>
+  </a>
+</div>
+
+<h2>Related clusters</h2>
+<p>The Interactive Web cluster builds on and connects to other clusters on this site.</p>
+<div class="cluster-links">
+  <a href="/rendering/" class="cluster-link"><span class="dot" style="background:#a855f7"></span>Rendering</a>
+  <a href="/architecture/" class="cluster-link"><span class="dot" style="background:#6366f1"></span>Frontend Architecture</a>
+  <a href="/modern-frameworks/" class="cluster-link"><span class="dot" style="background:#06b6d4"></span>Modern Frameworks</a>
+  <a href="/backbonejs/" class="cluster-link"><span class="dot" style="background:#3b82f6"></span>Backbone.js Guide</a>
+</div>
+
+<div style="margin-top:32px">
+<a href="/backbonejs/" class="btn">Start with the Backbone.js Guide →</a>
+</div>
+
+<div class="back-home" style="margin-top:20px">
+<a href="/">← Back to Home</a>
+</div>
+
+</div>
+</main>
+
+<footer>
+<p>Backbone Tutorials</p>
+<nav class="bt-social" aria-label="Backbone Tutorials on social media">
+  <a style="--c:#181717" href="https://github.com/backbonetutorials/backbonetutorials" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on GitHub"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#fff" d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0 1 12 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222 0 1.606-.014 2.898-.014 3.293 0 .322.216.694.825.576C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg></a>
+  <a style="--c:#000000" href="https://x.com/backbonetutor" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on X (formerly Twitter)"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#fff" d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+  <a style="--c:#FF0000" href="https://www.youtube.com/@BACKBONETUTORIALS" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on YouTube"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#fff" d="M8.5 6.5 L8.5 17.5 L17.5 12 Z"/></svg></a>
+  <a style="--c:#0285FF" href="https://bsky.app/profile/backbonetutorials.bsky.social" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on Bluesky"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#fff" d="M12 10.8c-1.087-2.114-4.046-6.053-6.798-7.995C2.566.944 1.561 1.266.902 1.565.139 1.908 0 3.08 0 3.768c0 .69.378 5.65.624 6.479.815 2.736 3.713 3.66 6.383 3.364.136-.02.275-.039.415-.056-.138.022-.276.04-.415.056-3.912.58-7.387 2.005-2.83 7.078 5.013 5.19 6.87-1.113 7.823-4.308.953 3.195 2.05 9.271 7.733 4.308 4.267-4.308 1.172-6.498-2.74-7.078a8.741 8.741 0 0 1-.415-.056c.14.017.279.036.415.056 2.67.296 5.568-.628 6.383-3.364C23.622 9.418 24 4.458 24 3.768c0-.688-.139-1.86-.902-2.203-.659-.299-1.664-.621-4.3 1.24C16.046 4.747 13.087 8.686 12 10.8Z"/></svg></a>
+  <a style="--c:#d62976;background-image:linear-gradient(150deg,rgba(255,255,255,.30),rgba(255,255,255,0) 42%,rgba(0,0,0,.22)),linear-gradient(45deg,#feda75,#fa7e1e,#d62976,#962fbf,#4f5bd5)" href="https://www.instagram.com/backbonetutorials/" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on Instagram"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="4" y="4" width="16" height="16" rx="5" fill="none" stroke="#fff" stroke-width="2"/><circle cx="12" cy="12" r="3.6" fill="none" stroke="#fff" stroke-width="2"/><circle cx="17.2" cy="6.8" r="1.25" fill="#fff"/></svg></a>
+  <a style="--c:#000000" href="https://www.tiktok.com/@backbonetutorials" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on TikTok"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#fff" d="M16.5 5.82a4.79 4.79 0 0 1-1.16-3.07h-2.9v11.43a2.45 2.45 0 1 1-2.45-2.45c.17 0 .33.02.49.05V8.83a5.36 5.36 0 0 0-.49-.02 5.35 5.35 0 1 0 5.35 5.35V8.6a7.66 7.66 0 0 0 4.46 1.42V7.13a4.79 4.79 0 0 1-2.8-1.31Z"/></svg></a>
+  <a style="--c:#1877F2" href="https://www.facebook.com/BackboneTutorials" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on Facebook"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#fff" d="M13.5 21v-8h2.6l.4-3h-3V8.1c0-.87.27-1.46 1.5-1.46H17V3.96c-.28-.04-1.2-.12-2.28-.12-2.26 0-3.8 1.38-3.8 3.9V10H8.3v3h2.62v8h2.58Z"/></svg></a>
+</nav>
+<p>
+<a href="/">Home</a> |
+<a href="/about/">About</a> |
+<a href="/contact/">Contact</a> |
+<a href="/privacy-policy/">Privacy Policy</a> |
+<a href="/terms/">Terms</a>
+</p>
+<p>© 2026 Backbone Tutorials</p>
+</footer>
+
+</body>
+</html>
