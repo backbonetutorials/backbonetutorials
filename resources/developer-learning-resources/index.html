@@ -1,0 +1,353 @@
+<!-- DEPLOY TO: /resources/developer-learning-resources/  (index.html) · Article · per MASTERMIND_SEO.md -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Developer Learning Resources — Where to Learn</title>
+
+<meta name="description" content="An annotated directory of developer learning resources: reference docs, engineering blogs, courses, books, communities, and learning paths on this site.">
+
+<meta name="robots" content="index, follow">
+<meta name="author" content="Backbone Tutorials">
+<meta name="theme-color" content="#2563eb">
+<meta name="format-detection" content="telephone=no">
+
+<link rel="canonical" href="https://backbonetutorials.com/resources/developer-learning-resources/">
+
+<link rel="icon" href="/assets/favicon.ico">
+<link rel="apple-touch-icon" href="/assets/favicon.png">
+
+<meta property="og:title" content="Developer Learning Resources — Where to Learn">
+<meta property="og:description" content="An annotated directory of developer learning resources: reference docs, engineering blogs, courses, books, communities, and learning paths on this site.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://backbonetutorials.com/resources/developer-learning-resources/">
+<meta property="og:image" content="https://backbonetutorials.com/assets/resources/developer-learning-resources-1200.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:type" content="image/jpeg">
+<meta property="og:image:alt" content="Developer Learning Resources — Backbone Tutorials">
+<meta property="og:site_name" content="Backbone Tutorials">
+<meta property="og:locale" content="en_US">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Developer Learning Resources — Where to Learn">
+<meta name="twitter:description" content="An annotated directory of developer learning resources: reference docs, engineering blogs, courses, books, communities, and learning paths on this site.">
+<meta name="twitter:image" content="https://backbonetutorials.com/assets/resources/developer-learning-resources-1200.jpg">
+<meta name="twitter:image:alt" content="Developer Learning Resources — Backbone Tutorials">
+<meta name="twitter:url" content="https://backbonetutorials.com/resources/developer-learning-resources/">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+
+<style>
+html{scroll-behavior:smooth}
+body{font-family:'Inter',sans-serif;margin:0;background:#f4f6f9;color:#1f2937;line-height:1.7}
+.container{max-width:900px;margin:30px auto;padding:20px;background:#fff;border-radius:10px;box-shadow:0 2px 10px rgba(0,0,0,0.04)}
+h1,h2,h3{color:#111827}
+.nav{background:#111827;padding:15px;display:flex;justify-content:center;align-items:center;flex-wrap:wrap;gap:8px}
+.nav a{color:white;margin:0 10px;text-decoration:none;font-weight:600}
+.nav a:hover{text-decoration:underline}
+.nav-logo img{vertical-align:middle;margin-right:12px;border-radius:8px}
+figure{margin:30px 0}
+pre{background:#111;color:#eee;padding:15px;border-radius:8px;overflow-x:auto;box-shadow:0 2px 8px rgba(0,0,0,0.15)}
+code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+p code,li code{background:#eef2ff;padding:1px 5px;border-radius:4px;font-size:.95em}
+.cta{background:#eef2ff;padding:20px;margin-top:30px;text-align:center;border-radius:10px}
+a{color:#2563eb}
+.back-home{margin-top:25px}
+footer{background:#111827;color:white;text-align:center;padding:30px 20px;margin-top:40px}
+footer a{color:#93c5fd;text-decoration:none}
+footer a:hover{text-decoration:underline}
+.btn{display:inline-block;background:#2563eb;color:white;padding:12px 22px;border-radius:8px;text-decoration:none;font-weight:600;margin-top:15px;transition:0.2s ease}
+.btn:hover{background:#1d4ed8;transform:translateY(-1px)}
+.card{background:#fff;padding:20px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.05);overflow:hidden;max-width:100%;border:1px solid #eef2f7;border-left:4px solid #f97316}
+.toc-list{padding-left:20px}
+.toc-list li{margin-bottom:8px}
+.author-line{font-size:15px;margin-top:-6px;margin-bottom:10px;color:#4b5563}
+figcaption{font-size:14px;color:#6b7280;margin-top:10px}
+#faq h3{margin-top:25px}
+#faq p{margin-bottom:18px}
+.breadcrumb{font-size:14px;color:#6b7280;margin:0 0 10px}
+.breadcrumb a{color:#2563eb;text-decoration:none}
+.breadcrumb a:hover{text-decoration:underline}
+.diagram{width:100%;height:auto;display:block;border-radius:10px}
+table.cmp{border-collapse:collapse;width:100%;margin:20px 0;font-size:14.5px}
+table.cmp th,table.cmp td{border:1px solid #e5e7eb;padding:9px 12px;text-align:left;vertical-align:top}
+table.cmp th{background:#f9fafb;font-weight:700}
+.bt-social{display:flex;gap:13px;flex-wrap:wrap;align-items:center;justify-content:center;margin:0 0 14px;padding:0;list-style:none}
+.bt-social a{position:relative;isolation:isolate;width:46px;height:46px;border-radius:14px;display:inline-flex;align-items:center;justify-content:center;text-decoration:none;-webkit-tap-highlight-color:transparent;background-color:var(--c,#333);background-image:linear-gradient(150deg,rgba(255,255,255,.30),rgba(255,255,255,0) 42%,rgba(0,0,0,.22));box-shadow:0 1px 1px rgba(0,0,0,.22),0 7px 14px -3px rgba(0,0,0,.34),inset 0 1px 0 rgba(255,255,255,.50),inset 0 -2px 5px rgba(0,0,0,.30);transition:transform .18s cubic-bezier(.2,.7,.2,1),box-shadow .18s ease}
+.bt-social a::before{content:"";position:absolute;left:3px;right:3px;top:2px;height:44%;border-radius:12px 12px 50% 50%/12px 12px 24px 24px;background:linear-gradient(180deg,rgba(255,255,255,.42),rgba(255,255,255,0));pointer-events:none;z-index:0}
+.bt-social a:hover{transform:translateY(-3px) scale(1.05);box-shadow:0 2px 2px rgba(0,0,0,.20),0 16px 26px -6px rgba(0,0,0,.40),inset 0 1px 0 rgba(255,255,255,.55),inset 0 -2px 6px rgba(0,0,0,.32)}
+.bt-social a:active{transform:translateY(-1px) scale(1.01)}
+.bt-social a:focus-visible{outline:3px solid #93c5fd;outline-offset:3px}
+.bt-social svg{position:relative;z-index:1;width:22px;height:22px;display:block;filter:drop-shadow(0 1px 1px rgba(0,0,0,.28))}
+@media (prefers-reduced-motion:reduce){.bt-social a{transition:none}.bt-social a:hover{transform:none}}
+@media(max-width:600px){.container{padding:15px}}
+</style>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": "https://backbonetutorials.com/#organization",
+      "name": "Backbone Tutorials",
+      "url": "https://backbonetutorials.com/",
+      "logo": { "@type": "ImageObject", "url": "https://backbonetutorials.com/assets/logo.png" },
+      "sameAs": [
+        "https://github.com/backbonetutorials/backbonetutorials",
+        "https://x.com/backbonetutor",
+        "https://www.youtube.com/@BACKBONETUTORIALS",
+        "https://bsky.app/profile/backbonetutorials.bsky.social",
+        "https://www.instagram.com/backbonetutorials/",
+        "https://www.tiktok.com/@backbonetutorials",
+        "https://www.facebook.com/BackboneTutorials"
+      ],
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "contactType": "customer support",
+        "url": "https://x.com/backbonetutor",
+        "availableLanguage": ["English"],
+        "areaServed": "Worldwide"
+      }
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://backbonetutorials.com/#website",
+      "url": "https://backbonetutorials.com/",
+      "name": "Backbone Tutorials",
+      "publisher": { "@id": "https://backbonetutorials.com/#organization" }
+    },
+    {
+      "@type": "Person",
+      "@id": "https://backbonetutorials.com/author/backbone-tutorials-team/#person",
+      "name": "Backbone Tutorials Team",
+      "url": "https://backbonetutorials.com/author/backbone-tutorials-team/",
+      "worksFor": { "@id": "https://backbonetutorials.com/#organization" },
+      "jobTitle": "Frontend JavaScript Editorial Team",
+      "knowsAbout": ["Learning resources", "Web development education", "Documentation", "Frontend development"]
+    },
+    {
+      "@type": "WebPage",
+      "@id": "https://backbonetutorials.com/resources/developer-learning-resources/#webpage",
+      "url": "https://backbonetutorials.com/resources/developer-learning-resources/",
+      "name": "Developer Learning Resources \u2014 Where to Learn",
+      "headline": "Developer Learning Resources",
+      "description": "An annotated directory of developer learning resources: reference docs, engineering blogs, courses, books, communities, and learning paths on this site.",
+      "inLanguage": "en",
+      "isPartOf": { "@id": "https://backbonetutorials.com/#website" },
+      "author": { "@id": "https://backbonetutorials.com/author/backbone-tutorials-team/#person" },
+      "publisher": { "@id": "https://backbonetutorials.com/#organization" },
+      "breadcrumb": { "@id": "https://backbonetutorials.com/resources/developer-learning-resources/#breadcrumb" },
+      "mainEntity": { "@id": "https://backbonetutorials.com/resources/developer-learning-resources/#article" }
+    },
+    {
+      "@type": "Article",
+      "@id": "https://backbonetutorials.com/resources/developer-learning-resources/#article",
+      "url": "https://backbonetutorials.com/resources/developer-learning-resources/",
+      "headline": "Developer Learning Resources",
+      "description": "An annotated directory of developer learning resources: reference docs, engineering blogs, courses, books, communities, and learning paths on this site.",
+      "inLanguage": "en",
+      "image": { "@type": "ImageObject", "url": "https://backbonetutorials.com/assets/resources/developer-learning-resources-1200.jpg", "width": 1200, "height": 630 },
+      "author": { "@id": "https://backbonetutorials.com/author/backbone-tutorials-team/#person" },
+      "publisher": { "@id": "https://backbonetutorials.com/#organization" },
+      "mainEntityOfPage": { "@id": "https://backbonetutorials.com/resources/developer-learning-resources/#webpage" },
+      "datePublished": "2026-06-14T04:30:00+07:00",
+      "dateModified": "2026-06-14T04:30:00+07:00",
+      "articleSection": ["Resources", "Frontend Architecture"],
+      "keywords": ["developer learning resources", "learn web development", "frontend learning", "web development docs"],
+      "about": [
+        { "@type": "Thing", "name": "Learning resources" },
+        { "@type": "Thing", "name": "Web development" },
+        { "@type": "Thing", "name": "Education" }
+      ]
+    },
+    {
+      "@type": "BreadcrumbList",
+      "@id": "https://backbonetutorials.com/resources/developer-learning-resources/#breadcrumb",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://backbonetutorials.com/" },
+        { "@type": "ListItem", "position": 2, "name": "Resources", "item": "https://backbonetutorials.com/resources/" },
+        { "@type": "ListItem", "position": 3, "name": "Developer Learning Resources", "item": "https://backbonetutorials.com/resources/developer-learning-resources/" }
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "@id": "https://backbonetutorials.com/resources/developer-learning-resources/#faq",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What are the best reference sites for web development?",
+          "acceptedAnswer": { "@type": "Answer", "text": "MDN Web Docs is the definitive reference for HTML, CSS, JavaScript, and browser APIs, and web.dev is strong on performance, Core Web Vitals, and rendering. Both are accurate and free, and are the first places to check." }
+        },
+        {
+          "@type": "Question",
+          "name": "How should I learn frontend development effectively?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Read a few trustworthy sources deeply rather than skimming many. Combine reference documentation for how things work, engineering blogs for why, and structured paths or courses when a topic needs a guided sequence." }
+        },
+        {
+          "@type": "Question",
+          "name": "Are books still worth reading for frontend?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Yes, especially books on the JavaScript language itself and on software design, since those change far more slowly than frameworks. They give a depth of understanding that outlasts any specific tool." }
+        },
+        {
+          "@type": "Question",
+          "name": "Where can I practise what I learn?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Use runnable examples and build small projects. This site's examples hub provides focused, runnable code for each concept, and the guides sequence the articles into paths so reading and practice stay connected." }
+        }
+      ]
+    }
+  ]
+}
+</script>
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-FYJP43XDHH"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-FYJP43XDHH');
+</script>
+
+</head>
+<body>
+
+<nav class="nav" aria-label="Main Navigation">
+<a href="/" class="nav-logo" title="Backbone Tutorials Homepage"><img src="/assets/logo.png" alt="Backbone Tutorials Logo" width="36" height="36" loading="lazy" decoding="async"></a>
+<a href="/" title="Backbone.js Tutorials Homepage">Home</a>
+<a href="/backbonejs/" title="Backbone.js Complete Guide">Backbone Guide</a>
+<a href="/what-is-a-router/" title="What is a Router">Router</a>
+<a href="/what-is-a-model/" title="What is a Model">Model</a>
+<a href="/what-is-a-view/" title="What is a View">View</a>
+<a href="/what-is-a-collection/" title="What is a Collection">Collection</a>
+</nav>
+
+<main>
+<article class="container">
+
+<nav class="breadcrumb" aria-label="Breadcrumb">
+<a href="/">Home</a> › <a href="/resources/">Resources</a> › <span aria-current="page">Developer Learning Resources</span>
+</nav>
+
+<h1>Developer Learning Resources</h1>
+
+<p class="author-line">Written by <a href="/author/backbone-tutorials-team/">Backbone Tutorials Team</a></p>
+<p class="author-line">Last updated: June 2026 · 8 min read</p>
+
+<p>Good learning resources share a quality: they explain why, not only how. This annotated directory points to the references, blogs, and communities that consistently do that for frontend engineering, with a note on what each is best for. It is deliberately short and opinionated, because a few trustworthy sources read deeply beat a long bookmark folder skimmed once. Most are free.</p>
+<p>Where this site covers a topic in the same spirit, the entry links across so you can keep learning in one place.</p>
+
+<figure>
+<svg class="diagram" viewBox="0 0 720 140" role="img" aria-labelledby="t d" xmlns="http://www.w3.org/2000/svg">
+<title id="t">Learning resource categories</title><desc id="d">Reference documentation, engineering blogs, structured courses, books, community channels, and this site.</desc>
+<rect x="0" y="0" width="720" height="140" rx="12" fill="#0f172a"></rect>
+<g font-family="Inter,sans-serif"><rect x="20" y="30" width="219" height="40" rx="9" fill="#1e293b" stroke="#f97316"></rect><text x="129" y="54" fill="#fdba74" font-size="10" text-anchor="middle" font-weight="700">References</text><rect x="251" y="30" width="219" height="40" rx="9" fill="#1e293b" stroke="#f97316"></rect><text x="360" y="54" fill="#fdba74" font-size="10" text-anchor="middle" font-weight="700">Engineering blogs</text><rect x="481" y="30" width="219" height="40" rx="9" fill="#1e293b" stroke="#f97316"></rect><text x="591" y="54" fill="#fdba74" font-size="10" text-anchor="middle" font-weight="700">Courses</text><rect x="20" y="82" width="219" height="40" rx="9" fill="#1e293b" stroke="#f97316"></rect><text x="129" y="106" fill="#fdba74" font-size="10" text-anchor="middle" font-weight="700">Books</text><rect x="251" y="82" width="219" height="40" rx="9" fill="#1e293b" stroke="#f97316"></rect><text x="360" y="106" fill="#fdba74" font-size="10" text-anchor="middle" font-weight="700">Communities</text><rect x="481" y="82" width="219" height="40" rx="9" fill="#1e293b" stroke="#f97316"></rect><text x="591" y="106" fill="#fdba74" font-size="10" text-anchor="middle" font-weight="700">This site</text></g></svg>
+</figure>
+
+<div class="card">
+<p style="margin-top:0"><strong>What you'll learn</strong></p>
+<ul class="toc-list">
+<li><a href="#refs">Reference documentation</a></li>
+<li><a href="#blogs">Engineering blogs</a></li>
+<li><a href="#courses">Structured courses</a></li>
+<li><a href="#books">Books worth reading</a></li>
+<li><a href="#communities">Communities</a></li>
+<li><a href="#site">Learning on this site</a></li>
+</ul>
+</div>
+
+<h2 id="refs">Reference documentation</h2>
+<p>Two references cover almost everything about how the web platform behaves.</p>
+<h3>The sources to trust first</h3>
+<ul>
+<li><strong><a href="https://developer.mozilla.org/" target="_blank" rel="noopener noreferrer">MDN Web Docs</a></strong> &middot; the definitive reference for HTML, CSS, JavaScript, and browser APIs, accurate and thorough, the first place to check how anything works.</li>
+<li><strong><a href="https://web.dev/" target="_blank" rel="noopener noreferrer">web.dev</a></strong> &middot; Google's resource for modern web development, strong on performance, Core Web Vitals, and rendering, closely aligned with how search and browsers actually behave.</li>
+</ul>
+<h2 id="blogs">Engineering blogs</h2>
+<p>Blogs explain the reasoning and trade-offs that references leave out.</p>
+<h3>Where ideas are argued</h3>
+<ul>
+<li><strong>CSS-Tricks and Smashing Magazine</strong> &middot; long-running publications with practical, well-edited articles on real frontend problems, good for depth on a specific technique.</li>
+<li><strong>Browser and framework engineering blogs</strong> &middot; posts from the teams building browsers and frameworks explain changes at the source, the most reliable account of why something works as it does.</li>
+</ul>
+<h2 id="courses">Structured courses</h2>
+<p>When a topic needs a guided path, a structured course beats scattered articles.</p>
+<h3>Guided, sequenced learning</h3>
+<ul>
+<li><strong>Frontend-focused course platforms</strong> &middot; project-based courses that build a real application step by step suit people who learn by doing rather than reading.</li>
+<li><strong>The roadmaps on this site</strong> &middot; the <a href="/guides/">guides</a> sequence existing articles into free learning paths, from <a href="/guides/backbone-learning-path/">Backbone</a> to <a href="/guides/frontend-architecture-roadmap/">architecture</a>.</li>
+</ul>
+<h2 id="books">Books worth reading</h2>
+<p>A few books remain worth the time despite the pace of change.</p>
+<h3>Long-form depth</h3>
+<ul>
+<li><strong>Foundational JavaScript books</strong> &middot; well-regarded titles on the language itself give a depth of understanding that outlasts any framework, since the language changes far more slowly.</li>
+<li><strong>Architecture and patterns books</strong> &middot; texts on software design and frontend patterns explain structure that applies across frameworks, complementing the <a href="/concepts/">concepts</a> on this site.</li>
+</ul>
+<h2 id="communities">Communities</h2>
+<p>People accelerate learning, both for answers and for exposure to new ideas.</p>
+<h3>Learning with others</h3>
+<ul>
+<li><strong>Stack Overflow</strong> &middot; the archive of answered programming questions, where most specific problems have already been solved and explained.</li>
+<li><strong>Developer communities and forums</strong> &middot; active spaces for discussion and feedback keep you current and surface ideas you would not search for, including this site is own <a href="/about/">channels</a>.</li>
+</ul>
+<h2 id="site">Learning on this site</h2>
+<p>This site is built as a connected curriculum, not isolated posts.</p>
+<h3>A route through the material</h3>
+<ul>
+<li><strong>The topic clusters</strong> &middot; <a href="/backbonejs/">Backbone</a>, <a href="/architecture/">architecture</a>, <a href="/rendering/">rendering</a>, <a href="/javascript-seo/">JavaScript SEO</a>, and <a href="/interactive-web/">interactive web</a> each go from basics to depth.</li>
+<li><strong>The examples and guides</strong> &middot; the <a href="/examples/">examples</a> give runnable code and the <a href="/guides/">guides</a> give sequenced paths, so reading and practice stay together.</li>
+</ul>
+
+<section id="faq">
+<h2>Frequently Asked Questions</h2>
+<h3>What are the best reference sites for web development?</h3>
+<p>MDN Web Docs is the definitive reference for HTML, CSS, JavaScript, and browser APIs, and web.dev is strong on performance, Core Web Vitals, and rendering. Both are accurate and free, and are the first places to check.</p>
+<h3>How should I learn frontend development effectively?</h3>
+<p>Read a few trustworthy sources deeply rather than skimming many. Combine reference documentation for how things work, engineering blogs for why, and structured paths or courses when a topic needs a guided sequence.</p>
+<h3>Are books still worth reading for frontend?</h3>
+<p>Yes, especially books on the JavaScript language itself and on software design, since those change far more slowly than frameworks. They give a depth of understanding that outlasts any specific tool.</p>
+<h3>Where can I practise what I learn?</h3>
+<p>Use runnable examples and build small projects. This site's examples hub provides focused, runnable code for each concept, and the guides sequence the articles into paths so reading and practice stay connected.</p>
+</section>
+
+<p><strong>Read next:</strong> back to the <a href="/resources/">Resources</a> hub, or start a <a href="/guides/">learning path</a>.</p>
+
+<div class="cta"><p><strong>Ready to follow a path?</strong></p><p>The guides turn these resources into a sequenced route through the material.</p><a href="/guides/" class="btn">Explore the Guides →</a></div>
+
+<div class="back-home">
+<a href="/resources/">← Back to Resources</a>
+</div>
+
+</article>
+</main>
+
+<footer>
+<p>Backbone Tutorials</p>
+<nav class="bt-social" aria-label="Backbone Tutorials on social media">
+  <a style="--c:#181717" href="https://github.com/backbonetutorials/backbonetutorials" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on GitHub"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#fff" d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0 1 12 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222 0 1.606-.014 2.898-.014 3.293 0 .322.216.694.825.576C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg></a>
+  <a style="--c:#000000" href="https://x.com/backbonetutor" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on X (formerly Twitter)"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#fff" d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+  <a style="--c:#FF0000" href="https://www.youtube.com/@BACKBONETUTORIALS" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on YouTube"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#fff" d="M8.5 6.5 L8.5 17.5 L17.5 12 Z"/></svg></a>
+  <a style="--c:#0285FF" href="https://bsky.app/profile/backbonetutorials.bsky.social" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on Bluesky"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#fff" d="M12 10.8c-1.087-2.114-4.046-6.053-6.798-7.995C2.566.944 1.561 1.266.902 1.565.139 1.908 0 3.08 0 3.768c0 .69.378 5.65.624 6.479.815 2.736 3.713 3.66 6.383 3.364.136-.02.275-.039.415-.056-.138.022-.276.04-.415.056-3.912.58-7.387 2.005-2.83 7.078 5.013 5.19 6.87-1.113 7.823-4.308.953 3.195 2.05 9.271 7.733 4.308 4.267-4.308 1.172-6.498-2.74-7.078a8.741 8.741 0 0 1-.415-.056c.14.017.279.036.415.056 2.67.296 5.568-.628 6.383-3.364C23.622 9.418 24 4.458 24 3.768c0-.688-.139-1.86-.902-2.203-.659-.299-1.664-.621-4.3 1.24C16.046 4.747 13.087 8.686 12 10.8Z"/></svg></a>
+  <a style="--c:#d62976;background-image:linear-gradient(150deg,rgba(255,255,255,.30),rgba(255,255,255,0) 42%,rgba(0,0,0,.22)),linear-gradient(45deg,#feda75,#fa7e1e,#d62976,#962fbf,#4f5bd5)" href="https://www.instagram.com/backbonetutorials/" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on Instagram"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="4" y="4" width="16" height="16" rx="5" fill="none" stroke="#fff" stroke-width="2"/><circle cx="12" cy="12" r="3.6" fill="none" stroke="#fff" stroke-width="2"/><circle cx="17.2" cy="6.8" r="1.25" fill="#fff"/></svg></a>
+  <a style="--c:#000000" href="https://www.tiktok.com/@backbonetutorials" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on TikTok"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#fff" d="M16.5 5.82a4.79 4.79 0 0 1-1.16-3.07h-2.9v11.43a2.45 2.45 0 1 1-2.45-2.45c.17 0 .33.02.49.05V8.83a5.36 5.36 0 0 0-.49-.02 5.35 5.35 0 1 0 5.35 5.35V8.6a7.66 7.66 0 0 0 4.46 1.42V7.13a4.79 4.79 0 0 1-2.8-1.31Z"/></svg></a>
+  <a style="--c:#1877F2" href="https://www.facebook.com/BackboneTutorials" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on Facebook"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#fff" d="M13.5 21v-8h2.6l.4-3h-3V8.1c0-.87.27-1.46 1.5-1.46H17V3.96c-.28-.04-1.2-.12-2.28-.12-2.26 0-3.8 1.38-3.8 3.9V10H8.3v3h2.62v8h2.58Z"/></svg></a>
+</nav>
+<p>
+<a href="/">Home</a> |
+<a href="/about/">About</a> |
+<a href="/contact/">Contact</a> |
+<a href="/privacy-policy/">Privacy Policy</a> |
+<a href="/terms/">Terms</a>
+</p>
+<p>© 2026 Backbone Tutorials</p>
+</footer>
+
+</body>
+</html>

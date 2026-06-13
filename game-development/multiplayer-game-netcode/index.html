@@ -1,0 +1,336 @@
+<!-- DEPLOY TO: /game-development/multiplayer-game-netcode/  (index.html) · TechArticle · per MASTERMIND_SEO.md -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Multiplayer Game Netcode — Staying in Sync</title>
+
+<meta name="description" content="Learn multiplayer game netcode: the authoritative server model, client prediction, server reconciliation, and interpolation for networked play.">
+
+<meta name="robots" content="index, follow">
+<meta name="author" content="Backbone Tutorials">
+<meta name="theme-color" content="#2563eb">
+<meta name="format-detection" content="telephone=no">
+
+<link rel="canonical" href="https://backbonetutorials.com/game-development/multiplayer-game-netcode/">
+
+<link rel="icon" href="/assets/favicon.ico">
+<link rel="apple-touch-icon" href="/assets/favicon.png">
+
+<meta property="og:title" content="Multiplayer Game Netcode — Staying in Sync">
+<meta property="og:description" content="Learn multiplayer game netcode: the authoritative server model, client prediction, server reconciliation, and interpolation for networked play.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://backbonetutorials.com/game-development/multiplayer-game-netcode/">
+<meta property="og:image" content="https://backbonetutorials.com/assets/game-development/multiplayer-game-netcode-1200.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:type" content="image/jpeg">
+<meta property="og:image:alt" content="Multiplayer Game Netcode — Backbone Tutorials">
+<meta property="og:site_name" content="Backbone Tutorials">
+<meta property="og:locale" content="en_US">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Multiplayer Game Netcode — Staying in Sync">
+<meta name="twitter:description" content="Learn multiplayer game netcode: the authoritative server model, client prediction, server reconciliation, and interpolation for networked play.">
+<meta name="twitter:image" content="https://backbonetutorials.com/assets/game-development/multiplayer-game-netcode-1200.jpg">
+<meta name="twitter:image:alt" content="Multiplayer Game Netcode — Backbone Tutorials">
+<meta name="twitter:url" content="https://backbonetutorials.com/game-development/multiplayer-game-netcode/">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+
+<style>
+html{scroll-behavior:smooth}
+body{font-family:'Inter',sans-serif;margin:0;background:#f4f6f9;color:#1f2937;line-height:1.7}
+.container{max-width:900px;margin:30px auto;padding:20px;background:#fff;border-radius:10px;box-shadow:0 2px 10px rgba(0,0,0,0.04)}
+h1,h2,h3{color:#111827}
+.nav{background:#111827;padding:15px;display:flex;justify-content:center;align-items:center;flex-wrap:wrap;gap:8px}
+.nav a{color:white;margin:0 10px;text-decoration:none;font-weight:600}
+.nav a:hover{text-decoration:underline}
+.nav-logo img{vertical-align:middle;margin-right:12px;border-radius:8px}
+figure{margin:30px 0}
+pre{background:#111;color:#eee;padding:15px;border-radius:8px;overflow-x:auto;box-shadow:0 2px 8px rgba(0,0,0,0.15)}
+code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+p code,li code{background:#eef2ff;padding:1px 5px;border-radius:4px;font-size:.95em}
+.cta{background:#eef2ff;padding:20px;margin-top:30px;text-align:center;border-radius:10px}
+a{color:#2563eb}
+.back-home{margin-top:25px}
+footer{background:#111827;color:white;text-align:center;padding:30px 20px;margin-top:40px}
+footer a{color:#93c5fd;text-decoration:none}
+footer a:hover{text-decoration:underline}
+.btn{display:inline-block;background:#2563eb;color:white;padding:12px 22px;border-radius:8px;text-decoration:none;font-weight:600;margin-top:15px;transition:0.2s ease}
+.btn:hover{background:#1d4ed8;transform:translateY(-1px)}
+.card{background:#fff;padding:20px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.05);overflow:hidden;max-width:100%;border:1px solid #eef2f7;border-left:4px solid #ec4899}
+.toc-list{padding-left:20px}
+.toc-list li{margin-bottom:8px}
+.author-line{font-size:15px;margin-top:-6px;margin-bottom:10px;color:#4b5563}
+figcaption{font-size:14px;color:#6b7280;margin-top:10px}
+#faq h3{margin-top:25px}
+#faq p{margin-bottom:18px}
+.breadcrumb{font-size:14px;color:#6b7280;margin:0 0 10px}
+.breadcrumb a{color:#2563eb;text-decoration:none}
+.breadcrumb a:hover{text-decoration:underline}
+.diagram{width:100%;height:auto;display:block;border-radius:10px}
+table.cmp{border-collapse:collapse;width:100%;margin:20px 0;font-size:14.5px}
+table.cmp th,table.cmp td{border:1px solid #e5e7eb;padding:9px 12px;text-align:left;vertical-align:top}
+table.cmp th{background:#f9fafb;font-weight:700}
+.bt-social{display:flex;gap:13px;flex-wrap:wrap;align-items:center;justify-content:center;margin:0 0 14px;padding:0;list-style:none}
+.bt-social a{position:relative;isolation:isolate;width:46px;height:46px;border-radius:14px;display:inline-flex;align-items:center;justify-content:center;text-decoration:none;-webkit-tap-highlight-color:transparent;background-color:var(--c,#333);background-image:linear-gradient(150deg,rgba(255,255,255,.30),rgba(255,255,255,0) 42%,rgba(0,0,0,.22));box-shadow:0 1px 1px rgba(0,0,0,.22),0 7px 14px -3px rgba(0,0,0,.34),inset 0 1px 0 rgba(255,255,255,.50),inset 0 -2px 5px rgba(0,0,0,.30);transition:transform .18s cubic-bezier(.2,.7,.2,1),box-shadow .18s ease}
+.bt-social a::before{content:"";position:absolute;left:3px;right:3px;top:2px;height:44%;border-radius:12px 12px 50% 50%/12px 12px 24px 24px;background:linear-gradient(180deg,rgba(255,255,255,.42),rgba(255,255,255,0));pointer-events:none;z-index:0}
+.bt-social a:hover{transform:translateY(-3px) scale(1.05);box-shadow:0 2px 2px rgba(0,0,0,.20),0 16px 26px -6px rgba(0,0,0,.40),inset 0 1px 0 rgba(255,255,255,.55),inset 0 -2px 6px rgba(0,0,0,.32)}
+.bt-social a:active{transform:translateY(-1px) scale(1.01)}
+.bt-social a:focus-visible{outline:3px solid #93c5fd;outline-offset:3px}
+.bt-social svg{position:relative;z-index:1;width:22px;height:22px;display:block;filter:drop-shadow(0 1px 1px rgba(0,0,0,.28))}
+@media (prefers-reduced-motion:reduce){.bt-social a{transition:none}.bt-social a:hover{transform:none}}
+@media(max-width:600px){.container{padding:15px}}
+</style>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": "https://backbonetutorials.com/#organization",
+      "name": "Backbone Tutorials",
+      "url": "https://backbonetutorials.com/",
+      "logo": { "@type": "ImageObject", "url": "https://backbonetutorials.com/assets/logo.png" },
+      "sameAs": [
+        "https://github.com/backbonetutorials/backbonetutorials",
+        "https://x.com/backbonetutor",
+        "https://www.youtube.com/@BACKBONETUTORIALS",
+        "https://bsky.app/profile/backbonetutorials.bsky.social",
+        "https://www.instagram.com/backbonetutorials/",
+        "https://www.tiktok.com/@backbonetutorials",
+        "https://www.facebook.com/BackboneTutorials"
+      ],
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "contactType": "customer support",
+        "url": "https://x.com/backbonetutor",
+        "availableLanguage": ["English"],
+        "areaServed": "Worldwide"
+      }
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://backbonetutorials.com/#website",
+      "url": "https://backbonetutorials.com/",
+      "name": "Backbone Tutorials",
+      "publisher": { "@id": "https://backbonetutorials.com/#organization" }
+    },
+    {
+      "@type": "Person",
+      "@id": "https://backbonetutorials.com/author/backbone-tutorials-team/#person",
+      "name": "Backbone Tutorials Team",
+      "url": "https://backbonetutorials.com/author/backbone-tutorials-team/",
+      "worksFor": { "@id": "https://backbonetutorials.com/#organization" },
+      "jobTitle": "Frontend JavaScript Editorial Team",
+      "knowsAbout": ["Netcode", "Client prediction", "Authoritative server", "Multiplayer games"]
+    },
+    {
+      "@type": "WebPage",
+      "@id": "https://backbonetutorials.com/game-development/multiplayer-game-netcode/#webpage",
+      "url": "https://backbonetutorials.com/game-development/multiplayer-game-netcode/",
+      "name": "Multiplayer Game Netcode \u2014 Staying in Sync",
+      "headline": "Multiplayer Game Netcode",
+      "description": "Learn multiplayer game netcode: the authoritative server model, client prediction, server reconciliation, and interpolation for networked play.",
+      "inLanguage": "en",
+      "isPartOf": { "@id": "https://backbonetutorials.com/#website" },
+      "author": { "@id": "https://backbonetutorials.com/author/backbone-tutorials-team/#person" },
+      "publisher": { "@id": "https://backbonetutorials.com/#organization" },
+      "breadcrumb": { "@id": "https://backbonetutorials.com/game-development/multiplayer-game-netcode/#breadcrumb" },
+      "mainEntity": { "@id": "https://backbonetutorials.com/game-development/multiplayer-game-netcode/#article" }
+    },
+    {
+      "@type": "TechArticle",
+      "@id": "https://backbonetutorials.com/game-development/multiplayer-game-netcode/#article",
+      "url": "https://backbonetutorials.com/game-development/multiplayer-game-netcode/",
+      "headline": "Multiplayer Game Netcode",
+      "description": "Learn multiplayer game netcode: the authoritative server model, client prediction, server reconciliation, and interpolation for networked play.",
+      "inLanguage": "en",
+      "image": { "@type": "ImageObject", "url": "https://backbonetutorials.com/assets/game-development/multiplayer-game-netcode-1200.jpg", "width": 1200, "height": 630 },
+      "author": { "@id": "https://backbonetutorials.com/author/backbone-tutorials-team/#person" },
+      "publisher": { "@id": "https://backbonetutorials.com/#organization" },
+      "mainEntityOfPage": { "@id": "https://backbonetutorials.com/game-development/multiplayer-game-netcode/#webpage" },
+      "datePublished": "2026-06-14T04:30:00+07:00",
+      "dateModified": "2026-06-14T04:30:00+07:00",
+      "articleSection": ["Game Development", "Frontend Architecture"],
+      "keywords": ["multiplayer game netcode", "client prediction", "server reconciliation", "game networking"],
+      "about": [
+        { "@type": "Thing", "name": "Netcode" },
+        { "@type": "Thing", "name": "Multiplayer games" },
+        { "@type": "Thing", "name": "Networking" }
+      ]
+    },
+    {
+      "@type": "BreadcrumbList",
+      "@id": "https://backbonetutorials.com/game-development/multiplayer-game-netcode/#breadcrumb",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://backbonetutorials.com/" },
+        { "@type": "ListItem", "position": 2, "name": "Game Development", "item": "https://backbonetutorials.com/game-development/" },
+        { "@type": "ListItem", "position": 3, "name": "Multiplayer Game Netcode", "item": "https://backbonetutorials.com/game-development/multiplayer-game-netcode/" }
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "@id": "https://backbonetutorials.com/game-development/multiplayer-game-netcode/#faq",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What is netcode in multiplayer games?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Netcode is the set of techniques that keep a networked game in sync despite delay. It covers who holds the true state, how clients show moves instantly, and how disagreements between client and server are resolved." }
+        },
+        {
+          "@type": "Question",
+          "name": "What is an authoritative server?",
+          "acceptedAnswer": { "@type": "Answer", "text": "An authoritative server is one machine that holds the true game state. Clients send inputs to it rather than deciding outcomes, and it resolves everything. This prevents disagreement between players and makes cheating far harder." }
+        },
+        {
+          "@type": "Question",
+          "name": "What is client prediction?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Client prediction applies your input immediately, predicting what the server will decide, so your character responds at once instead of after a network round trip. Because you know your own input, the prediction is almost always correct." }
+        },
+        {
+          "@type": "Question",
+          "name": "What is server reconciliation?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Reconciliation corrects a wrong prediction. When the server result differs from what the client predicted, the client accepts the server state and replays inputs made since, applying the correction without losing recent actions." }
+        }
+      ]
+    }
+  ]
+}
+</script>
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-FYJP43XDHH"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-FYJP43XDHH');
+</script>
+
+</head>
+<body>
+
+<nav class="nav" aria-label="Main Navigation">
+<a href="/" class="nav-logo" title="Backbone Tutorials Homepage"><img src="/assets/logo.png" alt="Backbone Tutorials Logo" width="36" height="36" loading="lazy" decoding="async"></a>
+<a href="/" title="Backbone.js Tutorials Homepage">Home</a>
+<a href="/backbonejs/" title="Backbone.js Complete Guide">Backbone Guide</a>
+<a href="/what-is-a-router/" title="What is a Router">Router</a>
+<a href="/what-is-a-model/" title="What is a Model">Model</a>
+<a href="/what-is-a-view/" title="What is a View">View</a>
+<a href="/what-is-a-collection/" title="What is a Collection">Collection</a>
+</nav>
+
+<main>
+<article class="container">
+
+<nav class="breadcrumb" aria-label="Breadcrumb">
+<a href="/">Home</a> › <a href="/game-development/">Game Development</a> › <span aria-current="page">Multiplayer Game Netcode</span>
+</nav>
+
+<h1>Multiplayer Game Netcode</h1>
+
+<p class="author-line">Written by <a href="/author/backbone-tutorials-team/">Backbone Tutorials Team</a></p>
+<p class="author-line">Last updated: June 2026 · 8 min read</p>
+
+<p>A game played by two people on one keyboard stays in sync for free. The moment those players sit at different computers, everything changes: messages take time to arrive, each player sees a slightly different version of the game, and someone has to decide what really happened. Netcode is the set of techniques that solve this. This article explains the authoritative server model, client prediction, and reconciliation, the foundations of networked multiplayer, framed purely as engineering.</p>
+<p>It extends the <a href="/game-development/multiplayer-pong/">local multiplayer Pong</a> demo and shares its core problems with the <a href="/interactive-web/">interactive web</a> cluster.</p>
+
+<figure>
+<svg class="diagram" viewBox="0 0 720 150" role="img" aria-labelledby="t d" xmlns="http://www.w3.org/2000/svg">
+<title id="t">The netcode loop</title><desc id="d">A client predicts a move, sends it to the authoritative server, and reconciles when the server confirms.</desc>
+<rect x="0" y="0" width="720" height="150" rx="12" fill="#0f172a"></rect>
+<g font-family="Inter,sans-serif"><rect x="20" y="54" width="160" height="42" rx="9" fill="#1e293b" stroke="#ec4899"></rect><text x="100" y="79" fill="#f9a8d4" font-size="10.5" text-anchor="middle" font-weight="700">Client predicts</text><rect x="194" y="54" width="160" height="42" rx="9" fill="#1e293b" stroke="#ec4899"></rect><text x="273" y="73" fill="#f9a8d4" font-size="10.5" text-anchor="middle" font-weight="700">Send</text><text x="273" y="86" fill="#f9a8d4" font-size="10.5" text-anchor="middle" font-weight="700">to server</text><rect x="367" y="54" width="160" height="42" rx="9" fill="#1e293b" stroke="#ec4899"></rect><text x="447" y="73" fill="#f9a8d4" font-size="10.5" text-anchor="middle" font-weight="700">Server</text><text x="447" y="86" fill="#f9a8d4" font-size="10.5" text-anchor="middle" font-weight="700">is authority</text><rect x="540" y="54" width="160" height="42" rx="9" fill="#1e293b" stroke="#ec4899"></rect><text x="620" y="79" fill="#f9a8d4" font-size="10.5" text-anchor="middle" font-weight="700">Reconcile</text><g stroke="#475569" stroke-width="2" fill="none"><path d="M180 75 L194 75" marker-end="url(#a)"></path><path d="M353 75 L367 75" marker-end="url(#a)"></path><path d="M526 75 L540 75" marker-end="url(#a)"></path></g></g>
+<defs><marker id="a" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0 0 L6 3 L0 6 Z" fill="#475569"></path></marker></defs></svg>
+</figure>
+
+<div class="card">
+<p style="margin-top:0"><strong>What you'll learn</strong></p>
+<ul class="toc-list">
+<li><a href="#problem">The core problem</a></li>
+<li><a href="#authority">An authoritative server</a></li>
+<li><a href="#prediction">Client prediction</a></li>
+<li><a href="#reconcile">Server reconciliation</a></li>
+<li><a href="#others">Showing other players</a></li>
+<li><a href="#pitfalls">Common pitfalls</a></li>
+</ul>
+</div>
+
+<h2 id="problem">The core problem</h2>
+<p>Networked games fight a single unavoidable fact: information takes time to travel.</p>
+<h3>Latency changes everything</h3>
+<p>When two machines are involved, a player action reaches the other side tens or hundreds of milliseconds later. In that gap, both players are acting on slightly outdated views of the game. If each machine simply trusted its own version, the two would drift apart and disagree about the score, positions, and who won. Every netcode technique exists to manage this gap, the same latency challenge covered in <a href="/interactive-web/latency-and-reconciliation/">latency and reconciliation</a>.</p>
+<h2 id="authority">An authoritative server</h2>
+<p>The first decision is who gets the final say about the game state.</p>
+<h3>One source of truth</h3>
+<p>The standard answer is an authoritative server: one machine, usually the server, holds the true game state, and clients send their inputs to it rather than deciding outcomes themselves. The server resolves everything and tells clients the result. This prevents disagreement and, importantly, makes cheating far harder, since a client cannot simply declare itself the winner. It is the single source of truth idea applied across a network, connected to <a href="/interactive-web/multiplayer-state-synchronization/">multiplayer state synchronization</a>.</p>
+<h2 id="prediction">Client prediction</h2>
+<p>Waiting for the server before showing your own move would feel awful.</p>
+<h3>Acting before confirmation</h3>
+<p>If a client waited for the server to confirm every move, controls would feel laggy by the round trip time. Client prediction fixes this: the client applies your input immediately, predicting what the server will decide, so your own character responds at once. The prediction is almost always right, because you know your own input, so play feels instant while the server still has the final say. This is the game version of the <a href="/interactive-web/optimistic-ui-updates/">optimistic update</a>.</p>
+<h2 id="reconcile">Server reconciliation</h2>
+<p>Occasionally the prediction and the server disagree, and that must be resolved.</p>
+<h3>Correcting a wrong guess</h3>
+<p>When the server result arrives and differs from what the client predicted, the client reconciles: it accepts the server state as truth and replays any inputs made since, so the correction is applied without losing recent actions. Done well this is invisible; done badly it shows as a rubber band snap. Reconciliation is what keeps prediction honest, and it mirrors the conflict handling in <a href="/interactive-web/realtime-data-synchronization/">realtime data synchronization</a>.</p>
+<h2 id="others">Showing other players</h2>
+<p>You can predict your own moves, but not what other players will do.</p>
+<h3>Interpolation between updates</h3>
+<p>Other players arrive as a series of position updates from the server, spaced apart in time. Drawing them only when an update lands would look jerky, so games interpolate, smoothly moving a remote player between its last known positions. This trades a little added delay for smooth motion, and the transport carrying these updates is usually a <a href="/interactive-web/websocket-fundamentals/">WebSocket</a>.</p>
+<h2 id="pitfalls">Common pitfalls</h2>
+<p>Netcode is famously subtle, with a few defining traps.</p>
+<h3>What usually goes wrong</h3>
+<p>The most common is trusting the client, which both desynchronizes play and invites cheating; keep the server authoritative. The second is no prediction, which makes controls feel sluggish on any real connection. The third is a harsh reconciliation that snaps objects visibly instead of correcting smoothly. Start from the working <a href="/game-development/multiplayer-pong/">local version</a> and add the network layer once the game logic is solid.</p>
+
+<section id="faq">
+<h2>Frequently Asked Questions</h2>
+<h3>What is netcode in multiplayer games?</h3>
+<p>Netcode is the set of techniques that keep a networked game in sync despite delay. It covers who holds the true state, how clients show moves instantly, and how disagreements between client and server are resolved.</p>
+<h3>What is an authoritative server?</h3>
+<p>An authoritative server is one machine that holds the true game state. Clients send inputs to it rather than deciding outcomes, and it resolves everything. This prevents disagreement between players and makes cheating far harder.</p>
+<h3>What is client prediction?</h3>
+<p>Client prediction applies your input immediately, predicting what the server will decide, so your character responds at once instead of after a network round trip. Because you know your own input, the prediction is almost always correct.</p>
+<h3>What is server reconciliation?</h3>
+<p>Reconciliation corrects a wrong prediction. When the server result differs from what the client predicted, the client accepts the server state and replays inputs made since, applying the correction without losing recent actions.</p>
+</section>
+
+<p><strong>Read next:</strong> the <a href="/game-development/">Game Development</a> hub, or explore <a href="/interactive-web/">the Interactive Web cluster</a>.</p>
+
+<div class="cta"><p><strong>Start with the local version?</strong></p><p>Play the shared screen Pong, then add the network layer.</p><a href="/game-development/multiplayer-pong/" class="btn">Play: Multiplayer Pong &rarr;</a></div>
+
+<div class="back-home">
+<a href="/game-development/">← Back to Game Development</a>
+</div>
+
+</article>
+</main>
+
+<footer>
+<p>Backbone Tutorials</p>
+<nav class="bt-social" aria-label="Backbone Tutorials on social media">
+  <a style="--c:#181717" href="https://github.com/backbonetutorials/backbonetutorials" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on GitHub"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#fff" d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0 1 12 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222 0 1.606-.014 2.898-.014 3.293 0 .322.216.694.825.576C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg></a>
+  <a style="--c:#000000" href="https://x.com/backbonetutor" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on X (formerly Twitter)"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#fff" d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+  <a style="--c:#FF0000" href="https://www.youtube.com/@BACKBONETUTORIALS" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on YouTube"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#fff" d="M8.5 6.5 L8.5 17.5 L17.5 12 Z"/></svg></a>
+  <a style="--c:#0285FF" href="https://bsky.app/profile/backbonetutorials.bsky.social" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on Bluesky"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#fff" d="M12 10.8c-1.087-2.114-4.046-6.053-6.798-7.995C2.566.944 1.561 1.266.902 1.565.139 1.908 0 3.08 0 3.768c0 .69.378 5.65.624 6.479.815 2.736 3.713 3.66 6.383 3.364.136-.02.275-.039.415-.056-.138.022-.276.04-.415.056-3.912.58-7.387 2.005-2.83 7.078 5.013 5.19 6.87-1.113 7.823-4.308.953 3.195 2.05 9.271 7.733 4.308 4.267-4.308 1.172-6.498-2.74-7.078a8.741 8.741 0 0 1-.415-.056c.14.017.279.036.415.056 2.67.296 5.568-.628 6.383-3.364C23.622 9.418 24 4.458 24 3.768c0-.688-.139-1.86-.902-2.203-.659-.299-1.664-.621-4.3 1.24C16.046 4.747 13.087 8.686 12 10.8Z"/></svg></a>
+  <a style="--c:#d62976;background-image:linear-gradient(150deg,rgba(255,255,255,.30),rgba(255,255,255,0) 42%,rgba(0,0,0,.22)),linear-gradient(45deg,#feda75,#fa7e1e,#d62976,#962fbf,#4f5bd5)" href="https://www.instagram.com/backbonetutorials/" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on Instagram"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="4" y="4" width="16" height="16" rx="5" fill="none" stroke="#fff" stroke-width="2"/><circle cx="12" cy="12" r="3.6" fill="none" stroke="#fff" stroke-width="2"/><circle cx="17.2" cy="6.8" r="1.25" fill="#fff"/></svg></a>
+  <a style="--c:#000000" href="https://www.tiktok.com/@backbonetutorials" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on TikTok"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#fff" d="M16.5 5.82a4.79 4.79 0 0 1-1.16-3.07h-2.9v11.43a2.45 2.45 0 1 1-2.45-2.45c.17 0 .33.02.49.05V8.83a5.36 5.36 0 0 0-.49-.02 5.35 5.35 0 1 0 5.35 5.35V8.6a7.66 7.66 0 0 0 4.46 1.42V7.13a4.79 4.79 0 0 1-2.8-1.31Z"/></svg></a>
+  <a style="--c:#1877F2" href="https://www.facebook.com/BackboneTutorials" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on Facebook"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#fff" d="M13.5 21v-8h2.6l.4-3h-3V8.1c0-.87.27-1.46 1.5-1.46H17V3.96c-.28-.04-1.2-.12-2.28-.12-2.26 0-3.8 1.38-3.8 3.9V10H8.3v3h2.62v8h2.58Z"/></svg></a>
+</nav>
+<p>
+<a href="/">Home</a> |
+<a href="/about/">About</a> |
+<a href="/contact/">Contact</a> |
+<a href="/privacy-policy/">Privacy Policy</a> |
+<a href="/terms/">Terms</a>
+</p>
+<p>© 2026 Backbone Tutorials</p>
+</footer>
+
+</body>
+</html>

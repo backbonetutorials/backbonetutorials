@@ -1,345 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="/sitemap.xsl"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
-        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
   <url>
     <loc>https://backbonetutorials.com/</loc>
-    <lastmod>2026-06-12</lastmod>
+    <lastmod>2026-06-14</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
     <image:image>
       <image:loc>https://backbonetutorials.com/assets/index-1200.jpg</image:loc>
-      <image:title>Backbone.js Tutorials &amp;amp; JavaScript Guides for Beginners</image:title>
     </image:image>
   </url>
   <url>
     <loc>https://backbonetutorials.com/backbonejs/</loc>
-    <lastmod>2026-06-12</lastmod>
+    <lastmod>2026-06-14</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
     <image:image>
       <image:loc>https://backbonetutorials.com/assets/backbonejs-1200.jpg</image:loc>
-      <image:title>Backbone.js Tutorial &amp;ndash; Complete Guide for Beginners</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://backbonetutorials.com/nodejs-restify-mongodb-mongoose/</loc>
-    <lastmod>2026-06-12</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-    <image:image>
-      <image:loc>https://backbonetutorials.com/assets/nodejs-restify-mongodb-mongoose-1200.jpg</image:loc>
-      <image:title>Node.js Restify MongoDB Guide | Backbone Tutorials</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://backbonetutorials.com/organizing-backbone-using-modules/</loc>
-    <lastmod>2026-06-12</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-    <image:image>
-      <image:loc>https://backbonetutorials.com/assets/organizing-backbone-using-modules-1200.jpg</image:loc>
-      <image:title>Organizing Backbone.js Using Modules</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://backbonetutorials.com/seo-for-single-page-apps/</loc>
-    <lastmod>2026-06-12</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-    <image:image>
-      <image:loc>https://backbonetutorials.com/assets/seo-for-single-page-apps-1200.jpg</image:loc>
-      <image:title>SEO for Single Page Apps (SPA SEO) Complete Guide</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://backbonetutorials.com/what-is-a-collection/</loc>
-    <lastmod>2026-06-12</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-    <image:image>
-      <image:loc>https://backbonetutorials.com/assets/what-is-a-collection-1200.jpg</image:loc>
-      <image:title>What is a Collection in Backbone.js? Complete Guide</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://backbonetutorials.com/what-is-a-model/</loc>
-    <lastmod>2026-06-12</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-    <image:image>
-      <image:loc>https://backbonetutorials.com/assets/what-is-a-model-1200.jpg</image:loc>
-      <image:title>What is a Model in Backbone.js? Complete Guide</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://backbonetutorials.com/what-is-a-router/</loc>
-    <lastmod>2026-06-12</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-    <image:image>
-      <image:loc>https://backbonetutorials.com/assets/what-is-a-router-1200.jpg</image:loc>
-      <image:title>What is a Router in Backbone.js? Complete Beginner Guide</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://backbonetutorials.com/what-is-a-view/</loc>
-    <lastmod>2026-06-12</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-    <image:image>
-      <image:loc>https://backbonetutorials.com/assets/what-is-a-view-1200.jpg</image:loc>
-      <image:title>What is a View in Backbone.js? Complete Guide</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://backbonetutorials.com/why-would-you-use-backbone/</loc>
-    <lastmod>2026-06-12</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-    <image:image>
-      <image:loc>https://backbonetutorials.com/assets/why-would-you-use-backbone-1200.jpg</image:loc>
-      <image:title>Why Would You Use Backbone? Complete Guide</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://backbonetutorials.com/author/backbone-tutorials-team/</loc>
-    <lastmod>2026-06-12</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
-    <image:image>
-      <image:loc>https://backbonetutorials.com/assets/logo.png</image:loc>
-      <image:title>Backbone Tutorials Team | Backbone.js Learning Resources</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://backbonetutorials.com/about/</loc>
-    <lastmod>2026-06-12</lastmod>
-    <changefreq>yearly</changefreq>
-    <priority>0.3</priority>
-    <image:image>
-      <image:loc>https://backbonetutorials.com/assets/logo.png</image:loc>
-      <image:title>About Backbone Tutorials | Backbone.js Learning Resources</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://backbonetutorials.com/contact/</loc>
-    <lastmod>2026-06-12</lastmod>
-    <changefreq>yearly</changefreq>
-    <priority>0.3</priority>
-    <image:image>
-      <image:loc>https://backbonetutorials.com/assets/logo.png</image:loc>
-      <image:title>Contact Backbone Tutorials | Questions &amp;amp; Educational Support</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://backbonetutorials.com/privacy-policy/</loc>
-    <lastmod>2026-06-12</lastmod>
-    <changefreq>yearly</changefreq>
-    <priority>0.2</priority>
-    <image:image>
-      <image:loc>https://backbonetutorials.com/assets/logo.png</image:loc>
-      <image:title>Privacy Policy | Backbone Tutorials</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://backbonetutorials.com/terms/</loc>
-    <lastmod>2026-06-12</lastmod>
-    <changefreq>yearly</changefreq>
-    <priority>0.2</priority>
-    <image:image>
-      <image:loc>https://backbonetutorials.com/assets/logo.png</image:loc>
-      <image:title>Terms and Conditions | Backbone Tutorials</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://backbonetutorials.com/foundations/</loc>
-    <lastmod>2026-06-12</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <image:image>
-      <image:loc>https://backbonetutorials.com/assets/foundations/foundations-1200.jpg</image:loc>
-      <image:title>Backbone.js Foundations — Core Concepts &amp;amp; Guides</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://backbonetutorials.com/foundations/backbone-application-structure/</loc>
-    <lastmod>2026-06-12</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-    <image:image>
-      <image:loc>https://backbonetutorials.com/assets/foundations/backbone-application-structure-1200.jpg</image:loc>
-      <image:title>Backbone.js Application Structure — scaling cleanly</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://backbonetutorials.com/foundations/backbone-data-flow/</loc>
-    <lastmod>2026-06-12</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-    <image:image>
-      <image:loc>https://backbonetutorials.com/assets/foundations/backbone-data-flow-1200.jpg</image:loc>
-      <image:title>Backbone.js Data Flow — from model to screen</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://backbonetutorials.com/foundations/backbone-events/</loc>
-    <lastmod>2026-06-12</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-    <image:image>
-      <image:loc>https://backbonetutorials.com/assets/foundations/backbone-events-1200.jpg</image:loc>
-      <image:title>Backbone.js Events — on, listenTo, and Custom Events</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://backbonetutorials.com/foundations/backbone-routing-basics/</loc>
-    <lastmod>2026-06-12</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-    <image:image>
-      <image:loc>https://backbonetutorials.com/assets/foundations/backbone-routing-basics-1200.jpg</image:loc>
-      <image:title>Backbone.js Routing Basics — routes, params, history</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://backbonetutorials.com/foundations/backbone-sync/</loc>
-    <lastmod>2026-06-12</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-    <image:image>
-      <image:loc>https://backbonetutorials.com/assets/foundations/backbone-sync-1200.jpg</image:loc>
-      <image:title>Backbone.js Sync — fetch, save, destroy, and REST</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://backbonetutorials.com/foundations/backbone-templates/</loc>
-    <lastmod>2026-06-12</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-    <image:image>
-      <image:loc>https://backbonetutorials.com/assets/foundations/backbone-templates-1200.jpg</image:loc>
-      <image:title>Backbone.js Templates with Underscore _.template</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://backbonetutorials.com/foundations/backbone-view-lifecycle/</loc>
-    <lastmod>2026-06-12</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-    <image:image>
-      <image:loc>https://backbonetutorials.com/assets/foundations/backbone-view-lifecycle-1200.jpg</image:loc>
-      <image:title>Backbone.js View Lifecycle — render, events, remove</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://backbonetutorials.com/javascript-seo/</loc>
-    <lastmod>2026-06-12</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <image:image>
-      <image:loc>https://backbonetutorials.com/assets/javascript-seo/javascript-seo-1200.jpg</image:loc>
-      <image:title>JavaScript SEO — crawling, rendering, indexing</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://backbonetutorials.com/javascript-seo/client-side-seo/</loc>
-    <lastmod>2026-06-12</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-    <image:image>
-      <image:loc>https://backbonetutorials.com/assets/javascript-seo/client-side-seo-1200.jpg</image:loc>
-      <image:title>Client-side SEO — ranking when the browser renders</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://backbonetutorials.com/javascript-seo/crawlability/</loc>
-    <lastmod>2026-06-12</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-    <image:image>
-      <image:loc>https://backbonetutorials.com/assets/javascript-seo/crawlability-1200.jpg</image:loc>
-      <image:title>Crawlability — links, robots, and resource access</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://backbonetutorials.com/javascript-seo/framework-seo/</loc>
-    <lastmod>2026-06-12</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-    <image:image>
-      <image:loc>https://backbonetutorials.com/assets/javascript-seo/framework-seo-1200.jpg</image:loc>
-      <image:title>Framework SEO — rendering, not the framework</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://backbonetutorials.com/javascript-seo/googlebot-rendering/</loc>
-    <lastmod>2026-06-12</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-    <image:image>
-      <image:loc>https://backbonetutorials.com/assets/javascript-seo/googlebot-rendering-1200.jpg</image:loc>
-      <image:title>Googlebot Rendering — how the WRS works</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://backbonetutorials.com/javascript-seo/how-google-crawls-javascript/</loc>
-    <lastmod>2026-06-12</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-    <image:image>
-      <image:loc>https://backbonetutorials.com/assets/javascript-seo/how-google-crawls-javascript-1200.jpg</image:loc>
-      <image:title>How Google Crawls JavaScript — crawl, render, index</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://backbonetutorials.com/javascript-seo/javascript-rendering-and-indexing/</loc>
-    <lastmod>2026-06-12</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-    <image:image>
-      <image:loc>https://backbonetutorials.com/assets/javascript-seo/javascript-rendering-and-indexing-1200.jpg</image:loc>
-      <image:title>JavaScript Rendering and Indexing — what gets indexed</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://backbonetutorials.com/javascript-seo/javascript-seo-audits/</loc>
-    <lastmod>2026-06-12</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-    <image:image>
-      <image:loc>https://backbonetutorials.com/assets/javascript-seo/javascript-seo-audits-1200.jpg</image:loc>
-      <image:title>JavaScript SEO Audits — a repeatable checklist</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://backbonetutorials.com/javascript-seo/rendering-debugging/</loc>
-    <lastmod>2026-06-12</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-    <image:image>
-      <image:loc>https://backbonetutorials.com/assets/javascript-seo/rendering-debugging-1200.jpg</image:loc>
-      <image:title>Rendering Debugging — why content goes missing</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://backbonetutorials.com/javascript-seo/rendering-for-search-engines/</loc>
-    <lastmod>2026-06-12</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-    <image:image>
-      <image:loc>https://backbonetutorials.com/assets/javascript-seo/rendering-for-search-engines-1200.jpg</image:loc>
-      <image:title>Rendering for Search Engines — SSR, SSG, dynamic</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://backbonetutorials.com/javascript-seo/spa-indexing/</loc>
-    <lastmod>2026-06-12</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-    <image:image>
-      <image:loc>https://backbonetutorials.com/assets/javascript-seo/spa-indexing-1200.jpg</image:loc>
-      <image:title>SPA Indexing — getting a single page app indexed</image:title>
     </image:image>
   </url>
   <url>
@@ -349,237 +26,51 @@
     <priority>0.8</priority>
     <image:image>
       <image:loc>https://backbonetutorials.com/assets/architecture/frontend-architecture-hub-1200.jpg</image:loc>
-      <image:title>Frontend Architecture — systems, state, and scale</image:title>
     </image:image>
   </url>
   <url>
-    <loc>https://backbonetutorials.com/architecture/browser-state-systems/</loc>
-    <lastmod>2026-06-12</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
+    <loc>https://backbonetutorials.com/concepts/</loc>
+    <lastmod>2026-06-14</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
     <image:image>
-      <image:loc>https://backbonetutorials.com/assets/architecture/browser-state-systems-1200.jpg</image:loc>
-      <image:title>Browser State Systems — where state lives</image:title>
+      <image:loc>https://backbonetutorials.com/assets/concepts/hub-1200.jpg</image:loc>
     </image:image>
   </url>
   <url>
-    <loc>https://backbonetutorials.com/architecture/client-side-architecture/</loc>
-    <lastmod>2026-06-12</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
+    <loc>https://backbonetutorials.com/examples/</loc>
+    <lastmod>2026-06-14</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
     <image:image>
-      <image:loc>https://backbonetutorials.com/assets/architecture/client-side-architecture-1200.jpg</image:loc>
-      <image:title>Client-side Architecture — structuring a frontend app</image:title>
+      <image:loc>https://backbonetutorials.com/assets/examples/hub-1200.jpg</image:loc>
     </image:image>
   </url>
   <url>
-    <loc>https://backbonetutorials.com/architecture/component-communication/</loc>
-    <lastmod>2026-06-12</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-    <image:image>
-      <image:loc>https://backbonetutorials.com/assets/architecture/component-communication-1200.jpg</image:loc>
-      <image:title>Component Communication — how components talk</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://backbonetutorials.com/architecture/event-driven-ui/</loc>
-    <lastmod>2026-06-12</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-    <image:image>
-      <image:loc>https://backbonetutorials.com/assets/architecture/event-driven-ui-1200.jpg</image:loc>
-      <image:title>Event-driven UI — building interfaces that react</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://backbonetutorials.com/architecture/frontend-performance/</loc>
-    <lastmod>2026-06-12</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-    <image:image>
-      <image:loc>https://backbonetutorials.com/assets/architecture/frontend-performance-1200.jpg</image:loc>
-      <image:title>Frontend Performance — fast loads, smooth runtime</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://backbonetutorials.com/architecture/frontend-systems/</loc>
-    <lastmod>2026-06-12</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-    <image:image>
-      <image:loc>https://backbonetutorials.com/assets/architecture/frontend-systems-1200.jpg</image:loc>
-      <image:title>Frontend Systems — the frontend as a system</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://backbonetutorials.com/architecture/interactive-apps/</loc>
-    <lastmod>2026-06-12</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-    <image:image>
-      <image:loc>https://backbonetutorials.com/assets/architecture/interactive-apps-1200.jpg</image:loc>
-      <image:title>Interactive Apps — building software in the browser</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://backbonetutorials.com/architecture/realtime-systems/</loc>
-    <lastmod>2026-06-12</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-    <image:image>
-      <image:loc>https://backbonetutorials.com/assets/architecture/realtime-systems-1200.jpg</image:loc>
-      <image:title>Realtime Systems — building live, collaborative UIs</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://backbonetutorials.com/architecture/routing/</loc>
-    <lastmod>2026-06-12</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-    <image:image>
-      <image:loc>https://backbonetutorials.com/assets/architecture/routing-architecture-1200.jpg</image:loc>
-      <image:title>Routing — client-side routing architecture</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://backbonetutorials.com/architecture/scalable-ui/</loc>
-    <lastmod>2026-06-12</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-    <image:image>
-      <image:loc>https://backbonetutorials.com/assets/architecture/scalable-ui-1200.jpg</image:loc>
-      <image:title>Scalable UI — interfaces that grow without breaking</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://backbonetutorials.com/architecture/spa/</loc>
-    <lastmod>2026-06-12</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-    <image:image>
-      <image:loc>https://backbonetutorials.com/assets/architecture/spa-architecture-1200.jpg</image:loc>
-      <image:title>SPA Architecture — how single page apps are built</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://backbonetutorials.com/architecture/state-management/</loc>
-    <lastmod>2026-06-12</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-    <image:image>
-      <image:loc>https://backbonetutorials.com/assets/architecture/state-management-1200.jpg</image:loc>
-      <image:title>State Management — keeping frontend state sane</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://backbonetutorials.com/rendering/</loc>
+    <loc>https://backbonetutorials.com/foundations/</loc>
     <lastmod>2026-06-12</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <image:image>
-      <image:loc>https://backbonetutorials.com/assets/rendering/rendering-hub-1200.jpg</image:loc>
-      <image:title>Rendering — pipeline, strategy, and optimization</image:title>
+      <image:loc>https://backbonetutorials.com/assets/foundations/foundations-1200.jpg</image:loc>
     </image:image>
   </url>
   <url>
-    <loc>https://backbonetutorials.com/rendering/browser-painting-and-composition/</loc>
-    <lastmod>2026-06-12</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
+    <loc>https://backbonetutorials.com/game-development/</loc>
+    <lastmod>2026-06-14</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
     <image:image>
-      <image:loc>https://backbonetutorials.com/assets/rendering/browser-painting-and-composition-1200.jpg</image:loc>
-      <image:title>Browser Painting and Composition — layers and the GPU</image:title>
+      <image:loc>https://backbonetutorials.com/assets/game-development/hub-1200.jpg</image:loc>
     </image:image>
   </url>
   <url>
-    <loc>https://backbonetutorials.com/rendering/browser-rendering-pipeline/</loc>
-    <lastmod>2026-06-12</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
+    <loc>https://backbonetutorials.com/guides/</loc>
+    <lastmod>2026-06-14</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
     <image:image>
-      <image:loc>https://backbonetutorials.com/assets/rendering/browser-rendering-pipeline-1200.jpg</image:loc>
-      <image:title>Browser Rendering Pipeline — from code to pixels</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://backbonetutorials.com/rendering/client-side-rendering-vs-ssr/</loc>
-    <lastmod>2026-06-12</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-    <image:image>
-      <image:loc>https://backbonetutorials.com/assets/rendering/client-side-rendering-vs-ssr-1200.jpg</image:loc>
-      <image:title>CSR vs SSR — choosing a rendering strategy</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://backbonetutorials.com/rendering/dom-rendering-performance/</loc>
-    <lastmod>2026-06-12</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-    <image:image>
-      <image:loc>https://backbonetutorials.com/assets/rendering/dom-rendering-performance-1200.jpg</image:loc>
-      <image:title>DOM Rendering Performance — fast, efficient updates</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://backbonetutorials.com/rendering/hydration-vs-prerendering/</loc>
-    <lastmod>2026-06-12</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-    <image:image>
-      <image:loc>https://backbonetutorials.com/assets/rendering/hydration-vs-prerendering-1200.jpg</image:loc>
-      <image:title>Hydration vs Prerendering — strategies explained</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://backbonetutorials.com/rendering/javascript-rendering/</loc>
-    <lastmod>2026-06-12</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-    <image:image>
-      <image:loc>https://backbonetutorials.com/assets/rendering/javascript-rendering-1200.jpg</image:loc>
-      <image:title>JavaScript Rendering — how JS builds the DOM</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://backbonetutorials.com/rendering/progressive-rendering/</loc>
-    <lastmod>2026-06-12</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-    <image:image>
-      <image:loc>https://backbonetutorials.com/assets/rendering/progressive-rendering-1200.jpg</image:loc>
-      <image:title>Progressive Rendering — show content as it arrives</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://backbonetutorials.com/rendering/render-blocking-resources/</loc>
-    <lastmod>2026-06-12</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-    <image:image>
-      <image:loc>https://backbonetutorials.com/assets/rendering/render-blocking-resources-1200.jpg</image:loc>
-      <image:title>Render-Blocking Resources — eliminate the bottleneck</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://backbonetutorials.com/rendering/render-optimization/</loc>
-    <lastmod>2026-06-12</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-    <image:image>
-      <image:loc>https://backbonetutorials.com/assets/rendering/render-optimization-1200.jpg</image:loc>
-      <image:title>Render Optimization — the complete playbook</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://backbonetutorials.com/rendering/rendering-lifecycle/</loc>
-    <lastmod>2026-06-12</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-    <image:image>
-      <image:loc>https://backbonetutorials.com/assets/rendering/rendering-lifecycle-1200.jpg</image:loc>
-      <image:title>Rendering Lifecycle — state change to frame</image:title>
+      <image:loc>https://backbonetutorials.com/assets/guides/hub-1200.jpg</image:loc>
     </image:image>
   </url>
   <url>
@@ -589,147 +80,15 @@
     <priority>0.8</priority>
     <image:image>
       <image:loc>https://backbonetutorials.com/assets/interactive-web/hub-1200.jpg</image:loc>
-      <image:title>Interactive Web — realtime engineering patterns</image:title>
     </image:image>
   </url>
   <url>
-    <loc>https://backbonetutorials.com/interactive-web/collaborative-editing-architecture/</loc>
+    <loc>https://backbonetutorials.com/javascript-seo/</loc>
     <lastmod>2026-06-12</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
     <image:image>
-      <image:loc>https://backbonetutorials.com/assets/interactive-web/collaborative-editing-architecture-1200.jpg</image:loc>
-      <image:title>Collaborative Editing Architecture — design for many editors</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://backbonetutorials.com/interactive-web/conflict-resolution-crdts/</loc>
-    <lastmod>2026-06-12</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-    <image:image>
-      <image:loc>https://backbonetutorials.com/assets/interactive-web/conflict-resolution-crdts-1200.jpg</image:loc>
-      <image:title>Conflict-Resolution CRDTs — merge without coordination</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://backbonetutorials.com/interactive-web/event-streaming-architecture/</loc>
-    <lastmod>2026-06-12</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-    <image:image>
-      <image:loc>https://backbonetutorials.com/assets/interactive-web/event-streaming-architecture-1200.jpg</image:loc>
-      <image:title>Event Streaming Architecture — append-only event logs</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://backbonetutorials.com/interactive-web/latency-and-reconciliation/</loc>
-    <lastmod>2026-06-12</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-    <image:image>
-      <image:loc>https://backbonetutorials.com/assets/interactive-web/latency-and-reconciliation-1200.jpg</image:loc>
-      <image:title>Latency and Reconciliation — measure, hide, recover</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://backbonetutorials.com/interactive-web/multiplayer-state-synchronization/</loc>
-    <lastmod>2026-06-12</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-    <image:image>
-      <image:loc>https://backbonetutorials.com/assets/interactive-web/multiplayer-state-synchronization-1200.jpg</image:loc>
-      <image:title>Multiplayer State Synchronization — shared world</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://backbonetutorials.com/interactive-web/operational-transform-basics/</loc>
-    <lastmod>2026-06-12</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-    <image:image>
-      <image:loc>https://backbonetutorials.com/assets/interactive-web/operational-transform-basics-1200.jpg</image:loc>
-      <image:title>Operational Transform Basics — concurrent edits</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://backbonetutorials.com/interactive-web/optimistic-ui-updates/</loc>
-    <lastmod>2026-06-12</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-    <image:image>
-      <image:loc>https://backbonetutorials.com/assets/interactive-web/optimistic-ui-updates-1200.jpg</image:loc>
-      <image:title>Optimistic UI Updates — instant feedback, safe rollback</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://backbonetutorials.com/interactive-web/presence-and-awareness-systems/</loc>
-    <lastmod>2026-06-12</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-    <image:image>
-      <image:loc>https://backbonetutorials.com/assets/interactive-web/presence-and-awareness-systems-1200.jpg</image:loc>
-      <image:title>Presence and Awareness Systems — who is here</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://backbonetutorials.com/interactive-web/pub-sub-messaging-patterns/</loc>
-    <lastmod>2026-06-12</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-    <image:image>
-      <image:loc>https://backbonetutorials.com/assets/interactive-web/pub-sub-messaging-patterns-1200.jpg</image:loc>
-      <image:title>Pub-Sub Messaging Patterns — channels and subscribers</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://backbonetutorials.com/interactive-web/realtime-data-synchronization/</loc>
-    <lastmod>2026-06-12</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-    <image:image>
-      <image:loc>https://backbonetutorials.com/assets/interactive-web/realtime-data-synchronization-1200.jpg</image:loc>
-      <image:title>Realtime Data Synchronization — keep clients in sync</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://backbonetutorials.com/interactive-web/realtime-rendering-loops/</loc>
-    <lastmod>2026-06-12</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-    <image:image>
-      <image:loc>https://backbonetutorials.com/assets/interactive-web/realtime-rendering-loops-1200.jpg</image:loc>
-      <image:title>Realtime Rendering Loops — network state to the screen</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://backbonetutorials.com/interactive-web/server-sent-events/</loc>
-    <lastmod>2026-06-12</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-    <image:image>
-      <image:loc>https://backbonetutorials.com/assets/interactive-web/server-sent-events-1200.jpg</image:loc>
-      <image:title>Server-Sent Events — server push over HTTP</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://backbonetutorials.com/interactive-web/webrtc-data-channels/</loc>
-    <lastmod>2026-06-12</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-    <image:image>
-      <image:loc>https://backbonetutorials.com/assets/interactive-web/webrtc-data-channels-1200.jpg</image:loc>
-      <image:title>WebRTC Data Channels — peer-to-peer in the browser</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://backbonetutorials.com/interactive-web/websocket-fundamentals/</loc>
-    <lastmod>2026-06-12</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-    <image:image>
-      <image:loc>https://backbonetutorials.com/assets/interactive-web/websocket-fundamentals-1200.jpg</image:loc>
-      <image:title>WebSocket Fundamentals — persistent, full-duplex connections</image:title>
+      <image:loc>https://backbonetutorials.com/assets/javascript-seo/javascript-seo-1200.jpg</image:loc>
     </image:image>
   </url>
   <url>
@@ -739,7 +98,762 @@
     <priority>0.8</priority>
     <image:image>
       <image:loc>https://backbonetutorials.com/assets/modern-frameworks/hub-1200.jpg</image:loc>
-      <image:title>Modern Frameworks — Backbone to React, Vue &amp; Beyond</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://backbonetutorials.com/nodejs-restify-mongodb-mongoose/</loc>
+    <lastmod>2026-06-12</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://backbonetutorials.com/assets/nodejs-restify-mongodb-mongoose-1200.jpg</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://backbonetutorials.com/organizing-backbone-using-modules/</loc>
+    <lastmod>2026-06-12</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://backbonetutorials.com/assets/organizing-backbone-using-modules-1200.jpg</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://backbonetutorials.com/rendering/</loc>
+    <lastmod>2026-06-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://backbonetutorials.com/assets/rendering/rendering-hub-1200.jpg</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://backbonetutorials.com/resources/</loc>
+    <lastmod>2026-06-14</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://backbonetutorials.com/assets/resources/hub-1200.jpg</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://backbonetutorials.com/seo-for-single-page-apps/</loc>
+    <lastmod>2026-06-12</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://backbonetutorials.com/assets/seo-for-single-page-apps-1200.jpg</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://backbonetutorials.com/what-is-a-collection/</loc>
+    <lastmod>2026-06-12</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://backbonetutorials.com/assets/what-is-a-collection-1200.jpg</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://backbonetutorials.com/what-is-a-model/</loc>
+    <lastmod>2026-06-12</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://backbonetutorials.com/assets/what-is-a-model-1200.jpg</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://backbonetutorials.com/what-is-a-router/</loc>
+    <lastmod>2026-06-12</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://backbonetutorials.com/assets/what-is-a-router-1200.jpg</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://backbonetutorials.com/what-is-a-view/</loc>
+    <lastmod>2026-06-12</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://backbonetutorials.com/assets/what-is-a-view-1200.jpg</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://backbonetutorials.com/why-would-you-use-backbone/</loc>
+    <lastmod>2026-06-12</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://backbonetutorials.com/assets/why-would-you-use-backbone-1200.jpg</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://backbonetutorials.com/architecture/browser-state-systems/</loc>
+    <lastmod>2026-06-12</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://backbonetutorials.com/assets/architecture/browser-state-systems-1200.jpg</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://backbonetutorials.com/architecture/client-side-architecture/</loc>
+    <lastmod>2026-06-12</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://backbonetutorials.com/assets/architecture/client-side-architecture-1200.jpg</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://backbonetutorials.com/architecture/component-communication/</loc>
+    <lastmod>2026-06-12</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://backbonetutorials.com/assets/architecture/component-communication-1200.jpg</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://backbonetutorials.com/architecture/event-driven-ui/</loc>
+    <lastmod>2026-06-12</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://backbonetutorials.com/assets/architecture/event-driven-ui-1200.jpg</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://backbonetutorials.com/architecture/frontend-performance/</loc>
+    <lastmod>2026-06-12</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://backbonetutorials.com/assets/architecture/frontend-performance-1200.jpg</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://backbonetutorials.com/architecture/frontend-systems/</loc>
+    <lastmod>2026-06-12</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://backbonetutorials.com/assets/architecture/frontend-systems-1200.jpg</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://backbonetutorials.com/architecture/interactive-apps/</loc>
+    <lastmod>2026-06-12</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://backbonetutorials.com/assets/architecture/interactive-apps-1200.jpg</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://backbonetutorials.com/architecture/realtime-systems/</loc>
+    <lastmod>2026-06-12</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://backbonetutorials.com/assets/architecture/realtime-systems-1200.jpg</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://backbonetutorials.com/architecture/routing/</loc>
+    <lastmod>2026-06-12</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://backbonetutorials.com/assets/architecture/routing-architecture-1200.jpg</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://backbonetutorials.com/architecture/scalable-ui/</loc>
+    <lastmod>2026-06-12</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://backbonetutorials.com/assets/architecture/scalable-ui-1200.jpg</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://backbonetutorials.com/architecture/spa/</loc>
+    <lastmod>2026-06-12</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://backbonetutorials.com/assets/architecture/spa-architecture-1200.jpg</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://backbonetutorials.com/architecture/state-management/</loc>
+    <lastmod>2026-06-12</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://backbonetutorials.com/assets/architecture/state-management-1200.jpg</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://backbonetutorials.com/concepts/browser-memory-management/</loc>
+    <lastmod>2026-06-14</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://backbonetutorials.com/assets/concepts/browser-memory-management-1200.jpg</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://backbonetutorials.com/concepts/event-driven-architecture/</loc>
+    <lastmod>2026-06-14</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://backbonetutorials.com/assets/concepts/event-driven-architecture-1200.jpg</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://backbonetutorials.com/concepts/mvc-pattern/</loc>
+    <lastmod>2026-06-14</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://backbonetutorials.com/assets/concepts/mvc-pattern-1200.jpg</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://backbonetutorials.com/concepts/virtual-dom/</loc>
+    <lastmod>2026-06-14</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://backbonetutorials.com/assets/concepts/virtual-dom-1200.jpg</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://backbonetutorials.com/examples/backbone-collection-example/</loc>
+    <lastmod>2026-06-14</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://backbonetutorials.com/assets/examples/backbone-collection-example-1200.jpg</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://backbonetutorials.com/examples/backbone-model-example/</loc>
+    <lastmod>2026-06-14</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://backbonetutorials.com/assets/examples/backbone-model-example-1200.jpg</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://backbonetutorials.com/examples/backbone-router-example/</loc>
+    <lastmod>2026-06-14</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://backbonetutorials.com/assets/examples/backbone-router-example-1200.jpg</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://backbonetutorials.com/examples/backbone-view-example/</loc>
+    <lastmod>2026-06-14</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://backbonetutorials.com/assets/examples/backbone-view-example-1200.jpg</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://backbonetutorials.com/examples/browser-rendering-example/</loc>
+    <lastmod>2026-06-14</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://backbonetutorials.com/assets/examples/browser-rendering-example-1200.jpg</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://backbonetutorials.com/examples/event-driven-ui-example/</loc>
+    <lastmod>2026-06-14</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://backbonetutorials.com/assets/examples/event-driven-ui-example-1200.jpg</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://backbonetutorials.com/examples/javascript-seo-example/</loc>
+    <lastmod>2026-06-14</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://backbonetutorials.com/assets/examples/javascript-seo-example-1200.jpg</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://backbonetutorials.com/examples/realtime-ui-example/</loc>
+    <lastmod>2026-06-14</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://backbonetutorials.com/assets/examples/realtime-ui-example-1200.jpg</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://backbonetutorials.com/examples/rendering-example/</loc>
+    <lastmod>2026-06-14</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://backbonetutorials.com/assets/examples/rendering-example-1200.jpg</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://backbonetutorials.com/examples/spa-routing-example/</loc>
+    <lastmod>2026-06-14</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://backbonetutorials.com/assets/examples/spa-routing-example-1200.jpg</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://backbonetutorials.com/examples/state-management-example/</loc>
+    <lastmod>2026-06-14</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://backbonetutorials.com/assets/examples/state-management-example-1200.jpg</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://backbonetutorials.com/foundations/backbone-application-structure/</loc>
+    <lastmod>2026-06-12</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://backbonetutorials.com/assets/foundations/backbone-application-structure-1200.jpg</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://backbonetutorials.com/foundations/backbone-data-flow/</loc>
+    <lastmod>2026-06-12</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://backbonetutorials.com/assets/foundations/backbone-data-flow-1200.jpg</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://backbonetutorials.com/foundations/backbone-events/</loc>
+    <lastmod>2026-06-12</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://backbonetutorials.com/assets/foundations/backbone-events-1200.jpg</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://backbonetutorials.com/foundations/backbone-routing-basics/</loc>
+    <lastmod>2026-06-12</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://backbonetutorials.com/assets/foundations/backbone-routing-basics-1200.jpg</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://backbonetutorials.com/foundations/backbone-sync/</loc>
+    <lastmod>2026-06-12</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://backbonetutorials.com/assets/foundations/backbone-sync-1200.jpg</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://backbonetutorials.com/foundations/backbone-templates/</loc>
+    <lastmod>2026-06-12</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://backbonetutorials.com/assets/foundations/backbone-templates-1200.jpg</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://backbonetutorials.com/foundations/backbone-view-lifecycle/</loc>
+    <lastmod>2026-06-12</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://backbonetutorials.com/assets/foundations/backbone-view-lifecycle-1200.jpg</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://backbonetutorials.com/game-development/breakout-game/</loc>
+    <lastmod>2026-06-14</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://backbonetutorials.com/assets/game-development/breakout-game-1200.jpg</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://backbonetutorials.com/game-development/canvas-2d-rendering/</loc>
+    <lastmod>2026-06-14</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://backbonetutorials.com/assets/game-development/canvas-2d-rendering-1200.jpg</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://backbonetutorials.com/game-development/collision-detection/</loc>
+    <lastmod>2026-06-14</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://backbonetutorials.com/assets/game-development/collision-detection-1200.jpg</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://backbonetutorials.com/game-development/game-loop-fundamentals/</loc>
+    <lastmod>2026-06-14</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://backbonetutorials.com/assets/game-development/game-loop-fundamentals-1200.jpg</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://backbonetutorials.com/game-development/game-state-management/</loc>
+    <lastmod>2026-06-14</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://backbonetutorials.com/assets/game-development/game-state-management-1200.jpg</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://backbonetutorials.com/game-development/handling-game-input/</loc>
+    <lastmod>2026-06-14</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://backbonetutorials.com/assets/game-development/handling-game-input-1200.jpg</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://backbonetutorials.com/game-development/multiplayer-game-netcode/</loc>
+    <lastmod>2026-06-14</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://backbonetutorials.com/assets/game-development/multiplayer-game-netcode-1200.jpg</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://backbonetutorials.com/game-development/multiplayer-pong/</loc>
+    <lastmod>2026-06-14</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://backbonetutorials.com/assets/game-development/multiplayer-pong-1200.jpg</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://backbonetutorials.com/game-development/sprite-animation/</loc>
+    <lastmod>2026-06-14</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://backbonetutorials.com/assets/game-development/sprite-animation-1200.jpg</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://backbonetutorials.com/guides/backbone-learning-path/</loc>
+    <lastmod>2026-06-14</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://backbonetutorials.com/assets/guides/backbone-learning-path-1200.jpg</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://backbonetutorials.com/guides/frontend-architecture-roadmap/</loc>
+    <lastmod>2026-06-14</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://backbonetutorials.com/assets/guides/frontend-architecture-roadmap-1200.jpg</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://backbonetutorials.com/guides/frontend-performance-roadmap/</loc>
+    <lastmod>2026-06-14</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://backbonetutorials.com/assets/guides/frontend-performance-roadmap-1200.jpg</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://backbonetutorials.com/guides/javascript-seo-roadmap/</loc>
+    <lastmod>2026-06-14</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://backbonetutorials.com/assets/guides/javascript-seo-roadmap-1200.jpg</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://backbonetutorials.com/guides/realtime-apps-roadmap/</loc>
+    <lastmod>2026-06-14</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://backbonetutorials.com/assets/guides/realtime-apps-roadmap-1200.jpg</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://backbonetutorials.com/guides/rendering-learning-path/</loc>
+    <lastmod>2026-06-14</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://backbonetutorials.com/assets/guides/rendering-learning-path-1200.jpg</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://backbonetutorials.com/guides/spa-developer-roadmap/</loc>
+    <lastmod>2026-06-14</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://backbonetutorials.com/assets/guides/spa-developer-roadmap-1200.jpg</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://backbonetutorials.com/interactive-web/collaborative-editing-architecture/</loc>
+    <lastmod>2026-06-12</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://backbonetutorials.com/assets/interactive-web/collaborative-editing-architecture-1200.jpg</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://backbonetutorials.com/interactive-web/conflict-resolution-crdts/</loc>
+    <lastmod>2026-06-12</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://backbonetutorials.com/assets/interactive-web/conflict-resolution-crdts-1200.jpg</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://backbonetutorials.com/interactive-web/event-streaming-architecture/</loc>
+    <lastmod>2026-06-12</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://backbonetutorials.com/assets/interactive-web/event-streaming-architecture-1200.jpg</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://backbonetutorials.com/interactive-web/latency-and-reconciliation/</loc>
+    <lastmod>2026-06-12</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://backbonetutorials.com/assets/interactive-web/latency-and-reconciliation-1200.jpg</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://backbonetutorials.com/interactive-web/multiplayer-state-synchronization/</loc>
+    <lastmod>2026-06-12</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://backbonetutorials.com/assets/interactive-web/multiplayer-state-synchronization-1200.jpg</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://backbonetutorials.com/interactive-web/operational-transform-basics/</loc>
+    <lastmod>2026-06-12</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://backbonetutorials.com/assets/interactive-web/operational-transform-basics-1200.jpg</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://backbonetutorials.com/interactive-web/optimistic-ui-updates/</loc>
+    <lastmod>2026-06-12</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://backbonetutorials.com/assets/interactive-web/optimistic-ui-updates-1200.jpg</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://backbonetutorials.com/interactive-web/presence-and-awareness-systems/</loc>
+    <lastmod>2026-06-12</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://backbonetutorials.com/assets/interactive-web/presence-and-awareness-systems-1200.jpg</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://backbonetutorials.com/interactive-web/pub-sub-messaging-patterns/</loc>
+    <lastmod>2026-06-12</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://backbonetutorials.com/assets/interactive-web/pub-sub-messaging-patterns-1200.jpg</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://backbonetutorials.com/interactive-web/realtime-data-synchronization/</loc>
+    <lastmod>2026-06-12</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://backbonetutorials.com/assets/interactive-web/realtime-data-synchronization-1200.jpg</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://backbonetutorials.com/interactive-web/realtime-rendering-loops/</loc>
+    <lastmod>2026-06-12</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://backbonetutorials.com/assets/interactive-web/realtime-rendering-loops-1200.jpg</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://backbonetutorials.com/interactive-web/server-sent-events/</loc>
+    <lastmod>2026-06-12</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://backbonetutorials.com/assets/interactive-web/server-sent-events-1200.jpg</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://backbonetutorials.com/interactive-web/webrtc-data-channels/</loc>
+    <lastmod>2026-06-12</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://backbonetutorials.com/assets/interactive-web/webrtc-data-channels-1200.jpg</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://backbonetutorials.com/interactive-web/websocket-fundamentals/</loc>
+    <lastmod>2026-06-12</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://backbonetutorials.com/assets/interactive-web/websocket-fundamentals-1200.jpg</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://backbonetutorials.com/javascript-seo/client-side-seo/</loc>
+    <lastmod>2026-06-12</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://backbonetutorials.com/assets/javascript-seo/client-side-seo-1200.jpg</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://backbonetutorials.com/javascript-seo/crawlability/</loc>
+    <lastmod>2026-06-12</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://backbonetutorials.com/assets/javascript-seo/crawlability-1200.jpg</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://backbonetutorials.com/javascript-seo/framework-seo/</loc>
+    <lastmod>2026-06-12</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://backbonetutorials.com/assets/javascript-seo/framework-seo-1200.jpg</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://backbonetutorials.com/javascript-seo/googlebot-rendering/</loc>
+    <lastmod>2026-06-12</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://backbonetutorials.com/assets/javascript-seo/googlebot-rendering-1200.jpg</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://backbonetutorials.com/javascript-seo/how-google-crawls-javascript/</loc>
+    <lastmod>2026-06-12</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://backbonetutorials.com/assets/javascript-seo/how-google-crawls-javascript-1200.jpg</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://backbonetutorials.com/javascript-seo/javascript-rendering-and-indexing/</loc>
+    <lastmod>2026-06-12</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://backbonetutorials.com/assets/javascript-seo/javascript-rendering-and-indexing-1200.jpg</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://backbonetutorials.com/javascript-seo/javascript-seo-audits/</loc>
+    <lastmod>2026-06-12</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://backbonetutorials.com/assets/javascript-seo/javascript-seo-audits-1200.jpg</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://backbonetutorials.com/javascript-seo/rendering-debugging/</loc>
+    <lastmod>2026-06-12</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://backbonetutorials.com/assets/javascript-seo/rendering-debugging-1200.jpg</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://backbonetutorials.com/javascript-seo/rendering-for-search-engines/</loc>
+    <lastmod>2026-06-12</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://backbonetutorials.com/assets/javascript-seo/rendering-for-search-engines-1200.jpg</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://backbonetutorials.com/javascript-seo/spa-indexing/</loc>
+    <lastmod>2026-06-12</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://backbonetutorials.com/assets/javascript-seo/spa-indexing-1200.jpg</image:loc>
     </image:image>
   </url>
   <url>
@@ -749,7 +863,6 @@
     <priority>0.6</priority>
     <image:image>
       <image:loc>https://backbonetutorials.com/assets/modern-frameworks/backbone-to-react-1200.jpg</image:loc>
-      <image:title>Backbone to React — An Incremental Migration Guide</image:title>
     </image:image>
   </url>
   <url>
@@ -759,7 +872,6 @@
     <priority>0.6</priority>
     <image:image>
       <image:loc>https://backbonetutorials.com/assets/modern-frameworks/backbone-to-vue-1200.jpg</image:loc>
-      <image:title>Backbone to Vue — An Incremental Migration Guide</image:title>
     </image:image>
   </url>
   <url>
@@ -769,7 +881,6 @@
     <priority>0.6</priority>
     <image:image>
       <image:loc>https://backbonetutorials.com/assets/modern-frameworks/component-based-architecture-1200.jpg</image:loc>
-      <image:title>Component-Based Architecture Explained</image:title>
     </image:image>
   </url>
   <url>
@@ -779,7 +890,6 @@
     <priority>0.6</priority>
     <image:image>
       <image:loc>https://backbonetutorials.com/assets/modern-frameworks/framework-evolution-1200.jpg</image:loc>
-      <image:title>Evolution of Frontend Frameworks — jQuery to Signals</image:title>
     </image:image>
   </url>
   <url>
@@ -789,7 +899,6 @@
     <priority>0.6</priority>
     <image:image>
       <image:loc>https://backbonetutorials.com/assets/modern-frameworks/frontend-framework-comparisons-1200.jpg</image:loc>
-      <image:title>Frontend Framework Comparisons — How to Choose</image:title>
     </image:image>
   </url>
   <url>
@@ -799,7 +908,6 @@
     <priority>0.6</priority>
     <image:image>
       <image:loc>https://backbonetutorials.com/assets/modern-frameworks/frontend-frameworks-1200.jpg</image:loc>
-      <image:title>Frontend Frameworks — The Landscape Explained</image:title>
     </image:image>
   </url>
   <url>
@@ -809,7 +917,6 @@
     <priority>0.6</priority>
     <image:image>
       <image:loc>https://backbonetutorials.com/assets/modern-frameworks/is-backbonejs-dead-1200.jpg</image:loc>
-      <image:title>Is Backbone.js Dead? An Honest 2026 Answer</image:title>
     </image:image>
   </url>
   <url>
@@ -819,7 +926,6 @@
     <priority>0.6</priority>
     <image:image>
       <image:loc>https://backbonetutorials.com/assets/modern-frameworks/mvc-vs-components-1200.jpg</image:loc>
-      <image:title>MVC vs Components — Two Frontend Architectures</image:title>
     </image:image>
   </url>
   <url>
@@ -829,7 +935,6 @@
     <priority>0.6</priority>
     <image:image>
       <image:loc>https://backbonetutorials.com/assets/modern-frameworks/reactivity-systems-1200.jpg</image:loc>
-      <image:title>Reactivity Systems — How Modern Frameworks Update</image:title>
     </image:image>
   </url>
   <url>
@@ -839,7 +944,204 @@
     <priority>0.6</priority>
     <image:image>
       <image:loc>https://backbonetutorials.com/assets/modern-frameworks/state-management-evolution-1200.jpg</image:loc>
-      <image:title>State Management Evolution — Models to Signals</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://backbonetutorials.com/rendering/browser-painting-and-composition/</loc>
+    <lastmod>2026-06-12</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://backbonetutorials.com/assets/rendering/browser-painting-and-composition-1200.jpg</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://backbonetutorials.com/rendering/browser-rendering-pipeline/</loc>
+    <lastmod>2026-06-12</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://backbonetutorials.com/assets/rendering/browser-rendering-pipeline-1200.jpg</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://backbonetutorials.com/rendering/client-side-rendering-vs-ssr/</loc>
+    <lastmod>2026-06-12</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://backbonetutorials.com/assets/rendering/client-side-rendering-vs-ssr-1200.jpg</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://backbonetutorials.com/rendering/dom-rendering-performance/</loc>
+    <lastmod>2026-06-12</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://backbonetutorials.com/assets/rendering/dom-rendering-performance-1200.jpg</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://backbonetutorials.com/rendering/hydration-vs-prerendering/</loc>
+    <lastmod>2026-06-12</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://backbonetutorials.com/assets/rendering/hydration-vs-prerendering-1200.jpg</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://backbonetutorials.com/rendering/javascript-rendering/</loc>
+    <lastmod>2026-06-12</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://backbonetutorials.com/assets/rendering/javascript-rendering-1200.jpg</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://backbonetutorials.com/rendering/progressive-rendering/</loc>
+    <lastmod>2026-06-12</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://backbonetutorials.com/assets/rendering/progressive-rendering-1200.jpg</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://backbonetutorials.com/rendering/render-blocking-resources/</loc>
+    <lastmod>2026-06-12</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://backbonetutorials.com/assets/rendering/render-blocking-resources-1200.jpg</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://backbonetutorials.com/rendering/render-optimization/</loc>
+    <lastmod>2026-06-12</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://backbonetutorials.com/assets/rendering/render-optimization-1200.jpg</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://backbonetutorials.com/rendering/rendering-lifecycle/</loc>
+    <lastmod>2026-06-12</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://backbonetutorials.com/assets/rendering/rendering-lifecycle-1200.jpg</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://backbonetutorials.com/resources/backbonejs-resources/</loc>
+    <lastmod>2026-06-14</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://backbonetutorials.com/assets/resources/backbonejs-resources-1200.jpg</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://backbonetutorials.com/resources/browser-devtools-guide/</loc>
+    <lastmod>2026-06-14</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://backbonetutorials.com/assets/resources/browser-devtools-guide-1200.jpg</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://backbonetutorials.com/resources/developer-learning-resources/</loc>
+    <lastmod>2026-06-14</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://backbonetutorials.com/assets/resources/developer-learning-resources-1200.jpg</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://backbonetutorials.com/resources/frontend-developer-tools/</loc>
+    <lastmod>2026-06-14</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://backbonetutorials.com/assets/resources/frontend-developer-tools-1200.jpg</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://backbonetutorials.com/resources/javascript-seo-tools/</loc>
+    <lastmod>2026-06-14</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://backbonetutorials.com/assets/resources/javascript-seo-tools-1200.jpg</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://backbonetutorials.com/resources/performance-monitoring-tools/</loc>
+    <lastmod>2026-06-14</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://backbonetutorials.com/assets/resources/performance-monitoring-tools-1200.jpg</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://backbonetutorials.com/resources/rendering-and-testing-tools/</loc>
+    <lastmod>2026-06-14</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://backbonetutorials.com/assets/resources/rendering-and-testing-tools-1200.jpg</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://backbonetutorials.com/author/backbone-tutorials-team/</loc>
+    <lastmod>2026-06-12</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+    <image:image>
+      <image:loc>https://backbonetutorials.com/assets/logo.png</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://backbonetutorials.com/about/</loc>
+    <lastmod>2026-06-12</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.3</priority>
+    <image:image>
+      <image:loc>https://backbonetutorials.com/assets/logo.png</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://backbonetutorials.com/contact/</loc>
+    <lastmod>2026-06-12</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.3</priority>
+    <image:image>
+      <image:loc>https://backbonetutorials.com/assets/logo.png</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://backbonetutorials.com/privacy-policy/</loc>
+    <lastmod>2026-06-12</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.2</priority>
+    <image:image>
+      <image:loc>https://backbonetutorials.com/assets/logo.png</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://backbonetutorials.com/terms/</loc>
+    <lastmod>2026-06-12</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.2</priority>
+    <image:image>
+      <image:loc>https://backbonetutorials.com/assets/logo.png</image:loc>
     </image:image>
   </url>
 </urlset>
