@@ -1,4 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
+<?xml-stylesheet type="text/xsl" href="/sitemap.xsl"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
   <url>
     <loc>https://backbonetutorials.com/</loc>
@@ -7,7 +8,7 @@
     <priority>1.0</priority>
     <image:image>
       <image:loc>https://backbonetutorials.com/assets/index-1200.jpg</image:loc>
-      <image:title>Backbone.js Tutorials &amp;amp; JavaScript Guides for Beginners</image:title>
+      <image:title>Backbone.js Tutorials &amp; JavaScript Guides for Beginners</image:title>
     </image:image>
   </url>
   <url>
@@ -227,7 +228,7 @@
     <priority>0.8</priority>
     <image:image>
       <image:loc>https://backbonetutorials.com/assets/logo.png</image:loc>
-      <image:title>Contact Backbone Tutorials | Questions &amp;amp; Educational Support</image:title>
+      <image:title>Contact Backbone Tutorials | Questions &amp; Educational Support</image:title>
     </image:image>
   </url>
   <url>
