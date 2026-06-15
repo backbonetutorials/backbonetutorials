@@ -1,0 +1,371 @@
+<!-- DEPLOY TO: /what-is-a-controller/  (index.html) · TechArticle · per MASTERMIND_SEO.md -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>What Is a Controller in Backbone.js? — MVC Explained</title>
+
+<meta name="description" content="Backbone.js has no Controller class. Learn where controller logic really lives, how the Router fills the role, and how to structure a Backbone app.">
+
+<meta name="robots" content="index, follow">
+<meta name="author" content="Backbone Tutorials">
+<meta name="theme-color" content="#2563eb">
+<meta name="format-detection" content="telephone=no">
+
+<link rel="canonical" href="https://backbonetutorials.com/what-is-a-controller/">
+
+<link rel="icon" href="/assets/favicon.ico">
+<link rel="apple-touch-icon" href="/assets/favicon.png">
+
+<meta property="og:title" content="What Is a Controller in Backbone.js? — MVC Explained">
+<meta property="og:description" content="Backbone.js has no Controller class. Here is where that logic actually lives and how the Router fills the role.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://backbonetutorials.com/what-is-a-controller/">
+<meta property="og:image" content="https://backbonetutorials.com/assets/backbonejs/what-is-a-controller-1200.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:type" content="image/jpeg">
+<meta property="og:image:alt" content="What Is a Controller — Backbone Tutorials">
+<meta property="og:site_name" content="Backbone Tutorials">
+<meta property="og:locale" content="en_US">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="What Is a Controller in Backbone.js? — MVC Explained">
+<meta name="twitter:description" content="Backbone.js has no Controller class. Here is where that logic lives and how the Router fills the role.">
+<meta name="twitter:image" content="https://backbonetutorials.com/assets/backbonejs/what-is-a-controller-1200.jpg">
+<meta name="twitter:image:alt" content="What Is a Controller — Backbone Tutorials">
+<meta name="twitter:url" content="https://backbonetutorials.com/what-is-a-controller/">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+
+<style>
+html{scroll-behavior:smooth}
+body{font-family:'Inter',sans-serif;margin:0;background:#f4f6f9;color:#1f2937;line-height:1.7}
+.container{max-width:900px;margin:30px auto;padding:20px;background:#fff;border-radius:10px;box-shadow:0 2px 10px rgba(0,0,0,0.04)}
+h1,h2,h3{color:#111827}
+.nav{background:#111827;padding:15px;display:flex;justify-content:center;align-items:center;flex-wrap:wrap;gap:8px}
+.nav a{color:white;margin:0 10px;text-decoration:none;font-weight:600}
+.nav a:hover{text-decoration:underline}
+.nav-logo img{vertical-align:middle;margin-right:12px;border-radius:8px}
+figure{margin:30px 0}
+pre{background:#111;color:#eee;padding:15px;border-radius:8px;overflow-x:auto;box-shadow:0 2px 8px rgba(0,0,0,0.15)}
+code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+p code,li code{background:#eef2ff;padding:1px 5px;border-radius:4px;font-size:.95em}
+.cta{background:#eef2ff;padding:20px;margin-top:30px;text-align:center;border-radius:10px}
+a{color:#2563eb}
+.back-home{margin-top:25px}
+footer{background:#111827;color:white;text-align:center;padding:30px 20px;margin-top:40px}
+footer a{color:#93c5fd;text-decoration:none}
+footer a:hover{text-decoration:underline}
+.btn{display:inline-block;background:#2563eb;color:white;padding:12px 22px;border-radius:8px;text-decoration:none;font-weight:600;margin-top:15px;transition:0.2s ease}
+.btn:hover{background:#1d4ed8;transform:translateY(-1px)}
+.card{background:#fff;padding:20px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.05);overflow:hidden;max-width:100%;border:1px solid #eef2f7;border-left:4px solid #1d4ed8}
+.toc-list{padding-left:20px}
+.toc-list li{margin-bottom:8px}
+.author-line{font-size:15px;margin-top:-6px;margin-bottom:10px;color:#4b5563}
+figcaption{font-size:14px;color:#6b7280;margin-top:10px}
+#faq h3{margin-top:25px}
+#faq p{margin-bottom:18px}
+.breadcrumb{font-size:14px;color:#6b7280;margin:0 0 10px}
+.breadcrumb a{color:#2563eb;text-decoration:none}
+.breadcrumb a:hover{text-decoration:underline}
+.diagram{width:100%;height:auto;display:block;border-radius:10px}
+table.cmp{border-collapse:collapse;width:100%;margin:20px 0;font-size:14.5px}
+table.cmp th,table.cmp td{border:1px solid #e5e7eb;padding:9px 12px;text-align:left;vertical-align:top}
+table.cmp th{background:#f9fafb;font-weight:700}
+.bt-social{display:flex;gap:13px;flex-wrap:wrap;align-items:center;justify-content:center;margin:0 0 14px;padding:0;list-style:none}
+.bt-social a{position:relative;isolation:isolate;width:46px;height:46px;border-radius:14px;display:inline-flex;align-items:center;justify-content:center;text-decoration:none;-webkit-tap-highlight-color:transparent;background-color:var(--c,#333);background-image:linear-gradient(150deg,rgba(255,255,255,.30),rgba(255,255,255,0) 42%,rgba(0,0,0,.22));box-shadow:0 1px 1px rgba(0,0,0,.22),0 7px 14px -3px rgba(0,0,0,.34),inset 0 1px 0 rgba(255,255,255,.50),inset 0 -2px 5px rgba(0,0,0,.30);transition:transform .18s cubic-bezier(.2,.7,.2,1),box-shadow .18s ease}
+.bt-social a::before{content:"";position:absolute;left:3px;right:3px;top:2px;height:44%;border-radius:12px 12px 50% 50%/12px 12px 24px 24px;background:linear-gradient(180deg,rgba(255,255,255,.42),rgba(255,255,255,0));pointer-events:none;z-index:0}
+.bt-social a:hover{transform:translateY(-3px) scale(1.05);box-shadow:0 2px 2px rgba(0,0,0,.20),0 16px 26px -6px rgba(0,0,0,.40),inset 0 1px 0 rgba(255,255,255,.55),inset 0 -2px 6px rgba(0,0,0,.32)}
+.bt-social a:active{transform:translateY(-1px) scale(1.01)}
+.bt-social a:focus-visible{outline:3px solid #93c5fd;outline-offset:3px}
+.bt-social svg{position:relative;z-index:1;width:22px;height:22px;display:block;filter:drop-shadow(0 1px 1px rgba(0,0,0,.28))}
+@media (prefers-reduced-motion:reduce){.bt-social a{transition:none}.bt-social a:hover{transform:none}}
+@media(max-width:600px){.container{padding:15px}}
+</style>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": "https://backbonetutorials.com/#organization",
+      "name": "Backbone Tutorials",
+      "url": "https://backbonetutorials.com/",
+      "logo": { "@type": "ImageObject", "url": "https://backbonetutorials.com/assets/logo.png" },
+      "sameAs": [
+        "https://github.com/backbonetutorials/backbonetutorials",
+        "https://x.com/backbonetutor",
+        "https://www.youtube.com/@BACKBONETUTORIALS",
+        "https://bsky.app/profile/backbonetutorials.bsky.social",
+        "https://www.instagram.com/backbonetutorials/",
+        "https://www.tiktok.com/@backbonetutorials",
+        "https://www.facebook.com/BackboneTutorials"
+      ],
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "contactType": "customer support",
+        "url": "https://x.com/backbonetutor",
+        "availableLanguage": ["English"],
+        "areaServed": "Worldwide"
+      }
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://backbonetutorials.com/#website",
+      "url": "https://backbonetutorials.com/",
+      "name": "Backbone Tutorials",
+      "publisher": { "@id": "https://backbonetutorials.com/#organization" }
+    },
+    {
+      "@type": "Person",
+      "@id": "https://backbonetutorials.com/author/backbone-tutorials-team/#person",
+      "name": "Backbone Tutorials Team",
+      "url": "https://backbonetutorials.com/author/backbone-tutorials-team/",
+      "worksFor": { "@id": "https://backbonetutorials.com/#organization" },
+      "jobTitle": "Frontend JavaScript Editorial Team",
+      "knowsAbout": ["Backbone.js", "MVC", "JavaScript architecture", "Backbone Router", "Single page applications"]
+    },
+    {
+      "@type": "WebPage",
+      "@id": "https://backbonetutorials.com/what-is-a-controller/#webpage",
+      "url": "https://backbonetutorials.com/what-is-a-controller/",
+      "name": "What Is a Controller in Backbone.js? \u2014 MVC Explained",
+      "headline": "What Is a Controller in Backbone.js?",
+      "description": "Backbone.js has no Controller class. Learn where controller logic really lives, how the Router fills the role, and how to structure a Backbone app.",
+      "inLanguage": "en",
+      "isPartOf": { "@id": "https://backbonetutorials.com/#website" },
+      "author": { "@id": "https://backbonetutorials.com/author/backbone-tutorials-team/#person" },
+      "publisher": { "@id": "https://backbonetutorials.com/#organization" },
+      "breadcrumb": { "@id": "https://backbonetutorials.com/what-is-a-controller/#breadcrumb" },
+      "mainEntity": { "@id": "https://backbonetutorials.com/what-is-a-controller/#article" }
+    },
+    {
+      "@type": "TechArticle",
+      "@id": "https://backbonetutorials.com/what-is-a-controller/#article",
+      "url": "https://backbonetutorials.com/what-is-a-controller/",
+      "headline": "What Is a Controller in Backbone.js?",
+      "description": "Backbone.js has no Controller class. Learn where controller logic really lives, how the Router fills the role, and how to structure a Backbone app.",
+      "inLanguage": "en",
+      "image": { "@type": "ImageObject", "url": "https://backbonetutorials.com/assets/backbonejs/what-is-a-controller-1200.jpg", "width": 1200, "height": 630 },
+      "author": { "@id": "https://backbonetutorials.com/author/backbone-tutorials-team/#person" },
+      "publisher": { "@id": "https://backbonetutorials.com/#organization" },
+      "mainEntityOfPage": { "@id": "https://backbonetutorials.com/what-is-a-controller/#webpage" },
+      "datePublished": "2026-06-16T04:30:00+07:00",
+      "dateModified": "2026-06-16T04:30:00+07:00",
+      "articleSection": ["Backbone.js", "Frontend Architecture"],
+      "keywords": ["backbone controller", "backbone.js controller", "backbone mvc", "backbone router controller"],
+      "about": [
+        { "@type": "Thing", "name": "Backbone.js" },
+        { "@type": "Thing", "name": "Model View Controller" },
+        { "@type": "Thing", "name": "Backbone Router" }
+      ]
+    },
+    {
+      "@type": "BreadcrumbList",
+      "@id": "https://backbonetutorials.com/what-is-a-controller/#breadcrumb",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://backbonetutorials.com/" },
+        { "@type": "ListItem", "position": 2, "name": "Backbone.js", "item": "https://backbonetutorials.com/backbonejs/" },
+        { "@type": "ListItem", "position": 3, "name": "What Is a Controller", "item": "https://backbonetutorials.com/what-is-a-controller/" }
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "@id": "https://backbonetutorials.com/what-is-a-controller/#faq",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Does Backbone.js have a Controller class?",
+          "acceptedAnswer": { "@type": "Answer", "text": "No. Backbone provides Model, Collection, View, Router, and Events, but there is no Controller constructor. The Router and your Views together cover what a controller normally does." }
+        },
+        {
+          "@type": "Question",
+          "name": "What replaces the controller in Backbone?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Two things. The Router maps URLs to handler methods that set up a screen, and Views handle user driven logic through their events hash while staying bound to their Models." }
+        },
+        {
+          "@type": "Question",
+          "name": "Was Backbone.Controller ever real?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Yes. In very early Backbone releases the Router was actually named Backbone.Controller. It was renamed to Router because its real job is mapping URLs, and the old name caused confusion." }
+        },
+        {
+          "@type": "Question",
+          "name": "Where should business logic go in a Backbone app?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Put UI behaviour in View event handlers, page flow in Router methods, and shared rules on the Model or in a small service module. Keep any extracted controller object thin and add it only when a handler grows complex." }
+        }
+      ]
+    }
+  ]
+}
+</script>
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-FYJP43XDHH"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-FYJP43XDHH');
+</script>
+
+</head>
+<body>
+
+<nav class="nav" aria-label="Main Navigation">
+<a href="/" class="nav-logo" title="Backbone Tutorials Homepage"><img src="/assets/logo.png" alt="Backbone Tutorials Logo" width="36" height="36" loading="lazy" decoding="async"></a>
+<a href="/" title="Backbone.js Tutorials Homepage">Home</a>
+<a href="/backbonejs/" title="Backbone.js Complete Guide">Backbone Guide</a>
+<a href="/what-is-a-router/" title="What is a Router">Router</a>
+<a href="/what-is-a-model/" title="What is a Model">Model</a>
+<a href="/what-is-a-view/" title="What is a View">View</a>
+<a href="/what-is-a-collection/" title="What is a Collection">Collection</a>
+</nav>
+
+<main>
+<article class="container">
+
+<nav class="breadcrumb" aria-label="Breadcrumb">
+<a href="/">Home</a> › <a href="/backbonejs/">Backbone.js</a> › <span aria-current="page">What Is a Controller</span>
+</nav>
+
+<h1>What Is a Controller in Backbone.js?</h1>
+
+<p class="author-line">Written by <a href="/author/backbone-tutorials-team/">Backbone Tutorials Team</a></p>
+<p class="author-line">Last updated: June 2026 · 7 min read</p>
+
+<style>
+.container pre{background:#0f172a;color:#e2e8f0;padding:14px 16px;border-radius:10px;overflow:auto;font-size:13.5px;line-height:1.55;margin:14px 0}
+.container pre code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;background:none;padding:0;color:inherit}
+.container :not(pre)>code{background:#eef2ff;padding:1px 6px;border-radius:4px;font-size:0.92em}
+</style>
+<p>You open an unfamiliar Backbone project, go looking for a <code>controllers/</code> folder, and it is not there. No file defines one, and nothing in the framework is called a controller. For developers arriving from Rails, Laravel, or Angular, this is the first genuine surprise Backbone hands you.</p>
+<p>The short version is that Backbone deliberately leaves the controller out, and its job is split between two pieces you already use. This page explains exactly where that logic goes, why the framework was designed this way, and how to keep an app tidy without the controller you were expecting.</p>
+
+<figure>
+<svg viewBox="0 0 720 230" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="How a URL flows through the Router to Views and Models in Backbone">
+<defs><marker id="a1" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#64748b"/></marker></defs>
+<rect x="20" y="92" width="120" height="46" rx="10" fill="#1d4ed8"/><text x="80" y="120" fill="#fff" font-size="14" font-weight="700" text-anchor="middle">URL change</text>
+<rect x="200" y="80" width="150" height="70" rx="10" fill="#0e7490"/><text x="275" y="108" fill="#fff" font-size="14" font-weight="700" text-anchor="middle">Router</text><text x="275" y="128" fill="#cffafe" font-size="11" text-anchor="middle">controller role</text>
+<rect x="420" y="30" width="130" height="46" rx="10" fill="#334155"/><text x="485" y="58" fill="#fff" font-size="13" font-weight="700" text-anchor="middle">View</text>
+<rect x="420" y="154" width="130" height="46" rx="10" fill="#334155"/><text x="485" y="182" fill="#fff" font-size="13" font-weight="700" text-anchor="middle">Model / Collection</text>
+<rect x="600" y="92" width="100" height="46" rx="10" fill="#15803d"/><text x="650" y="120" fill="#fff" font-size="13" font-weight="700" text-anchor="middle">DOM</text>
+<line x1="140" y1="115" x2="196" y2="115" stroke="#64748b" stroke-width="2" marker-end="url(#a1)"/>
+<line x1="350" y1="105" x2="416" y2="60" stroke="#64748b" stroke-width="2" marker-end="url(#a1)"/>
+<line x1="350" y1="125" x2="416" y2="172" stroke="#64748b" stroke-width="2" marker-end="url(#a1)"/>
+<line x1="550" y1="55" x2="598" y2="108" stroke="#64748b" stroke-width="2" marker-end="url(#a1)"/>
+</svg>
+</figure>
+
+<div class="card">
+<p style="margin-top:0"><strong>What you'll learn</strong></p>
+<ul class="toc-list">
+<li>The short answer: no Controller class</li>
+<li>MVC versus Backbone's MV*</li>
+<li>The Router as your closest controller</li>
+<li>Where controller logic actually lives</li>
+<li>A worked example, route to view</li>
+<li>When you need more structure</li>
+</ul>
+</div>
+
+<h2>The short answer</h2>
+<p>Backbone ships five building blocks: <code>Model</code>, <code>Collection</code>, <code>View</code>, <code>Router</code>, and the <code>Events</code> system that ties them together. There is no class named <code>Controller</code>, and there is no folder the framework expects you to create for one. The coordinating work a controller usually performs is handled by the Router and your Views instead.</p>
+<p>This is a design choice, not an omission. Backbone calls itself a library rather than a framework precisely because it hands you primitives and lets you assemble the structure. Tested on Backbone.js 1.6.0, the public API confirms it: there is simply no controller constructor to instantiate.</p>
+
+<h2>MVC versus Backbone's MV*</h2>
+<p>Most server frameworks follow a strict Model View Controller flow. Backbone borrows the vocabulary but reshapes it, which is why people describe it as MV-star rather than MVC.</p>
+<h3>What a controller does in classic MVC</h3>
+<p>In a Rails or Laravel app the controller receives a request, decides what to do, asks the model for data, and picks a view to render. It is the traffic officer standing between the URL and everything else, and almost all per request decisions live there.</p>
+<h3>Why Backbone drops the controller</h3>
+<p>In the browser there is no incoming request to dispatch on every click. State changes in place, the View is already listening to the Model, and the URL is only one of many things that can trigger an update. A single central controller adds little, so Backbone spreads that responsibility across the Router and the Views that are already bound to data.</p>
+
+<h2>The Router is your closest controller</h2>
+<p>If one Backbone class deserves the controller label, it is the Router. It maps URL fragments to methods, and those methods are exactly where you set up the right Views and Collections for a screen.</p>
+<h3>Routes map URLs to handler methods</h3>
+<p>You declare a <code>routes</code> map, and each value names a method on the Router. When the fragment matches, Backbone calls that method, which is the same dispatch idea a server controller performs, only triggered by the address bar instead of an HTTP request.</p>
+
+<h2>Where controller logic actually lives</h2>
+<p>Once you accept that no single object owns coordination, the question becomes where each kind of logic belongs. Backbone gives you two natural homes.</p>
+<h3>View handlers own UI driven logic</h3>
+<p>Anything that responds to a click, a form submit, or a keypress belongs in a View through its <code>events</code> hash. The handler reads or writes the Model, and because the View listens to that Model, the screen updates on its own. Most of what feels like controller code in practice is just View event handlers.</p>
+<h3>The Router and modules own app flow</h3>
+<p>Logic that decides which screen to assemble, loads the data a page needs, or swaps one main View for another belongs in the Router method or in a small module it calls. This keeps page level flow in one place while leaving widget level behaviour inside the Views.</p>
+
+<h2>A worked example</h2>
+<p>The pattern is easiest to see in a few lines. A route fires, the handler fetches a Collection, then hands it to a View that renders the list.</p>
+<h3>Wiring a route to a view</h3>
+<pre><code>var AppRouter = Backbone.Router.extend({
+  routes: {
+    "users": "showUsers"
+  },
+  showUsers: function () {
+    var users = new UserCollection();
+    var view = new UserListView({ collection: users });
+    users.fetch();              // View re-renders when data arrives
+    $("#main").html(view.render().el);
+  }
+});</code></pre>
+<p>The Router decided what to show, the Collection held the data, and the View rendered it. No controller object was needed, yet every controller responsibility was met.</p>
+
+<h2>When you need more structure</h2>
+<p>On a large app, a route handler can grow long when it coordinates several Views and requests. That is the moment to extract a plain object or a module, sometimes called a controller or a presenter, and let the Router method delegate to it. Add this only when a handler genuinely earns it. Reaching for a controller layer on day one usually adds ceremony without paying it back, and the Router plus Views carry most apps comfortably on their own.</p>
+
+<section id="faq">
+<h2>Frequently Asked Questions</h2>
+<h3>Does Backbone.js have a Controller class?</h3>
+<p>No. Backbone provides Model, Collection, View, Router, and Events, but there is no Controller constructor. The Router and your Views together cover what a controller normally does.</p>
+<h3>What replaces the controller in Backbone?</h3>
+<p>Two things. The Router maps URLs to handler methods that set up a screen, and Views handle user driven logic through their events hash while staying bound to their Models.</p>
+<h3>Was Backbone.Controller ever real?</h3>
+<p>Yes. In very early Backbone releases the Router was actually named Backbone.Controller. It was renamed to Router because its real job is mapping URLs, and the old name caused confusion.</p>
+<h3>Where should business logic go in a Backbone app?</h3>
+<p>Put UI behaviour in View event handlers, page flow in Router methods, and shared rules on the Model or in a small service module. Keep any extracted controller object thin and add it only when a handler grows complex.</p>
+</section>
+
+<section class="read-next"><p style="font-weight:700;font-size:1.06rem;margin:0 0 12px;color:#0f172a">Read next</p>
+<div class="card"><p style="margin:0"><strong>Keep going with the core pieces:</strong></p>
+<ul class="toc-list" style="margin:8px 0 0">
+<li><a href="/what-is-a-router/">What is a Router</a>, the class that plays the controller role</li>
+<li><a href="/what-is-a-view/">What is a View</a>, where your UI logic lives</li>
+<li><a href="/what-is-a-model/">What is a Model</a>, the data your handlers read and write</li>
+</ul></div></section>
+
+<div class="cta"><p style="margin-top:0"><strong>Want the full picture of how the pieces fit?</strong></p><p>See how the Router, Views, Models, and Collections combine into a complete app.</p><a href="/backbonejs/" class="btn">Read the Backbone.js guide &rarr;</a></div>
+
+<div class="back-home">
+<a href="/backbonejs/">← Back to Backbone.js</a>
+</div>
+
+</article>
+</main>
+
+<footer>
+<p>Backbone Tutorials</p>
+<nav class="bt-social" aria-label="Backbone Tutorials on social media">
+  <a style="--c:#181717" href="https://github.com/backbonetutorials/backbonetutorials" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on GitHub"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#fff" d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0 1 12 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222 0 1.606-.014 2.898-.014 3.293 0 .322.216.694.825.576C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg></a>
+  <a style="--c:#000000" href="https://x.com/backbonetutor" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on X (formerly Twitter)"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#fff" d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+  <a style="--c:#FF0000" href="https://www.youtube.com/@BACKBONETUTORIALS" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on YouTube"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#fff" d="M8.5 6.5 L8.5 17.5 L17.5 12 Z"/></svg></a>
+  <a style="--c:#0285FF" href="https://bsky.app/profile/backbonetutorials.bsky.social" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on Bluesky"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#fff" d="M12 10.8c-1.087-2.114-4.046-6.053-6.798-7.995C2.566.944 1.561 1.266.902 1.565.139 1.908 0 3.08 0 3.768c0 .69.378 5.65.624 6.479.815 2.736 3.713 3.66 6.383 3.364.136-.02.275-.039.415-.056-.138.022-.276.04-.415.056-3.912.58-7.387 2.005-2.83 7.078 5.013 5.19 6.87-1.113 7.823-4.308.953 3.195 2.05 9.271 7.733 4.308 4.267-4.308 1.172-6.498-2.74-7.078a8.741 8.741 0 0 1-.415-.056c.14.017.279.036.415.056 2.67.296 5.568-.628 6.383-3.364C23.622 9.418 24 4.458 24 3.768c0-.688-.139-1.86-.902-2.203-.659-.299-1.664-.621-4.3 1.24C16.046 4.747 13.087 8.686 12 10.8Z"/></svg></a>
+  <a style="--c:#d62976;background-image:linear-gradient(150deg,rgba(255,255,255,.30),rgba(255,255,255,0) 42%,rgba(0,0,0,.22)),linear-gradient(45deg,#feda75,#fa7e1e,#d62976,#962fbf,#4f5bd5)" href="https://www.instagram.com/backbonetutorials/" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on Instagram"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="4" y="4" width="16" height="16" rx="5" fill="none" stroke="#fff" stroke-width="2"/><circle cx="12" cy="12" r="3.6" fill="none" stroke="#fff" stroke-width="2"/><circle cx="17.2" cy="6.8" r="1.25" fill="#fff"/></svg></a>
+  <a style="--c:#000000" href="https://www.tiktok.com/@backbonetutorials" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on TikTok"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#fff" d="M16.5 5.82a4.79 4.79 0 0 1-1.16-3.07h-2.9v11.43a2.45 2.45 0 1 1-2.45-2.45c.17 0 .33.02.49.05V8.83a5.36 5.36 0 0 0-.49-.02 5.35 5.35 0 1 0 5.35 5.35V8.6a7.66 7.66 0 0 0 4.46 1.42V7.13a4.79 4.79 0 0 1-2.8-1.31Z"/></svg></a>
+  <a style="--c:#1877F2" href="https://www.facebook.com/BackboneTutorials" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on Facebook"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#fff" d="M13.5 21v-8h2.6l.4-3h-3V8.1c0-.87.27-1.46 1.5-1.46H17V3.96c-.28-.04-1.2-.12-2.28-.12-2.26 0-3.8 1.38-3.8 3.9V10H8.3v3h2.62v8h2.58Z"/></svg></a>
+</nav>
+<p>
+<a href="/">Home</a> |
+<a href="/about/">About</a> |
+<a href="/contact/">Contact</a> |
+<a href="/privacy-policy/">Privacy Policy</a> |
+<a href="/terms/">Terms</a>
+</p>
+<p>© 2026 Backbone Tutorials</p>
+</footer>
+
+</body>
+</html>

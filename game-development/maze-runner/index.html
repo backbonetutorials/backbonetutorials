@@ -1,0 +1,441 @@
+<!-- DEPLOY TO: /game-development/maze-runner/  (index.html) · playable game · per MASTERMIND_SEO.md -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Maze Runner — Maze Navigation Game</title>
+<meta name="description" content="A colorful maze game built with JavaScript and canvas. Each maze is generated fresh; navigate to the exit, grab the data nodes, and beat your best time.">
+<meta name="robots" content="index, follow">
+<meta name="author" content="Backbone Tutorials">
+<meta name="theme-color" content="#2563eb">
+<meta name="format-detection" content="telephone=no">
+<link rel="canonical" href="https://backbonetutorials.com/game-development/maze-runner/">
+<link rel="icon" href="/assets/favicon.ico">
+<link rel="apple-touch-icon" href="/assets/favicon.png">
+<meta property="og:title" content="Maze Runner — Maze Navigation Game">
+<meta property="og:description" content="A colorful maze game built with JavaScript and canvas. Each maze is generated fresh; navigate to the exit, grab the data nodes, and beat your best time.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://backbonetutorials.com/game-development/maze-runner/">
+<meta property="og:image" content="https://backbonetutorials.com/assets/game-development/maze-runner-1200.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:site_name" content="Backbone Tutorials">
+<meta property="og:locale" content="en_US">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Maze Runner — Maze Navigation Game">
+<meta name="twitter:description" content="A colorful maze game built with JavaScript and canvas. Each maze is generated fresh; navigate to the exit, grab the data nodes, and beat your best time.">
+<meta name="twitter:image" content="https://backbonetutorials.com/assets/game-development/maze-runner-1200.jpg">
+<meta name="twitter:url" content="https://backbonetutorials.com/game-development/maze-runner/">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+html{scroll-behavior:smooth}
+body{font-family:'Inter',sans-serif;margin:0;background:#f4f6f9;color:#1f2937;line-height:1.7}
+.container{max-width:900px;margin:30px auto;padding:20px;background:#fff;border-radius:10px;box-shadow:0 2px 10px rgba(0,0,0,0.04)}
+h1,h2,h3{color:#111827}
+.nav{background:#111827;padding:15px;display:flex;justify-content:center;align-items:center;flex-wrap:wrap;gap:8px}
+.nav a{color:white;margin:0 10px;text-decoration:none;font-weight:600}
+.nav a:hover{text-decoration:underline}
+.nav-logo img{vertical-align:middle;margin-right:12px;border-radius:8px}
+figure{margin:30px 0}
+pre{background:#111;color:#eee;padding:15px;border-radius:8px;overflow-x:auto;box-shadow:0 2px 8px rgba(0,0,0,0.15)}
+code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+p code,li code{background:#eef2ff;padding:1px 5px;border-radius:4px;font-size:.95em}
+.cta{background:#eef2ff;padding:20px;margin-top:30px;text-align:center;border-radius:10px}
+a{color:#2563eb}
+.back-home{margin-top:25px}
+footer{background:#111827;color:white;text-align:center;padding:30px 20px;margin-top:40px}
+footer a{color:#93c5fd;text-decoration:none}
+footer a:hover{text-decoration:underline}
+.btn{display:inline-block;background:#2563eb;color:white;padding:12px 22px;border-radius:8px;text-decoration:none;font-weight:600;margin-top:15px;transition:0.2s ease}
+.btn:hover{background:#1d4ed8;transform:translateY(-1px)}
+.card{background:#fff;padding:20px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.05);overflow:hidden;max-width:100%;border:1px solid #eef2f7;border-left:4px solid #ec4899}
+.toc-list{padding-left:20px}
+.toc-list li{margin-bottom:8px}
+.author-line{font-size:15px;margin-top:-6px;margin-bottom:10px;color:#4b5563}
+figcaption{font-size:14px;color:#6b7280;margin-top:10px}
+#faq h3{margin-top:25px}
+#faq p{margin-bottom:18px}
+.breadcrumb{font-size:14px;color:#6b7280;margin:0 0 10px}
+.breadcrumb a{color:#2563eb;text-decoration:none}
+.breadcrumb a:hover{text-decoration:underline}
+.diagram{width:100%;height:auto;display:block;border-radius:10px}
+table.cmp{border-collapse:collapse;width:100%;margin:20px 0;font-size:14.5px}
+table.cmp th,table.cmp td{border:1px solid #e5e7eb;padding:9px 12px;text-align:left;vertical-align:top}
+table.cmp th{background:#f9fafb;font-weight:700}
+.bt-social{display:flex;gap:13px;flex-wrap:wrap;align-items:center;justify-content:center;margin:0 0 14px;padding:0;list-style:none}
+.bt-social a{position:relative;isolation:isolate;width:46px;height:46px;border-radius:14px;display:inline-flex;align-items:center;justify-content:center;text-decoration:none;-webkit-tap-highlight-color:transparent;background-color:var(--c,#333);background-image:linear-gradient(150deg,rgba(255,255,255,.30),rgba(255,255,255,0) 42%,rgba(0,0,0,.22));box-shadow:0 1px 1px rgba(0,0,0,.22),0 7px 14px -3px rgba(0,0,0,.34),inset 0 1px 0 rgba(255,255,255,.50),inset 0 -2px 5px rgba(0,0,0,.30);transition:transform .18s cubic-bezier(.2,.7,.2,1),box-shadow .18s ease}
+.bt-social a::before{content:"";position:absolute;left:3px;right:3px;top:2px;height:44%;border-radius:12px 12px 50% 50%/12px 12px 24px 24px;background:linear-gradient(180deg,rgba(255,255,255,.42),rgba(255,255,255,0));pointer-events:none;z-index:0}
+.bt-social a:hover{transform:translateY(-3px) scale(1.05);box-shadow:0 2px 2px rgba(0,0,0,.20),0 16px 26px -6px rgba(0,0,0,.40),inset 0 1px 0 rgba(255,255,255,.55),inset 0 -2px 6px rgba(0,0,0,.32)}
+.bt-social a:active{transform:translateY(-1px) scale(1.01)}
+.bt-social a:focus-visible{outline:3px solid #93c5fd;outline-offset:3px}
+.bt-social svg{position:relative;z-index:1;width:22px;height:22px;display:block;filter:drop-shadow(0 1px 1px rgba(0,0,0,.28))}
+@media (prefers-reduced-motion:reduce){.bt-social a{transition:none}.bt-social a:hover{transform:none}}
+@media(max-width:600px){.container{padding:15px}}
+.game-stage{margin:20px 0 6px;display:flex;flex-direction:column;align-items:center}
+canvas#game{background:#0f172a;border:1px solid #1f2937;border-radius:12px;max-width:100%;height:auto;touch-action:none;box-shadow:0 8px 24px rgba(0,0,0,0.18);display:block}
+.startbtn{margin-top:14px;background:#ec4899;color:#fff;border:none;border-radius:10px;padding:10px 24px;font-size:15px;font-weight:600;cursor:pointer;transition:background .15s}
+.startbtn:hover{background:#db2777}
+.startbtn:focus-visible{outline:3px solid #2563eb;outline-offset:3px}
+.controls{display:flex;gap:18px;flex-wrap:wrap;justify-content:center;margin-top:14px;font-size:13.5px;color:#475569}
+.controls kbd{background:#111827;color:#fff;border-radius:6px;padding:2px 8px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12.5px}
+.intro-lead{font-size:18px;color:#374151}
+.note{background:#fdf2f8;border:1px solid #fbcfe8;border-left:4px solid #ec4899;border-radius:10px;padding:14px 18px;margin:14px 0}
+
+</style>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": "https://backbonetutorials.com/#organization",
+      "name": "Backbone Tutorials",
+      "url": "https://backbonetutorials.com/",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://backbonetutorials.com/assets/logo.png"
+      },
+      "sameAs": [
+        "https://github.com/backbonetutorials/backbonetutorials",
+        "https://x.com/backbonetutor",
+        "https://www.youtube.com/@BACKBONETUTORIALS",
+        "https://bsky.app/profile/backbonetutorials.bsky.social",
+        "https://www.instagram.com/backbonetutorials/",
+        "https://www.tiktok.com/@backbonetutorials",
+        "https://www.facebook.com/BackboneTutorials"
+      ],
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "contactType": "customer support",
+        "url": "https://x.com/backbonetutor",
+        "availableLanguage": [
+          "English"
+        ],
+        "areaServed": "Worldwide"
+      }
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://backbonetutorials.com/#website",
+      "url": "https://backbonetutorials.com/",
+      "name": "Backbone Tutorials",
+      "publisher": {
+        "@id": "https://backbonetutorials.com/#organization"
+      }
+    },
+    {
+      "@type": "VideoGame",
+      "@id": "https://backbonetutorials.com/game-development/maze-runner/#game",
+      "name": "Maze Runner: Navigate the Maze",
+      "description": "A colorful maze navigation game built with plain JavaScript and canvas, with a fresh depth first generated maze each game, data nodes to collect, and a best time to beat.",
+      "url": "https://backbonetutorials.com/game-development/maze-runner/",
+      "genre": "Puzzle",
+      "gamePlatform": "Web browser",
+      "applicationCategory": "Game",
+      "operatingSystem": "Any modern web browser",
+      "inLanguage": "en",
+      "author": {
+        "@id": "https://backbonetutorials.com/#organization"
+      },
+      "publisher": {
+        "@id": "https://backbonetutorials.com/#organization"
+      },
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      }
+    },
+    {
+      "@type": "WebPage",
+      "@id": "https://backbonetutorials.com/game-development/maze-runner/#webpage",
+      "url": "https://backbonetutorials.com/game-development/maze-runner/",
+      "name": "Maze Runner: Navigate the Maze",
+      "description": "A colorful maze navigation game built with plain JavaScript and canvas, with a fresh depth first generated maze each game, data nodes to collect, and a best time to beat.",
+      "inLanguage": "en",
+      "isPartOf": {
+        "@id": "https://backbonetutorials.com/#website"
+      },
+      "publisher": {
+        "@id": "https://backbonetutorials.com/#organization"
+      },
+      "breadcrumb": {
+        "@id": "https://backbonetutorials.com/game-development/maze-runner/#breadcrumb"
+      },
+      "mainEntity": {
+        "@id": "https://backbonetutorials.com/game-development/maze-runner/#game"
+      },
+      "datePublished": "2026-06-16T04:30:00+07:00",
+      "dateModified": "2026-06-16T04:30:00+07:00"
+    },
+    {
+      "@type": "BreadcrumbList",
+      "@id": "https://backbonetutorials.com/game-development/maze-runner/#breadcrumb",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://backbonetutorials.com/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Game Development",
+          "item": "https://backbonetutorials.com/game-development/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "Maze Runner",
+          "item": "https://backbonetutorials.com/game-development/maze-runner/"
+        }
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "@id": "https://backbonetutorials.com/game-development/maze-runner/#faq",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "How do I play Maze Runner?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Get from the start to the green exit. Swipe on the maze, tap the arrows, or use WASD or the arrow keys to move one cell at a time, and grab the amber data nodes on the way. A new maze is built every game."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Is the maze always solvable?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. The generator uses a depth first carve that visits every cell, which produces a perfect maze with exactly one path between any two points, so the exit can always be reached."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What are the data nodes for?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "They are optional pickups that add to your node count for the run. Collecting all of them while still finding a fast route is the real test of a good path."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How does this relate to real programming?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "A maze is a graph, and generating or solving it is graph traversal, the same depth first and breadth first searches used for routing, pathfinding, and dependency resolution in real systems."
+          }
+        }
+      ]
+    }
+  ]
+}
+</script>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-FYJP43XDHH"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-FYJP43XDHH');
+</script>
+</head>
+<body>
+<nav class="nav" aria-label="Main Navigation">
+<a href="/" class="nav-logo" title="Backbone Tutorials Homepage"><img src="/assets/logo.png" alt="Backbone Tutorials Logo" width="36" height="36" loading="lazy" decoding="async"></a>
+<a href="/" title="Backbone.js Tutorials Homepage">Home</a>
+<a href="/backbonejs/" title="Backbone.js Complete Guide">Backbone Guide</a>
+<a href="/what-is-a-router/" title="What is a Router">Router</a>
+<a href="/what-is-a-model/" title="What is a Model">Model</a>
+<a href="/what-is-a-view/" title="What is a View">View</a>
+<a href="/what-is-a-collection/" title="What is a Collection">Collection</a>
+</nav>
+<main>
+<article class="container">
+<nav class="breadcrumb" aria-label="Breadcrumb"><a href="/">Home</a> &rsaquo; <a href="/game-development/">Game Development</a> &rsaquo; <span aria-current="page">Maze Runner</span></nav>
+<h1>Play Maze Runner</h1>
+<p class="intro-lead">A colorful maze game built with plain JavaScript and canvas. Every maze is generated fresh; navigate to the exit, grab the data nodes, and beat your best time.</p>
+<p>This is a real, playable game, not a screenshot. Find a route from the start to the exit while collecting nodes, against the clock. It is built with no library, just a maze generator, cell to cell movement, and a render loop, which makes it a clean example of grids and graphs in action. After you play, the sections below show how it works.</p>
+<style>
+.mz{max-width:480px;margin:14px auto 6px}
+.mz-bar{display:flex;align-items:center;gap:8px;margin-bottom:10px;min-height:30px;flex-wrap:wrap;justify-content:center}
+.mz-chip{background:#1e293b;border-radius:9px;padding:5px 12px;font-size:13px;font-weight:700;color:#e2e8f0}
+.mz-stage{position:relative}
+canvas#game{background:#0b1220;border:1px solid #1e293b;border-radius:12px;max-width:100%;height:auto;display:block;touch-action:none}
+.mz-overlay{position:absolute;inset:0;background:rgba(11,18,32,.88);border-radius:12px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;z-index:5;text-align:center;padding:0 18px}
+.mz-overlay[hidden]{display:none}
+.mz-overlay .msg{color:#fff;font-size:24px;font-weight:800}
+.mz-overlay .sub{color:#cbd5e1;font-size:13.5px;margin-top:-4px;max-width:300px}
+.dpad{display:flex;flex-direction:column;align-items:center;gap:8px;margin-top:14px;touch-action:none;user-select:none;-webkit-user-select:none}
+.dpad-mid{display:flex;gap:54px}
+.dbtn{width:58px;height:58px;border-radius:14px;border:none;background:#334155;color:#fff;font-size:21px;font-weight:800;-webkit-tap-highlight-color:transparent;touch-action:none;display:flex;align-items:center;justify-content:center;box-shadow:0 3px 8px rgba(0,0,0,.3)}
+.dbtn:active{filter:brightness(1.4)}
+.mz-hint{text-align:center;margin-top:8px;font-size:12px;color:#64748b}
+</style>
+<div class="mz">
+<div class="mz-bar" id="mzbar"></div>
+<div class="mz-stage">
+<canvas id="game" width="480" height="352" aria-label="Maze runner game. Navigate from the start to the exit, collecting data nodes along the way."></canvas>
+<div class="mz-overlay" id="mzstart">
+<div class="msg">Maze Runner</div>
+<div class="sub">Find your way to the green exit and grab the amber data nodes on the way. Each maze is generated fresh. Beat your best time.</div>
+<button class="startbtn" type="button" id="mzbegin">Start</button>
+</div>
+<div class="mz-overlay" id="mzover" hidden><div class="msg" id="mzovermsg"></div><button class="startbtn" type="button" id="mzagain">New maze</button></div>
+</div>
+<div class="dpad" id="dpad">
+<button class="dbtn" type="button" data-d="up" aria-label="Up">&#9650;</button>
+<div class="dpad-mid"><button class="dbtn" type="button" data-d="left" aria-label="Left">&#9664;</button><button class="dbtn" type="button" data-d="right" aria-label="Right">&#9654;</button></div>
+<button class="dbtn" type="button" data-d="down" aria-label="Down">&#9660;</button>
+</div>
+<div class="mz-hint">Swipe on the maze, use the arrows, or press WASD or the arrow keys.</div>
+</div>
+<script>
+(function(){
+  var canvas=document.getElementById('game'); if(!canvas){return;}
+  var ctx=canvas.getContext('2d'), CELL=32, COLS=15, ROWS=11, W=canvas.width, H=canvas.height;
+  var grid=[], player=null, bytes=[], running=false, over=false, won=false, startTime=0, finishTime=0, best=0, lastT=0, loopRunning=false;
+  var startOv=document.getElementById('mzstart'), overOv=document.getElementById('mzover'), overMsg=document.getElementById('mzovermsg'), barEl=document.getElementById('mzbar');
+  function cx(c){ return c*CELL+CELL/2; } function cy(r){ return r*CELL+CELL/2; }
+  function genMaze(){
+    grid=[]; for(var r=0;r<ROWS;r++){ grid[r]=[]; for(var c=0;c<COLS;c++){ grid[r][c]={up:true,down:true,left:true,right:true,v:false}; } }
+    var stack=[], cc=0, cr=0; grid[0][0].v=true; var seen=1, total=COLS*ROWS;
+    while(seen<total){
+      var nb=[];
+      if(cr>0 && !grid[cr-1][cc].v){ nb.push([cc,cr-1,'up']); }
+      if(cr<ROWS-1 && !grid[cr+1][cc].v){ nb.push([cc,cr+1,'down']); }
+      if(cc>0 && !grid[cr][cc-1].v){ nb.push([cc-1,cr,'left']); }
+      if(cc<COLS-1 && !grid[cr][cc+1].v){ nb.push([cc+1,cr,'right']); }
+      if(nb.length){ var n=nb[Math.floor(Math.random()*nb.length)]; var nc=n[0], nr=n[1], dir=n[2];
+        if(dir==='up'){ grid[cr][cc].up=false; grid[nr][nc].down=false; }
+        else if(dir==='down'){ grid[cr][cc].down=false; grid[nr][nc].up=false; }
+        else if(dir==='left'){ grid[cr][cc].left=false; grid[nr][nc].right=false; }
+        else { grid[cr][cc].right=false; grid[nr][nc].left=false; }
+        grid[nr][nc].v=true; seen++; stack.push([cc,cr]); cc=nc; cr=nr;
+      } else { var p=stack.pop(); cc=p[0]; cr=p[1]; }
+    }
+  }
+  function placeBytes(n){
+    bytes=[]; var tries=0;
+    while(bytes.length<n && tries<400){ tries++; var c=Math.floor(Math.random()*COLS), r=Math.floor(Math.random()*ROWS);
+      if((c===0&&r===0)||(c===COLS-1&&r===ROWS-1)){ continue; }
+      var dup=false; for(var i=0;i<bytes.length;i++){ if(bytes[i].c===c&&bytes[i].r===r){ dup=true; break; } }
+      if(!dup){ bytes.push({c:c,r:r,got:false}); }
+    }
+  }
+  function startGame(){
+    genMaze(); placeBytes(5);
+    player={c:0,r:0,px:cx(0),py:cy(0),tween:null,collected:0};
+    won=false; over=false; running=true; startTime=performance.now();
+    startOv.hidden=true; overOv.hidden=true; updateBar();
+    if(!loopRunning){ loopRunning=true; lastT=performance.now(); requestAnimationFrame(loop); }
+  }
+  function tryMove(dir){
+    if(!running||over||!player||player.tween){ return; }
+    var c=player.c, r=player.r, cell=grid[r][c], nc=c, nr=r;
+    if(dir==='up'&&!cell.up){ nr=r-1; } else if(dir==='down'&&!cell.down){ nr=r+1; } else if(dir==='left'&&!cell.left){ nc=c-1; } else if(dir==='right'&&!cell.right){ nc=c+1; } else { return; }
+    player.tween={fx:player.px,fy:player.py,tx:cx(nc),ty:cy(nr),t0:performance.now(),dur:85,nc:nc,nr:nr};
+  }
+  function arrive(){
+    player.c=player.tween.nc; player.r=player.tween.nr; player.px=player.tween.tx; player.py=player.tween.ty; player.tween=null;
+    for(var i=0;i<bytes.length;i++){ if(!bytes[i].got && bytes[i].c===player.c && bytes[i].r===player.r){ bytes[i].got=true; player.collected++; } }
+    if(player.c===COLS-1 && player.r===ROWS-1){ won=true; over=true; running=false; finishTime=performance.now()-startTime; var secs=(finishTime/1000); if(best===0||secs<best){ best=secs; } overMsg.textContent='Exit reached in '+secs.toFixed(1)+'s. Nodes '+player.collected+'/'+bytes.length+'.'; overOv.hidden=false; }
+  }
+  function update(dt){
+    if(player&&player.tween){ var tw=player.tween, p=Math.min(1,(performance.now()-tw.t0)/tw.dur); player.px=tw.fx+(tw.tx-tw.fx)*p; player.py=tw.fy+(tw.ty-tw.fy)*p; if(p>=1){ arrive(); } }
+  }
+  function draw(){
+    ctx.fillStyle='#0b1220'; ctx.fillRect(0,0,W,H);
+    // exit cell glow
+    ctx.fillStyle='rgba(34,197,94,.18)'; ctx.fillRect((COLS-1)*CELL,(ROWS-1)*CELL,CELL,CELL);
+    // bytes
+    for(var i=0;i<bytes.length;i++){ if(bytes[i].got){ continue; } ctx.save(); ctx.shadowColor='#fbbf24'; ctx.shadowBlur=10; ctx.fillStyle='#fbbf24'; ctx.beginPath(); ctx.arc(cx(bytes[i].c),cy(bytes[i].r),6,0,7); ctx.fill(); ctx.restore(); }
+    // exit marker
+    ctx.fillStyle='#22c55e'; ctx.beginPath(); ctx.arc(cx(COLS-1),cy(ROWS-1),8,0,7); ctx.fill();
+    // walls
+    ctx.strokeStyle='#3b82f6'; ctx.lineWidth=2.5; ctx.lineCap='round';
+    for(var r=0;r<ROWS;r++){ for(var c=0;c<COLS;c++){ var x=c*CELL, y=r*CELL, cell=grid[r][c];
+      if(cell.up){ ctx.beginPath(); ctx.moveTo(x,y); ctx.lineTo(x+CELL,y); ctx.stroke(); }
+      if(cell.left){ ctx.beginPath(); ctx.moveTo(x,y); ctx.lineTo(x,y+CELL); ctx.stroke(); }
+      if(c===COLS-1 && cell.right){ ctx.beginPath(); ctx.moveTo(x+CELL,y); ctx.lineTo(x+CELL,y+CELL); ctx.stroke(); }
+      if(r===ROWS-1 && cell.down){ ctx.beginPath(); ctx.moveTo(x,y+CELL); ctx.lineTo(x+CELL,y+CELL); ctx.stroke(); }
+    } }
+    // player
+    if(player){ ctx.save(); ctx.shadowColor='#38bdf8'; ctx.shadowBlur=12; ctx.fillStyle='#38bdf8'; ctx.beginPath(); ctx.arc(player.px,player.py,CELL*0.3,0,7); ctx.fill(); ctx.restore(); }
+  }
+  function updateBar(){ var secs=running?((performance.now()-startTime)/1000):(won?finishTime/1000:0); barEl.innerHTML='<span class="mz-chip">Time '+secs.toFixed(1)+'s</span><span class="mz-chip">Nodes '+(player?player.collected:0)+'/'+(bytes.length||5)+'</span><span class="mz-chip">Best '+(best?best.toFixed(1)+'s':'-')+'</span>'; }
+  function loop(t){ if(!running){ loopRunning=false; draw(); return; } var dt=Math.min(50,t-lastT); lastT=t; update(dt); draw(); updateBar(); requestAnimationFrame(loop); }
+  var sx=0, sy=0;
+  canvas.addEventListener('touchstart',function(e){ var tt=e.touches[0]; sx=tt.clientX; sy=tt.clientY; },{passive:true});
+  canvas.addEventListener('touchend',function(e){ var tt=e.changedTouches[0]; var dx=tt.clientX-sx, dy=tt.clientY-sy; if(Math.max(Math.abs(dx),Math.abs(dy))<18){ return; } if(Math.abs(dx)>Math.abs(dy)){ tryMove(dx>0?'right':'left'); } else { tryMove(dy>0?'down':'up'); } },{passive:true});
+  document.addEventListener('keydown',function(e){
+    var ad={ArrowUp:'up',ArrowDown:'down',ArrowLeft:'left',ArrowRight:'right'};
+    if(ad[e.key]){ if(running){ e.preventDefault(); } tryMove(ad[e.key]); return; }
+    var wd={w:'up',s:'down',a:'left',d:'right'}, c=e.key.toLowerCase(); if(wd[c]){ tryMove(wd[c]); }
+  });
+  var DMAP={up:'up',down:'down',left:'left',right:'right'};
+  var dbtns=document.querySelectorAll('#dpad .dbtn');
+  for(var b=0;b<dbtns.length;b++){ (function(btn){ btn.addEventListener('pointerdown',function(e){ if(e.cancelable){ e.preventDefault(); } tryMove(DMAP[btn.getAttribute('data-d')]); }); })(dbtns[b]); }
+  document.getElementById('mzbegin').addEventListener('click',startGame);
+  document.getElementById('mzagain').addEventListener('click',startGame);
+  genMaze(); placeBytes(5); player={c:0,r:0,px:cx(0),py:cy(0),tween:null,collected:0}; draw(); updateBar();
+})();
+</script>
+<h2>How to play</h2>
+<p>You start in the top left corner and your goal is the glowing green exit in the bottom right. Swipe on the maze, tap the on-screen arrows, or use WASD or the arrow keys to step from cell to cell, but you cannot pass through walls. Scattered through the maze are amber data nodes worth grabbing on your way. A timer runs from the moment you start, so the real challenge is finding a clean route and beating your best time. Every game builds a brand new maze, so no two runs are the same.</p>
+
+<h2>How this game is built</h2>
+<p>A maze game is a surprisingly deep little package: a generator, a movement system, and a clock.</p>
+<h3>Generating the maze</h3>
+<p>The maze is carved by a depth first search that wanders to random unvisited cells and knocks down the wall between them, backtracking when it gets stuck. That guarantees a perfect maze where every cell is reachable, so the exit is always solvable.</p>
+<h3>Moving without passing walls</h3>
+<p>Each move checks whether a wall blocks the way before sliding you to the next cell with a short tween, the kind of frame by frame motion the <a href="/game-development/game-loop-fundamentals/">game loop</a> handles, driven by your <a href="/game-development/handling-game-input/">input</a>.</p>
+<h3>Nodes, the timer, and the finish</h3>
+<p>Picking up a node, counting your time, and detecting the exit are all plain values the screen reflects, the core of <a href="/game-development/game-state-management/">game state management</a>.</p>
+<h3>Drawing the grid</h3>
+<p>The walls, the player, the nodes, and the exit are all drawn on the <a href="/game-development/canvas-2d-rendering/">canvas</a> each frame from the maze data, so what you see always matches the real layout.</p>
+
+<h2>Why a maze is really a graph</h2>
+<p>Under the walls, a maze is a graph: each cell is a node and each open passage is an edge. Generating it and solving it are classic graph problems, the same depth first and breadth first searches that power routing, dependency resolution, and pathfinding in real software. Building one by hand is a friendly way into the data structures behind <a href="/architecture/client-side-architecture/">client side architecture</a> and far beyond. Once you see the graph, the maze stops being a puzzle and becomes a map.</p>
+
+<h2>Frequently asked questions</h2>
+<h3>How do I play Maze Runner?</h3>
+<p>Get from the start to the green exit. Swipe on the maze, tap the arrows, or use WASD or the arrow keys to move one cell at a time, and grab the amber data nodes on the way. A new maze is built every game.</p>
+<h3>Is the maze always solvable?</h3>
+<p>Yes. The generator uses a depth first carve that visits every cell, which produces a perfect maze with exactly one path between any two points, so the exit can always be reached.</p>
+<h3>What are the data nodes for?</h3>
+<p>They are optional pickups that add to your node count for the run. Collecting all of them while still finding a fast route is the real test of a good path.</p>
+<h3>How does this relate to real programming?</h3>
+<p>A maze is a graph, and generating or solving it is graph traversal, the same depth first and breadth first searches used for routing, pathfinding, and dependency resolution in real systems.</p>
+
+<div class="cta"><p><strong>Want the structures behind maps and routes?</strong></p><p>See how front end systems are organised.</p><a href="/architecture/client-side-architecture/" class="btn">Read: Client Side Architecture &rarr;</a></div>
+<div class="back-home"><a href="/game-development/">&larr; Back to Game Development</a></div>
+</article>
+</main>
+<footer>
+<p>Backbone Tutorials</p>
+<nav class="bt-social" aria-label="Backbone Tutorials on social media">
+  <a style="--c:#181717" href="https://github.com/backbonetutorials/backbonetutorials" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on GitHub"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#fff" d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0 1 12 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222 0 1.606-.014 2.898-.014 3.293 0 .322.216.694.825.576C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg></a>
+  <a style="--c:#000000" href="https://x.com/backbonetutor" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on X (formerly Twitter)"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#fff" d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+  <a style="--c:#FF0000" href="https://www.youtube.com/@BACKBONETUTORIALS" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on YouTube"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#fff" d="M8.5 6.5 L8.5 17.5 L17.5 12 Z"/></svg></a>
+  <a style="--c:#0285FF" href="https://bsky.app/profile/backbonetutorials.bsky.social" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on Bluesky"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#fff" d="M12 10.8c-1.087-2.114-4.046-6.053-6.798-7.995C2.566.944 1.561 1.266.902 1.565.139 1.908 0 3.08 0 3.768c0 .69.378 5.65.624 6.479.815 2.736 3.713 3.66 6.383 3.364.136-.02.275-.039.415-.056-.138.022-.276.04-.415.056-3.912.58-7.387 2.005-2.83 7.078 5.013 5.19 6.87-1.113 7.823-4.308.953 3.195 2.05 9.271 7.733 4.308 4.267-4.308 1.172-6.498-2.74-7.078a8.741 8.741 0 0 1-.415-.056c.14.017.279.036.415.056 2.67.296 5.568-.628 6.383-3.364C23.622 9.418 24 4.458 24 3.768c0-.688-.139-1.86-.902-2.203-.659-.299-1.664-.621-4.3 1.24C16.046 4.747 13.087 8.686 12 10.8Z"/></svg></a>
+  <a style="--c:#d62976;background-image:linear-gradient(150deg,rgba(255,255,255,.30),rgba(255,255,255,0) 42%,rgba(0,0,0,.22)),linear-gradient(45deg,#feda75,#fa7e1e,#d62976,#962fbf,#4f5bd5)" href="https://www.instagram.com/backbonetutorials/" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on Instagram"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="4" y="4" width="16" height="16" rx="5" fill="none" stroke="#fff" stroke-width="2"/><circle cx="12" cy="12" r="3.6" fill="none" stroke="#fff" stroke-width="2"/><circle cx="17.2" cy="6.8" r="1.25" fill="#fff"/></svg></a>
+  <a style="--c:#000000" href="https://www.tiktok.com/@backbonetutorials" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on TikTok"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#fff" d="M16.5 5.82a4.79 4.79 0 0 1-1.16-3.07h-2.9v11.43a2.45 2.45 0 1 1-2.45-2.45c.17 0 .33.02.49.05V8.83a5.36 5.36 0 0 0-.49-.02 5.35 5.35 0 1 0 5.35 5.35V8.6a7.66 7.66 0 0 0 4.46 1.42V7.13a4.79 4.79 0 0 1-2.8-1.31Z"/></svg></a>
+  <a style="--c:#1877F2" href="https://www.facebook.com/BackboneTutorials" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on Facebook"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#fff" d="M13.5 21v-8h2.6l.4-3h-3V8.1c0-.87.27-1.46 1.5-1.46H17V3.96c-.28-.04-1.2-.12-2.28-.12-2.26 0-3.8 1.38-3.8 3.9V10H8.3v3h2.62v8h2.58Z"/></svg></a>
+</nav>
+<p>
+<a href="/">Home</a> |
+<a href="/about/">About</a> |
+<a href="/contact/">Contact</a> |
+<a href="/privacy-policy/">Privacy Policy</a> |
+<a href="/terms/">Terms</a>
+</p>
+<p>© 2026 Backbone Tutorials</p>
+</footer>
+</body>
+</html>

@@ -1,0 +1,375 @@
+<!-- DEPLOY TO: /namespacing/  (index.html) · TechArticle · per MASTERMIND_SEO.md -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Backbone.js Namespacing — Organize Your App</title>
+
+<meta name="description" content="Learn how to namespace a Backbone.js app, from the simple global object pattern to module based structure, to avoid globals and keep code organized.">
+
+<meta name="robots" content="index, follow">
+<meta name="author" content="Backbone Tutorials">
+<meta name="theme-color" content="#2563eb">
+<meta name="format-detection" content="telephone=no">
+
+<link rel="canonical" href="https://backbonetutorials.com/namespacing/">
+
+<link rel="icon" href="/assets/favicon.ico">
+<link rel="apple-touch-icon" href="/assets/favicon.png">
+
+<meta property="og:title" content="Backbone.js Namespacing — Organize Your App">
+<meta property="og:description" content="How to namespace a Backbone.js app, from the global object pattern to module based structure, without polluting globals.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://backbonetutorials.com/namespacing/">
+<meta property="og:image" content="https://backbonetutorials.com/assets/backbonejs/namespacing-1200.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:type" content="image/jpeg">
+<meta property="og:image:alt" content="Namespacing — Backbone Tutorials">
+<meta property="og:site_name" content="Backbone Tutorials">
+<meta property="og:locale" content="en_US">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Backbone.js Namespacing — Organize Your App">
+<meta name="twitter:description" content="How to namespace a Backbone.js app, from the global object pattern to modules, without polluting globals.">
+<meta name="twitter:image" content="https://backbonetutorials.com/assets/backbonejs/namespacing-1200.jpg">
+<meta name="twitter:image:alt" content="Namespacing — Backbone Tutorials">
+<meta name="twitter:url" content="https://backbonetutorials.com/namespacing/">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+
+<style>
+html{scroll-behavior:smooth}
+body{font-family:'Inter',sans-serif;margin:0;background:#f4f6f9;color:#1f2937;line-height:1.7}
+.container{max-width:900px;margin:30px auto;padding:20px;background:#fff;border-radius:10px;box-shadow:0 2px 10px rgba(0,0,0,0.04)}
+h1,h2,h3{color:#111827}
+.nav{background:#111827;padding:15px;display:flex;justify-content:center;align-items:center;flex-wrap:wrap;gap:8px}
+.nav a{color:white;margin:0 10px;text-decoration:none;font-weight:600}
+.nav a:hover{text-decoration:underline}
+.nav-logo img{vertical-align:middle;margin-right:12px;border-radius:8px}
+figure{margin:30px 0}
+pre{background:#111;color:#eee;padding:15px;border-radius:8px;overflow-x:auto;box-shadow:0 2px 8px rgba(0,0,0,0.15)}
+code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+p code,li code{background:#eef2ff;padding:1px 5px;border-radius:4px;font-size:.95em}
+.cta{background:#eef2ff;padding:20px;margin-top:30px;text-align:center;border-radius:10px}
+a{color:#2563eb}
+.back-home{margin-top:25px}
+footer{background:#111827;color:white;text-align:center;padding:30px 20px;margin-top:40px}
+footer a{color:#93c5fd;text-decoration:none}
+footer a:hover{text-decoration:underline}
+.btn{display:inline-block;background:#2563eb;color:white;padding:12px 22px;border-radius:8px;text-decoration:none;font-weight:600;margin-top:15px;transition:0.2s ease}
+.btn:hover{background:#1d4ed8;transform:translateY(-1px)}
+.card{background:#fff;padding:20px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.05);overflow:hidden;max-width:100%;border:1px solid #eef2f7;border-left:4px solid #1d4ed8}
+.toc-list{padding-left:20px}
+.toc-list li{margin-bottom:8px}
+.author-line{font-size:15px;margin-top:-6px;margin-bottom:10px;color:#4b5563}
+figcaption{font-size:14px;color:#6b7280;margin-top:10px}
+#faq h3{margin-top:25px}
+#faq p{margin-bottom:18px}
+.breadcrumb{font-size:14px;color:#6b7280;margin:0 0 10px}
+.breadcrumb a{color:#2563eb;text-decoration:none}
+.breadcrumb a:hover{text-decoration:underline}
+.diagram{width:100%;height:auto;display:block;border-radius:10px}
+table.cmp{border-collapse:collapse;width:100%;margin:20px 0;font-size:14.5px}
+table.cmp th,table.cmp td{border:1px solid #e5e7eb;padding:9px 12px;text-align:left;vertical-align:top}
+table.cmp th{background:#f9fafb;font-weight:700}
+.bt-social{display:flex;gap:13px;flex-wrap:wrap;align-items:center;justify-content:center;margin:0 0 14px;padding:0;list-style:none}
+.bt-social a{position:relative;isolation:isolate;width:46px;height:46px;border-radius:14px;display:inline-flex;align-items:center;justify-content:center;text-decoration:none;-webkit-tap-highlight-color:transparent;background-color:var(--c,#333);background-image:linear-gradient(150deg,rgba(255,255,255,.30),rgba(255,255,255,0) 42%,rgba(0,0,0,.22));box-shadow:0 1px 1px rgba(0,0,0,.22),0 7px 14px -3px rgba(0,0,0,.34),inset 0 1px 0 rgba(255,255,255,.50),inset 0 -2px 5px rgba(0,0,0,.30);transition:transform .18s cubic-bezier(.2,.7,.2,1),box-shadow .18s ease}
+.bt-social a::before{content:"";position:absolute;left:3px;right:3px;top:2px;height:44%;border-radius:12px 12px 50% 50%/12px 12px 24px 24px;background:linear-gradient(180deg,rgba(255,255,255,.42),rgba(255,255,255,0));pointer-events:none;z-index:0}
+.bt-social a:hover{transform:translateY(-3px) scale(1.05);box-shadow:0 2px 2px rgba(0,0,0,.20),0 16px 26px -6px rgba(0,0,0,.40),inset 0 1px 0 rgba(255,255,255,.55),inset 0 -2px 6px rgba(0,0,0,.32)}
+.bt-social a:active{transform:translateY(-1px) scale(1.01)}
+.bt-social a:focus-visible{outline:3px solid #93c5fd;outline-offset:3px}
+.bt-social svg{position:relative;z-index:1;width:22px;height:22px;display:block;filter:drop-shadow(0 1px 1px rgba(0,0,0,.28))}
+@media (prefers-reduced-motion:reduce){.bt-social a{transition:none}.bt-social a:hover{transform:none}}
+@media(max-width:600px){.container{padding:15px}}
+</style>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": "https://backbonetutorials.com/#organization",
+      "name": "Backbone Tutorials",
+      "url": "https://backbonetutorials.com/",
+      "logo": { "@type": "ImageObject", "url": "https://backbonetutorials.com/assets/logo.png" },
+      "sameAs": [
+        "https://github.com/backbonetutorials/backbonetutorials",
+        "https://x.com/backbonetutor",
+        "https://www.youtube.com/@BACKBONETUTORIALS",
+        "https://bsky.app/profile/backbonetutorials.bsky.social",
+        "https://www.instagram.com/backbonetutorials/",
+        "https://www.tiktok.com/@backbonetutorials",
+        "https://www.facebook.com/BackboneTutorials"
+      ],
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "contactType": "customer support",
+        "url": "https://x.com/backbonetutor",
+        "availableLanguage": ["English"],
+        "areaServed": "Worldwide"
+      }
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://backbonetutorials.com/#website",
+      "url": "https://backbonetutorials.com/",
+      "name": "Backbone Tutorials",
+      "publisher": { "@id": "https://backbonetutorials.com/#organization" }
+    },
+    {
+      "@type": "Person",
+      "@id": "https://backbonetutorials.com/author/backbone-tutorials-team/#person",
+      "name": "Backbone Tutorials Team",
+      "url": "https://backbonetutorials.com/author/backbone-tutorials-team/",
+      "worksFor": { "@id": "https://backbonetutorials.com/#organization" },
+      "jobTitle": "Frontend JavaScript Editorial Team",
+      "knowsAbout": ["Backbone.js", "JavaScript namespacing", "JavaScript architecture", "RequireJS", "Single page applications"]
+    },
+    {
+      "@type": "WebPage",
+      "@id": "https://backbonetutorials.com/namespacing/#webpage",
+      "url": "https://backbonetutorials.com/namespacing/",
+      "name": "Backbone.js Namespacing \u2014 Organize Your App",
+      "headline": "Backbone.js Namespacing",
+      "description": "Learn how to namespace a Backbone.js app, from the simple global object pattern to module based structure, to avoid globals and keep code organized.",
+      "inLanguage": "en",
+      "isPartOf": { "@id": "https://backbonetutorials.com/#website" },
+      "author": { "@id": "https://backbonetutorials.com/author/backbone-tutorials-team/#person" },
+      "publisher": { "@id": "https://backbonetutorials.com/#organization" },
+      "breadcrumb": { "@id": "https://backbonetutorials.com/namespacing/#breadcrumb" },
+      "mainEntity": { "@id": "https://backbonetutorials.com/namespacing/#article" }
+    },
+    {
+      "@type": "TechArticle",
+      "@id": "https://backbonetutorials.com/namespacing/#article",
+      "url": "https://backbonetutorials.com/namespacing/",
+      "headline": "Backbone.js Namespacing",
+      "description": "Learn how to namespace a Backbone.js app, from the simple global object pattern to module based structure, to avoid globals and keep code organized.",
+      "inLanguage": "en",
+      "image": { "@type": "ImageObject", "url": "https://backbonetutorials.com/assets/backbonejs/namespacing-1200.jpg", "width": 1200, "height": 630 },
+      "author": { "@id": "https://backbonetutorials.com/author/backbone-tutorials-team/#person" },
+      "publisher": { "@id": "https://backbonetutorials.com/#organization" },
+      "mainEntityOfPage": { "@id": "https://backbonetutorials.com/namespacing/#webpage" },
+      "datePublished": "2026-06-16T04:30:00+07:00",
+      "dateModified": "2026-06-16T04:30:00+07:00",
+      "articleSection": ["Backbone.js", "Frontend Architecture"],
+      "keywords": ["backbone namespacing", "backbone.js namespace", "javascript namespace", "backbone global scope"],
+      "about": [
+        { "@type": "Thing", "name": "Backbone.js" },
+        { "@type": "Thing", "name": "Namespace" },
+        { "@type": "Thing", "name": "JavaScript modules" }
+      ]
+    },
+    {
+      "@type": "BreadcrumbList",
+      "@id": "https://backbonetutorials.com/namespacing/#breadcrumb",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://backbonetutorials.com/" },
+        { "@type": "ListItem", "position": 2, "name": "Backbone.js", "item": "https://backbonetutorials.com/backbonejs/" },
+        { "@type": "ListItem", "position": 3, "name": "Namespacing", "item": "https://backbonetutorials.com/namespacing/" }
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "@id": "https://backbonetutorials.com/namespacing/#faq",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What is namespacing in Backbone.js?",
+          "acceptedAnswer": { "@type": "Answer", "text": "It is the practice of putting your Models, Views, Collections, and Routers under a single application object instead of leaving them as separate globals. One name owns the rest, which prevents collisions and makes structure clear." }
+        },
+        {
+          "@type": "Question",
+          "name": "How do I create a Backbone namespace?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Define one object, guarded so it is not overwritten, with sub objects for each class type: window.App = window.App || { Models: {}, Views: {}, Collections: {} }. Then attach each class onto it." }
+        },
+        {
+          "@type": "Question",
+          "name": "Is module loading better than a global namespace?",
+          "acceptedAnswer": { "@type": "Answer", "text": "For larger apps, yes. A loader like RequireJS or native ES modules removes every global, since each file imports what it needs by path. The global object pattern is simpler and fine for small to medium apps." }
+        },
+        {
+          "@type": "Question",
+          "name": "How deep should a namespace be?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Keep it shallow. Two levels such as App.Models.User handle almost every app. Deep chains are harder to type and maintain, and usually signal that the structure should be flattened." }
+        }
+      ]
+    }
+  ]
+}
+</script>
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-FYJP43XDHH"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-FYJP43XDHH');
+</script>
+
+</head>
+<body>
+
+<nav class="nav" aria-label="Main Navigation">
+<a href="/" class="nav-logo" title="Backbone Tutorials Homepage"><img src="/assets/logo.png" alt="Backbone Tutorials Logo" width="36" height="36" loading="lazy" decoding="async"></a>
+<a href="/" title="Backbone.js Tutorials Homepage">Home</a>
+<a href="/backbonejs/" title="Backbone.js Complete Guide">Backbone Guide</a>
+<a href="/what-is-a-router/" title="What is a Router">Router</a>
+<a href="/what-is-a-model/" title="What is a Model">Model</a>
+<a href="/what-is-a-view/" title="What is a View">View</a>
+<a href="/what-is-a-collection/" title="What is a Collection">Collection</a>
+</nav>
+
+<main>
+<article class="container">
+
+<nav class="breadcrumb" aria-label="Breadcrumb">
+<a href="/">Home</a> › <a href="/backbonejs/">Backbone.js</a> › <span aria-current="page">Namespacing</span>
+</nav>
+
+<h1>Backbone.js Namespacing</h1>
+
+<p class="author-line">Written by <a href="/author/backbone-tutorials-team/">Backbone Tutorials Team</a></p>
+<p class="author-line">Last updated: June 2026 · 6 min read</p>
+
+<style>
+.container pre{background:#0f172a;color:#e2e8f0;padding:14px 16px;border-radius:10px;overflow:auto;font-size:13.5px;line-height:1.55;margin:14px 0}
+.container pre code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;background:none;padding:0;color:inherit}
+.container :not(pre)>code{background:#eef2ff;padding:1px 6px;border-radius:4px;font-size:0.92em}
+</style>
+<p>Add a few Views and a Collection to a quick Backbone demo and the global scope fills up fast. <code>UserView</code>, <code>UserModel</code>, <code>appRouter</code>, and a dozen helpers all sit on <code>window</code>, where any script can clobber them and nothing tells you how the pieces relate. Namespacing is the simplest cure, and on classic Backbone projects it was one of the first things experienced developers reached for.</p>
+<p>This guide shows two ways to namespace a Backbone app: the lightweight global object pattern, and the cleaner module based approach. Examples run on Backbone.js 1.6.0.</p>
+
+<figure>
+<svg viewBox="0 0 720 220" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Models, Views and Collections grouped under a single App namespace object">
+<rect x="250" y="20" width="220" height="48" rx="10" fill="#1d4ed8"/><text x="360" y="49" fill="#fff" font-size="15" font-weight="700" text-anchor="middle">window.App</text>
+<rect x="60" y="130" width="160" height="60" rx="10" fill="#334155"/><text x="140" y="158" fill="#fff" font-size="13" font-weight="700" text-anchor="middle">App.Models</text><text x="140" y="176" fill="#cbd5e1" font-size="11" text-anchor="middle">User, Post</text>
+<rect x="280" y="130" width="160" height="60" rx="10" fill="#334155"/><text x="360" y="158" fill="#fff" font-size="13" font-weight="700" text-anchor="middle">App.Views</text><text x="360" y="176" fill="#cbd5e1" font-size="11" text-anchor="middle">UserView</text>
+<rect x="500" y="130" width="160" height="60" rx="10" fill="#334155"/><text x="580" y="158" fill="#fff" font-size="13" font-weight="700" text-anchor="middle">App.Collections</text><text x="580" y="176" fill="#cbd5e1" font-size="11" text-anchor="middle">Users</text>
+<line x1="320" y1="68" x2="160" y2="128" stroke="#64748b" stroke-width="2"/>
+<line x1="360" y1="68" x2="360" y2="128" stroke="#64748b" stroke-width="2"/>
+<line x1="400" y1="68" x2="560" y2="128" stroke="#64748b" stroke-width="2"/>
+</svg>
+</figure>
+
+<div class="card">
+<p style="margin-top:0"><strong>What you'll learn</strong></p>
+<ul class="toc-list">
+<li>Why namespacing matters</li>
+<li>The global object pattern</li>
+<li>Avoiding the global scope entirely</li>
+<li>Organizing a growing app</li>
+<li>A worked example</li>
+<li>Common pitfalls</li>
+</ul>
+</div>
+
+<h2>Why namespacing matters</h2>
+<p>Backbone does not impose any structure on where your classes live, so by default they land on the global object. That works for a single demo and breaks down everywhere else. Two scripts can define the same global, a typo silently overwrites a class, and a newcomer has no map of how Models, Views, and Collections relate.</p>
+<p>A namespace is just one object that owns the rest. Instead of a hundred globals you expose one, and everything hangs underneath it. That single change makes an app easier to read, safer to extend, and far less likely to collide with a third party script.</p>
+
+<h2>The global object pattern</h2>
+<p>The quickest approach is a single application object created once, with sub objects for each kind of class. No build tooling is required.</p>
+<h3>Creating an app namespace</h3>
+<pre><code>window.App = window.App || {
+  Models: {},
+  Views: {},
+  Collections: {},
+  Routers: {}
+};</code></pre>
+<h3>Attaching Models, Views, and Collections</h3>
+<p>Every class is defined onto the namespace rather than as a bare global, so the relationships are obvious at a glance.</p>
+<pre><code>App.Models.User = Backbone.Model.extend({ defaults: { name: "" } });
+
+App.Views.User = Backbone.View.extend({
+  render: function () { this.$el.text(this.model.get("name")); return this; }
+});</code></pre>
+
+<h2>Avoiding the global scope entirely</h2>
+<p>The object pattern still puts one name on <code>window</code>. If you want nothing global at all, a module loader removes even that.</p>
+<h3>Namespacing through modules</h3>
+<p>With RequireJS or ES modules, each file returns its class and other files import it by path. The folder structure becomes the namespace, no shared object is needed, and the loader guarantees nothing leaks. This is the same idea covered in the modular Backbone example, applied here to keep the global scope completely empty.</p>
+
+<h2>Organizing a growing app</h2>
+<p>Once you have a namespace, how you arrange it decides whether it stays readable as the app grows.</p>
+<h3>Grouping by feature</h3>
+<p>On larger apps, grouping by feature often beats grouping by type. A <code>App.Users</code> branch that holds the user Model, View, and Collection together keeps related code in one place, which is easier to navigate than three parallel folders.</p>
+<h3>Keeping the namespace shallow</h3>
+<p>Resist deep chains like <code>App.Features.Users.Views.List.Item</code>. Every extra level is more to type and more to break. Two levels handle almost every app, and anything deeper is usually a sign the structure needs flattening.</p>
+
+<h2>A worked example</h2>
+<p>The pieces come together in a short, fully namespaced snippet that creates a Model, renders it through a View, and never touches a bare global.</p>
+<h3>A small namespaced app</h3>
+<pre><code>window.App = { Models: {}, Views: {} };
+
+App.Models.User = Backbone.Model.extend({ defaults: { name: "" } });
+App.Views.User = Backbone.View.extend({
+  render: function () { this.$el.text(this.model.get("name")); return this; }
+});
+
+var user = new App.Models.User({ name: "Grace" });
+$("#app").html(new App.Views.User({ model: user }).render().el);</code></pre>
+
+<h2>Common pitfalls</h2>
+<p>Two mistakes show up again and again. The first is recreating the namespace in several files with a plain assignment, which wipes out whatever was there before, so always guard it with <code>window.App = window.App || {}</code>. The second is letting the namespace grow so deep that nobody can remember the path to a class. Keep it shallow, guard the root, and a namespace will carry an app a long way before you need anything heavier.</p>
+
+<section id="faq">
+<h2>Frequently Asked Questions</h2>
+<h3>What is namespacing in Backbone.js?</h3>
+<p>It is the practice of putting your Models, Views, Collections, and Routers under a single application object instead of leaving them as separate globals. One name owns the rest, which prevents collisions and makes structure clear.</p>
+<h3>How do I create a Backbone namespace?</h3>
+<p>Define one object, guarded so it is not overwritten, with sub objects for each class type: window.App = window.App || { Models: {}, Views: {}, Collections: {} }. Then attach each class onto it.</p>
+<h3>Is module loading better than a global namespace?</h3>
+<p>For larger apps, yes. A loader like RequireJS or native ES modules removes every global, since each file imports what it needs by path. The global object pattern is simpler and fine for small to medium apps.</p>
+<h3>How deep should a namespace be?</h3>
+<p>Keep it shallow. Two levels such as App.Models.User handle almost every app. Deep chains are harder to type and maintain, and usually signal that the structure should be flattened.</p>
+</section>
+
+<section class="read-next"><p style="font-weight:700;font-size:1.06rem;margin:0 0 12px;color:#0f172a">Read next</p>
+<div class="card"><p style="margin:0"><strong>Structure your app further:</strong></p>
+<ul class="toc-list" style="margin:8px 0 0">
+<li><a href="/examples/modular-backbone/">Modular Backbone with RequireJS</a>, namespacing without globals</li>
+<li><a href="/organizing-backbone-using-modules/">Organizing Backbone using modules</a></li>
+<li><a href="/what-is-a-model/">What is a Model</a>, the classes you will namespace</li>
+</ul></div></section>
+
+<div class="cta"><p style="margin-top:0"><strong>Outgrowing a global namespace?</strong></p><p>See how modules remove every global and resolve dependencies for you.</p><a href="/examples/modular-backbone/" class="btn">Modular Backbone with RequireJS &rarr;</a></div>
+
+<div class="back-home">
+<a href="/backbonejs/">← Back to Backbone.js</a>
+</div>
+
+</article>
+</main>
+
+<footer>
+<p>Backbone Tutorials</p>
+<nav class="bt-social" aria-label="Backbone Tutorials on social media">
+  <a style="--c:#181717" href="https://github.com/backbonetutorials/backbonetutorials" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on GitHub"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#fff" d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0 1 12 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222 0 1.606-.014 2.898-.014 3.293 0 .322.216.694.825.576C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg></a>
+  <a style="--c:#000000" href="https://x.com/backbonetutor" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on X (formerly Twitter)"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#fff" d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+  <a style="--c:#FF0000" href="https://www.youtube.com/@BACKBONETUTORIALS" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on YouTube"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#fff" d="M8.5 6.5 L8.5 17.5 L17.5 12 Z"/></svg></a>
+  <a style="--c:#0285FF" href="https://bsky.app/profile/backbonetutorials.bsky.social" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on Bluesky"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#fff" d="M12 10.8c-1.087-2.114-4.046-6.053-6.798-7.995C2.566.944 1.561 1.266.902 1.565.139 1.908 0 3.08 0 3.768c0 .69.378 5.65.624 6.479.815 2.736 3.713 3.66 6.383 3.364.136-.02.275-.039.415-.056-.138.022-.276.04-.415.056-3.912.58-7.387 2.005-2.83 7.078 5.013 5.19 6.87-1.113 7.823-4.308.953 3.195 2.05 9.271 7.733 4.308 4.267-4.308 1.172-6.498-2.74-7.078a8.741 8.741 0 0 1-.415-.056c.14.017.279.036.415.056 2.67.296 5.568-.628 6.383-3.364C23.622 9.418 24 4.458 24 3.768c0-.688-.139-1.86-.902-2.203-.659-.299-1.664-.621-4.3 1.24C16.046 4.747 13.087 8.686 12 10.8Z"/></svg></a>
+  <a style="--c:#d62976;background-image:linear-gradient(150deg,rgba(255,255,255,.30),rgba(255,255,255,0) 42%,rgba(0,0,0,.22)),linear-gradient(45deg,#feda75,#fa7e1e,#d62976,#962fbf,#4f5bd5)" href="https://www.instagram.com/backbonetutorials/" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on Instagram"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="4" y="4" width="16" height="16" rx="5" fill="none" stroke="#fff" stroke-width="2"/><circle cx="12" cy="12" r="3.6" fill="none" stroke="#fff" stroke-width="2"/><circle cx="17.2" cy="6.8" r="1.25" fill="#fff"/></svg></a>
+  <a style="--c:#000000" href="https://www.tiktok.com/@backbonetutorials" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on TikTok"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#fff" d="M16.5 5.82a4.79 4.79 0 0 1-1.16-3.07h-2.9v11.43a2.45 2.45 0 1 1-2.45-2.45c.17 0 .33.02.49.05V8.83a5.36 5.36 0 0 0-.49-.02 5.35 5.35 0 1 0 5.35 5.35V8.6a7.66 7.66 0 0 0 4.46 1.42V7.13a4.79 4.79 0 0 1-2.8-1.31Z"/></svg></a>
+  <a style="--c:#1877F2" href="https://www.facebook.com/BackboneTutorials" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on Facebook"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#fff" d="M13.5 21v-8h2.6l.4-3h-3V8.1c0-.87.27-1.46 1.5-1.46H17V3.96c-.28-.04-1.2-.12-2.28-.12-2.26 0-3.8 1.38-3.8 3.9V10H8.3v3h2.62v8h2.58Z"/></svg></a>
+</nav>
+<p>
+<a href="/">Home</a> |
+<a href="/about/">About</a> |
+<a href="/contact/">Contact</a> |
+<a href="/privacy-policy/">Privacy Policy</a> |
+<a href="/terms/">Terms</a>
+</p>
+<p>© 2026 Backbone Tutorials</p>
+</footer>
+
+</body>
+</html>

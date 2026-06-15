@@ -1,0 +1,445 @@
+<!-- DEPLOY TO: /game-development/asteroid-dodge/  (index.html) · playable game · per MASTERMIND_SEO.md -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Asteroid Dodge — Survival Arcade Game</title>
+<meta name="description" content="A fast asteroid dodge survival game built with JavaScript. Steer your ship and dodge falling rocks as they get faster. Touch, drag, or keyboard. No signup.">
+<meta name="robots" content="index, follow">
+<meta name="author" content="Backbone Tutorials">
+<meta name="theme-color" content="#2563eb">
+<meta name="format-detection" content="telephone=no">
+<link rel="canonical" href="https://backbonetutorials.com/game-development/asteroid-dodge/">
+<link rel="icon" href="/assets/favicon.ico">
+<link rel="apple-touch-icon" href="/assets/favicon.png">
+<meta property="og:title" content="Asteroid Dodge — Survival Arcade Game">
+<meta property="og:description" content="A fast asteroid dodge survival game built with JavaScript. Steer your ship and dodge falling rocks as they get faster. Touch, drag, or keyboard. No signup.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://backbonetutorials.com/game-development/asteroid-dodge/">
+<meta property="og:image" content="https://backbonetutorials.com/assets/game-development/asteroid-dodge-1200.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:site_name" content="Backbone Tutorials">
+<meta property="og:locale" content="en_US">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Asteroid Dodge — Survival Arcade Game">
+<meta name="twitter:description" content="A fast asteroid dodge survival game built with JavaScript. Steer your ship and dodge falling rocks as they get faster. Touch, drag, or keyboard. No signup.">
+<meta name="twitter:image" content="https://backbonetutorials.com/assets/game-development/asteroid-dodge-1200.jpg">
+<meta name="twitter:url" content="https://backbonetutorials.com/game-development/asteroid-dodge/">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+html{scroll-behavior:smooth}
+body{font-family:'Inter',sans-serif;margin:0;background:#f4f6f9;color:#1f2937;line-height:1.7}
+.container{max-width:900px;margin:30px auto;padding:20px;background:#fff;border-radius:10px;box-shadow:0 2px 10px rgba(0,0,0,0.04)}
+h1,h2,h3{color:#111827}
+.nav{background:#111827;padding:15px;display:flex;justify-content:center;align-items:center;flex-wrap:wrap;gap:8px}
+.nav a{color:white;margin:0 10px;text-decoration:none;font-weight:600}
+.nav a:hover{text-decoration:underline}
+.nav-logo img{vertical-align:middle;margin-right:12px;border-radius:8px}
+figure{margin:30px 0}
+pre{background:#111;color:#eee;padding:15px;border-radius:8px;overflow-x:auto;box-shadow:0 2px 8px rgba(0,0,0,0.15)}
+code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+p code,li code{background:#eef2ff;padding:1px 5px;border-radius:4px;font-size:.95em}
+.cta{background:#eef2ff;padding:20px;margin-top:30px;text-align:center;border-radius:10px}
+a{color:#2563eb}
+.back-home{margin-top:25px}
+footer{background:#111827;color:white;text-align:center;padding:30px 20px;margin-top:40px}
+footer a{color:#93c5fd;text-decoration:none}
+footer a:hover{text-decoration:underline}
+.btn{display:inline-block;background:#2563eb;color:white;padding:12px 22px;border-radius:8px;text-decoration:none;font-weight:600;margin-top:15px;transition:0.2s ease}
+.btn:hover{background:#1d4ed8;transform:translateY(-1px)}
+.card{background:#fff;padding:20px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.05);overflow:hidden;max-width:100%;border:1px solid #eef2f7;border-left:4px solid #ec4899}
+.toc-list{padding-left:20px}
+.toc-list li{margin-bottom:8px}
+.author-line{font-size:15px;margin-top:-6px;margin-bottom:10px;color:#4b5563}
+figcaption{font-size:14px;color:#6b7280;margin-top:10px}
+#faq h3{margin-top:25px}
+#faq p{margin-bottom:18px}
+.breadcrumb{font-size:14px;color:#6b7280;margin:0 0 10px}
+.breadcrumb a{color:#2563eb;text-decoration:none}
+.breadcrumb a:hover{text-decoration:underline}
+.diagram{width:100%;height:auto;display:block;border-radius:10px}
+table.cmp{border-collapse:collapse;width:100%;margin:20px 0;font-size:14.5px}
+table.cmp th,table.cmp td{border:1px solid #e5e7eb;padding:9px 12px;text-align:left;vertical-align:top}
+table.cmp th{background:#f9fafb;font-weight:700}
+.bt-social{display:flex;gap:13px;flex-wrap:wrap;align-items:center;justify-content:center;margin:0 0 14px;padding:0;list-style:none}
+.bt-social a{position:relative;isolation:isolate;width:46px;height:46px;border-radius:14px;display:inline-flex;align-items:center;justify-content:center;text-decoration:none;-webkit-tap-highlight-color:transparent;background-color:var(--c,#333);background-image:linear-gradient(150deg,rgba(255,255,255,.30),rgba(255,255,255,0) 42%,rgba(0,0,0,.22));box-shadow:0 1px 1px rgba(0,0,0,.22),0 7px 14px -3px rgba(0,0,0,.34),inset 0 1px 0 rgba(255,255,255,.50),inset 0 -2px 5px rgba(0,0,0,.30);transition:transform .18s cubic-bezier(.2,.7,.2,1),box-shadow .18s ease}
+.bt-social a::before{content:"";position:absolute;left:3px;right:3px;top:2px;height:44%;border-radius:12px 12px 50% 50%/12px 12px 24px 24px;background:linear-gradient(180deg,rgba(255,255,255,.42),rgba(255,255,255,0));pointer-events:none;z-index:0}
+.bt-social a:hover{transform:translateY(-3px) scale(1.05);box-shadow:0 2px 2px rgba(0,0,0,.20),0 16px 26px -6px rgba(0,0,0,.40),inset 0 1px 0 rgba(255,255,255,.55),inset 0 -2px 6px rgba(0,0,0,.32)}
+.bt-social a:active{transform:translateY(-1px) scale(1.01)}
+.bt-social a:focus-visible{outline:3px solid #93c5fd;outline-offset:3px}
+.bt-social svg{position:relative;z-index:1;width:22px;height:22px;display:block;filter:drop-shadow(0 1px 1px rgba(0,0,0,.28))}
+@media (prefers-reduced-motion:reduce){.bt-social a{transition:none}.bt-social a:hover{transform:none}}
+@media(max-width:600px){.container{padding:15px}}
+.game-stage{margin:20px 0 6px;display:flex;flex-direction:column;align-items:center}
+canvas#game{background:#0f172a;border:1px solid #1f2937;border-radius:12px;max-width:100%;height:auto;touch-action:none;box-shadow:0 8px 24px rgba(0,0,0,0.18);display:block}
+.startbtn{margin-top:14px;background:#ec4899;color:#fff;border:none;border-radius:10px;padding:10px 24px;font-size:15px;font-weight:600;cursor:pointer;transition:background .15s}
+.startbtn:hover{background:#db2777}
+.startbtn:focus-visible{outline:3px solid #2563eb;outline-offset:3px}
+.controls{display:flex;gap:18px;flex-wrap:wrap;justify-content:center;margin-top:14px;font-size:13.5px;color:#475569}
+.controls kbd{background:#111827;color:#fff;border-radius:6px;padding:2px 8px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12.5px}
+.intro-lead{font-size:18px;color:#374151}
+.note{background:#fdf2f8;border:1px solid #fbcfe8;border-left:4px solid #ec4899;border-radius:10px;padding:14px 18px;margin:14px 0}
+
+</style>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": "https://backbonetutorials.com/#organization",
+      "name": "Backbone Tutorials",
+      "url": "https://backbonetutorials.com/",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://backbonetutorials.com/assets/logo.png"
+      },
+      "sameAs": [
+        "https://github.com/backbonetutorials/backbonetutorials",
+        "https://x.com/backbonetutor",
+        "https://www.youtube.com/@BACKBONETUTORIALS",
+        "https://bsky.app/profile/backbonetutorials.bsky.social",
+        "https://www.instagram.com/backbonetutorials/",
+        "https://www.tiktok.com/@backbonetutorials",
+        "https://www.facebook.com/BackboneTutorials"
+      ],
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "contactType": "customer support",
+        "url": "https://x.com/backbonetutor",
+        "availableLanguage": [
+          "English"
+        ],
+        "areaServed": "Worldwide"
+      }
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://backbonetutorials.com/#website",
+      "url": "https://backbonetutorials.com/",
+      "name": "Backbone Tutorials",
+      "publisher": {
+        "@id": "https://backbonetutorials.com/#organization"
+      }
+    },
+    {
+      "@type": "VideoGame",
+      "@id": "https://backbonetutorials.com/game-development/asteroid-dodge/#game",
+      "name": "Asteroid Dodge: Survival Arcade",
+      "description": "A survival arcade game built with plain JavaScript and HTML canvas, where you steer a ship to dodge falling asteroids across endless levels that grow faster over time, with touch, drag, and keyboard controls.",
+      "url": "https://backbonetutorials.com/game-development/asteroid-dodge/",
+      "genre": "Arcade",
+      "gamePlatform": "Web browser",
+      "applicationCategory": "Game",
+      "operatingSystem": "Any modern web browser",
+      "inLanguage": "en",
+      "author": {
+        "@id": "https://backbonetutorials.com/#organization"
+      },
+      "publisher": {
+        "@id": "https://backbonetutorials.com/#organization"
+      },
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      }
+    },
+    {
+      "@type": "WebPage",
+      "@id": "https://backbonetutorials.com/game-development/asteroid-dodge/#webpage",
+      "url": "https://backbonetutorials.com/game-development/asteroid-dodge/",
+      "name": "Asteroid Dodge: Survival Arcade",
+      "description": "A survival arcade game built with plain JavaScript and HTML canvas, where you steer a ship to dodge falling asteroids across endless levels that grow faster over time, with touch, drag, and keyboard controls.",
+      "inLanguage": "en",
+      "isPartOf": {
+        "@id": "https://backbonetutorials.com/#website"
+      },
+      "publisher": {
+        "@id": "https://backbonetutorials.com/#organization"
+      },
+      "breadcrumb": {
+        "@id": "https://backbonetutorials.com/game-development/asteroid-dodge/#breadcrumb"
+      },
+      "mainEntity": {
+        "@id": "https://backbonetutorials.com/game-development/asteroid-dodge/#game"
+      },
+      "datePublished": "2026-06-16T04:30:00+07:00",
+      "dateModified": "2026-06-16T04:30:00+07:00"
+    },
+    {
+      "@type": "BreadcrumbList",
+      "@id": "https://backbonetutorials.com/game-development/asteroid-dodge/#breadcrumb",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://backbonetutorials.com/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Game Development",
+          "item": "https://backbonetutorials.com/game-development/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "Asteroid Dodge",
+          "item": "https://backbonetutorials.com/game-development/asteroid-dodge/"
+        }
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "@id": "https://backbonetutorials.com/game-development/asteroid-dodge/#faq",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "How do I play Asteroid Dodge?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Hold the left or right button, or drag on the canvas, to steer your ship away from falling asteroids. Survive as long as possible and beat your own best score."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Does it get harder over time?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. Every few seconds a new level begins, asteroids spawn more frequently and fall faster, so the field fills up and your room to move shrinks."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How is the collision detection done?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Each frame the code measures the straight line distance from the ship centre to each asteroid centre. If that distance is smaller than the ship half-width plus the asteroid radius, a hit is registered."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How does this relate to programming?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "It demonstrates delta time movement, a spawn and difficulty ramp, circle collision detection, and cross platform input handling, four fundamentals that appear in almost every real time interactive system."
+          }
+        }
+      ]
+    }
+  ]
+}
+</script>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-FYJP43XDHH"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-FYJP43XDHH');
+</script>
+</head>
+<body>
+<nav class="nav" aria-label="Main Navigation">
+<a href="/" class="nav-logo" title="Backbone Tutorials Homepage"><img src="/assets/logo.png" alt="Backbone Tutorials Logo" width="36" height="36" loading="lazy" decoding="async"></a>
+<a href="/" title="Backbone.js Tutorials Homepage">Home</a>
+<a href="/backbonejs/" title="Backbone.js Complete Guide">Backbone Guide</a>
+<a href="/what-is-a-router/" title="What is a Router">Router</a>
+<a href="/what-is-a-model/" title="What is a Model">Model</a>
+<a href="/what-is-a-view/" title="What is a View">View</a>
+<a href="/what-is-a-collection/" title="What is a Collection">Collection</a>
+</nav>
+<main>
+<article class="container">
+<nav class="breadcrumb" aria-label="Breadcrumb"><a href="/">Home</a> &rsaquo; <a href="/game-development/">Game Development</a> &rsaquo; <span aria-current="page">Asteroid Dodge</span></nav>
+<h1>Play Asteroid Dodge</h1>
+<p class="intro-lead">A fast survival arcade game built with plain JavaScript and canvas. Steer your ship left and right to dodge falling asteroids as the field gets faster. Touch, drag, or keyboard controls.</p>
+<p>This is a real, playable game, not a screenshot. Asteroids rain from above and your job is simply to stay alive. The longer you last the faster it gets, so every session is a test of how long you can keep the feedback loop of move, check, react going before a rock catches you.</p>
+<style>
+.ad{max-width:420px;margin:14px auto 6px}
+.ad-bar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;justify-content:center;margin-bottom:10px}
+.ad-chip{background:#1e293b;color:#e2e8f0;border-radius:9px;padding:5px 12px;font-size:13px;font-weight:700}
+.ad-stage{position:relative;background:#06080f;border-radius:12px;padding:0;box-shadow:inset 0 0 0 1px rgba(148,163,184,.1)}
+#adcanvas{display:block;width:100%;height:auto;border-radius:12px;touch-action:none}
+.ad-overlay{position:absolute;inset:0;background:rgba(4,6,14,.92);border-radius:12px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;z-index:5;text-align:center;padding:0 20px}
+.ad-overlay[hidden]{display:none}
+.ad-overlay .msg{color:#fff;font-size:23px;font-weight:800}
+.ad-overlay .sub{color:#cbd5e1;font-size:13px;max-width:320px;margin-top:-4px;line-height:1.5}
+.sbtns{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+.ad-pad{display:flex;gap:14px;justify-content:center;margin-top:12px}
+.ad-pad button{width:74px;height:56px;border:none;border-radius:13px;background:#1e293b;color:#e2e8f0;font-size:24px;font-weight:800;cursor:pointer;-webkit-tap-highlight-color:transparent;touch-action:none;box-shadow:inset 0 -3px 0 rgba(0,0,0,.3),inset 0 0 0 1px rgba(99,179,237,.3)}
+.ad-pad button:active{transform:translateY(1px);background:#334155}
+.ad-hint{text-align:center;margin-top:9px;font-size:12px;color:#64748b;font-weight:600}
+.ad-msg{text-align:center;margin-top:9px;font-size:13.5px;font-weight:700;color:#475569;min-height:18px}
+</style>
+<div class="ad">
+<div class="ad-bar" id="adbar"></div>
+<div class="ad-stage">
+<canvas id="adcanvas" width="400" height="520"></canvas>
+<div class="ad-overlay" id="adstart">
+<div class="msg">Asteroid Dodge</div>
+<div class="sub">Steer your ship, dodge the asteroids, and survive as long as you can. The field gets faster every few seconds.</div>
+<div class="sbtns"><button class="startbtn" type="button" id="adgo">Start Game</button></div>
+</div>
+<div class="ad-overlay" id="adover" hidden>
+<div class="msg" id="adovermsg"></div>
+<div class="sub" id="adorange"></div>
+<button class="startbtn" type="button" id="adagain">Play again</button>
+</div>
+</div>
+<div class="ad-pad">
+<button type="button" id="adleft" aria-label="Steer left">&#9664;</button>
+<button type="button" id="adright" aria-label="Steer right">&#9654;</button>
+</div>
+<div class="ad-hint" id="adhint">Tap buttons or use A / D / arrow keys &middot; or drag on the canvas</div>
+<div class="ad-msg" id="admsg"></div>
+</div>
+<script>
+(function(){
+  var cv=document.getElementById('adcanvas'); if(!cv){return;}
+  var ctx=cv.getContext('2d');
+  var W=400, H=520, running=false, raf=null;
+  var ship, asteroids, particles, score, best, elapsed, lastT, lvl, spawnTimer, spawnInt, drag;
+  var keys={left:false, right:false};
+  var barEl=document.getElementById('adbar'), msgEl=document.getElementById('admsg'),
+      startOv=document.getElementById('adstart'), overOv=document.getElementById('adover'),
+      overMsg=document.getElementById('adovermsg'), orSub=document.getElementById('adorange');
+  best=0;
+  function rand(a,b){ return a+Math.random()*(b-a); }
+  function initGame(){
+    ship={x:W/2, y:H-70, w:22, h:32, vx:0, shield:false, inv:0};
+    asteroids=[]; particles=[];
+    score=0; elapsed=0; lastT=null; lvl=1; spawnTimer=0; spawnInt=1.1;
+    updateBar();
+  }
+  function spawnAsteroid(){
+    var r=rand(14,30), x=rand(r,W-r);
+    var sp=rand(90,140)*(1+lvl*0.12);
+    asteroids.push({x:x, y:-r, r:r, vx:rand(-28,28), vy:sp, rot:0, rotV:rand(-2,2), sides:Math.floor(rand(5,9))});
+  }
+  function explode(x,y,col){ for(var i=0;i<10;i++){ particles.push({x:x,y:y,vx:rand(-90,90),vy:rand(-90,90),life:1,col:col||'#f97316'}); } }
+  function updateBar(){ barEl.innerHTML='<span class="ad-chip">Score '+score+'</span><span class="ad-chip">Best '+best+'</span><span class="ad-chip">Level '+lvl+'</span>'; }
+  function drawShip(x,y,inv){
+    if(inv>0 && Math.floor(inv*10)%2===0){ return; }
+    ctx.save(); ctx.translate(x,y);
+    ctx.fillStyle='#38bdf8'; ctx.shadowColor='#38bdf8'; ctx.shadowBlur=12;
+    ctx.beginPath(); ctx.moveTo(0,-18); ctx.lineTo(13,14); ctx.lineTo(0,8); ctx.lineTo(-13,14); ctx.closePath(); ctx.fill();
+    ctx.fillStyle='rgba(251,191,36,0.9)';
+    ctx.beginPath(); ctx.moveTo(-7,14); ctx.lineTo(0,28); ctx.lineTo(7,14); ctx.closePath(); ctx.fill();
+    ctx.restore();
+  }
+  function drawAsteroid(a){
+    ctx.save(); ctx.translate(a.x,a.y); ctx.rotate(a.rot);
+    ctx.strokeStyle='#94a3b8'; ctx.lineWidth=2.5; ctx.fillStyle='rgba(30,41,59,0.85)';
+    ctx.shadowColor='rgba(148,163,184,0.5)'; ctx.shadowBlur=6;
+    ctx.beginPath(); for(var i=0;i<a.sides;i++){ var ang=((Math.PI*2)/a.sides)*i; var rr=a.r*(0.8+Math.sin(i*7.3)*0.2); ctx.lineTo(Math.cos(ang)*rr,Math.sin(ang)*rr); } ctx.closePath(); ctx.fill(); ctx.stroke();
+    ctx.restore();
+  }
+  function loop(ts){
+    if(!running){ return; }
+    if(!lastT){ lastT=ts; }
+    var dt=Math.min((ts-lastT)/1000, 0.05); lastT=ts;
+    elapsed+=dt; score=Math.floor(elapsed*10);
+    if(score>best){ best=score; }
+    lvl=1+Math.floor(elapsed/8);
+    spawnTimer+=dt; if(spawnTimer>=spawnInt){ spawnAsteroid(); spawnTimer=0; spawnInt=Math.max(0.42,1.1-lvl*0.09); }
+    var spd=240;
+    if(keys.left){ ship.vx-=spd*dt*2.8; } if(keys.right){ ship.vx+=spd*dt*2.8; }
+    ship.vx*=Math.pow(0.06,dt); ship.x=Math.max(18,Math.min(W-18,ship.x+ship.vx*dt));
+    if(ship.inv>0){ ship.inv-=dt; }
+    for(var i=asteroids.length-1;i>=0;i--){
+      var a=asteroids[i]; a.x+=a.vx*dt; a.y+=a.vy*dt; a.rot+=a.rotV*dt;
+      if(a.y>H+a.r+10){ asteroids.splice(i,1); continue; }
+      var dx=ship.x-a.x, dy=ship.y-a.y, dist=Math.sqrt(dx*dx+dy*dy);
+      if(dist<a.r+14 && ship.inv<=0){ explode(ship.x,ship.y,'#38bdf8'); endGame(); return; }
+    }
+    for(var p=particles.length-1;p>=0;p--){ var pt=particles[p]; pt.x+=pt.vx*dt; pt.y+=pt.vy*dt; pt.life-=dt*2.2; if(pt.life<=0){ particles.splice(p,1); } }
+    ctx.fillStyle='#06080f'; ctx.fillRect(0,0,W,H);
+    for(var s=0;s<38;s++){ var sx=(s*137+score*0.4)%W, sy=(s*197+score*0.2)%H, sa=0.3+0.5*Math.sin(s*3.7+elapsed); ctx.globalAlpha=sa; ctx.fillStyle='#fff'; ctx.fillRect(sx,sy,1.5,1.5); } ctx.globalAlpha=1;
+    for(var j=0;j<asteroids.length;j++){ drawAsteroid(asteroids[j]); }
+    for(var q=0;q<particles.length;q++){ var pt2=particles[q]; ctx.globalAlpha=pt2.life; ctx.fillStyle=pt2.col; ctx.beginPath(); ctx.arc(pt2.x,pt2.y,3,0,Math.PI*2); ctx.fill(); } ctx.globalAlpha=1;
+    drawShip(ship.x, ship.y, ship.inv);
+    updateBar();
+    raf=requestAnimationFrame(loop);
+  }
+  function endGame(){ running=false; cancelAnimationFrame(raf); ctx.fillStyle='#06080f'; ctx.fillRect(0,0,W,H); overMsg.textContent='Score: '+score; orSub.textContent='Best: '+best+'  |  Level: '+lvl; overOv.hidden=false; updateBar(); }
+  function startGame(){ initGame(); startOv.hidden=true; overOv.hidden=true; running=true; lastT=null; raf=requestAnimationFrame(loop); msgEl.textContent='Survive!'; }
+  document.getElementById('adgo').addEventListener('click', startGame);
+  document.getElementById('adagain').addEventListener('click', function(){ overOv.hidden=true; startGame(); });
+  document.addEventListener('keydown',function(e){ if(e.key==='a'||e.key==='A'||e.key==='ArrowLeft'){ keys.left=true; e.preventDefault(); } if(e.key==='d'||e.key==='D'||e.key==='ArrowRight'){ keys.right=true; e.preventDefault(); } });
+  document.addEventListener('keyup',function(e){ if(e.key==='a'||e.key==='A'||e.key==='ArrowLeft'){ keys.left=false; } if(e.key==='d'||e.key==='D'||e.key==='ArrowRight'){ keys.right=false; } });
+  var lbtn=document.getElementById('adleft'), rbtn=document.getElementById('adright');
+  lbtn.addEventListener('pointerdown',function(e){ e.preventDefault(); keys.left=true; }); lbtn.addEventListener('pointerup',function(){ keys.left=false; }); lbtn.addEventListener('pointercancel',function(){ keys.left=false; });
+  rbtn.addEventListener('pointerdown',function(e){ e.preventDefault(); keys.right=true; }); rbtn.addEventListener('pointerup',function(){ keys.right=false; }); rbtn.addEventListener('pointercancel',function(){ keys.right=false; });
+  var dragSX=null;
+  cv.addEventListener('pointerdown',function(e){ dragSX=e.clientX; });
+  cv.addEventListener('pointermove',function(e){ if(dragSX===null||!running){ return; } var dx=e.clientX-dragSX; keys.left=dx<-8; keys.right=dx>8; });
+  cv.addEventListener('pointerup',function(){ dragSX=null; keys.left=false; keys.right=false; });
+  cv.addEventListener('pointercancel',function(){ dragSX=null; keys.left=false; keys.right=false; });
+  initGame(); updateBar();
+})();
+</script>
+<h2>How to play</h2>
+<p>Your ship sits near the bottom of the screen and asteroids rain down from above in a field that gets denser every few seconds. Hold the left or right button to slide your ship across the screen, and keep it clear of every rock. There is no shooting here, only survival. Stay alive as long as possible and watch your score climb. A session runs as long as your reflexes hold out, so the goal is always to beat your own best.</p>
+
+<h2>Controls</h2>
+<p>Everything works on any device, from a phone in one hand to a desktop with a keyboard.</p>
+<h3>Touch and drag</h3>
+<p>On a phone, hold the left or right button below the canvas or drag your finger across the canvas to steer. The ship follows smoothly so you can make small corrections without lifting your hand.</p>
+<h3>Keyboard</h3>
+<p>On a keyboard, hold A or the left arrow to go left and D or the right arrow to go right. The steering accelerates the longer you hold, so quick taps give small nudges.</p>
+
+<h2>How this game is built</h2>
+<p>Asteroid Dodge is a compact tour of the core arcade loop, tying together several techniques in the game development cluster.</p>
+<h3>Delta time and the game loop</h3>
+<p>The loop runs on <code>requestAnimationFrame</code> and every movement and spawn is multiplied by the time since the last frame, so the game runs at the same speed on a fast phone and a slow one, the idea at the heart of <a href="/game-development/game-loop-fundamentals/">game loop fundamentals</a>.</p>
+<h3>Spawning and difficulty</h3>
+<p>A timer fires every second or so and adds a new asteroid with a random size, horizontal drift, and fall speed. As time passes the spawn interval shortens and the speed ceiling rises, a simple but effective difficulty ramp.</p>
+<h3>Collision and particles</h3>
+<p>Each frame the code checks the distance from the ship centre to every asteroid centre. If that distance is less than the sum of the ship half-width and the asteroid radius, the ship is hit, a particle burst fires, and the game ends. The distance check is the same circle collision covered in <a href="/game-development/collision-detection/">collision detection</a>, and the input flow follows <a href="/game-development/handling-game-input/">handling game input</a>.</p>
+
+<h2>Why survival games teach great programming habits</h2>
+<p>Asteroid Dodge is a closed feedback loop: spawn enemies, move everything by delta time, check for collision, update score, repeat. That is the shape of every real time system, from animation engines to data dashboards. Handling the input cleanly so a button held on a phone feels the same as a key held on a keyboard is the same challenge every cross platform UI faces, and it is solved here the same way, by treating both as a shared boolean state. Get this loop solid and you have the skeleton of dozens of more complex games, and a clear mental model for the reactive, state driven thinking behind <a href="/architecture/event-driven-ui/">event driven UI</a>.</p>
+
+<h2>Frequently asked questions</h2>
+<h3>How do I play Asteroid Dodge?</h3>
+<p>Hold the left or right button, or drag on the canvas, to steer your ship away from falling asteroids. Survive as long as possible and beat your own best score.</p>
+<h3>Does it get harder over time?</h3>
+<p>Yes. Every few seconds a new level begins, asteroids spawn more frequently and fall faster, so the field fills up and your room to move shrinks.</p>
+<h3>How is the collision detection done?</h3>
+<p>Each frame the code measures the straight line distance from the ship centre to each asteroid centre. If that distance is smaller than the ship half-width plus the asteroid radius, a hit is registered.</p>
+<h3>How does this relate to programming?</h3>
+<p>It demonstrates delta time movement, a spawn and difficulty ramp, circle collision detection, and cross platform input handling, four fundamentals that appear in almost every real time interactive system.</p>
+
+<div class="cta"><p><strong>Want the engineering behind real time, reactive systems?</strong></p><p>See how event driven interfaces respond to change at speed.</p><a href="/architecture/event-driven-ui/" class="btn">Read: Event Driven UI &rarr;</a></div>
+<div class="back-home"><a href="/game-development/">&larr; Back to Game Development</a></div>
+</article>
+</main>
+<footer>
+<p>Backbone Tutorials</p>
+<nav class="bt-social" aria-label="Backbone Tutorials on social media">
+  <a style="--c:#181717" href="https://github.com/backbonetutorials/backbonetutorials" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on GitHub"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#fff" d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0 1 12 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222 0 1.606-.014 2.898-.014 3.293 0 .322.216.694.825.576C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg></a>
+  <a style="--c:#000000" href="https://x.com/backbonetutor" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on X (formerly Twitter)"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#fff" d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+  <a style="--c:#FF0000" href="https://www.youtube.com/@BACKBONETUTORIALS" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on YouTube"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#fff" d="M8.5 6.5 L8.5 17.5 L17.5 12 Z"/></svg></a>
+  <a style="--c:#0285FF" href="https://bsky.app/profile/backbonetutorials.bsky.social" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on Bluesky"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#fff" d="M12 10.8c-1.087-2.114-4.046-6.053-6.798-7.995C2.566.944 1.561 1.266.902 1.565.139 1.908 0 3.08 0 3.768c0 .69.378 5.65.624 6.479.815 2.736 3.713 3.66 6.383 3.364.136-.02.275-.039.415-.056-.138.022-.276.04-.415.056-3.912.58-7.387 2.005-2.83 7.078 5.013 5.19 6.87-1.113 7.823-4.308.953 3.195 2.05 9.271 7.733 4.308 4.267-4.308 1.172-6.498-2.74-7.078a8.741 8.741 0 0 1-.415-.056c.14.017.279.036.415.056 2.67.296 5.568-.628 6.383-3.364C23.622 9.418 24 4.458 24 3.768c0-.688-.139-1.86-.902-2.203-.659-.299-1.664-.621-4.3 1.24C16.046 4.747 13.087 8.686 12 10.8Z"/></svg></a>
+  <a style="--c:#d62976;background-image:linear-gradient(150deg,rgba(255,255,255,.30),rgba(255,255,255,0) 42%,rgba(0,0,0,.22)),linear-gradient(45deg,#feda75,#fa7e1e,#d62976,#962fbf,#4f5bd5)" href="https://www.instagram.com/backbonetutorials/" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on Instagram"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="4" y="4" width="16" height="16" rx="5" fill="none" stroke="#fff" stroke-width="2"/><circle cx="12" cy="12" r="3.6" fill="none" stroke="#fff" stroke-width="2"/><circle cx="17.2" cy="6.8" r="1.25" fill="#fff"/></svg></a>
+  <a style="--c:#000000" href="https://www.tiktok.com/@backbonetutorials" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on TikTok"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#fff" d="M16.5 5.82a4.79 4.79 0 0 1-1.16-3.07h-2.9v11.43a2.45 2.45 0 1 1-2.45-2.45c.17 0 .33.02.49.05V8.83a5.36 5.36 0 0 0-.49-.02 5.35 5.35 0 1 0 5.35 5.35V8.6a7.66 7.66 0 0 0 4.46 1.42V7.13a4.79 4.79 0 0 1-2.8-1.31Z"/></svg></a>
+  <a style="--c:#1877F2" href="https://www.facebook.com/BackboneTutorials" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on Facebook"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#fff" d="M13.5 21v-8h2.6l.4-3h-3V8.1c0-.87.27-1.46 1.5-1.46H17V3.96c-.28-.04-1.2-.12-2.28-.12-2.26 0-3.8 1.38-3.8 3.9V10H8.3v3h2.62v8h2.58Z"/></svg></a>
+</nav>
+<p>
+<a href="/">Home</a> |
+<a href="/about/">About</a> |
+<a href="/contact/">Contact</a> |
+<a href="/privacy-policy/">Privacy Policy</a> |
+<a href="/terms/">Terms</a>
+</p>
+<p>© 2026 Backbone Tutorials</p>
+</footer>
+</body>
+</html>
