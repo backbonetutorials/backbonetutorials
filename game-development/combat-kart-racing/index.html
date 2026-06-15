@@ -1,0 +1,514 @@
+<!-- DEPLOY TO: /game-development/combat-kart-racing/  (index.html) · playable game · per MASTERMIND_SEO.md -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Combat Kart Racing — 1 to 4 Player Game</title>
+<meta name="description" content="A top-down combat kart racer for 1 to 4 players. Grab weapons from mystery boxes, spin out rivals, and race three laps. Then read how it is built.">
+<meta name="robots" content="index, follow">
+<meta name="author" content="Backbone Tutorials">
+<meta name="theme-color" content="#2563eb">
+<meta name="format-detection" content="telephone=no">
+<link rel="canonical" href="https://backbonetutorials.com/game-development/combat-kart-racing/">
+<link rel="icon" href="/assets/favicon.ico">
+<link rel="apple-touch-icon" href="/assets/favicon.png">
+<meta property="og:title" content="Combat Kart Racing — 1 to 4 Player Game">
+<meta property="og:description" content="A top-down combat kart racer for 1 to 4 players. Grab weapons from mystery boxes, spin out rivals, and race three laps. Then read how it is built.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://backbonetutorials.com/game-development/combat-kart-racing/">
+<meta property="og:image" content="https://backbonetutorials.com/assets/game-development/combat-kart-racing-1200.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:site_name" content="Backbone Tutorials">
+<meta property="og:locale" content="en_US">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Combat Kart Racing — 1 to 4 Player Game">
+<meta name="twitter:description" content="A top-down combat kart racer for 1 to 4 players. Grab weapons from mystery boxes, spin out rivals, and race three laps. Then read how it is built.">
+<meta name="twitter:image" content="https://backbonetutorials.com/assets/game-development/combat-kart-racing-1200.jpg">
+<meta name="twitter:url" content="https://backbonetutorials.com/game-development/combat-kart-racing/">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+html{scroll-behavior:smooth}
+body{font-family:'Inter',sans-serif;margin:0;background:#f4f6f9;color:#1f2937;line-height:1.7}
+.container{max-width:900px;margin:30px auto;padding:20px;background:#fff;border-radius:10px;box-shadow:0 2px 10px rgba(0,0,0,0.04)}
+h1,h2,h3{color:#111827}
+.nav{background:#111827;padding:15px;display:flex;justify-content:center;align-items:center;flex-wrap:wrap;gap:8px}
+.nav a{color:white;margin:0 10px;text-decoration:none;font-weight:600}
+.nav a:hover{text-decoration:underline}
+.nav-logo img{vertical-align:middle;margin-right:12px;border-radius:8px}
+figure{margin:30px 0}
+pre{background:#111;color:#eee;padding:15px;border-radius:8px;overflow-x:auto;box-shadow:0 2px 8px rgba(0,0,0,0.15)}
+code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+p code,li code{background:#eef2ff;padding:1px 5px;border-radius:4px;font-size:.95em}
+.cta{background:#eef2ff;padding:20px;margin-top:30px;text-align:center;border-radius:10px}
+a{color:#2563eb}
+.back-home{margin-top:25px}
+footer{background:#111827;color:white;text-align:center;padding:30px 20px;margin-top:40px}
+footer a{color:#93c5fd;text-decoration:none}
+footer a:hover{text-decoration:underline}
+.btn{display:inline-block;background:#2563eb;color:white;padding:12px 22px;border-radius:8px;text-decoration:none;font-weight:600;margin-top:15px;transition:0.2s ease}
+.btn:hover{background:#1d4ed8;transform:translateY(-1px)}
+.card{background:#fff;padding:20px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.05);overflow:hidden;max-width:100%;border:1px solid #eef2f7;border-left:4px solid #ec4899}
+.toc-list{padding-left:20px}
+.toc-list li{margin-bottom:8px}
+.author-line{font-size:15px;margin-top:-6px;margin-bottom:10px;color:#4b5563}
+figcaption{font-size:14px;color:#6b7280;margin-top:10px}
+#faq h3{margin-top:25px}
+#faq p{margin-bottom:18px}
+.breadcrumb{font-size:14px;color:#6b7280;margin:0 0 10px}
+.breadcrumb a{color:#2563eb;text-decoration:none}
+.breadcrumb a:hover{text-decoration:underline}
+.diagram{width:100%;height:auto;display:block;border-radius:10px}
+table.cmp{border-collapse:collapse;width:100%;margin:20px 0;font-size:14.5px}
+table.cmp th,table.cmp td{border:1px solid #e5e7eb;padding:9px 12px;text-align:left;vertical-align:top}
+table.cmp th{background:#f9fafb;font-weight:700}
+.bt-social{display:flex;gap:13px;flex-wrap:wrap;align-items:center;justify-content:center;margin:0 0 14px;padding:0;list-style:none}
+.bt-social a{position:relative;isolation:isolate;width:46px;height:46px;border-radius:14px;display:inline-flex;align-items:center;justify-content:center;text-decoration:none;-webkit-tap-highlight-color:transparent;background-color:var(--c,#333);background-image:linear-gradient(150deg,rgba(255,255,255,.30),rgba(255,255,255,0) 42%,rgba(0,0,0,.22));box-shadow:0 1px 1px rgba(0,0,0,.22),0 7px 14px -3px rgba(0,0,0,.34),inset 0 1px 0 rgba(255,255,255,.50),inset 0 -2px 5px rgba(0,0,0,.30);transition:transform .18s cubic-bezier(.2,.7,.2,1),box-shadow .18s ease}
+.bt-social a::before{content:"";position:absolute;left:3px;right:3px;top:2px;height:44%;border-radius:12px 12px 50% 50%/12px 12px 24px 24px;background:linear-gradient(180deg,rgba(255,255,255,.42),rgba(255,255,255,0));pointer-events:none;z-index:0}
+.bt-social a:hover{transform:translateY(-3px) scale(1.05);box-shadow:0 2px 2px rgba(0,0,0,.20),0 16px 26px -6px rgba(0,0,0,.40),inset 0 1px 0 rgba(255,255,255,.55),inset 0 -2px 6px rgba(0,0,0,.32)}
+.bt-social a:active{transform:translateY(-1px) scale(1.01)}
+.bt-social a:focus-visible{outline:3px solid #93c5fd;outline-offset:3px}
+.bt-social svg{position:relative;z-index:1;width:22px;height:22px;display:block;filter:drop-shadow(0 1px 1px rgba(0,0,0,.28))}
+@media (prefers-reduced-motion:reduce){.bt-social a{transition:none}.bt-social a:hover{transform:none}}
+@media(max-width:600px){.container{padding:15px}}
+.game-stage{margin:20px 0 6px;display:flex;flex-direction:column;align-items:center}
+canvas#game{background:#0f172a;border:1px solid #1f2937;border-radius:12px;max-width:100%;height:auto;touch-action:none;box-shadow:0 8px 24px rgba(0,0,0,0.18);display:block}
+.startbtn{margin-top:14px;background:#ec4899;color:#fff;border:none;border-radius:10px;padding:10px 24px;font-size:15px;font-weight:600;cursor:pointer;transition:background .15s}
+.startbtn:hover{background:#db2777}
+.startbtn:focus-visible{outline:3px solid #2563eb;outline-offset:3px}
+.controls{display:flex;gap:18px;flex-wrap:wrap;justify-content:center;margin-top:14px;font-size:13.5px;color:#475569}
+.controls kbd{background:#111827;color:#fff;border-radius:6px;padding:2px 8px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12.5px}
+.intro-lead{font-size:18px;color:#374151}
+.note{background:#fdf2f8;border:1px solid #fbcfe8;border-left:4px solid #ec4899;border-radius:10px;padding:14px 18px;margin:14px 0}
+
+</style>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": "https://backbonetutorials.com/#organization",
+      "name": "Backbone Tutorials",
+      "url": "https://backbonetutorials.com/",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://backbonetutorials.com/assets/logo.png"
+      },
+      "sameAs": [
+        "https://github.com/backbonetutorials/backbonetutorials",
+        "https://x.com/backbonetutor",
+        "https://www.youtube.com/@BACKBONETUTORIALS",
+        "https://bsky.app/profile/backbonetutorials.bsky.social",
+        "https://www.instagram.com/backbonetutorials/",
+        "https://www.tiktok.com/@backbonetutorials",
+        "https://www.facebook.com/BackboneTutorials"
+      ],
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "contactType": "customer support",
+        "url": "https://x.com/backbonetutor",
+        "availableLanguage": [
+          "English"
+        ],
+        "areaServed": "Worldwide"
+      }
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://backbonetutorials.com/#website",
+      "url": "https://backbonetutorials.com/",
+      "name": "Backbone Tutorials",
+      "publisher": {
+        "@id": "https://backbonetutorials.com/#organization"
+      }
+    },
+    {
+      "@type": "VideoGame",
+      "@id": "https://backbonetutorials.com/game-development/combat-kart-racing/#game",
+      "name": "Combat Kart Racing: 1 to 4 Players",
+      "description": "A colorful top-down combat kart racing game for one to four local players, with weapons from mystery boxes, a lap circuit, and checkpoints, built with JavaScript and canvas.",
+      "url": "https://backbonetutorials.com/game-development/combat-kart-racing/",
+      "genre": "Racing",
+      "gamePlatform": "Web browser",
+      "applicationCategory": "Game",
+      "operatingSystem": "Any modern web browser",
+      "inLanguage": "en",
+      "author": {
+        "@id": "https://backbonetutorials.com/#organization"
+      },
+      "publisher": {
+        "@id": "https://backbonetutorials.com/#organization"
+      },
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      }
+    },
+    {
+      "@type": "WebPage",
+      "@id": "https://backbonetutorials.com/game-development/combat-kart-racing/#webpage",
+      "url": "https://backbonetutorials.com/game-development/combat-kart-racing/",
+      "name": "Combat Kart Racing: 1 to 4 Players",
+      "description": "A colorful top-down combat kart racing game for one to four local players, with weapons from mystery boxes, a lap circuit, and checkpoints, built with JavaScript and canvas.",
+      "inLanguage": "en",
+      "isPartOf": {
+        "@id": "https://backbonetutorials.com/#website"
+      },
+      "publisher": {
+        "@id": "https://backbonetutorials.com/#organization"
+      },
+      "breadcrumb": {
+        "@id": "https://backbonetutorials.com/game-development/combat-kart-racing/#breadcrumb"
+      },
+      "mainEntity": {
+        "@id": "https://backbonetutorials.com/game-development/combat-kart-racing/#game"
+      },
+      "datePublished": "2026-06-16T04:30:00+07:00",
+      "dateModified": "2026-06-16T04:30:00+07:00"
+    },
+    {
+      "@type": "BreadcrumbList",
+      "@id": "https://backbonetutorials.com/game-development/combat-kart-racing/#breadcrumb",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://backbonetutorials.com/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Game Development",
+          "item": "https://backbonetutorials.com/game-development/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "Combat Kart Racing",
+          "item": "https://backbonetutorials.com/game-development/combat-kart-racing/"
+        }
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "@id": "https://backbonetutorials.com/game-development/combat-kart-racing/#faq",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "How many players can play?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "One to four, all on the same keyboard. Player one uses WASD, player two the arrow keys, player three IJKL, and player four TFGH, each with their own fire key."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How do the weapons work?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Drive over a mystery box to arm a weapon, then press your fire key to launch it forward. If it hits another kart, that kart spins out briefly, letting you overtake. You can hold one weapon at a time."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Why is my kart slow sometimes?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "You have left the track onto the grass, which reduces your top speed. Steer back onto the gray surface to get your speed back, and take the corners smoothly."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Is this networked multiplayer?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "No. It is local, shared screen racing with no network, which keeps every kart in sync. Online racing would add delay and need the netcode covered in a separate article."
+          }
+        }
+      ]
+    }
+  ]
+}
+</script>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-FYJP43XDHH"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-FYJP43XDHH');
+</script>
+</head>
+<body>
+<nav class="nav" aria-label="Main Navigation">
+<a href="/" class="nav-logo" title="Backbone Tutorials Homepage"><img src="/assets/logo.png" alt="Backbone Tutorials Logo" width="36" height="36" loading="lazy" decoding="async"></a>
+<a href="/" title="Backbone.js Tutorials Homepage">Home</a>
+<a href="/backbonejs/" title="Backbone.js Complete Guide">Backbone Guide</a>
+<a href="/what-is-a-router/" title="What is a Router">Router</a>
+<a href="/what-is-a-model/" title="What is a Model">Model</a>
+<a href="/what-is-a-view/" title="What is a View">View</a>
+<a href="/what-is-a-collection/" title="What is a Collection">Collection</a>
+</nav>
+<main>
+<article class="container">
+<nav class="breadcrumb" aria-label="Breadcrumb"><a href="/">Home</a> &rsaquo; <a href="/game-development/">Game Development</a> &rsaquo; <span aria-current="page">Combat Kart Racing</span></nav>
+<h1>Play Combat Kart Racing</h1>
+<p class="intro-lead">A colorful top-down kart racer for one to four players, with weapons from mystery boxes and a real lap circuit. Grab a friend or three, then read how it works.</p>
+<p>This is a real, playable game for up to four people on one keyboard. It pulls together the game loop, canvas drawing, driving physics, collisions, weapons, checkpoints, and multi player input, so it doubles as a tour of the whole cluster. Pick your player count and race.</p>
+<style>
+.race{max-width:760px;margin:14px auto 6px}
+.rhud{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-bottom:10px;min-height:30px}
+.rchip{display:flex;align-items:center;gap:6px;background:#1e293b;border:2px solid #475569;border-radius:9px;padding:4px 10px;font-size:12.5px;font-weight:700;color:#e2e8f0}
+.rchip .dot{width:10px;height:10px;border-radius:3px}
+.rchip .wp{color:#fde047}
+.race-stage{position:relative;width:100%}
+canvas#game{background:#15803d;border:1px solid #14532d;border-radius:12px;max-width:100%;height:auto;display:block;touch-action:none}
+.raceoverlay{position:absolute;inset:0;background:rgba(15,23,42,.84);border-radius:12px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;z-index:5}
+.raceoverlay[hidden]{display:none}
+.raceoverlay .msg{color:#fff;font-size:26px;font-weight:800;text-align:center;padding:0 16px}
+.raceoverlay .sub{color:#cbd5e1;font-size:14px;margin-top:-4px}
+.pbtns{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+.race .controls{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:6px 16px;margin-top:14px;font-size:12.5px;color:#475569}
+.race .controls b{color:#0f172a}
+.race kbd{background:#111827;color:#fff;border-radius:5px;padding:1px 6px;font-family:ui-monospace,monospace;font-size:11.5px}
+.touchpad{display:none;margin-top:12px;align-items:center;justify-content:space-between;gap:10px;user-select:none;-webkit-user-select:none;touch-action:none}
+.touchpad .tp-side{display:flex;gap:11px;align-items:center}
+.tp-btn{width:62px;height:62px;border-radius:50%;border:none;font-weight:800;font-size:13px;color:#fff;background:#475569;display:flex;align-items:center;justify-content:center;-webkit-tap-highlight-color:transparent;touch-action:none;box-shadow:0 3px 8px rgba(0,0,0,.3)}
+.tp-btn.steer{font-size:26px}
+.tp-btn:active{filter:brightness(1.4)}
+.tp-gas{background:#16a34a;width:76px;height:76px}
+.tp-fire{background:#f97316}
+.tp-brake{background:#334155;width:50px;height:50px;font-size:10px}
+.tphint{display:none;text-align:center;font-size:12px;color:#64748b;margin-top:8px}
+@media (pointer:coarse),(max-width:740px){.touchpad{display:flex}.tphint{display:block}.race .controls{display:none}}
+@media (max-width:520px){.raceoverlay .msg{font-size:21px}.raceoverlay .sub{font-size:12.5px;padding:0 14px}.pbtns .startbtn{padding:8px 12px;font-size:13px}}
+</style>
+<div class="race">
+<div id="rhud" class="rhud"></div>
+<div class="race-stage">
+<canvas id="game" width="720" height="470" aria-label="Top-down combat kart racing game for one to four players. Drive your car, collect weapons from mystery boxes, and race three laps."></canvas>
+<div id="startscreen" class="raceoverlay">
+<div class="msg">Combat Kart Racing</div>
+<div class="sub">Pick up weapons from the mystery boxes. First to 3 laps wins.</div>
+<div class="pbtns">
+<button class="startbtn" type="button" data-p="1">1 Player</button>
+<button class="startbtn" type="button" data-p="2">2 Players</button>
+<button class="startbtn" type="button" data-p="3">3 Players</button>
+<button class="startbtn" type="button" data-p="4">4 Players</button>
+</div>
+</div>
+<div id="winscreen" class="raceoverlay" hidden><div class="msg" id="winmsg"></div><button id="raceagain" class="startbtn" type="button">Race again</button></div>
+</div>
+<div class="controls" id="rctrls">
+<div><b style="color:#ef4444">P1</b> <kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> drive | <kbd>Q</kbd> fire</div>
+<div><b style="color:#3b82f6">P2</b> <kbd>Arrows</kbd> drive | <kbd>M</kbd> fire</div>
+<div><b style="color:#22c55e">P3</b> <kbd>I</kbd><kbd>J</kbd><kbd>K</kbd><kbd>L</kbd> drive | <kbd>O</kbd> fire</div>
+<div><b style="color:#eab308">P4</b> <kbd>T</kbd><kbd>F</kbd><kbd>G</kbd><kbd>H</kbd> drive | <kbd>B</kbd> fire</div>
+</div>
+<div class="touchpad" id="touchpad">
+<div class="tp-side"><button class="tp-btn steer" type="button" data-k="a" aria-label="Steer left">&#9664;</button><button class="tp-btn steer" type="button" data-k="d" aria-label="Steer right">&#9654;</button></div>
+<div class="tp-side"><button class="tp-btn tp-brake" type="button" data-k="s" aria-label="Brake">BRK</button><button class="tp-btn tp-fire" type="button" data-fire="1" aria-label="Fire weapon">FIRE</button><button class="tp-btn tp-gas" type="button" data-k="w" aria-label="Accelerate">GAS</button></div>
+</div>
+<div class="tphint">On a phone, choose 1 Player. Hold GAS, steer with the arrows, tap FIRE.</div>
+</div>
+<script>
+(function(){
+  var canvas=document.getElementById('game'); if(!canvas){return;}
+  var ctx=canvas.getContext('2d'); var W=canvas.width, H=canvas.height;
+  var cx=360, cy=235, RxO=300, RyO=180, RxI=170, RyI=80;
+  var midRx=(RxO+RxI)/2, midRy=(RyO+RyI)/2;
+  var CP=[[cx,cy-midRy],[cx+midRx,cy],[cx,cy+midRy],[cx-midRx,cy]]; // top,right,bottom,left
+  var LAPS=3;
+  var CTRL=[
+    {a:'w',b:'s',l:'a',r:'d',f:'q',col:'#ef4444',name:'P1'},
+    {a:'arrowup',b:'arrowdown',l:'arrowleft',r:'arrowright',f:'m',col:'#3b82f6',name:'P2'},
+    {a:'i',b:'k',l:'j',r:'l',f:'o',col:'#22c55e',name:'P3'},
+    {a:'t',b:'g',l:'f',r:'h',f:'b',col:'#eab308',name:'P4'}
+  ];
+  var keys={}, cars=[], shots=[], boxes=[], running=false, winner=null, numP=0;
+  var BOXPOS=[[cx+midRx*0.72,cy-midRy*0.72],[cx+midRx*0.72,cy+midRy*0.72],[cx-midRx*0.72,cy+midRy*0.72],[cx-midRx*0.72,cy-midRy*0.72]];
+
+  function onTrack(x,y){ var ix=(x-cx)/RxI, iy=(y-cy)/RyI, ox=(x-cx)/RxO, oy=(y-cy)/RyO; return (ix*ix+iy*iy>=1) && (ox*ox+oy*oy<=1); }
+  function makeCars(n){
+    cars=[];
+    for(var i=0;i<n;i++){
+      var gx=cx+(i%2===0?-24:24), gy=92+Math.floor(i/2)*40;
+      cars.push({x:gx,y:gy,ang:0,sp:0,lap:0,cp:1,col:CTRL[i].col,name:CTRL[i].name,c:CTRL[i],wp:false,spin:0});
+    }
+  }
+  function makeBoxes(){ boxes=[]; for(var i=0;i<BOXPOS.length;i++){ boxes.push({x:BOXPOS[i][0],y:BOXPOS[i][1],t:0}); } }
+  function start(n){ numP=n; makeCars(n); makeBoxes(); shots=[]; winner=null; running=true; document.getElementById('startscreen').hidden=true; document.getElementById('winscreen').hidden=true; }
+  function fire(car){
+    if(!car.wp||car.spin>0){ return; }
+    car.wp=false;
+    shots.push({x:car.x+Math.cos(car.ang)*20,y:car.y+Math.sin(car.ang)*20,ang:car.ang,owner:car,life:90});
+  }
+  function update(){
+    if(!running){ return; }
+    var i,j;
+    for(i=0;i<cars.length;i++){
+      var c=cars[i], k=c.c;
+      if(c.spin>0){ c.spin--; c.ang+=0.42; c.sp*=0.92; }
+      else {
+        var maxS=onTrack(c.x,c.y)?3.6:1.5;
+        if(keys[k.a]){ c.sp+=0.16; }
+        if(keys[k.b]){ c.sp-=0.18; }
+        if(c.sp>maxS){ c.sp=maxS; } if(c.sp<-1.6){ c.sp=-1.6; }
+        var turn=0.052*(c.sp>=0?1:-1)*Math.min(1,Math.abs(c.sp)/1.2);
+        if(keys[k.l]){ c.ang-=turn; } if(keys[k.r]){ c.ang+=turn; }
+      }
+      c.sp*=0.975;
+      c.x+=Math.cos(c.ang)*c.sp; c.y+=Math.sin(c.ang)*c.sp;
+      if(c.x<10){c.x=10;c.sp*=0.5;} if(c.x>W-10){c.x=W-10;c.sp*=0.5;}
+      if(c.y<10){c.y=10;c.sp*=0.5;} if(c.y>H-10){c.y=H-10;c.sp*=0.5;}
+      // checkpoints
+      var tcp=CP[c.cp], dx=c.x-tcp[0], dy=c.y-tcp[1];
+      if(dx*dx+dy*dy<58*58){
+        if(c.cp===0){ c.lap++; c.cp=1; if(c.lap>=LAPS && !winner){ winner=c; running=false; showWin(c); } }
+        else { c.cp=(c.cp+1)%4; }
+      }
+      // pick up boxes
+      for(j=0;j<boxes.length;j++){ var bx=boxes[j]; if(bx.t>0){ continue; } var bdx=c.x-bx.x, bdy=c.y-bx.y; if(bdx*bdx+bdy*bdy<24*24 && !c.wp){ c.wp=true; bx.t=240; } }
+    }
+    for(j=0;j<boxes.length;j++){ if(boxes[j].t>0){ boxes[j].t--; } }
+    // shots
+    for(i=shots.length-1;i>=0;i--){
+      var s=shots[i]; s.x+=Math.cos(s.ang)*7.5; s.y+=Math.sin(s.ang)*7.5; s.life--;
+      var hit=false;
+      for(j=0;j<cars.length;j++){ var t=cars[j]; if(t===s.owner||t.spin>0){ continue; } var hdx=t.x-s.x, hdy=t.y-s.y; if(hdx*hdx+hdy*hdy<17*17){ t.spin=70; t.sp*=0.4; hit=true; break; } }
+      if(hit||s.life<=0||s.x<0||s.x>W||s.y<0||s.y>H){ shots.splice(i,1); }
+    }
+    drawHud();
+  }
+  function ell(x,y,rx,ry){ ctx.beginPath(); ctx.ellipse(x,y,rx,ry,0,0,Math.PI*2); }
+  function drawTrack(){
+    ctx.fillStyle='#15803d'; ctx.fillRect(0,0,W,H);
+    ctx.fillStyle='#166534'; for(var s=0;s<W;s+=48){ ctx.fillRect(s,0,24,H); }
+    ell(cx,cy,RxO,RyO); ctx.fillStyle='#3f4654'; ctx.fill();
+    // outer kerb
+    ctx.lineWidth=9; ell(cx,cy,RxO,RyO); ctx.strokeStyle='#f8fafc'; ctx.stroke();
+    ctx.setLineDash([20,20]); ell(cx,cy,RxO,RyO); ctx.strokeStyle='#ef4444'; ctx.stroke(); ctx.setLineDash([]);
+    // infield
+    ell(cx,cy,RxI,RyI); ctx.fillStyle='#15803d'; ctx.fill();
+    ctx.lineWidth=8; ell(cx,cy,RxI,RyI); ctx.strokeStyle='#f8fafc'; ctx.stroke();
+    ctx.setLineDash([16,16]); ell(cx,cy,RxI,RyI); ctx.strokeStyle='#ef4444'; ctx.stroke(); ctx.setLineDash([]);
+    // start/finish checker at top band (x ~ cx, y 55..155)
+    var yTop=cy-RyO, yIn=cy-RyI;
+    for(var row=0;row<8;row++){ for(var colc=0;colc<2;colc++){ var yy=yTop+row*((yIn-yTop)/8); ctx.fillStyle=((row+colc)%2===0)?'#fff':'#0f172a'; ctx.fillRect(cx-10+colc*10, yy, 10, (yIn-yTop)/8); } }
+  }
+  function drawBox(b){
+    if(b.t>0){ return; }
+    ctx.save(); ctx.translate(b.x,b.y);
+    var hue=(Date.now()/8)%360;
+    ctx.fillStyle='hsl('+hue+',85%,55%)'; roundRect(-13,-13,26,26,7); ctx.fill();
+    ctx.fillStyle='#fff'; ctx.font='bold 18px Inter, sans-serif'; ctx.textAlign='center'; ctx.textBaseline='middle'; ctx.fillText('?',0,1);
+    ctx.restore();
+  }
+  function roundRect(x,y,w,h,r){ ctx.beginPath(); ctx.moveTo(x+r,y); ctx.arcTo(x+w,y,x+w,y+h,r); ctx.arcTo(x+w,y+h,x,y+h,r); ctx.arcTo(x,y+h,x,y,r); ctx.arcTo(x,y,x+w,y,r); ctx.closePath(); }
+  function drawCar(c){
+    ctx.save(); ctx.translate(c.x,c.y); ctx.rotate(c.ang);
+    ctx.fillStyle=c.spin>0?'#94a3b8':c.col; roundRect(-13,-9,26,18,5); ctx.fill();
+    ctx.fillStyle='rgba(15,23,42,.65)'; roundRect(0,-6,9,12,3); ctx.fill();
+    ctx.fillStyle='#0f172a'; ctx.fillRect(-11,-11,7,4); ctx.fillRect(-11,7,7,4); ctx.fillRect(7,-11,5,4); ctx.fillRect(7,7,5,4);
+    if(c.wp){ ctx.fillStyle='#fde047'; ctx.beginPath(); ctx.arc(0,-14,4,0,Math.PI*2); ctx.fill(); }
+    ctx.restore();
+  }
+  function drawShot(s){ ctx.save(); ctx.translate(s.x,s.y); ctx.rotate(s.ang); ctx.fillStyle='#f97316'; roundRect(-6,-3,12,6,3); ctx.fill(); ctx.fillStyle='#fde047'; ctx.fillRect(-7,-2,3,4); ctx.restore(); }
+  function draw(){
+    drawTrack();
+    for(var i=0;i<boxes.length;i++){ drawBox(boxes[i]); }
+    for(i=0;i<shots.length;i++){ drawShot(shots[i]); }
+    for(i=0;i<cars.length;i++){ drawCar(cars[i]); }
+  }
+  function drawHud(){
+    var h=document.getElementById('rhud'); var html='';
+    for(var i=0;i<cars.length;i++){ var c=cars[i]; html+='<span class="rchip"><span class="dot" style="background:'+c.col+'"></span>'+c.name+' Lap '+Math.min(c.lap+1,LAPS)+'/'+LAPS+(c.wp?' <span class="wp">armed</span>':'')+(c.spin>0?' spin':'')+'</span>'; }
+    h.innerHTML=html;
+  }
+  function showWin(c){ document.getElementById('winmsg').textContent=c.name+' wins!'; document.getElementById('winscreen').hidden=false; }
+  function loop(){ update(); draw(); requestAnimationFrame(loop); }
+  document.addEventListener('keydown',function(e){
+    var k=e.key.toLowerCase(); keys[k]=true;
+    if(k==='arrowup'||k==='arrowdown'||k==='arrowleft'||k==='arrowright'){ if(running){ e.preventDefault(); } }
+    if(running){ for(var i=0;i<cars.length;i++){ if(k===cars[i].c.f){ fire(cars[i]); } } }
+  });
+  document.addEventListener('keyup',function(e){ keys[e.key.toLowerCase()]=false; });
+  var pb=document.querySelectorAll('.pbtns .startbtn');
+  for(var i=0;i<pb.length;i++){ (function(btn){ btn.addEventListener('click',function(){ start(parseInt(btn.getAttribute('data-p'),10)); }); })(pb[i]); }
+  document.getElementById('raceagain').addEventListener('click',function(){ document.getElementById('winscreen').hidden=true; document.getElementById('startscreen').hidden=false; running=false; cars=[]; shots=[]; drawHud(); draw(); });
+  // on-screen touch controls drive Player 1
+  var tpEls=document.querySelectorAll('#touchpad .tp-btn');
+  for(var ti=0;ti<tpEls.length;ti++){ (function(btn){
+    var k=btn.getAttribute('data-k'), isFire=btn.getAttribute('data-fire');
+    function down(e){ if(e.cancelable){ e.preventDefault(); } if(isFire){ if(running&&cars.length){ fire(cars[0]); } } else if(k){ keys[k]=true; } }
+    function up(e){ if(e.cancelable){ e.preventDefault(); } if(k){ keys[k]=false; } }
+    btn.addEventListener('touchstart',down,{passive:false});
+    btn.addEventListener('touchend',up,{passive:false});
+    btn.addEventListener('touchcancel',up,{passive:false});
+    btn.addEventListener('mousedown',down); btn.addEventListener('mouseup',up); btn.addEventListener('mouseleave',up);
+  })(tpEls[ti]); }
+  draw(); loop();
+})();
+</script>
+<h2>How to play</h2>
+<p>Pick the number of players, then each player drives one kart with their own keys: accelerate, brake, and steer left or right. Steering only works while you are moving, just like a real car. Drive over a glowing mystery box to pick up a weapon, then press your fire key to launch it forward. A hit sends the target spinning for a moment, so use it to pass. Stay on the gray track, because the grass is slow. Race through the corners in order and the first kart to finish three laps wins.</p>
+
+<h2>How this game is built</h2>
+<p>This is the most complete demo in the cluster, and it combines almost every technique the other pages teach.</p>
+<h3>One loop, many karts</h3>
+<p>A single requestAnimationFrame loop updates every kart, every weapon, and the boxes, then redraws the scene, the cycle from <a href="/game-development/game-loop-fundamentals/">game loop fundamentals</a>.</p>
+<h3>Driving feel</h3>
+<p>Each kart has a position, an angle, and a speed. Acceleration adds to speed along the facing angle, friction bleeds it off, and steering turns the angle only when moving. That small set of rules gives an arcade driving feel.</p>
+<h3>The track and staying on it</h3>
+<p>The course is two ellipses, an outer edge and an inner infield, drawn on the <a href="/game-development/canvas-2d-rendering/">canvas</a> with kerbs and a checkered line. A kart is on track when it sits between the two ellipses, and off track it slows down.</p>
+<h3>Weapons and hits</h3>
+<p>Firing spawns a projectile that travels forward, and a simple distance check decides when it strikes a rival, the idea from <a href="/game-development/collision-detection/">collision detection</a>. A hit triggers a brief spin out.</p>
+<h3>Laps, checkpoints, and input</h3>
+<p>Four checkpoints around the loop must be passed in order, which counts a lap and stops shortcuts. Up to four players read their own keys at once through the input state in <a href="/game-development/handling-game-input/">handling game input</a>, and the race phases are plain <a href="/game-development/game-state-management/">game state</a>.</p>
+
+<h2>From local to online racing</h2>
+<div class="note"><p>This is <strong>local multiplayer</strong>: up to four people share one keyboard and one screen, so the game stays perfectly in sync with no network.</p></div>
+<p>Making karts race across the internet is a separate discipline. Each player would sit on a different machine, and the game would face network delay and the need to agree on one true position for every kart. Those techniques, client prediction and reconciliation, are covered in <a href="/game-development/multiplayer-game-netcode/">multiplayer game netcode</a> and across the <a href="/interactive-web/">interactive web</a> cluster.</p>
+
+<h2>Frequently asked questions</h2>
+<h3>How many players can play?</h3>
+<p>One to four, all on the same keyboard. Player one uses WASD, player two the arrow keys, player three IJKL, and player four TFGH, each with their own fire key.</p>
+<h3>How do the weapons work?</h3>
+<p>Drive over a mystery box to arm a weapon, then press your fire key to launch it forward. If it hits another kart, that kart spins out briefly, letting you overtake. You can hold one weapon at a time.</p>
+<h3>Why is my kart slow sometimes?</h3>
+<p>You have left the track onto the grass, which reduces your top speed. Steer back onto the gray surface to get your speed back, and take the corners smoothly.</p>
+<h3>Is this networked multiplayer?</h3>
+<p>No. It is local, shared screen racing with no network, which keeps every kart in sync. Online racing would add delay and need the netcode covered in a separate article.</p>
+
+<div class="cta"><p><strong>Want the multiplayer engineering behind online racing?</strong></p><p>See how games keep many players in sync across machines.</p><a href="/game-development/multiplayer-game-netcode/" class="btn">Read: Multiplayer Game Netcode &rarr;</a></div>
+<div class="back-home"><a href="/game-development/">&larr; Back to Game Development</a></div>
+</article>
+</main>
+<footer>
+<p>Backbone Tutorials</p>
+<nav class="bt-social" aria-label="Backbone Tutorials on social media">
+  <a style="--c:#181717" href="https://github.com/backbonetutorials/backbonetutorials" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on GitHub"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#fff" d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0 1 12 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222 0 1.606-.014 2.898-.014 3.293 0 .322.216.694.825.576C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg></a>
+  <a style="--c:#000000" href="https://x.com/backbonetutor" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on X (formerly Twitter)"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#fff" d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+  <a style="--c:#FF0000" href="https://www.youtube.com/@BACKBONETUTORIALS" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on YouTube"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#fff" d="M8.5 6.5 L8.5 17.5 L17.5 12 Z"/></svg></a>
+  <a style="--c:#0285FF" href="https://bsky.app/profile/backbonetutorials.bsky.social" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on Bluesky"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#fff" d="M12 10.8c-1.087-2.114-4.046-6.053-6.798-7.995C2.566.944 1.561 1.266.902 1.565.139 1.908 0 3.08 0 3.768c0 .69.378 5.65.624 6.479.815 2.736 3.713 3.66 6.383 3.364.136-.02.275-.039.415-.056-.138.022-.276.04-.415.056-3.912.58-7.387 2.005-2.83 7.078 5.013 5.19 6.87-1.113 7.823-4.308.953 3.195 2.05 9.271 7.733 4.308 4.267-4.308 1.172-6.498-2.74-7.078a8.741 8.741 0 0 1-.415-.056c.14.017.279.036.415.056 2.67.296 5.568-.628 6.383-3.364C23.622 9.418 24 4.458 24 3.768c0-.688-.139-1.86-.902-2.203-.659-.299-1.664-.621-4.3 1.24C16.046 4.747 13.087 8.686 12 10.8Z"/></svg></a>
+  <a style="--c:#d62976;background-image:linear-gradient(150deg,rgba(255,255,255,.30),rgba(255,255,255,0) 42%,rgba(0,0,0,.22)),linear-gradient(45deg,#feda75,#fa7e1e,#d62976,#962fbf,#4f5bd5)" href="https://www.instagram.com/backbonetutorials/" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on Instagram"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="4" y="4" width="16" height="16" rx="5" fill="none" stroke="#fff" stroke-width="2"/><circle cx="12" cy="12" r="3.6" fill="none" stroke="#fff" stroke-width="2"/><circle cx="17.2" cy="6.8" r="1.25" fill="#fff"/></svg></a>
+  <a style="--c:#000000" href="https://www.tiktok.com/@backbonetutorials" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on TikTok"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#fff" d="M16.5 5.82a4.79 4.79 0 0 1-1.16-3.07h-2.9v11.43a2.45 2.45 0 1 1-2.45-2.45c.17 0 .33.02.49.05V8.83a5.36 5.36 0 0 0-.49-.02 5.35 5.35 0 1 0 5.35 5.35V8.6a7.66 7.66 0 0 0 4.46 1.42V7.13a4.79 4.79 0 0 1-2.8-1.31Z"/></svg></a>
+  <a style="--c:#1877F2" href="https://www.facebook.com/BackboneTutorials" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on Facebook"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#fff" d="M13.5 21v-8h2.6l.4-3h-3V8.1c0-.87.27-1.46 1.5-1.46H17V3.96c-.28-.04-1.2-.12-2.28-.12-2.26 0-3.8 1.38-3.8 3.9V10H8.3v3h2.62v8h2.58Z"/></svg></a>
+</nav>
+<p>
+<a href="/">Home</a> |
+<a href="/about/">About</a> |
+<a href="/contact/">Contact</a> |
+<a href="/privacy-policy/">Privacy Policy</a> |
+<a href="/terms/">Terms</a>
+</p>
+<p>© 2026 Backbone Tutorials</p>
+</footer>
+</body>
+</html>

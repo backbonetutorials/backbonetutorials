@@ -1,0 +1,423 @@
+<!-- DEPLOY TO: /game-development/packet-defense/  (index.html) · playable game · per MASTERMIND_SEO.md -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Packet Defense — Tower Defense Strategy Game</title>
+<meta name="description" content="A tower defense strategy game built with JavaScript and canvas. Place defenses to stop malicious packets before they reach your server. Survive 8 waves.">
+<meta name="robots" content="index, follow">
+<meta name="author" content="Backbone Tutorials">
+<meta name="theme-color" content="#2563eb">
+<meta name="format-detection" content="telephone=no">
+<link rel="canonical" href="https://backbonetutorials.com/game-development/packet-defense/">
+<link rel="icon" href="/assets/favicon.ico">
+<link rel="apple-touch-icon" href="/assets/favicon.png">
+<meta property="og:title" content="Packet Defense — Tower Defense Strategy Game">
+<meta property="og:description" content="A tower defense strategy game built with JavaScript and canvas. Place defenses to stop malicious packets before they reach your server. Survive 8 waves.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://backbonetutorials.com/game-development/packet-defense/">
+<meta property="og:image" content="https://backbonetutorials.com/assets/game-development/packet-defense-1200.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:site_name" content="Backbone Tutorials">
+<meta property="og:locale" content="en_US">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Packet Defense — Tower Defense Strategy Game">
+<meta name="twitter:description" content="A tower defense strategy game built with JavaScript and canvas. Place defenses to stop malicious packets before they reach your server. Survive 8 waves.">
+<meta name="twitter:image" content="https://backbonetutorials.com/assets/game-development/packet-defense-1200.jpg">
+<meta name="twitter:url" content="https://backbonetutorials.com/game-development/packet-defense/">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+html{scroll-behavior:smooth}
+body{font-family:'Inter',sans-serif;margin:0;background:#f4f6f9;color:#1f2937;line-height:1.7}
+.container{max-width:900px;margin:30px auto;padding:20px;background:#fff;border-radius:10px;box-shadow:0 2px 10px rgba(0,0,0,0.04)}
+h1,h2,h3{color:#111827}
+.nav{background:#111827;padding:15px;display:flex;justify-content:center;align-items:center;flex-wrap:wrap;gap:8px}
+.nav a{color:white;margin:0 10px;text-decoration:none;font-weight:600}
+.nav a:hover{text-decoration:underline}
+.nav-logo img{vertical-align:middle;margin-right:12px;border-radius:8px}
+figure{margin:30px 0}
+pre{background:#111;color:#eee;padding:15px;border-radius:8px;overflow-x:auto;box-shadow:0 2px 8px rgba(0,0,0,0.15)}
+code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+p code,li code{background:#eef2ff;padding:1px 5px;border-radius:4px;font-size:.95em}
+.cta{background:#eef2ff;padding:20px;margin-top:30px;text-align:center;border-radius:10px}
+a{color:#2563eb}
+.back-home{margin-top:25px}
+footer{background:#111827;color:white;text-align:center;padding:30px 20px;margin-top:40px}
+footer a{color:#93c5fd;text-decoration:none}
+footer a:hover{text-decoration:underline}
+.btn{display:inline-block;background:#2563eb;color:white;padding:12px 22px;border-radius:8px;text-decoration:none;font-weight:600;margin-top:15px;transition:0.2s ease}
+.btn:hover{background:#1d4ed8;transform:translateY(-1px)}
+.card{background:#fff;padding:20px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.05);overflow:hidden;max-width:100%;border:1px solid #eef2f7;border-left:4px solid #ec4899}
+.toc-list{padding-left:20px}
+.toc-list li{margin-bottom:8px}
+.author-line{font-size:15px;margin-top:-6px;margin-bottom:10px;color:#4b5563}
+figcaption{font-size:14px;color:#6b7280;margin-top:10px}
+#faq h3{margin-top:25px}
+#faq p{margin-bottom:18px}
+.breadcrumb{font-size:14px;color:#6b7280;margin:0 0 10px}
+.breadcrumb a{color:#2563eb;text-decoration:none}
+.breadcrumb a:hover{text-decoration:underline}
+.diagram{width:100%;height:auto;display:block;border-radius:10px}
+table.cmp{border-collapse:collapse;width:100%;margin:20px 0;font-size:14.5px}
+table.cmp th,table.cmp td{border:1px solid #e5e7eb;padding:9px 12px;text-align:left;vertical-align:top}
+table.cmp th{background:#f9fafb;font-weight:700}
+.bt-social{display:flex;gap:13px;flex-wrap:wrap;align-items:center;justify-content:center;margin:0 0 14px;padding:0;list-style:none}
+.bt-social a{position:relative;isolation:isolate;width:46px;height:46px;border-radius:14px;display:inline-flex;align-items:center;justify-content:center;text-decoration:none;-webkit-tap-highlight-color:transparent;background-color:var(--c,#333);background-image:linear-gradient(150deg,rgba(255,255,255,.30),rgba(255,255,255,0) 42%,rgba(0,0,0,.22));box-shadow:0 1px 1px rgba(0,0,0,.22),0 7px 14px -3px rgba(0,0,0,.34),inset 0 1px 0 rgba(255,255,255,.50),inset 0 -2px 5px rgba(0,0,0,.30);transition:transform .18s cubic-bezier(.2,.7,.2,1),box-shadow .18s ease}
+.bt-social a::before{content:"";position:absolute;left:3px;right:3px;top:2px;height:44%;border-radius:12px 12px 50% 50%/12px 12px 24px 24px;background:linear-gradient(180deg,rgba(255,255,255,.42),rgba(255,255,255,0));pointer-events:none;z-index:0}
+.bt-social a:hover{transform:translateY(-3px) scale(1.05);box-shadow:0 2px 2px rgba(0,0,0,.20),0 16px 26px -6px rgba(0,0,0,.40),inset 0 1px 0 rgba(255,255,255,.55),inset 0 -2px 6px rgba(0,0,0,.32)}
+.bt-social a:active{transform:translateY(-1px) scale(1.01)}
+.bt-social a:focus-visible{outline:3px solid #93c5fd;outline-offset:3px}
+.bt-social svg{position:relative;z-index:1;width:22px;height:22px;display:block;filter:drop-shadow(0 1px 1px rgba(0,0,0,.28))}
+@media (prefers-reduced-motion:reduce){.bt-social a{transition:none}.bt-social a:hover{transform:none}}
+@media(max-width:600px){.container{padding:15px}}
+.game-stage{margin:20px 0 6px;display:flex;flex-direction:column;align-items:center}
+canvas#game{background:#0f172a;border:1px solid #1f2937;border-radius:12px;max-width:100%;height:auto;touch-action:none;box-shadow:0 8px 24px rgba(0,0,0,0.18);display:block}
+.startbtn{margin-top:14px;background:#ec4899;color:#fff;border:none;border-radius:10px;padding:10px 24px;font-size:15px;font-weight:600;cursor:pointer;transition:background .15s}
+.startbtn:hover{background:#db2777}
+.startbtn:focus-visible{outline:3px solid #2563eb;outline-offset:3px}
+.controls{display:flex;gap:18px;flex-wrap:wrap;justify-content:center;margin-top:14px;font-size:13.5px;color:#475569}
+.controls kbd{background:#111827;color:#fff;border-radius:6px;padding:2px 8px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12.5px}
+.intro-lead{font-size:18px;color:#374151}
+.note{background:#fdf2f8;border:1px solid #fbcfe8;border-left:4px solid #ec4899;border-radius:10px;padding:14px 18px;margin:14px 0}
+
+</style>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": "https://backbonetutorials.com/#organization",
+      "name": "Backbone Tutorials",
+      "url": "https://backbonetutorials.com/",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://backbonetutorials.com/assets/logo.png"
+      },
+      "sameAs": [
+        "https://github.com/backbonetutorials/backbonetutorials",
+        "https://x.com/backbonetutor",
+        "https://www.youtube.com/@BACKBONETUTORIALS",
+        "https://bsky.app/profile/backbonetutorials.bsky.social",
+        "https://www.instagram.com/backbonetutorials/",
+        "https://www.tiktok.com/@backbonetutorials",
+        "https://www.facebook.com/BackboneTutorials"
+      ],
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "contactType": "customer support",
+        "url": "https://x.com/backbonetutor",
+        "availableLanguage": [
+          "English"
+        ],
+        "areaServed": "Worldwide"
+      }
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://backbonetutorials.com/#website",
+      "url": "https://backbonetutorials.com/",
+      "name": "Backbone Tutorials",
+      "publisher": {
+        "@id": "https://backbonetutorials.com/#organization"
+      }
+    },
+    {
+      "@type": "VideoGame",
+      "@id": "https://backbonetutorials.com/game-development/packet-defense/#game",
+      "name": "Packet Defense: Tower Defense",
+      "description": "A colorful tower defense strategy game built with plain JavaScript and canvas, where you place Scanner and Firewall defenses to stop malicious packets from reaching your server across eight waves.",
+      "url": "https://backbonetutorials.com/game-development/packet-defense/",
+      "genre": "Strategy",
+      "gamePlatform": "Web browser",
+      "applicationCategory": "Game",
+      "operatingSystem": "Any modern web browser",
+      "inLanguage": "en",
+      "author": {
+        "@id": "https://backbonetutorials.com/#organization"
+      },
+      "publisher": {
+        "@id": "https://backbonetutorials.com/#organization"
+      },
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      }
+    },
+    {
+      "@type": "WebPage",
+      "@id": "https://backbonetutorials.com/game-development/packet-defense/#webpage",
+      "url": "https://backbonetutorials.com/game-development/packet-defense/",
+      "name": "Packet Defense: Tower Defense",
+      "description": "A colorful tower defense strategy game built with plain JavaScript and canvas, where you place Scanner and Firewall defenses to stop malicious packets from reaching your server across eight waves.",
+      "inLanguage": "en",
+      "isPartOf": {
+        "@id": "https://backbonetutorials.com/#website"
+      },
+      "publisher": {
+        "@id": "https://backbonetutorials.com/#organization"
+      },
+      "breadcrumb": {
+        "@id": "https://backbonetutorials.com/game-development/packet-defense/#breadcrumb"
+      },
+      "mainEntity": {
+        "@id": "https://backbonetutorials.com/game-development/packet-defense/#game"
+      },
+      "datePublished": "2026-06-16T04:30:00+07:00",
+      "dateModified": "2026-06-16T04:30:00+07:00"
+    },
+    {
+      "@type": "BreadcrumbList",
+      "@id": "https://backbonetutorials.com/game-development/packet-defense/#breadcrumb",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://backbonetutorials.com/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Game Development",
+          "item": "https://backbonetutorials.com/game-development/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "Packet Defense",
+          "item": "https://backbonetutorials.com/game-development/packet-defense/"
+        }
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "@id": "https://backbonetutorials.com/game-development/packet-defense/#faq",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "How do I play Packet Defense?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Choose a defense at the bottom, then tap an empty tile beside the wire to build it. Defenses fire automatically. Destroy packets to earn coins, keep packets off your server, and clear all 8 waves."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What is the difference between the two defenses?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "The Scanner is cheap and fires quickly with low damage, good against many weak packets. The Firewall costs more and fires slower but hits much harder, good for tougher packets later on."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How do I earn more coins?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "You earn coins for every packet you destroy and a bonus each time you clear a wave. Spend wisely between waves to expand your defenses before the next one arrives."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How does this relate to real programming?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "It models a stream of incoming events being filtered by layered defenses under a resource budget, which mirrors how real services inspect traffic and prioritise work when load rises."
+          }
+        }
+      ]
+    }
+  ]
+}
+</script>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-FYJP43XDHH"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-FYJP43XDHH');
+</script>
+</head>
+<body>
+<nav class="nav" aria-label="Main Navigation">
+<a href="/" class="nav-logo" title="Backbone Tutorials Homepage"><img src="/assets/logo.png" alt="Backbone Tutorials Logo" width="36" height="36" loading="lazy" decoding="async"></a>
+<a href="/" title="Backbone.js Tutorials Homepage">Home</a>
+<a href="/backbonejs/" title="Backbone.js Complete Guide">Backbone Guide</a>
+<a href="/what-is-a-router/" title="What is a Router">Router</a>
+<a href="/what-is-a-model/" title="What is a Model">Model</a>
+<a href="/what-is-a-view/" title="What is a View">View</a>
+<a href="/what-is-a-collection/" title="What is a Collection">Collection</a>
+</nav>
+<main>
+<article class="container">
+<nav class="breadcrumb" aria-label="Breadcrumb"><a href="/">Home</a> &rsaquo; <a href="/game-development/">Game Development</a> &rsaquo; <span aria-current="page">Packet Defense</span></nav>
+<h1>Play Packet Defense</h1>
+<p class="intro-lead">A colorful tower defense strategy game built with plain JavaScript and canvas. Place defenses to stop malicious packets before they reach your server, and survive eight waves.</p>
+<p>This is a real, playable strategy game, not a screenshot. Packets stream along the wire toward your server, and you build defenses to destroy them and earn coins for more. It is built with no library, just a route, some targeting maths, and a render loop, which makes it a clear example of how several systems run together. After you play, the sections below show how it works.</p>
+<style>
+.pd{max-width:540px;margin:14px auto 6px}
+.pd-bar{display:flex;align-items:center;gap:8px;margin-bottom:10px;flex-wrap:wrap}
+.pd-chip{background:#1e293b;border-radius:9px;padding:5px 12px;font-size:13px;font-weight:700;color:#e2e8f0}
+.pd-stage{position:relative}
+canvas#game{background:#0f172a;border:1px solid #1e293b;border-radius:12px;max-width:100%;height:auto;display:block;touch-action:none;cursor:pointer}
+.pd-tools{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:12px}
+.pd-tbtn{border:2px solid #475569;background:#1e293b;color:#e2e8f0;border-radius:10px;padding:7px 12px;font-size:13px;font-weight:700;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.pd-tbtn.sel{border-color:#38bdf8;background:#0c2536}
+.pd-tbtn .c{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px;vertical-align:middle}
+.pd-wave{margin-left:auto}
+.pd-go{background:#16a34a;border:none;color:#fff;border-radius:10px;padding:8px 16px;font-size:14px;font-weight:800;cursor:pointer}
+.pd-go:disabled{background:#334155;color:#94a3b8;cursor:default}
+.pd-overlay{position:absolute;inset:0;background:rgba(15,23,42,.88);border-radius:12px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;z-index:5;text-align:center;padding:0 18px}
+.pd-overlay[hidden]{display:none}
+.pd-overlay .msg{color:#fff;font-size:25px;font-weight:800}
+.pd-overlay .sub{color:#cbd5e1;font-size:13.5px;margin-top:-4px;max-width:340px}
+</style>
+<div class="pd">
+<div class="pd-bar" id="pdbar"></div>
+<div class="pd-stage">
+<canvas id="game" width="540" height="360" aria-label="Packet defense tower game. Place defenses on the grid to stop malicious packets from reaching your server."></canvas>
+<div class="pd-overlay" id="pdstart">
+<div class="msg">Packet Defense</div>
+<div class="sub">Malicious packets travel the wire toward your server. Place defenses on empty tiles to destroy them. Survive 8 waves.</div>
+<button class="startbtn" type="button" id="pdbegin">Start</button>
+</div>
+<div class="pd-overlay" id="pdover" hidden><div class="msg" id="pdovermsg"></div><button class="startbtn" type="button" id="pdagain">Play again</button></div>
+</div>
+<div class="pd-tools">
+<button class="pd-tbtn sel" type="button" data-t="scanner"><span class="c" style="background:#38bdf8"></span>Scanner <span style="color:#94a3b8">40</span></button>
+<button class="pd-tbtn" type="button" data-t="firewall"><span class="c" style="background:#f97316"></span>Firewall <span style="color:#94a3b8">80</span></button>
+<span class="pd-wave"></span>
+<button class="pd-go" type="button" id="pdwave">Start Wave 1</button>
+</div>
+</div>
+<script>
+(function(){
+  var canvas=document.getElementById('game'); if(!canvas){return;}
+  var ctx=canvas.getContext('2d'), CELL=36, COLS=15, ROWS=10, W=canvas.width, H=canvas.height;
+  var WP=[[0,2],[3,2],[3,7],[7,7],[7,2],[11,2],[11,7],[14,7]];
+  var wpx=WP.map(function(c){ return {x:c[0]*CELL+CELL/2, y:c[1]*CELL+CELL/2}; });
+  var pathCells={};
+  (function(){ for(var i=0;i<WP.length-1;i++){ var a=WP[i], b=WP[i+1];
+    if(a[1]===b[1]){ var lo=Math.min(a[0],b[0]), hi=Math.max(a[0],b[0]); for(var c=lo;c<=hi;c++){ pathCells[c+','+a[1]]=true; } }
+    else { var lo2=Math.min(a[1],b[1]), hi2=Math.max(a[1],b[1]); for(var r=lo2;r<=hi2;r++){ pathCells[a[0]+','+r]=true; } } } })();
+  var TYPES={scanner:{cost:40,range:2.3*CELL,cd:420,dmg:1,col:'#38bdf8'}, firewall:{cost:80,range:1.9*CELL,cd:900,dmg:4,col:'#f97316'}};
+  var towers=[], enemies=[], beams=[], lives=12, coins=120, wave=0, selType='scanner';
+  var waveActive=false, toSpawn=0, spawnTimer=0, running=false, done=false, lastT=0;
+  var startOv=document.getElementById('pdstart'), overOv=document.getElementById('pdover'), overMsg=document.getElementById('pdovermsg'), barEl=document.getElementById('pdbar'), waveBtn=document.getElementById('pdwave');
+  function towerAt(c,r){ for(var i=0;i<towers.length;i++){ if(towers[i].col===c && towers[i].row===r){ return towers[i]; } } return null; }
+  function place(c,r){
+    if(done || c<0||r<0||c>=COLS||r>=ROWS){ return; }
+    if(pathCells[c+','+r] || towerAt(c,r)){ return; }
+    var ty=TYPES[selType]; if(coins<ty.cost){ return; }
+    coins-=ty.cost;
+    towers.push({col:c,row:r,x:c*CELL+CELL/2,y:r*CELL+CELL/2,range:ty.range,dmg:ty.dmg,cdMax:ty.cd,cd:0,col:ty.col});
+    updateBar();
+  }
+  function spawnEnemy(){ var hp=3+wave*2; enemies.push({x:wpx[0].x,y:wpx[0].y,wp:1,hp:hp,maxhp:hp,speed:0.85+wave*0.05,alive:true}); }
+  function startWave(){
+    if(waveActive||done){ return; }
+    wave++; toSpawn=5+wave*2; spawnTimer=0; waveActive=true; running=true; updateBar();
+    if(!loopRunning){ loopRunning=true; lastT=performance.now(); requestAnimationFrame(loop); }
+  }
+  function endGame(winFlag){ done=true; waveActive=false; overMsg.textContent = winFlag ? ('Server defended! You cleared all 8 waves.') : ('Server breached on wave '+wave+'.'); overOv.hidden=false; updateBar(); }
+  function update(dt){
+    var i;
+    for(i=0;i<enemies.length;i++){ var e=enemies[i]; if(!e.alive){ continue; }
+      var tg=wpx[e.wp], dx=tg.x-e.x, dy=tg.y-e.y, d=Math.sqrt(dx*dx+dy*dy), step=e.speed*(dt/16.67);
+      if(d<=step){ e.x=tg.x; e.y=tg.y; e.wp++; if(e.wp>=wpx.length){ e.alive=false; lives--; if(lives<=0){ endGame(false); } } }
+      else { e.x+=dx/d*step; e.y+=dy/d*step; }
+    }
+    for(i=0;i<towers.length;i++){ var t=towers[i]; if(t.cd>0){ t.cd-=dt; }
+      if(t.cd<=0){ var best=null, bs=-1;
+        for(var j=0;j<enemies.length;j++){ var e=enemies[j]; if(!e.alive){ continue; } var ddx=e.x-t.x, ddy=e.y-t.y; if(ddx*ddx+ddy*ddy<=t.range*t.range){ var sc=e.wp*1000 - Math.sqrt((wpx[e.wp].x-e.x)*(wpx[e.wp].x-e.x)+(wpx[e.wp].y-e.y)*(wpx[e.wp].y-e.y)); if(sc>bs){ bs=sc; best=e; } } }
+        if(best){ best.hp-=t.dmg; beams.push({x1:t.x,y1:t.y,x2:best.x,y2:best.y,life:90,col:t.col}); t.cd=t.cdMax; if(best.hp<=0){ best.alive=false; coins+=8; } }
+      }
+    }
+    for(i=0;i<beams.length;i++){ beams[i].life-=dt; }
+    beams=beams.filter(function(b){ return b.life>0; });
+    enemies=enemies.filter(function(e){ return e.alive; });
+    if(waveActive && toSpawn>0){ spawnTimer-=dt; if(spawnTimer<=0){ spawnEnemy(); toSpawn--; spawnTimer=620; } }
+    if(waveActive && toSpawn===0 && enemies.length===0){ waveActive=false; coins+=20+wave*5; if(wave>=8){ endGame(true); } updateBar(); }
+  }
+  function rr(x,y,w,h,r){ ctx.beginPath(); ctx.moveTo(x+r,y); ctx.arcTo(x+w,y,x+w,y+h,r); ctx.arcTo(x+w,y+h,x,y+h,r); ctx.arcTo(x,y+h,x,y,r); ctx.arcTo(x,y,x+w,y,r); ctx.closePath(); }
+  function draw(){
+    ctx.fillStyle='#0f172a'; ctx.fillRect(0,0,W,H);
+    for(var c=0;c<COLS;c++){ for(var r=0;r<ROWS;r++){ if(pathCells[c+','+r]){ ctx.fillStyle='#334155'; ctx.fillRect(c*CELL,r*CELL,CELL,CELL); } else { ctx.strokeStyle='rgba(148,163,184,.07)'; ctx.strokeRect(c*CELL+0.5,r*CELL+0.5,CELL,CELL); } } }
+    var ex=WP[WP.length-1]; ctx.fillStyle='#16a34a'; rr(ex[0]*CELL+3,ex[1]*CELL+3,CELL-6,CELL-6,5); ctx.fill(); ctx.fillStyle='#dcfce7'; ctx.font='bold 9px Inter,sans-serif'; ctx.textAlign='center'; ctx.fillText('SRV',ex[0]*CELL+CELL/2,ex[1]*CELL+CELL/2+3);
+    var en=WP[0]; ctx.fillStyle='#1e3a8a'; rr(en[0]*CELL+5,en[1]*CELL+5,CELL-10,CELL-10,4); ctx.fill();
+    for(var i=0;i<towers.length;i++){ var t=towers[i]; ctx.fillStyle=t.col; rr(t.x-13,t.y-13,26,26,6); ctx.fill(); ctx.fillStyle='rgba(15,23,42,.6)'; ctx.beginPath(); ctx.arc(t.x,t.y,6,0,7); ctx.fill(); }
+    for(i=0;i<enemies.length;i++){ var e=enemies[i]; ctx.fillStyle='#ef4444'; rr(e.x-11,e.y-11,22,22,5); ctx.fill(); ctx.fillStyle='#7f1d1d'; ctx.fillRect(e.x-10,e.y-16,20,4); ctx.fillStyle='#22c55e'; ctx.fillRect(e.x-10,e.y-16,20*Math.max(0,e.hp/e.maxhp),4); }
+    for(i=0;i<beams.length;i++){ var bm=beams[i]; ctx.strokeStyle=bm.col; ctx.lineWidth=2.5; ctx.globalAlpha=Math.min(1,bm.life/90); ctx.beginPath(); ctx.moveTo(bm.x1,bm.y1); ctx.lineTo(bm.x2,bm.y2); ctx.stroke(); ctx.globalAlpha=1; }
+  }
+  function updateBar(){ barEl.innerHTML='<span class="pd-chip">Lives '+lives+'</span><span class="pd-chip">Coins '+coins+'</span><span class="pd-chip">Wave '+wave+' / 8</span>'; waveBtn.textContent = done ? 'Done' : (waveActive ? 'Wave '+wave+' running' : 'Start Wave '+(wave+1)); waveBtn.disabled = waveActive||done; }
+  var loopRunning=false;
+  function loop(t){ if(!running){ loopRunning=false; return; } var dt=Math.min(50,t-lastT); lastT=t; update(dt); draw(); requestAnimationFrame(loop); }
+  canvas.addEventListener('pointerdown',function(e){ if(e.cancelable){ e.preventDefault(); } if(!running||done){ return; } var rect=canvas.getBoundingClientRect(); var px=(e.clientX-rect.left)*(W/rect.width), py=(e.clientY-rect.top)*(H/rect.height); place(Math.floor(px/CELL), Math.floor(py/CELL)); });
+  var tb=document.querySelectorAll('.pd-tbtn');
+  for(var k=0;k<tb.length;k++){ (function(btn){ btn.addEventListener('click',function(){ selType=btn.getAttribute('data-t'); for(var m=0;m<tb.length;m++){ tb[m].classList.remove('sel'); } btn.classList.add('sel'); }); })(tb[k]); }
+  waveBtn.addEventListener('click',startWave);
+  document.getElementById('pdbegin').addEventListener('click',function(){ startOv.hidden=true; running=true; if(!loopRunning){ loopRunning=true; lastT=performance.now(); requestAnimationFrame(loop); } updateBar(); });
+  document.getElementById('pdagain').addEventListener('click',function(){ towers=[]; enemies=[]; beams=[]; lives=12; coins=120; wave=0; done=false; waveActive=false; toSpawn=0; overOv.hidden=true; running=true; lastT=performance.now(); if(!loopRunning){ loopRunning=true; requestAnimationFrame(loop); } updateBar(); });
+  draw(); updateBar();
+})();
+</script>
+<h2>How to play</h2>
+<p>Malicious packets enter on the left and follow the wire toward your server on the right. Your job is to stop them. Pick a defense, then tap an empty tile next to the path to build it, and it will automatically fire at packets in range. Every packet you destroy pays out coins to build more. A packet that reaches the server costs you a life, and if your lives run out the server is breached. Clear all 8 waves to win. The Scanner is cheap and fast for thinning crowds, the Firewall is pricier but hits hard, so mix them and cover the long straights and corners.</p>
+
+<h2>How this game is built</h2>
+<p>A tower defense ties together routing, targeting, timing, and economy, all on one loop.</p>
+<h3>The path and waypoints</h3>
+<p>The wire is a list of waypoints, and each packet steers toward the next one until it reaches the server. Following a route like this is a compact movement system the <a href="/game-development/game-loop-fundamentals/">game loop</a> advances every frame.</p>
+<h3>Towers picking a target</h3>
+<p>On each cooldown a tower measures the distance to every packet and fires at the one in range that is furthest along the wire, the same range and distance maths behind <a href="/game-development/collision-detection/">collision detection</a>.</p>
+<h3>Waves, coins, and lives</h3>
+<p>A wave spawns a set number of packets on a timer, kills pay coins, leaks cost lives, and clearing a wave pays a bonus. All of it is plain values the screen reflects, the core of <a href="/game-development/game-state-management/">game state management</a>.</p>
+<h3>Placing defenses from a tap</h3>
+<p>A tap is turned into a grid cell, checked against the path and existing towers, and charged against your coins. That tap to action flow is the input idea in <a href="/game-development/handling-game-input/">handling game input</a>.</p>
+
+<h2>Why this models real systems</h2>
+<p>A stream of packets heading for a server, defenses that inspect and filter them, and limited resources to spend is not far from how real networks and services are protected. Systems handle a flow of incoming events, apply layers of checks, and prioritise what matters under load, the same shape as the patterns in <a href="/interactive-web/event-streaming-architecture/">event streaming</a> and <a href="/architecture/realtime-systems/">realtime systems</a>. Playing defender makes that flow tangible.</p>
+
+<h2>Frequently asked questions</h2>
+<h3>How do I play Packet Defense?</h3>
+<p>Choose a defense at the bottom, then tap an empty tile beside the wire to build it. Defenses fire automatically. Destroy packets to earn coins, keep packets off your server, and clear all 8 waves.</p>
+<h3>What is the difference between the two defenses?</h3>
+<p>The Scanner is cheap and fires quickly with low damage, good against many weak packets. The Firewall costs more and fires slower but hits much harder, good for tougher packets later on.</p>
+<h3>How do I earn more coins?</h3>
+<p>You earn coins for every packet you destroy and a bonus each time you clear a wave. Spend wisely between waves to expand your defenses before the next one arrives.</p>
+<h3>How does this relate to real programming?</h3>
+<p>It models a stream of incoming events being filtered by layered defenses under a resource budget, which mirrors how real services inspect traffic and prioritise work when load rises.</p>
+
+<div class="cta"><p><strong>Want the engineering behind streams of events?</strong></p><p>See how systems process a continuous flow of data.</p><a href="/interactive-web/event-streaming-architecture/" class="btn">Read: Event Streaming Architecture &rarr;</a></div>
+<div class="back-home"><a href="/game-development/">&larr; Back to Game Development</a></div>
+</article>
+</main>
+<footer>
+<p>Backbone Tutorials</p>
+<nav class="bt-social" aria-label="Backbone Tutorials on social media">
+  <a style="--c:#181717" href="https://github.com/backbonetutorials/backbonetutorials" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on GitHub"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#fff" d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0 1 12 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222 0 1.606-.014 2.898-.014 3.293 0 .322.216.694.825.576C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg></a>
+  <a style="--c:#000000" href="https://x.com/backbonetutor" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on X (formerly Twitter)"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#fff" d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+  <a style="--c:#FF0000" href="https://www.youtube.com/@BACKBONETUTORIALS" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on YouTube"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#fff" d="M8.5 6.5 L8.5 17.5 L17.5 12 Z"/></svg></a>
+  <a style="--c:#0285FF" href="https://bsky.app/profile/backbonetutorials.bsky.social" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on Bluesky"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#fff" d="M12 10.8c-1.087-2.114-4.046-6.053-6.798-7.995C2.566.944 1.561 1.266.902 1.565.139 1.908 0 3.08 0 3.768c0 .69.378 5.65.624 6.479.815 2.736 3.713 3.66 6.383 3.364.136-.02.275-.039.415-.056-.138.022-.276.04-.415.056-3.912.58-7.387 2.005-2.83 7.078 5.013 5.19 6.87-1.113 7.823-4.308.953 3.195 2.05 9.271 7.733 4.308 4.267-4.308 1.172-6.498-2.74-7.078a8.741 8.741 0 0 1-.415-.056c.14.017.279.036.415.056 2.67.296 5.568-.628 6.383-3.364C23.622 9.418 24 4.458 24 3.768c0-.688-.139-1.86-.902-2.203-.659-.299-1.664-.621-4.3 1.24C16.046 4.747 13.087 8.686 12 10.8Z"/></svg></a>
+  <a style="--c:#d62976;background-image:linear-gradient(150deg,rgba(255,255,255,.30),rgba(255,255,255,0) 42%,rgba(0,0,0,.22)),linear-gradient(45deg,#feda75,#fa7e1e,#d62976,#962fbf,#4f5bd5)" href="https://www.instagram.com/backbonetutorials/" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on Instagram"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="4" y="4" width="16" height="16" rx="5" fill="none" stroke="#fff" stroke-width="2"/><circle cx="12" cy="12" r="3.6" fill="none" stroke="#fff" stroke-width="2"/><circle cx="17.2" cy="6.8" r="1.25" fill="#fff"/></svg></a>
+  <a style="--c:#000000" href="https://www.tiktok.com/@backbonetutorials" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on TikTok"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#fff" d="M16.5 5.82a4.79 4.79 0 0 1-1.16-3.07h-2.9v11.43a2.45 2.45 0 1 1-2.45-2.45c.17 0 .33.02.49.05V8.83a5.36 5.36 0 0 0-.49-.02 5.35 5.35 0 1 0 5.35 5.35V8.6a7.66 7.66 0 0 0 4.46 1.42V7.13a4.79 4.79 0 0 1-2.8-1.31Z"/></svg></a>
+  <a style="--c:#1877F2" href="https://www.facebook.com/BackboneTutorials" target="_blank" rel="me noopener noreferrer" aria-label="Backbone Tutorials on Facebook"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#fff" d="M13.5 21v-8h2.6l.4-3h-3V8.1c0-.87.27-1.46 1.5-1.46H17V3.96c-.28-.04-1.2-.12-2.28-.12-2.26 0-3.8 1.38-3.8 3.9V10H8.3v3h2.62v8h2.58Z"/></svg></a>
+</nav>
+<p>
+<a href="/">Home</a> |
+<a href="/about/">About</a> |
+<a href="/contact/">Contact</a> |
+<a href="/privacy-policy/">Privacy Policy</a> |
+<a href="/terms/">Terms</a>
+</p>
+<p>© 2026 Backbone Tutorials</p>
+</footer>
+</body>
+</html>
